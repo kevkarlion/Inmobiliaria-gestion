@@ -3,6 +3,8 @@ import { PropertyRepository } from "../repositories/property.repository";
 import { PropertyTypeRepository } from "../repositories/property-type.repository";
 import { ZoneRepository } from "../repositories/zone.repository";
 import { PropertyModel } from "@/domain/property/property.schema";
+import { NotFoundError } from "@/server/errors/http-error";
+import { BadRequestError } from "@/server/errors/http-error";
 
 export class PropertyService {
   static async create(payload: any) {
@@ -11,10 +13,14 @@ export class PropertyService {
 
     const propertyType =
       await PropertyTypeRepository.findBySlug(propertyTypeSlug);
-    if (!propertyType) throw new Error("Invalid property type");
+    if (!propertyType) {
+      throw new BadRequestError("Invalid property type");
+    }
 
     const zone = await ZoneRepository.findBySlug(zoneSlug);
-    if (!zone) throw new Error("Invalid zone");
+    if (!zone) {
+      throw new BadRequestError("Invalid zone");
+    }
 
     // 🔑 slug único
     let slug = slugify(title, { lower: true });
@@ -109,7 +115,7 @@ export class PropertyService {
   static async findBySlug(slug: string) {
     const property = await PropertyRepository.findBySlug(slug);
     if (!property) {
-      throw new Error("Property not found");
+      throw new NotFoundError("Property not found");
     }
     return property;
   }
