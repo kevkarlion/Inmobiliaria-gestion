@@ -12,6 +12,7 @@ type FindAllOptions = {
 const DEFAULT_LIMIT = 12;
 
 export class PropertyRepository {
+  
   static findAll(filter: any, options: FindAllOptions = {}) {
     return PropertyModel.find(filter)
       .populate("propertyType", "name slug")
@@ -25,6 +26,8 @@ export class PropertyRepository {
   static count(filter: any) {
     return PropertyModel.countDocuments(filter);
   }
+
+
 
   static findBySlug(slug: string) {
     return PropertyModel.findOne({ slug, status: "active" })

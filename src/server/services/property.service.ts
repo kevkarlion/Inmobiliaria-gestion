@@ -63,6 +63,8 @@ export class PropertyService {
     });
   }
 
+
+
   /**
    * GET /properties con filtros + paginación
    */
@@ -159,6 +161,9 @@ export class PropertyService {
     };
   }
 
+
+
+  
   /**
    * GET /properties/:slug
    */
