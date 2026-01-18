@@ -1,58 +1,78 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectDB } from "@/db/connection";
 import { PropertyService } from "../services/property.service";
 import { NextResponse } from "next/server";
 import { HttpError } from "@/server/errors/http-error";
+import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
+import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
+import { CreatePropertyDTO } from "@/dtos/property/create-property.dto";
+import { UpdatePropertyDTO } from '@/dtos/property/update-property.dto'
 
 export class PropertyController {
+  private static handleError(error: unknown) {
+    if (error instanceof HttpError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.status },
+      );
+    }
 
-  private static handleError(error: any) {
-  if (error instanceof HttpError) {
+    console.error(error);
+
     return NextResponse.json(
-      { message: error.message },
-      { status: error.status },
+      { message: "Internal server error" },
+      { status: 500 },
     );
   }
 
-  console.error(error);
-
-  return NextResponse.json(
-    { message: "Internal server error" },
-    { status: 500 },
-  );
-}
-
-
-
-
-    static async create(req: Request) {
+  static async create(req: Request) {
     try {
       await connectDB();
 
       const body = await req.json();
-      const property = await PropertyService.create(body);
 
-      return NextResponse.json(property, { status: 201 });
-    } catch (error: any) {
+      // 1️⃣ DTO de entrada
+      const dto = new CreatePropertyDTO(body);
+
+      // 2️⃣ Service
+      const property = await PropertyService.create(dto);
+
+      // 3️⃣ DTO de salida
+      const response = new PropertyResponseDTO(property);
+
+      return NextResponse.json(response, { status: 201 });
+    } catch (error: unknown) {
       return this.handleError(error);
     }
   }
 
-  
+ static async getAll(req: Request) {
+  try {
+    await connectDB();
 
-  static async getAll(req: Request) {
-    try {
-      await connectDB();
+    const { searchParams } = new URL(req.url);
 
-      const { searchParams } = new URL(req.url);
-      const properties = await PropertyService.findAll(
-        Object.fromEntries(searchParams),
+    // 1️⃣ DTO de query
+    const queryDto = new QueryPropertyDTO(
+      Object.fromEntries(searchParams),
+    );
+
+    // 2️⃣ Service
+ const { items, meta } = await PropertyService.findAll(queryDto);
+    // 3️⃣ DTO de salida
+     const responseItems = items.map(
+        (property) => new PropertyResponseDTO(property),
       );
 
-      return NextResponse.json(properties);
-    } catch (error: any) {
-      return PropertyController.handleError(error);
-    }
+      return NextResponse.json({
+        items: responseItems,
+        meta,
+      });;
+
+  } catch (error: unknown) {
+    return this.handleError(error);
   }
+}
 
   static async getBySlug(
     req: Request,
@@ -62,9 +82,49 @@ export class PropertyController {
       await connectDB();
 
       const property = await PropertyService.findBySlug(params.slug);
-      return NextResponse.json(property);
-    } catch (error: any) {
+
+      return NextResponse.json(
+        new PropertyResponseDTO(property),
+      );
+    } catch (error: unknown) {
       return this.handleError(error);
     }
   }
+
+
+
+  // PUT /properties/:slug
+static async update(
+  req: Request,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    await connectDB();
+    const body = await req.json();
+    const dto = new UpdatePropertyDTO(body);
+
+    const updatedProperty = await PropertyService.update(params.slug, dto);
+
+    return NextResponse.json(new PropertyResponseDTO(updatedProperty));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    return this.handleError(error);
+  }
+}
+
+// DELETE /properties/:slug
+static async delete(
+  req: Request,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    await connectDB();
+    const result = await PropertyService.delete(params.slug);
+    return NextResponse.json(result);
+  } catch (error: any) {
+    return this.handleError(error);
+  }
+}
+
+
 }
