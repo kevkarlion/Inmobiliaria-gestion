@@ -106,7 +106,7 @@ static async update(
     const updatedProperty = await PropertyService.update(params.slug, dto);
 
     return NextResponse.json(new PropertyResponseDTO(updatedProperty));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   } catch (error: any) {
     return this.handleError(error);
   }

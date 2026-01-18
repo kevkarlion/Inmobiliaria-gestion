@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PropertyModel } from "@/db/schemas/property.schema";
 
 type SortOption = Record<string, 1 | -1>;
