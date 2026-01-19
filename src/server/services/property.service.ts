@@ -179,6 +179,8 @@ export class PropertyService {
     };
   }
 
+  
+
   /**
    * GET /properties/:slug
    */
@@ -194,66 +196,93 @@ export class PropertyService {
 
   // PUT /properties/:slug
   static async update(slug: string, payload: UpdatePropertyDTO) {
-    const property = await PropertyRepository.findBySlug(slug);
-    if (!property) throw new NotFoundError("Property not found");
+  const property = await PropertyRepository.findBySlug(slug);
+  if (!property) throw new NotFoundError("Property not found");
 
-    //Creamos un nuevo objeto updateData que copia todo lo que viene del DTO.
-    // Para permitir asignar los IDs
-    const updateData: Record<string, any> = { ...payload };
+  const updateData: Record<string, any> = { ...payload };
 
-    //Si el cliente envió propertyTypeSlug, buscamos el objeto correspondiente en la base de datos.
-    //Si no existe, lanzamos error 400.
-    //Asignamos el _id real a updateData.propertyType (esto es lo que Mongo necesita para relacionar la propiedad con su tipo).
-    //Eliminamos propertyTypeSlug porque ya no necesitamos ese campo en el objeto final.
-    if (payload.propertyTypeSlug) {
-      const type = await PropertyTypeRepository.findBySlug(
-        payload.propertyTypeSlug,
-      );
-      if (!type) throw new BadRequestError("Invalid property type");
-      updateData.propertyType = type._id;
-      delete updateData.propertyTypeSlug;
-    }
-
-    if (payload.zoneSlug) {
-      const zone = await ZoneRepository.findBySlug(payload.zoneSlug);
-      if (!zone) throw new BadRequestError("Invalid zone");
-      updateData.zone = zone._id;
-      delete updateData.zoneSlug;
-    }
-
-    // Actualizamos slug si cambia el title
-    if (payload.title) {
-      let newSlug = slugify(payload.title, { lower: true });
-      let slugExists = await PropertyModel.findOne({ slug: newSlug });
-      let counter = 1;
-      while (
-        slugExists &&
-        slugExists._id.toString() !== property._id.toString()
-      ) {
-        newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
-        slugExists = await PropertyModel.findOne({ slug: newSlug });
-        counter++;
-      }
-      updateData.slug = newSlug;
-    }
-
-    // 🔹 Merge parcial de price (amount y/o currency)
-    if (payload.price) {
-      updateData.price = {
-        amount: payload.price.amount ?? property.price.amount,
-        currency: payload.price.currency ?? property.price.currency,
-      };
-    }
-
-    // 🔹 Merge final: solo actualizar campos existentes en payload
-    Object.keys(updateData).forEach((key) => {
-      if (updateData[key] !== undefined) property[key] = updateData[key];
-    });
-
-    await property.save();
-
-    return property;
+  // propertyType
+  if (payload.propertyTypeSlug) {
+    const type = await PropertyTypeRepository.findBySlug(payload.propertyTypeSlug);
+    if (!type) throw new BadRequestError("Invalid property type");
+    updateData.propertyType = type._id;
+    delete updateData.propertyTypeSlug;
   }
+
+  // zone
+  if (payload.zoneSlug) {
+    const zone = await ZoneRepository.findBySlug(payload.zoneSlug);
+    if (!zone) throw new BadRequestError("Invalid zone");
+    updateData.zone = zone._id;
+    delete updateData.zoneSlug;
+  }
+
+  // Actualizamos slug si cambia el title
+  if (payload.title) {
+    let newSlug = slugify(payload.title, { lower: true });
+    let slugExists = await PropertyModel.findOne({ slug: newSlug });
+    let counter = 1;
+    while (slugExists && slugExists._id.toString() !== property._id.toString()) {
+      newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
+      slugExists = await PropertyModel.findOne({ slug: newSlug });
+      counter++;
+    }
+    updateData.slug = newSlug;
+  }
+
+  // 🔹 Merge parcial de price (amount y/o currency)
+  if (payload.price) {
+    updateData.price = {
+      amount: payload.price.amount ?? property.price.amount,
+      currency: payload.price.currency ?? property.price.currency,
+    };
+  }
+
+  // 🔹 Merge parcial de features
+  if (payload.features) {
+    updateData.features = {
+      bedrooms: payload.features.bedrooms ?? property.features.bedrooms,
+      bathrooms: payload.features.bathrooms ?? property.features.bathrooms,
+      totalM2: payload.features.totalM2 ?? property.features.totalM2,
+      coveredM2: payload.features.coveredM2 ?? property.features.coveredM2,
+      rooms: payload.features.rooms ?? property.features.rooms,
+      garage: payload.features.garage ?? property.features.garage,
+    };
+  }
+
+  // 🔹 Merge parcial de address
+  if (payload.address) {
+    updateData.address = {
+      street: payload.address.street ?? property.address?.street,
+      number: payload.address.number ?? property.address?.number,
+      zipCode: payload.address.zipCode ?? property.address?.zipCode,
+    };
+  }
+
+  // 🔹 Merge parcial de flags
+  if (payload.flags) {
+    updateData.flags = {
+      featured: payload.flags.featured ?? property.flags.featured,
+      opportunity: payload.flags.opportunity ?? property.flags.opportunity,
+      premium: payload.flags.premium ?? property.flags.premium,
+    };
+  }
+
+  // 🔹 Otros campos simples: description, tags, images, status
+  if (payload.description !== undefined) updateData.description = payload.description;
+  if (payload.tags !== undefined) updateData.tags = payload.tags;
+  if (payload.images !== undefined) updateData.images = payload.images;
+  if (payload.status !== undefined) updateData.status = payload.status;
+
+  // 🔹 Merge final: solo actualizar campos existentes en payload
+  Object.keys(updateData).forEach((key) => {
+    if (updateData[key] !== undefined) property[key] = updateData[key];
+  });
+
+  await property.save();
+
+  return property;
+}
 
   // DELETE /properties/:slug
   static async delete(slug: string) {

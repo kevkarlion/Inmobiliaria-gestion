@@ -1,28 +1,43 @@
-//transformando el "desorden" que viene de internet (body) en un objeto limpio, tipado y organizado que tu servicio de base de datos puede entender sin errores.
+// backend/dto/UpdatePropertyDTO.ts
 export class UpdatePropertyDTO {
   title?: string;
-  operationType?: string;
+  slug?: string;
+  operationType?: "venta" | "alquiler";
   propertyTypeSlug?: string;
   zoneSlug?: string;
+
+  address?: {
+    street?: string;
+    number?: string;
+    zipCode?: string;
+  };
+
   price?: {
     amount?: number;
-    currency?: string;
+    currency?: "USD" | "ARS";
   };
+
   features?: {
     bedrooms?: number;
     bathrooms?: number;
-    m2?: number;
+    totalM2?: number;
+    coveredM2?: number;
+    rooms?: number;
     garage?: boolean;
   };
+
   flags?: {
     featured?: boolean;
-    premium?: boolean;
     opportunity?: boolean;
+    premium?: boolean;
   };
 
+  tags?: string[];
+  images?: string[];
+  description?: string;
+  status?: "active" | "inactive";
 
-  //Asignación Masiva" (Object.assign)
-  //Agarra todo lo que viene en data y lo "pega" automáticamente en this.
+  // Asignación masiva segura
   constructor(data: Partial<UpdatePropertyDTO>) {
     Object.assign(this, data);
   }
