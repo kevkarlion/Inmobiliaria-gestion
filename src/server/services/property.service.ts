@@ -6,14 +6,17 @@ import { ZoneRepository } from "../repositories/zone.repository";
 import { PropertyModel } from "@/domain/property/property.schema";
 import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
 
+import { QueryPropertyDTO } from '@/dtos/property/query-property.dto'
+ 
+
 import { NotFoundError, BadRequestError } from "@/server/errors/http-error";
 
 /**
  * Tipo explícito para sort de Mongo
  */
-type SortOption = Record<string, 1 | -1>;
 
 export class PropertyService {
+  
   static async create(payload: any) {
     const { title, operationType, propertyTypeSlug, zoneSlug, ...rest } =
       payload;
@@ -69,80 +72,94 @@ export class PropertyService {
    * GET /properties con filtros + paginación
    */
 
-  static async findAll(query: any) {
-    const filter: any = { status: "active" };
+  static async findAll(query: QueryPropertyDTO) {
+    // 🔹 filtro base
+    const filter: any = {
+      status: "active",
+    };
 
-    if (query.operationType) {
-      filter.operationType = query.operationType;
+    const f = query.filters;
+
+    // 🔍 filtros simples
+    if (f.operationType) {
+      filter.operationType = f.operationType;
     }
 
-    if (query.search) {
-      filter.title = { $regex: query.search, $options: "i" };
+    if (f.search) {
+      filter.title = {
+        $regex: f.search,
+        $options: "i",
+      };
     }
 
-    if (query.minPrice || query.maxPrice) {
+    // 💰 precio
+    if (f.minPrice !== undefined || f.maxPrice !== undefined) {
       filter["price.amount"] = {};
-      if (query.minPrice) {
-        filter["price.amount"].$gte = Number(query.minPrice);
+      if (f.minPrice !== undefined) {
+        filter["price.amount"].$gte = f.minPrice;
       }
-      if (query.maxPrice) {
-        filter["price.amount"].$lte = Number(query.maxPrice);
+      if (f.maxPrice !== undefined) {
+        filter["price.amount"].$lte = f.maxPrice;
       }
     }
 
-    if (query.propertyType) {
-      const type = await PropertyTypeRepository.findBySlug(query.propertyType);
+    // 🏷 tipo de propiedad (slug → _id)
+    if (f.propertyType) {
+      const type = await PropertyTypeRepository.findBySlug(f.propertyType);
       if (type) {
         filter.propertyType = type._id;
       }
     }
 
-    if (query.zone) {
-      const zone = await ZoneRepository.findBySlug(query.zone);
+    // 📍 zona (slug → _id)
+    if (f.zone) {
+      const zone = await ZoneRepository.findBySlug(f.zone);
       if (zone) {
         filter.zone = zone._id;
       }
     }
 
-    if (query.bedrooms) {
-      filter["features.bedrooms"] = { $gte: Number(query.bedrooms) };
+    // 🛏 features
+    if (f.bedrooms !== undefined) {
+      filter["features.bedrooms"] = { $gte: f.bedrooms };
     }
 
-    if (query.bathrooms) {
-      filter["features.bathrooms"] = { $gte: Number(query.bathrooms) };
+    if (f.bathrooms !== undefined) {
+      filter["features.bathrooms"] = { $gte: f.bathrooms };
     }
 
-    if (query.minM2 || query.maxM2) {
+    if (f.minM2 !== undefined || f.maxM2 !== undefined) {
       filter["features.m2"] = {};
-      if (query.minM2) {
-        filter["features.m2"].$gte = Number(query.minM2);
+      if (f.minM2 !== undefined) {
+        filter["features.m2"].$gte = f.minM2;
       }
-      if (query.maxM2) {
-        filter["features.m2"].$lte = Number(query.maxM2);
+      if (f.maxM2 !== undefined) {
+        filter["features.m2"].$lte = f.maxM2;
       }
     }
 
-    if (query.garage) {
-      filter["features.garage"] = query.garage === "true";
+    if (f.garage !== undefined) {
+      filter["features.garage"] = f.garage;
     }
 
-    const flagKeys = ["featured", "premium", "opportunity"];
-    flagKeys.forEach((flag) => {
-      if (query[flag]) {
-        filter[`flags.${flag}`] = query[flag] === "true";
+    // 🚩 flags
+    const flags: Array<keyof typeof f> = [
+      "featured",
+      "premium",
+      "opportunity",
+    ];
+
+    flags.forEach((flag) => {
+      if (f[flag] !== undefined) {
+        filter[`flags.${flag}`] = f[flag];
       }
     });
 
-    // 🔥 sort bien tipado
-    const order: 1 | -1 = query.order === "asc" ? 1 : -1;
-
-    const sort: SortOption =
-      query.sortBy === "price" ? { "price.amount": order } : { createdAt: -1 };
-
     // 📄 paginación
-    const page = Number(query.page) || 1;
-    const limit = Number(query.limit) || 12;
-    const skip = (page - 1) * limit;
+    const { skip, limit, page } = query.pagination;
+
+    // 🔃 orden
+    const sort = query.sort.sort;
 
     // ⚡ queries en paralelo
     const [items, total] = await Promise.all([

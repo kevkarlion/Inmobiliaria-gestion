@@ -7,6 +7,7 @@ import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
 import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
 import { CreatePropertyDTO } from "@/dtos/property/create-property.dto";
 import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
+import { PropertyFilterDTO } from "@/dtos/property/filter-property.dto";
 
 export class PropertyController {
   private static handleError(error: unknown) {
@@ -44,34 +45,32 @@ export class PropertyController {
     }
   }
 
-  static async getAll(req: Request) {
-    try {
-      await connectDB();
+ static async getAll(req: Request) {
+  try {
+    await connectDB();
 
-      const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(req.url);
+    const rawQuery = Object.fromEntries(searchParams);
 
-      console.log("RAW PARAMS:", Object.fromEntries(searchParams));
+    const queryDto = new QueryPropertyDTO(rawQuery);
 
-      // 1️⃣ DTO de query
-      const queryDto = new QueryPropertyDTO(Object.fromEntries(searchParams));
+    const { items, meta } = await PropertyService.findAll(queryDto);
 
-      console.log("DTO:", queryDto);
+    const responseItems = items.map(
+      (property) => new PropertyResponseDTO(property),
+    );
 
-      // 2️⃣ Service
-      const { items, meta } = await PropertyService.findAll(queryDto);
-      // 3️⃣ DTO de salida
-      const responseItems = items.map(
-        (property) => new PropertyResponseDTO(property),
-      );
-
-      return NextResponse.json({
-        items: responseItems,
-        meta,
-      });
-    } catch (error: unknown) {
-      return this.handleError(error);
-    }
+    return NextResponse.json({
+      items: responseItems,
+      meta,
+    });
+  } catch (error: unknown) {
+    return this.handleError(error);
   }
+}
+
+
+
 
   static async getBySlug(
     req: Request,

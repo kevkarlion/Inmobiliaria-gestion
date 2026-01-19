@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export class PropertyResponseDTO {
   id: string;
   title: string;
