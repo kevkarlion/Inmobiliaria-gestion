@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ZoneModel } from '@/domain/zone/zone.schema'
 
 export class ZoneRepository {

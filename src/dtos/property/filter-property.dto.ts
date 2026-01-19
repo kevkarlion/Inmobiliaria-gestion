@@ -20,11 +20,28 @@ export class PropertyFilterDTO {
   opportunity?: boolean;
 
   constructor(query: any) {
-    this.operationType = query.operationType;
-    this.propertyType = query.propertyType;
-    this.zone = query.zone;
-    this.search = query.search;
+    // 🔑 STRINGS
+    this.operationType =
+      query.operationType && query.operationType !== ""
+        ? query.operationType
+        : undefined;
 
+    this.propertyType =
+      query.propertyType && query.propertyType !== ""
+        ? query.propertyType
+        : undefined;
+
+    this.zone =
+      query.zone && query.zone !== ""
+        ? query.zone
+        : undefined;
+
+    this.search =
+      query.search && query.search.trim() !== ""
+        ? query.search.trim()
+        : undefined;
+
+    // 🔢 NUMBERS
     this.minPrice = query.minPrice ? Number(query.minPrice) : undefined;
     this.maxPrice = query.maxPrice ? Number(query.maxPrice) : undefined;
 
@@ -34,16 +51,33 @@ export class PropertyFilterDTO {
     this.minM2 = query.minM2 ? Number(query.minM2) : undefined;
     this.maxM2 = query.maxM2 ? Number(query.maxM2) : undefined;
 
+    // ✅ BOOLEANS
     this.garage =
-      query.garage !== undefined ? query.garage === "true" : undefined;
+      query.garage === "true"
+        ? true
+        : query.garage === "false"
+        ? false
+        : undefined;
 
     this.featured =
-      query.featured !== undefined ? query.featured === "true" : undefined;
+      query.featured === "true"
+        ? true
+        : query.featured === "false"
+        ? false
+        : undefined;
 
     this.premium =
-      query.premium !== undefined ? query.premium === "true" : undefined;
+      query.premium === "true"
+        ? true
+        : query.premium === "false"
+        ? false
+        : undefined;
 
     this.opportunity =
-      query.opportunity !== undefined ? query.opportunity === "true" : undefined;
+      query.opportunity === "true"
+        ? true
+        : query.opportunity === "false"
+        ? false
+        : undefined;
   }
 }

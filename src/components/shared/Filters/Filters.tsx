@@ -40,7 +40,6 @@ export default function Filters() {
         <option className="text-black" value="norte">Norte</option>
         <option className="text-black" value="sur">Sur</option>
         <option className="text-black" value="centro">Centro</option>
-        <option className="text-black" value="zona-norte">Zona-Norte</option>
         <option className="text-black" value="zona-comercial">Zona-Comercial</option>
         <option className="text-black" value="zona-universitaria">Zona-Universitaria</option>
         <option className="text-black" value="costanera">Costanera</option>

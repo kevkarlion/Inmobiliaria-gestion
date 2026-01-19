@@ -6,7 +6,7 @@ export class PropertyResponseDTO {
   price: any;
   propertyType: any;
   zone: any;
-
+  operationType: string;
   address?: {
     street?: string;
     number?: string;
@@ -20,6 +20,7 @@ export class PropertyResponseDTO {
     this.price = property.price;
     this.propertyType = property.propertyType;
     this.zone = property.zone;
+    this.operationType = property.operationType;
     this.address = property.address;
   }
 }

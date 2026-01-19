@@ -15,8 +15,6 @@ import { NotFoundError, BadRequestError } from "@/server/errors/http-error";
  */
 
 export class PropertyService {
-
-
   static async create(payload: any) {
     const { title, operationType, propertyTypeSlug, zoneSlug, ...rest } =
       payload;
@@ -47,7 +45,7 @@ export class PropertyService {
       counter++;
     }
 
-    console.log("PAYLOAD ADDRESS:", rest.address)
+    console.log("PAYLOAD ADDRESS:", rest.address);
     //envio estrictamente los datos para minimizar errores
     return PropertyRepository.create({
       title,
@@ -91,6 +89,12 @@ export class PropertyService {
       };
     }
 
+    if (f.operationType) {
+              console.log('f.propertyType', f.operationType)
+
+      filter.operationType = f.operationType.toLowerCase();
+    }
+
     // 💰 precio
     if (f.minPrice !== undefined || f.maxPrice !== undefined) {
       filter["price.amount"] = {};
@@ -109,6 +113,8 @@ export class PropertyService {
         filter.propertyType = type._id;
       }
     }
+
+    
 
     // 📍 zona (slug → _id)
     if (f.zone) {

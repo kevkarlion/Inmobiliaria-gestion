@@ -59,6 +59,8 @@ export class PropertyController {
       (property) => new PropertyResponseDTO(property),
     );
 
+
+    console.log('responseItems', responseItems)
     return NextResponse.json({
       items: responseItems,
       meta,
