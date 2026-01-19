@@ -6,8 +6,7 @@ import { ZoneRepository } from "../repositories/zone.repository";
 import { PropertyModel } from "@/domain/property/property.schema";
 import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
 
-import { QueryPropertyDTO } from '@/dtos/property/query-property.dto'
- 
+import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
 
 import { NotFoundError, BadRequestError } from "@/server/errors/http-error";
 
@@ -16,7 +15,8 @@ import { NotFoundError, BadRequestError } from "@/server/errors/http-error";
  */
 
 export class PropertyService {
-  
+
+
   static async create(payload: any) {
     const { title, operationType, propertyTypeSlug, zoneSlug, ...rest } =
       payload;
@@ -47,7 +47,7 @@ export class PropertyService {
       counter++;
     }
 
-
+    console.log("PAYLOAD ADDRESS:", rest.address)
     //envio estrictamente los datos para minimizar errores
     return PropertyRepository.create({
       title,
@@ -55,18 +55,17 @@ export class PropertyService {
       operationType,
       propertyType: propertyType._id,
       zone: zone._id,
+      address: rest.address ?? {},
       price: rest.price
         ? {
             amount: Number(rest.price.amount),
-            currency: rest.price.currency || "ARS", // default si no viene
+            currency: rest.price.currency || "ARS",
           }
-        : { amount: 0, currency: "ARS" }, // por si acaso
+        : { amount: 0, currency: "ARS" },
       features: rest.features || {},
       flags: rest.flags || {},
     });
   }
-
-
 
   /**
    * GET /properties con filtros + paginación
@@ -143,11 +142,7 @@ export class PropertyService {
     }
 
     // 🚩 flags
-    const flags: Array<keyof typeof f> = [
-      "featured",
-      "premium",
-      "opportunity",
-    ];
+    const flags: Array<keyof typeof f> = ["featured", "premium", "opportunity"];
 
     flags.forEach((flag) => {
       if (f[flag] !== undefined) {
@@ -178,9 +173,6 @@ export class PropertyService {
     };
   }
 
-
-
-  
   /**
    * GET /properties/:slug
    */

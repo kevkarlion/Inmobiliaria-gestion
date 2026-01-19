@@ -7,7 +7,6 @@ import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
 import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
 import { CreatePropertyDTO } from "@/dtos/property/create-property.dto";
 import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
-import { PropertyFilterDTO } from "@/dtos/property/filter-property.dto";
 
 export class PropertyController {
   private static handleError(error: unknown) {

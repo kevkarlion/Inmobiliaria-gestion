@@ -3,9 +3,15 @@ export class PropertyResponseDTO {
   id: string;
   title: string;
   slug: string;
-  price: number;
+  price: any;
   propertyType: any;
   zone: any;
+
+  address?: {
+    street?: string;
+    number?: string;
+    zipCode?: string;
+  };
 
   constructor(property: any) {
     this.id = property._id.toString();
@@ -14,5 +20,6 @@ export class PropertyResponseDTO {
     this.price = property.price;
     this.propertyType = property.propertyType;
     this.zone = property.zone;
+    this.address = property.address;
   }
 }
