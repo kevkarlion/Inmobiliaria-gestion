@@ -3,19 +3,16 @@
 
 import Link from "next/link";
 
-
-
-
 export default function PropertyCard({ property }: any) {
   return (
     <Link href={`/properties/${property.slug}`}>
-      <div className="relative border p-4 rounded-lg bg-white text-black dark:bg-neutral-900 dark:text-white">
+      <div className="border p-4 rounded-lg bg-white text-black dark:bg-neutral-900 dark:text-white hover:shadow-md transition">
 
         {/* FLAGS */}
         {(property.flags?.featured ||
           property.flags?.opportunity ||
           property.flags?.premium) && (
-          <div className="absolute top-2 right-2 flex flex-col gap-1 text-xs">
+          <div className="flex flex-wrap gap-2 text-xs mb-2">
             {property.flags.featured && (
               <span className="bg-yellow-500 text-white px-2 py-1 rounded">
                 Destacada
@@ -34,8 +31,24 @@ export default function PropertyCard({ property }: any) {
           </div>
         )}
 
+        {/* TAGS */}
+        {property.tags?.length > 0 && (
+          <div className="flex flex-wrap gap-2 text-xs mb-2">
+            {property.tags.map((tag: string, i: number) => (
+              <span
+                key={i}
+                className="bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 px-2 py-1 rounded"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
         {/* TÍTULO */}
-        <h2 className="font-semibold text-lg mb-1">{property.title}</h2>
+        <h2 className="font-semibold text-lg mb-1 leading-tight">
+          {property.title}
+        </h2>
 
         {/* OPERACIÓN */}
         {property.operationType && (
@@ -52,7 +65,7 @@ export default function PropertyCard({ property }: any) {
 
         {/* DIRECCIÓN */}
         {(property.address?.street || property.zone?.name) && (
-          <p className="text-sm text-gray-600 mb-1">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
             {property.address?.street
               ? `${property.address.street} ${property.address.number ?? ""}`
               : ""}
@@ -60,7 +73,7 @@ export default function PropertyCard({ property }: any) {
           </p>
         )}
 
-        {/* TIPO DE PROPIEDAD */}
+        {/* TIPO */}
         {property.propertyType?.name && (
           <p className="text-sm text-gray-500 mb-1">
             Tipo: {property.propertyType.name}
@@ -104,4 +117,3 @@ export default function PropertyCard({ property }: any) {
     </Link>
   );
 }
-

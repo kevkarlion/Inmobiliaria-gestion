@@ -33,6 +33,7 @@ export default function Filters() {
         <option className="text-black" value="">Tipo</option>
         <option className="text-black" value="casa">Casa</option>
         <option className="text-black" value="departamento">Departamento</option>
+        <option className="text-black" value="terreno">Terreno</option>
       </select>
 
       <select onChange={(e) => updateFilter("zone", e.target.value)}>
