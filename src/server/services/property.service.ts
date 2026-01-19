@@ -45,7 +45,7 @@ export class PropertyService {
       counter++;
     }
 
-    console.log("PAYLOAD ADDRESS:", rest.address);
+   
     //envio estrictamente los datos para minimizar errores
     return PropertyRepository.create({
       title,
@@ -90,8 +90,6 @@ export class PropertyService {
     }
 
     if (f.operationType) {
-              console.log('f.propertyType', f.operationType)
-
       filter.operationType = f.operationType.toLowerCase();
     }
 

@@ -63,7 +63,7 @@ export default function EditPropertyForm({ property, slug, onClose }: EditProper
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log("Editing property:", form);
+    
 
     try {
       const res = await fetch(`/api/properties/${slug}`, {
@@ -74,8 +74,7 @@ export default function EditPropertyForm({ property, slug, onClose }: EditProper
 
       if (!res.ok) throw new Error("Error actualizando propiedad");
 
-      const data = await res.json();
-      console.log("Propiedad actualizada:", data);
+      
       alert("Propiedad actualizada con éxito!");
       onClose();
     } catch (error) {

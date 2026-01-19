@@ -81,7 +81,7 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
   // 🔹 Envío del formulario
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log("Form data:", form);
+  
 
     try {
       const res = await fetch("/api/properties", {
@@ -94,8 +94,8 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
 
       if (!res.ok) throw new Error("Error creando propiedad");
 
-      const data = await res.json();
-      console.log("Propiedad creada:", data);
+   
+      
       alert("Propiedad creada con éxito!");
     } catch (error) {
       console.error(error);
@@ -165,6 +165,7 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
           <option value="">Seleccione</option>
           <option value="casa">Casa</option>
           <option value="departamento">Departamento</option>
+          <option value="terreno">Terreno</option>
         </select>
       </div>
 

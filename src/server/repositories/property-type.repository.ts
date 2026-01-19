@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PropertyTypeModel } from '@/domain/property-type/property-type.schema'
 
 export class PropertyTypeRepository {

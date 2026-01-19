@@ -1,4 +1,3 @@
-
 import { notFound } from "next/navigation";
 import { PropertyService } from "@/server/services/property.service";
 import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
@@ -7,7 +6,9 @@ interface PropertyPageProps {
   params: { slug: string };
 }
 
-export default async function PropertyPageDetail({ params }: PropertyPageProps) {
+export default async function PropertyPageDetail({
+  params,
+}: PropertyPageProps) {
   // 🔹 Si params es Promise, desestructuramos con await
   const resolvedParams = await params;
   const { slug } = resolvedParams;
@@ -23,10 +24,27 @@ export default async function PropertyPageDetail({ params }: PropertyPageProps) 
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">{dto.title}</h1>
 
-      {dto.flags?.featured && (
-        <span className="inline-block bg-yellow-500 text-white px-3 py-1 rounded mb-4">
-          Destacada
-        </span>
+      {/* FLAGS */}
+      {(dto.flags?.featured ||
+        dto.flags?.opportunity ||
+        dto.flags?.premium) && (
+        <div className="flex gap-2 mb-4 text-sm">
+          {dto.flags.featured && (
+            <span className="bg-yellow-500 text-white px-3 py-1 rounded">
+              Destacada
+            </span>
+          )}
+          {dto.flags.opportunity && (
+            <span className="bg-red-500 text-white px-3 py-1 rounded">
+              Oportunidad
+            </span>
+          )}
+          {dto.flags.premium && (
+            <span className="bg-purple-600 text-white px-3 py-1 rounded">
+              Premium
+            </span>
+          )}
+        </div>
       )}
 
       <p className="text-lg font-medium mb-2">

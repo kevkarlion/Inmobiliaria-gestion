@@ -3,16 +3,35 @@
 
 import Link from "next/link";
 
+
+
+
 export default function PropertyCard({ property }: any) {
   return (
     <Link href={`/properties/${property.slug}`}>
       <div className="relative border p-4 rounded-lg bg-white text-black dark:bg-neutral-900 dark:text-white">
 
-        {/* FEATURED */}
-        {property.flags?.featured && (
-          <span className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded">
-            Destacada
-          </span>
+        {/* FLAGS */}
+        {(property.flags?.featured ||
+          property.flags?.opportunity ||
+          property.flags?.premium) && (
+          <div className="absolute top-2 right-2 flex flex-col gap-1 text-xs">
+            {property.flags.featured && (
+              <span className="bg-yellow-500 text-white px-2 py-1 rounded">
+                Destacada
+              </span>
+            )}
+            {property.flags.opportunity && (
+              <span className="bg-red-500 text-white px-2 py-1 rounded">
+                Oportunidad
+              </span>
+            )}
+            {property.flags.premium && (
+              <span className="bg-purple-600 text-white px-2 py-1 rounded">
+                Premium
+              </span>
+            )}
+          </div>
         )}
 
         {/* TÍTULO */}
@@ -20,7 +39,13 @@ export default function PropertyCard({ property }: any) {
 
         {/* OPERACIÓN */}
         {property.operationType && (
-          <p className={`text-sm font-medium mb-1 ${property.operationType === "venta" ? "text-green-600" : "text-blue-600"}`}>
+          <p
+            className={`text-sm font-medium mb-1 ${
+              property.operationType === "venta"
+                ? "text-green-600"
+                : "text-blue-600"
+            }`}
+          >
             {property.operationType === "venta" ? "Venta" : "Alquiler"}
           </p>
         )}
@@ -37,32 +62,46 @@ export default function PropertyCard({ property }: any) {
 
         {/* TIPO DE PROPIEDAD */}
         {property.propertyType?.name && (
-          <p className="text-sm text-gray-500 mb-1">Tipo: {property.propertyType.name}</p>
+          <p className="text-sm text-gray-500 mb-1">
+            Tipo: {property.propertyType.name}
+          </p>
         )}
 
         {/* FEATURES */}
         <p className="text-sm text-gray-500 mb-1">
-          {property.features?.bedrooms !== undefined && <>Dorms: {property.features.bedrooms} </>}
-          {property.features?.bathrooms !== undefined && <> • Baños: {property.features.bathrooms} </>}
-          {property.features?.rooms !== undefined && <> • Amb.: {property.features.rooms} </>}
+          {property.features?.bedrooms !== undefined && (
+            <>Dorms: {property.features.bedrooms} </>
+          )}
+          {property.features?.bathrooms !== undefined && (
+            <> • Baños: {property.features.bathrooms} </>
+          )}
+          {property.features?.rooms !== undefined && (
+            <> • Amb.: {property.features.rooms} </>
+          )}
           {property.features?.garage && <> • Garage</>}
         </p>
 
         {/* METROS */}
         {(property.features?.totalM2 || property.features?.coveredM2) && (
           <p className="text-sm text-gray-500 mb-1">
-            {property.features.totalM2 && <>Total: {property.features.totalM2} m²</>}
-            {property.features.coveredM2 && <> • Cubiertos: {property.features.coveredM2} m²</>}
+            {property.features.totalM2 && (
+              <>Total: {property.features.totalM2} m²</>
+            )}
+            {property.features.coveredM2 && (
+              <> • Cubiertos: {property.features.coveredM2} m²</>
+            )}
           </p>
         )}
 
         {/* PRECIO */}
         {property.price && (
           <p className="font-bold text-lg mt-2">
-            {property.price.currency} {property.price.amount.toLocaleString("es-AR")}
+            {property.price.currency}{" "}
+            {property.price.amount.toLocaleString("es-AR")}
           </p>
         )}
       </div>
     </Link>
   );
 }
+
