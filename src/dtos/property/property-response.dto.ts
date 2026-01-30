@@ -1,37 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// domain/dtos/PropertyResponse.dto.ts
+import { Property } from "@/domain/types/Property.types";
+
 export class PropertyResponseDTO {
   id: string;
   title: string;
   slug: string;
-  price: any;
-  propertyType: any;
-  zone: any;
+  price: Property["price"];         // Extrae el tipo directamente de la interfaz
+  propertyType: Property["propertyType"]; 
+  zone: Property["zone"];
   operationType: string;
-  address?: {
-    street?: string;
-    number?: string;
-    zipCode?: string;
-  };
-  features?: {
-    bedrooms?: number;
-    bathrooms?: number;
-    totalM2?: number;
-    coveredM2?: number;
-    rooms?: number;
-    garage?: boolean;
-  };
-  flags?: {
-    featured?: boolean;
-    opportunity?: boolean;
-    premium?: boolean;
-  };
-  age?: number;
-  tags?: string[];
-  images?: string[];
+  address: Property["address"];
+  features: Property["features"];
+  flags: Property["flags"];
+  tags: string[];
+  images: string[];
   description?: string;
   status?: string;
 
-  constructor(property: any) {
+  constructor(property: Property) { // <--- Aquí usamos la interfaz de "dato cocinado"
     this.id = property._id.toString();
     this.title = property.title;
     this.slug = property.slug;
@@ -39,10 +25,9 @@ export class PropertyResponseDTO {
     this.propertyType = property.propertyType;
     this.zone = property.zone;
     this.operationType = property.operationType;
-    this.address = property.address || {};
-    this.features = property.features || {};
-    this.flags = property.flags || {};
-    this.age = property.age;
+    this.address = property.address;
+    this.features = property.features;
+    this.flags = property.flags;
     this.tags = property.tags || [];
     this.images = property.images || [];
     this.description = property.description;

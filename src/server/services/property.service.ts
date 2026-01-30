@@ -4,6 +4,9 @@ import { PropertyRepository } from "../repositories/property.repository";
 import { PropertyTypeRepository } from "../repositories/property-type.repository";
 import { ZoneRepository } from "../repositories/zone.repository";
 import { PropertyModel } from "@/domain/property/property.schema";
+import { IProperty } from "@/domain/interfaces/property.interface";
+import { Property } from "@/domain/types/Property.types";
+import { CreatePropertyDTO } from "@/dtos/property/create-property.dto";
 import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
 
 import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
@@ -15,54 +18,84 @@ import { NotFoundError, BadRequestError } from "@/server/errors/http-error";
  */
 
 export class PropertyService {
-  static async create(payload: any) {
-    const { title, operationType, propertyTypeSlug, zoneSlug, ...rest } =
-      payload;
-
-    if (!title || !operationType) {
-      throw new BadRequestError("Missing required fields");
-    }
-
-    const propertyType =
-      await PropertyTypeRepository.findBySlug(propertyTypeSlug);
+  /**
+   * Crea una nueva propiedad, valida referencias y retorna el objeto poblado.
+   */
+  static async create(dto: CreatePropertyDTO): Promise<Property> {
+    // 1. Validar que las entidades relacionadas existan
+    const propertyType = await PropertyTypeRepository.findBySlug(dto.propertyTypeSlug);
     if (!propertyType) {
-      throw new BadRequestError("Invalid property type");
+      throw new BadRequestError(`El tipo de propiedad '${dto.propertyTypeSlug}' no existe.`);
     }
 
-    const zone = await ZoneRepository.findBySlug(zoneSlug);
+    const zone = await ZoneRepository.findBySlug(dto.zoneSlug);
     if (!zone) {
-      throw new BadRequestError("Invalid zone");
+      throw new BadRequestError(`La zona '${dto.zoneSlug}' no existe.`);
     }
 
-    // 🔑 slug único
-    let slug = slugify(title, { lower: true });
+    // 2. Generar Slug único (Lógica de negocio)
+    let slug = slugify(dto.title, { lower: true, strict: true });
     let slugExists = await PropertyModel.findOne({ slug });
     let counter = 1;
 
     while (slugExists) {
-      slug = `${slugify(title, { lower: true })}-${counter}`;
-      slugExists = await PropertyModel.findOne({ slug });
+      const newSlug = `${slugify(dto.title, { lower: true, strict: true })}-${counter}`;
+      slugExists = await PropertyModel.findOne({ slug: newSlug });
+      if (!slugExists) {
+        slug = newSlug;
+      }
       counter++;
     }
 
-   
-    //envio estrictamente los datos para minimizar errores
-    return PropertyRepository.create({
-      title,
-      slug,
-      operationType,
-      propertyType: propertyType._id,
-      zone: zone._id,
-      address: rest.address ?? {},
-      price: rest.price
-        ? {
-            amount: Number(rest.price.amount),
-            currency: rest.price.currency || "ARS",
-          }
-        : { amount: 0, currency: "ARS" },
-      features: rest.features || {},
-      flags: rest.flags || {},
-    });
+    // 3. Mapear DTO a IProperty (Formato de Base de Datos)
+    const propertyToSave: Partial<IProperty> = {
+      title: dto.title,
+      slug: slug,
+      operationType: dto.operationType as "venta" | "alquiler",
+      propertyType: propertyType._id, // Guardamos la referencia
+      zone: zone._id,                 // Guardamos la referencia
+      price: {
+        amount: dto.price.amount,
+        currency: (dto.price.currency as "USD" | "ARS") || "ARS",
+      },
+      address: {
+        street: dto.address?.street || "",
+        number: dto.address?.number || "",
+        zipCode: dto.address?.zipCode || "",
+      },
+      features: {
+        bedrooms: dto.features?.bedrooms || 0,
+        bathrooms: dto.features?.bathrooms || 0,
+        rooms: 0, // Valor por defecto o extender DTO
+        totalM2: dto.features?.m2 || 0, // Mapeo de 'm2' a 'totalM2'
+        coveredM2: 0,
+        garage: !!dto.features?.garage,
+      },
+      flags: {
+        featured: !!dto.flags?.featured,
+        opportunity: !!dto.flags?.opportunity,
+        premium: !!dto.flags?.premium,
+      },
+      status: "active",
+      tags: [],
+      images: [],
+    };
+
+    // 4. Guardar en Base de Datos
+    const savedProperty = await PropertyRepository.create(propertyToSave);
+
+    // 5. Poblar datos para cumplir con la interfaz 'Property' de salida
+    // Esto es lo que permite que el PropertyResponseDTO reciba objetos y no IDs
+    const result = await PropertyModel.findById(savedProperty._id)
+      .populate("propertyType")
+      .populate("zone")
+      .lean();
+
+    if (!result) {
+      throw new Error("Error crítico: No se pudo recuperar la propiedad creada.");
+    }
+
+    return result as unknown as Property;
   }
 
   /**
@@ -74,25 +107,20 @@ export class PropertyService {
     const filter: any = {
       status: "active",
     };
-
     const f = query.filters;
-
     // 🔍 filtros simples
     if (f.operationType) {
       filter.operationType = f.operationType;
     }
-
     if (f.search) {
       filter.title = {
         $regex: f.search,
         $options: "i",
       };
     }
-
     if (f.operationType) {
       filter.operationType = f.operationType.toLowerCase();
     }
-
     // 💰 precio
     if (f.minPrice !== undefined || f.maxPrice !== undefined) {
       filter["price.amount"] = {};
@@ -103,7 +131,6 @@ export class PropertyService {
         filter["price.amount"].$lte = f.maxPrice;
       }
     }
-
     // 🏷 tipo de propiedad (slug → _id)
     if (f.propertyType) {
       const type = await PropertyTypeRepository.findBySlug(f.propertyType);
@@ -111,9 +138,6 @@ export class PropertyService {
         filter.propertyType = type._id;
       }
     }
-
-    
-
     // 📍 zona (slug → _id)
     if (f.zone) {
       const zone = await ZoneRepository.findBySlug(f.zone);
@@ -121,16 +145,13 @@ export class PropertyService {
         filter.zone = zone._id;
       }
     }
-
     // 🛏 features
     if (f.bedrooms !== undefined) {
       filter["features.bedrooms"] = { $gte: f.bedrooms };
     }
-
     if (f.bathrooms !== undefined) {
       filter["features.bathrooms"] = { $gte: f.bathrooms };
     }
-
     if (f.minM2 !== undefined || f.maxM2 !== undefined) {
       filter["features.m2"] = {};
       if (f.minM2 !== undefined) {
@@ -140,32 +161,25 @@ export class PropertyService {
         filter["features.m2"].$lte = f.maxM2;
       }
     }
-
     if (f.garage !== undefined) {
       filter["features.garage"] = f.garage;
     }
-
     // 🚩 flags
     const flags: Array<keyof typeof f> = ["featured", "premium", "opportunity"];
-
     flags.forEach((flag) => {
       if (f[flag] !== undefined) {
         filter[`flags.${flag}`] = f[flag];
       }
     });
-
     // 📄 paginación
     const { skip, limit, page } = query.pagination;
-
     // 🔃 orden
     const sort = query.sort.sort;
-
     // ⚡ queries en paralelo
     const [items, total] = await Promise.all([
       PropertyRepository.findAll(filter, { sort, skip, limit }),
       PropertyRepository.count(filter),
     ]);
-
     return {
       items,
       meta: {

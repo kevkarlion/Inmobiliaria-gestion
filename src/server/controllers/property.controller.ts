@@ -23,43 +23,41 @@ export class PropertyController {
     );
   }
 
+
+  
   static async create(req: Request) {
     try {
       await connectDB();
-
       const body = await req.json();
-
       // 1️⃣ DTO de entrada
       const dto = new CreatePropertyDTO(body);
-
       // 2️⃣ Service
       const property = await PropertyService.create(dto);
-
       // 3️⃣ DTO de salida
       const response = new PropertyResponseDTO(property);
-
       return NextResponse.json(response, { status: 201 });
     } catch (error: unknown) {
       return this.handleError(error);
     }
   }
 
+
+
  static async getAll(req: Request) {
   try {
     await connectDB();
-
     const { searchParams } = new URL(req.url);
+    
+    //lo convierte en un objeto plano de JS.
     const rawQuery = Object.fromEntries(searchParams);
 
+    //Transformas esos strings en tipos reales
     const queryDto = new QueryPropertyDTO(rawQuery);
 
     const { items, meta } = await PropertyService.findAll(queryDto);
-
     const responseItems = items.map(
       (property) => new PropertyResponseDTO(property),
     );
-
-
     console.log('responseItems', responseItems)
     return NextResponse.json({
       items: responseItems,

@@ -1,48 +1,61 @@
-import { OperationType } from "../enums/operation-type.enum";
-import { PropertyStatus } from "../enums/property-status.enum";
+// domain/types/Property.types.ts
+import { Types } from "mongoose";
 
+/**
+ * Representa la propiedad tal cual vive en MongoDB (con IDs).
+ * Se usa para el Schema y operaciones de escritura.
+ */
 export interface IProperty {
+  _id: Types.ObjectId;
   title: string;
   slug: string;
-
-  operationType: OperationType;
-
-  propertyType: string; // ObjectId (PropertyType)
-  zone: string;         // ObjectId (Zone)
-
-  description?: string;
-
-  address?: {
-    street?: string;
-    number?: string;
-    zipCode?: string;
-  };
-
+  operationType: "venta" | "alquiler";
+  propertyType: Types.ObjectId; // Referencia a PropertyType
+  zone: Types.ObjectId;         // Referencia a Zone
   price: {
     amount: number;
-    currency: "ARS" | "USD";
+    currency: "USD" | "ARS";
   };
-
-  features?: {
-    bedrooms?: number;
-    bathrooms?: number;
-    totalM2?: number;
-    coveredM2?: number;
-    rooms?: number;
-    garage?: boolean;
+  address: {
+    street: string;
+    number: string;
+    zipCode: string;
   };
-
-  age?: number; // años
-
-  tags?: string[];
-
-  flags?: {
-    featured?: boolean;
-    opportunity?: boolean;
-    premium?: boolean;
+  features: {
+    bedrooms: number;
+    bathrooms: number;
+    totalM2: number;
+    coveredM2: number;
+    rooms: number;
+    garage: boolean;
   };
+  flags: {
+    featured: boolean;
+    opportunity: boolean;
+    premium: boolean;
+  };
+  tags: string[];
+  images: string[];
+  description: string;
+  status: "active" | "inactive";
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
-  images?: string[];
-
-  status?: PropertyStatus;
+/**
+ * Representa la propiedad después del .populate()
+ *
+ */
+export interface Property extends Omit<IProperty, "propertyType" | "zone" | "_id"> {
+  id: string; // El id transformado de _id a string
+  propertyType: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
+  zone: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
 }
