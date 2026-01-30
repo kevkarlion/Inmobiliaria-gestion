@@ -60,7 +60,7 @@ export default function AdminDashboard() {
               <option>Últimos 30 días</option>
             </select>
           </div>
-          <div className="h-75 w-full bg-slate-50 rounded-lg flex items-end justify-around p-4">
+          <div className="h-[300px] w-full bg-slate-50 rounded-lg flex items-end justify-around p-4">
             {/* Simulación de barras de gráfico */}
             {[40, 70, 45, 90, 65, 80, 50].map((height, i) => (
               <div 
