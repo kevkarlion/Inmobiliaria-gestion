@@ -15,46 +15,54 @@ export default function HomePage() {
   const [type, setType] = useState("");
   const [zone, setZone] = useState("");
 
+  // ================= FETCH =================
   useEffect(() => {
     async function fetchProperties() {
       try {
         const res = await fetch("/api/properties");
         const data = await res.json();
-        
-        // Debug: verificar la estructura de datos
-        console.log("Datos recibidos del API:", data);
-        console.log("Items recibidos:", data.items);
-        
+
         if (data.items && Array.isArray(data.items)) {
-          const mappedProperties = data.items.map(mapPropertyToUI);
-          
-          // Verificar que todas las propiedades tengan ID
-          const propertiesWithValidIds = mappedProperties.map((p: PropertyUI, index: any) => ({
+          const mapped = data.items.map(mapPropertyToUI);
+
+          // seguridad por si viene alguno sin id
+          const safe = mapped.map((p: PropertyUI, index: number) => ({
             ...p,
-            // Si no tiene ID, asignar uno temporal basado en índice
-            id: p.id || `temp-id-${index}-${Date.now()}`
+            id: p.id || `temp-${index}`,
           }));
-          
-          console.log("Propiedades mapeadas:", propertiesWithValidIds);
-          setProperties(propertiesWithValidIds);
+
+          setProperties(safe);
         }
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
     }
+
     fetchProperties();
   }, []);
 
+  // ================= FILTRADO PROFESIONAL =================
   const filtered = useMemo(() => {
-    if (!search && !operation && !type && !zone) return [];
+    if (
+      search.length < 3 &&
+      !operation &&
+      !type &&
+      !zone
+    ) return [];
 
     const q = search.toLowerCase();
 
     return properties.filter((p) => {
+      // búsqueda por palabras completas
       const matchText =
         !search ||
         [p.title, p.typeName, p.zoneName, p.street]
-          .some((f) => f?.toLowerCase().includes(q));
+          .some((f) =>
+            f
+              ?.toLowerCase()
+              .split(" ")
+              .some((word) => word.startsWith(q))
+          );
 
       const matchOperation =
         !operation || p.operationType === operation;
@@ -69,27 +77,24 @@ export default function HomePage() {
     });
   }, [search, operation, type, zone, properties]);
 
-  // 🔒 Versión robusta de types y zones
+  // ================= SELECT OPTIONS =================
   const types = useMemo(() => {
-    const slugs = properties
-      .map((p) => p.typeSlug)
-      .filter((slug): slug is string => 
-        typeof slug === 'string' && slug.trim() !== ''
-      );
-    
-    return [...new Set(slugs)];
+    return [...new Set(
+      properties
+        .map((p) => p.typeSlug)
+        .filter(Boolean)
+    )];
   }, [properties]);
 
   const zones = useMemo(() => {
-    const slugs = properties
-      .map((p) => p.zoneSlug)
-      .filter((slug): slug is string => 
-        typeof slug === 'string' && slug.trim() !== ''
-      );
-    
-    return [...new Set(slugs)];
+    return [...new Set(
+      properties
+        .map((p) => p.zoneSlug)
+        .filter(Boolean)
+    )];
   }, [properties]);
 
+  // ================= UI =================
   return (
     <main className="min-h-screen bg-white p-10">
       <div className="max-w-4xl mx-auto space-y-4">
@@ -113,8 +118,8 @@ export default function HomePage() {
             className="border p-3 rounded"
           >
             <option value="">Operación</option>
-            <option key="venta" value="venta">Venta</option>
-            <option key="alquiler" value="alquiler">Alquiler</option>
+            <option value="venta">Venta</option>
+            <option value="alquiler">Alquiler</option>
           </select>
 
           <select
@@ -147,10 +152,9 @@ export default function HomePage() {
         {/* RESULTADOS */}
         {filtered.length > 0 ? (
           <div className="bg-white border rounded-xl shadow mt-4">
-            {filtered.map((p, index) => (
+            {filtered.map((p) => (
               <div
-                // Usamos el índice como fallback si no hay ID
-                key={p.id || `property-${index}`}
+                key={p.id}
                 className="p-4 border-b hover:bg-gray-50 cursor-pointer"
               >
                 <div className="font-semibold">{p.title}</div>
@@ -161,7 +165,7 @@ export default function HomePage() {
             ))}
           </div>
         ) : (
-          search || operation || type || zone ? (
+          search.length >= 3 || operation || type || zone ? (
             <div className="text-center py-8 text-gray-500">
               No se encontraron propiedades con los filtros aplicados.
             </div>
