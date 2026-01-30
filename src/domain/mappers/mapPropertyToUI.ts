@@ -1,20 +1,20 @@
-import { Property } from "@/domain/types/Property.types";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import { Property } from "@/domain/types/Property.types";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 
-function normalizeOperation(
-  value: string,
-): "venta" | "alquiler" {
+function normalizeOperation(value: string): "venta" | "alquiler" {
   if (value === "venta" || value === "alquiler") {
     return value;
   }
   return "venta"; // default de seguridad
 }
 
-export function mapPropertyToUI(property: Property): PropertyUI {
+export function mapPropertyToUI(property: any): PropertyUI {
+  console.log("property to map", property);
   return {
-    id: property._id, // Usa ambos por compatibilidad
+    id: property.id, // Usa ambos por compatibilidad
     title: property.title,
-   operationType: normalizeOperation(property.operationType),
+    operationType: normalizeOperation(property.operationType),
     typeSlug: property.propertyType.slug,
     typeName: property.propertyType.name,
 

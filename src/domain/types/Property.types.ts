@@ -53,3 +53,14 @@ export interface Property {
   createdAt?: string; // Mongoose timestamps
   updatedAt?: string;
 }
+
+
+export interface FindAllPropertiesResult {
+  items: Property[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    pages: number;
+  };
+}

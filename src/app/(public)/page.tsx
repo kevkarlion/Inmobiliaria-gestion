@@ -18,12 +18,17 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchProperties() {
       const res = await fetch("/api/properties");
+      console.log("res", res);
       const data = await res.json();
+            console.log("data", data.items);
+
       setProperties(data.items.map(mapPropertyToUI));
     }
     fetchProperties();
   }, []);
 
+
+  console.log("properties", properties);
   // ================= FILTRADO =================
   const filtered = useMemo(() => {
     if (
