@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -18,30 +17,14 @@ export default function HomePage() {
   // ================= FETCH =================
   useEffect(() => {
     async function fetchProperties() {
-      try {
-        const res = await fetch("/api/properties");
-        const data = await res.json();
-
-        if (data.items && Array.isArray(data.items)) {
-          const mapped = data.items.map(mapPropertyToUI);
-
-          // seguridad por si viene alguno sin id
-          const safe = mapped.map((p: PropertyUI, index: number) => ({
-            ...p,
-            id: p.id || `temp-${index}`,
-          }));
-
-          setProperties(safe);
-        }
-      } catch (error) {
-        console.error("Error fetching properties:", error);
-      }
+      const res = await fetch("/api/properties");
+      const data = await res.json();
+      setProperties(data.items.map(mapPropertyToUI));
     }
-
     fetchProperties();
   }, []);
 
-  // ================= FILTRADO PROFESIONAL =================
+  // ================= FILTRADO =================
   const filtered = useMemo(() => {
     if (
       search.length < 3 &&
@@ -53,10 +36,9 @@ export default function HomePage() {
     const q = search.toLowerCase();
 
     return properties.filter((p) => {
-      // búsqueda por palabras completas
       const matchText =
         !search ||
-        [p.title, p.typeName, p.zoneName, p.street]
+        [p.title, p.street]
           .some((f) =>
             f
               ?.toLowerCase()
@@ -77,81 +59,90 @@ export default function HomePage() {
     });
   }, [search, operation, type, zone, properties]);
 
-  // ================= SELECT OPTIONS =================
+  // ================= OPTIONS =================
   const types = useMemo(() => {
-    return [...new Set(
-      properties
-        .map((p) => p.typeSlug)
-        .filter(Boolean)
-    )];
+    return [...new Set(properties.map((p) => p.typeSlug))];
   }, [properties]);
 
   const zones = useMemo(() => {
-    return [...new Set(
-      properties
-        .map((p) => p.zoneSlug)
-        .filter(Boolean)
-    )];
+    return [...new Set(properties.map((p) => p.zoneSlug))];
   }, [properties]);
 
   // ================= UI =================
   return (
     <main className="min-h-screen bg-white p-10">
-      <div className="max-w-4xl mx-auto space-y-4">
+      <div className="max-w-5xl mx-auto space-y-6">
 
-        {/* INPUT PRINCIPAL */}
+        {/* BUSCADOR */}
         <div className="relative">
           <Search className="absolute left-4 top-4 text-gray-400" />
           <input
             className="w-full pl-12 pr-4 py-4 border rounded-xl text-lg shadow"
-            placeholder="Buscar por zona, dirección o tipo..."
+            placeholder="Buscar por calle o palabra clave..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        {/* FILTROS */}
+        {/* FILTROS SIEMPRE VISIBLES */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <select
-            value={operation}
-            onChange={(e) => setOperation(e.target.value as Operation)}
-            className="border p-3 rounded"
-          >
-            <option value="">Operación</option>
-            <option value="venta">Venta</option>
-            <option value="alquiler">Alquiler</option>
-          </select>
 
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            className="border p-3 rounded"
-          >
-            <option value="">Tipo</option>
-            {types.map((t) => (
-              <option key={`type-${t}`} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">
+              Operación
+            </label>
+            <select
+              value={operation}
+              onChange={(e) => setOperation(e.target.value as Operation)}
+              className="w-full border p-3 rounded"
+            >
+              <option value="">Todas</option>
+              <option value="venta">Venta</option>
+              <option value="alquiler">Alquiler</option>
+            </select>
+          </div>
 
-          <select
-            value={zone}
-            onChange={(e) => setZone(e.target.value)}
-            className="border p-3 rounded"
-          >
-            <option value="">Zona</option>
-            {zones.map((z) => (
-              <option key={`zone-${z}`} value={z}>
-                {z}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">
+              Tipo de propiedad
+            </label>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="w-full border p-3 rounded"
+            >
+              <option value="">Todos</option>
+              {types.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">
+              Zona
+            </label>
+            <select
+              value={zone}
+              onChange={(e) => setZone(e.target.value)}
+              className="w-full border p-3 rounded"
+            >
+              <option value="">Todas</option>
+              {zones.map((z) => (
+                <option key={z} value={z}>
+                  {z}
+                </option>
+              ))}
+            </select>
+          </div>
+
         </div>
 
         {/* RESULTADOS */}
-        {filtered.length > 0 ? (
-          <div className="bg-white border rounded-xl shadow mt-4">
+        {filtered.length > 0 && (
+          <div className="bg-white border rounded-xl shadow">
             {filtered.map((p) => (
               <div
                 key={p.id}
@@ -164,12 +155,12 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        ) : (
-          search.length >= 3 || operation || type || zone ? (
-            <div className="text-center py-8 text-gray-500">
-              No se encontraron propiedades con los filtros aplicados.
-            </div>
-          ) : null
+        )}
+
+        {filtered.length === 0 && (search.length >= 3 || operation || type || zone) && (
+          <div className="text-center py-10 text-gray-500">
+            No se encontraron resultados.
+          </div>
         )}
       </div>
     </main>
