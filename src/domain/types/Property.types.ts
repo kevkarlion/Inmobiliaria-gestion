@@ -52,6 +52,13 @@ export interface Property {
   status: "active" | "inactive";
   createdAt?: string; // Mongoose timestamps
   updatedAt?: string;
+  // Property.types.ts
+location: {
+  mapsUrl: string;
+  lat: number;
+  lng: number;
+};
+
 }
 
 

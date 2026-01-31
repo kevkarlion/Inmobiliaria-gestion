@@ -18,6 +18,8 @@ export default function PropertiesAdminPage() {
     setLoading(true);
     try {
       const res = await fetch("/api/properties");
+
+      //data recibe formato ResponseDTO
       const data = await res.json();
       setProperties(data.items);
     } catch (err) {

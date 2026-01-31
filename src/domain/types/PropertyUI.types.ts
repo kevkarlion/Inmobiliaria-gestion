@@ -9,6 +9,7 @@ export interface PropertyUI {
   typeName: string;
   zoneSlug: string;
   zoneName: string;
+  slug: string;
   street: string;
   number: string;
   zipCode: string;
@@ -24,6 +25,10 @@ export interface PropertyUI {
   opportunity: boolean;
   premium: boolean;
   tags: string[];
-  image: string | null;
+  images: string[];
   status: "active" | "inactive";
+    // 🔥 lo que te interesa para la UI
+  mapsUrl: string | null; // ← importante
+  lat: number;
+  lng: number;
 }

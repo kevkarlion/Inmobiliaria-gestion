@@ -11,7 +11,7 @@ export interface IProperty {
   slug: string;
   operationType: "venta" | "alquiler";
   propertyType: Types.ObjectId; // Referencia a PropertyType
-  zone: Types.ObjectId;         // Referencia a Zone
+  zone: Types.ObjectId; // Referencia a Zone
   price: {
     amount: number;
     currency: "USD" | "ARS";
@@ -36,6 +36,13 @@ export interface IProperty {
   };
   tags: string[];
   images: string[];
+  // Property.types.ts
+  location: {
+    mapsUrl: string;
+    lat: number;
+    lng: number;
+  };
+
   description: string;
   status: "active" | "inactive";
   createdAt?: Date;
@@ -46,7 +53,10 @@ export interface IProperty {
  * Representa la propiedad después del .populate()
  *
  */
-export interface Property extends Omit<IProperty, "propertyType" | "zone" | "_id"> {
+export interface Property extends Omit<
+  IProperty,
+  "propertyType" | "zone" | "_id"
+> {
   id: string; // El id transformado de _id a string
   propertyType: {
     _id: string;

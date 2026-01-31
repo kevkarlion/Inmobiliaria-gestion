@@ -10,7 +10,7 @@ function normalizeOperation(value: string): "venta" | "alquiler" {
 }
 
 export function mapPropertyToUI(property: any): PropertyUI {
-  console.log("property to map", property);
+ 
   return {
     id: property.id, // Usa ambos por compatibilidad
     title: property.title,
@@ -18,6 +18,8 @@ export function mapPropertyToUI(property: any): PropertyUI {
     typeSlug: property.propertyType.slug,
     typeName: property.propertyType.name,
 
+    slug: property.slug,
+    
     zoneSlug: property.zone.slug,
     zoneName: property.zone.name,
 
@@ -40,7 +42,11 @@ export function mapPropertyToUI(property: any): PropertyUI {
     premium: property.flags.premium,
 
     tags: property.tags,
-    image: property.images[0] ?? null,
+    images: property.images ?? [], 
     status: property.status,
+
+     mapsUrl: property.location?.mapsUrl || null,
+    lat: property.location?.lat,
+    lng: property.location?.lng,
   };
 }

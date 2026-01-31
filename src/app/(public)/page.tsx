@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
+import Link from "next/link";
 
 type Operation = "" | "venta" | "alquiler";
 
@@ -18,47 +19,33 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchProperties() {
       const res = await fetch("/api/properties");
-      console.log("res", res);
       const data = await res.json();
-            console.log("data", data.items);
-
       setProperties(data.items.map(mapPropertyToUI));
     }
     fetchProperties();
   }, []);
 
-
-  console.log("properties", properties);
   // ================= FILTRADO =================
   const filtered = useMemo(() => {
-    if (
-      search.length < 3 &&
-      !operation &&
-      !type &&
-      !zone
-    ) return [];
+    if (search.length < 3 && !operation && !type && !zone) return [];
 
     const q = search.toLowerCase();
 
     return properties.filter((p) => {
       const matchText =
         !search ||
-        [p.title, p.street]
-          .some((f) =>
-            f
-              ?.toLowerCase()
-              .split(" ")
-              .some((word) => word.startsWith(q))
-          );
+        [p.title, p.street].some((f) =>
+          f
+            ?.toLowerCase()
+            .split(" ")
+            .some((word) => word.startsWith(q)),
+        );
 
-      const matchOperation =
-        !operation || p.operationType === operation;
+      const matchOperation = !operation || p.operationType === operation;
 
-      const matchType =
-        !type || p.typeSlug === type;
+      const matchType = !type || p.typeSlug === type;
 
-      const matchZone =
-        !zone || p.zoneSlug === zone;
+      const matchZone = !zone || p.zoneSlug === zone;
 
       return matchText && matchOperation && matchType && matchZone;
     });
@@ -75,14 +62,13 @@ export default function HomePage() {
 
   // ================= UI =================
   return (
-    <main className="min-h-screen bg-white p-10">
+    <main className="min-h-screen bg-black p-10">
       <div className="max-w-5xl mx-auto space-y-6">
-
         {/* BUSCADOR */}
         <div className="relative">
           <Search className="absolute left-4 top-4 text-gray-400" />
           <input
-            className="w-full pl-12 pr-4 py-4 border rounded-xl text-lg shadow"
+            className="w-full pl-12 pr-4 py-4 border rounded-xl text-lg shadow text-white"
             placeholder="Buscar por calle o palabra clave..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -91,7 +77,6 @@ export default function HomePage() {
 
         {/* FILTROS SIEMPRE VISIBLES */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
           <div>
             <label className="block text-sm text-gray-600 mb-1">
               Operación
@@ -126,9 +111,7 @@ export default function HomePage() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Zona
-            </label>
+            <label className="block text-sm text-gray-600 mb-1">Zona</label>
             <select
               value={zone}
               onChange={(e) => setZone(e.target.value)}
@@ -142,31 +125,31 @@ export default function HomePage() {
               ))}
             </select>
           </div>
-
         </div>
 
         {/* RESULTADOS */}
-        {filtered.length > 0 && (
-          <div className="bg-white border rounded-xl shadow">
-            {filtered.map((p) => (
-              <div
-                key={p.id}
-                className="p-4 border-b hover:bg-gray-50 cursor-pointer"
-              >
+        {filtered.map((p) => {
+          console.log("slug en UI:", p.slug);
+
+          return (
+            <Link key={p.id} href={`/property/${p.slug}`}>
+              <div className="p-4 border-b hover:bg-gray-50 cursor-pointer">
                 <div className="font-semibold">{p.title}</div>
                 <div className="text-sm text-gray-500">
-                  {p.typeName} · {p.zoneName} · {p.operationType} · {p.amount} {p.currency}
+                  {p.typeName} · {p.zoneName} · {p.operationType} · {p.amount}{" "}
+                  {p.currency}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </Link>
+          );
+        })}
 
-        {filtered.length === 0 && (search.length >= 3 || operation || type || zone) && (
-          <div className="text-center py-10 text-gray-500">
-            No se encontraron resultados.
-          </div>
-        )}
+        {filtered.length === 0 &&
+          (search.length >= 3 || operation || type || zone) && (
+            <div className="text-center py-10 text-gray-500">
+              No se encontraron resultados.
+            </div>
+          )}
       </div>
     </main>
   );

@@ -1,4 +1,7 @@
 // backend/dto/UpdatePropertyDTO.ts
+//DTO que trabaja con datos sanos hacia el front
+
+
 export class UpdatePropertyDTO {
   title?: string;
   slug?: string;

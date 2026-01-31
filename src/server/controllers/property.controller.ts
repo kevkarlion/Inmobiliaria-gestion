@@ -71,20 +71,11 @@ export class PropertyController {
 
 
 
-  static async getBySlug(
-    req: Request,
-    { params }: { params: { slug: string } },
-  ) {
-    try {
-      await connectDB();
-
-      const property = await PropertyService.findBySlug(params.slug);
-
-      return NextResponse.json(new PropertyResponseDTO(property));
-    } catch (error: unknown) {
-      return this.handleError(error);
-    }
+   static async getBySlug(slug: string) {
+    const property = await PropertyService.findBySlug(slug);
+    return new PropertyResponseDTO(property);
   }
+
 
   // PUT /properties/:slug
   static async update(req: Request, { params }: { params: { slug: string } }) {

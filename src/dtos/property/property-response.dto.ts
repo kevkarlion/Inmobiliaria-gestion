@@ -16,6 +16,8 @@ export class PropertyResponseDTO {
   images: string[];
   description?: string;
   status?: string;
+  location: Property["location"];
+
 
   constructor(property: Property) { // <--- Aquí usamos la interfaz de "dato cocinado"
     this.id = property._id.toString();
@@ -32,5 +34,7 @@ export class PropertyResponseDTO {
     this.images = property.images || [];
     this.description = property.description;
     this.status = property.status;
+    this.location = property.location;
+
   }
 }

@@ -55,6 +55,12 @@ const PropertySchema = new Schema<IProperty>(
       enum: ["active", "inactive"],
       default: "active",
     },
+    location: {
+  mapsUrl: { type: String },
+  lat: { type: Number },
+  lng: { type: Number },
+}
+
   },
   { 
     timestamps: true,

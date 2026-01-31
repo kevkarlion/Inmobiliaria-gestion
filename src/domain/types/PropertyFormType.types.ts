@@ -13,6 +13,7 @@ export interface PropertyFormType {
   rooms: number;
   garage: boolean;
   featured: boolean;
+  features: string;
   opportunity: boolean;
   premium: boolean;
   street: string;
