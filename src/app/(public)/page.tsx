@@ -1,21 +1,30 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { useEffect, useMemo, useState, useRef } from "react";
+import Image from "next/image";
+import {
+  Search,
+  MapPin,
+  Tag,
+  Home,
+  ChevronRight,
+  X,
+  Globe,
+} from "lucide-react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import Link from "next/link";
 
-type Operation = "" | "venta" | "alquiler";
-
 export default function HomePage() {
   const [properties, setProperties] = useState<PropertyUI[]>([]);
   const [search, setSearch] = useState("");
-  const [operation, setOperation] = useState<Operation>("");
+  const [operation, setOperation] = useState("");
   const [type, setType] = useState("");
-  const [zone, setZone] = useState("");
+  const [province, setProvince] = useState("");
+  const [city, setCity] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // ================= FETCH =================
   useEffect(() => {
     async function fetchProperties() {
       const res = await fetch("/api/properties");
@@ -25,131 +34,181 @@ export default function HomePage() {
     fetchProperties();
   }, []);
 
-  // ================= FILTRADO =================
   const filtered = useMemo(() => {
-    if (search.length < 3 && !operation && !type && !zone) return [];
-
-    const q = search.toLowerCase();
-
+    if (!search && !operation && !type && !province && !city) return [];
+    const q = search.toLowerCase().trim();
     return properties.filter((p) => {
       const matchText =
-        !search ||
-        [p.title, p.street].some((f) =>
-          f
-            ?.toLowerCase()
-            .split(" ")
-            .some((word) => word.startsWith(q)),
-        );
-
-      const matchOperation = !operation || p.operationType === operation;
-
+        !q ||
+        p.title.toLowerCase().includes(q) ||
+        p.street.toLowerCase().includes(q);
+      const matchOp = !operation || p.operationType === operation;
       const matchType = !type || p.typeSlug === type;
-
-      const matchZone = !zone || p.zoneSlug === zone;
-
-      return matchText && matchOperation && matchType && matchZone;
+      const matchProv = !province || p.provinceSlug === province;
+      const matchCity = !city || p.citySlug === city;
+      return matchText && matchOp && matchType && matchProv && matchCity;
     });
-  }, [search, operation, type, zone, properties]);
+  }, [search, operation, type, province, city, properties]);
 
-  // ================= OPTIONS =================
-  const types = useMemo(() => {
-    return [...new Set(properties.map((p) => p.typeSlug))];
+  const propertyTypes = useMemo(() => {
+    const uniqueSlugs = Array.from(
+      new Set(properties.map((p) => p.typeSlug)),
+    ).filter(Boolean);
+    return uniqueSlugs.map((slug) => ({
+      slug,
+      name: properties.find((p) => p.typeSlug === slug)?.typeName || slug,
+    }));
   }, [properties]);
 
-  const zones = useMemo(() => {
-    return [...new Set(properties.map((p) => p.zoneSlug))];
-  }, [properties]);
+  const showDropdown =
+    isFocused && (search.length > 0 || operation || type || province || city);
 
-  // ================= UI =================
   return (
-    <main className="min-h-screen bg-black p-10">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* BUSCADOR */}
-        <div className="relative">
-          <Search className="absolute left-4 top-4 text-gray-400" />
-          <input
-            className="w-full pl-12 pr-4 py-4 border rounded-xl text-lg shadow text-white"
-            placeholder="Buscar por calle o palabra clave..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+    <main className="min-h-screen bg-[#F8FAFC] pt-16 px-6">
+      <div className="w-full max-w-4xl mx-auto space-y-8" ref={containerRef}>
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-black text-slate-900">
+            ¿Qué estás <span className="text-blue-600">buscando?</span>
+          </h1>
         </div>
 
-        {/* FILTROS SIEMPRE VISIBLES */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Operación
-            </label>
+        <div className="bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            {/* SELECTS CON KEYS CORREGIDAS */}
+            <select
+              value={province}
+              onChange={(e) => {
+                setProvince(e.target.value);
+                setCity("");
+              }}
+              className="p-3 bg-slate-50 rounded-2xl text-xs font-bold outline-none"
+            >
+              <option value="">Provincia</option>
+              <option value="rio-negro">Río Negro</option>
+              <option value="neuquen">Neuquén</option>
+            </select>
+
+            <select
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              disabled={!province}
+              className="p-3 bg-slate-50 rounded-2xl text-xs font-bold outline-none disabled:opacity-50"
+            >
+              <option value="">Localidad</option>
+              {province === "rio-negro" && (
+                <>
+                  <option value="general-roca">General Roca</option>
+                  <option value="cipolletti">Cipolletti</option>
+                </>
+              )}
+            </select>
+
             <select
               value={operation}
-              onChange={(e) => setOperation(e.target.value as Operation)}
-              className="w-full border p-3 rounded"
+              onChange={(e) => setOperation(e.target.value)}
+              className="p-3 bg-slate-50 rounded-2xl text-xs font-bold outline-none"
             >
-              <option value="">Todas</option>
+              <option value="">Operación</option>
               <option value="venta">Venta</option>
               <option value="alquiler">Alquiler</option>
             </select>
-          </div>
 
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Tipo de propiedad
-            </label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full border p-3 rounded"
+              className="p-3 bg-slate-50 rounded-2xl text-xs font-bold outline-none"
             >
-              <option value="">Todos</option>
-              {types.map((t) => (
-                <option key={t} value={t}>
-                  {t}
+              <option value="">Propiedad</option>
+              {propertyTypes.map((t) => (
+                <option key={`type-opt-${t.slug}`} value={t.slug}>
+                  {t.name}
                 </option>
               ))}
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">Zona</label>
-            <select
-              value={zone}
-              onChange={(e) => setZone(e.target.value)}
-              className="w-full border p-3 rounded"
-            >
-              <option value="">Todas</option>
-              {zones.map((z) => (
-                <option key={z} value={z}>
-                  {z}
-                </option>
-              ))}
-            </select>
+          <div className="relative">
+            <input
+              onFocus={() => setIsFocused(true)}
+              className="w-full pl-14 pr-14 py-5 bg-slate-50 rounded-2xl text-lg font-semibold outline-none focus:ring-2 focus:ring-blue-600/20"
+              placeholder="Calle o zona..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {/* DROPDOWN DE RESULTADOS */}
+            {showDropdown && (
+              <div className="absolute top-[110%] left-0 w-full bg-white border border-slate-100 rounded-3xl shadow-2xl z-40 max-h-96 overflow-y-auto divide-y divide-slate-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="p-3 bg-slate-50/50 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  Resultados encontrados ({filtered.length})
+                </div>
+
+                {filtered.length > 0 ? (
+                  filtered.map((p) => (
+                    <Link
+                      key={`prop-card-${p.id}`}
+                      href={`/property/${p.slug}`}
+                      className="flex items-center gap-4 p-4 hover:bg-blue-50/50 group transition-all"
+                    >
+                      {/* Miniatura */}
+                      <div className="relative h-14 w-14 rounded-xl overflow-hidden shrink-0 shadow-sm bg-slate-100">
+                        <Image
+                          src={p.images[0] || "/placeholder.jpg"}
+                          alt={p.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          unoptimized={p.images[0]?.startsWith("data:")}
+                        />
+                      </div>
+
+                      {/* Información Central */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors truncate text-sm capitalize">
+                          {p.title}
+                        </h4>
+
+                        {/* 📍 DIRECCIÓN Y LOCALIDAD */}
+                        <div className="flex flex-col gap-0.5 mt-1">
+                          <p className="text-slate-600 text-xs font-medium flex items-center gap-1">
+                            <MapPin size={10} className="text-blue-500" />
+                            {p.street} {p.number}
+                          </p>
+                          <p className="text-slate-400 text-[10px] font-semibold uppercase tracking-tight pl-3.5">
+                            {p.cityName}, {p.provinceName}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Precio y Acción */}
+                      <div className="text-right shrink-0">
+                        <div className="text-sm font-black text-slate-900">
+                          <span className="text-[10px] text-blue-600 mr-0.5">
+                            {p.currency}
+                          </span>
+                          {p.amount.toLocaleString("es-AR")}
+                        </div>
+                        <div className="flex items-center justify-end gap-1 mt-1">
+                          <span className="text-[9px] font-black uppercase text-blue-500/60 tracking-tighter">
+                            Ver detalle
+                          </span>
+                          <ChevronRight
+                            size={12}
+                            className="text-slate-300 group-hover:translate-x-1 transition-transform"
+                          />
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="py-12 text-center">
+                    <p className="text-slate-400 text-sm font-medium">
+                      No encontramos propiedades con esos filtros.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
-
-        {/* RESULTADOS */}
-        {filtered.map((p) => {
-          console.log("slug en UI:", p.slug);
-
-          return (
-            <Link key={p.id} href={`/property/${p.slug}`}>
-              <div className="p-4 border-b hover:bg-gray-50 cursor-pointer">
-                <div className="font-semibold">{p.title}</div>
-                <div className="text-sm text-gray-500">
-                  {p.typeName} · {p.zoneName} · {p.operationType} · {p.amount}{" "}
-                  {p.currency}
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-
-        {filtered.length === 0 &&
-          (search.length >= 3 || operation || type || zone) && (
-            <div className="text-center py-10 text-gray-500">
-              No se encontraron resultados.
-            </div>
-          )}
       </div>
     </main>
   );

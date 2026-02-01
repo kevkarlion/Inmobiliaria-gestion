@@ -5,7 +5,6 @@ export class CreatePropertyDTO {
   title: string;
   operationType: string;
   propertyTypeSlug: string;
-  zoneSlug: string;
   description: string;
   age: number;
   images: string[];
@@ -13,10 +12,20 @@ export class CreatePropertyDTO {
 
   price: { 
     amount: number; 
-    currency: "USD" | "ARS" // 👈 Cambia 'string' por esto
+    currency: "USD" | "ARS";
   };
-  address: { street: string; number: string; zipCode: string };
-  location: { mapsUrl: string; lat: number; lng: number }; // Inflado
+  
+  address: { 
+    street: string; 
+    number: string; 
+    zipCode: string;
+    provinceSlug: string; // 👈 Ahora es Slug
+    citySlug: string;     // 👈 Ahora es Slug
+    barrioSlug?: string;  // 👈 Ahora es Slug
+  };
+  
+  location: { mapsUrl: string; lat: number; lng: number };
+  
   features: { 
     bedrooms: number; 
     bathrooms: number; 
@@ -26,18 +35,22 @@ export class CreatePropertyDTO {
     garage: boolean; 
     additionalInfo: string;
   };
+  
   flags: { featured: boolean; premium: boolean; opportunity: boolean };
 
   constructor(data: any) {
-    if (!data.title) throw new BadRequestError("Title is required");
-    if (!data.priceAmount) throw new BadRequestError("Price amount is required");
-    if (!data.propertyTypeSlug) throw new BadRequestError("Property type slug is required");
-    if (!data.zoneSlug) throw new BadRequestError("Zone slug is required");
+    // Validaciones básicas
+    if (!data.title) throw new BadRequestError("El título es requerido");
+    if (!data.priceAmount) throw new BadRequestError("El monto del precio es requerido");
+    if (!data.propertyTypeSlug) throw new BadRequestError("El tipo de propiedad es requerido");
+    
+    // Validaciones de ubicación por Slug
+    if (!data.province) throw new BadRequestError("La provincia es requerida");
+    if (!data.city) throw new BadRequestError("La localidad es requerida");
 
     this.title = data.title;
     this.operationType = data.operationType;
     this.propertyTypeSlug = data.propertyTypeSlug;
-    this.zoneSlug = data.zoneSlug;
     this.description = data.description || "";
     this.age = Number(data.age) || 0;
     this.images = data.images || [];
@@ -45,13 +58,17 @@ export class CreatePropertyDTO {
 
     this.price = {
       amount: Number(data.priceAmount),
-      currency: data.currency || "USD",
+      currency: data.currency === "ARS" ? "ARS" : "USD",
     };
 
     this.address = {
       street: data.street || "",
       number: data.number || "",
       zipCode: data.zipCode || "",
+      // Mapeamos lo que viene del form (province) al campo provinceSlug
+      provinceSlug: data.province, 
+      citySlug: data.city,         
+      barrioSlug: data.barrio || undefined, 
     };
 
     this.location = {
@@ -67,7 +84,7 @@ export class CreatePropertyDTO {
       coveredM2: Number(data.coveredM2) || 0,
       rooms: Number(data.rooms) || 0,
       garage: Boolean(data.garage),
-      additionalInfo: data.features || "",
+      additionalInfo: data.additionalInfo || "",
     };
 
     this.flags = {

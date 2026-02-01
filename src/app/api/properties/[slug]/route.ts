@@ -27,6 +27,17 @@ export async function GET(
 
 export async function PUT(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
+  
+  // Clonamos la petición para poder leer el body sin "gastarlo" 
+  // antes de que llegue al controlador
+  const clone = req.clone();
+  const body = await clone.json();
+  
+  console.log('--- DEBUG API ---');
+  console.log('SLUG DE URL:', resolvedParams.slug);
+  console.log('DATOS DEL FORM:', body); 
+  console.log('-----------------');
+
   return PropertyController.update(req, { params: resolvedParams });
 }
 

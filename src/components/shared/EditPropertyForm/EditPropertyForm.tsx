@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import Image from "next/image";
 import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
-import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
 import { mapPropertyToForm } from "@/domain/mappers/propertyToForm.mapper";
 
 interface EditPropertyFormProps {
@@ -13,373 +13,255 @@ interface EditPropertyFormProps {
 }
 
 export default function EditPropertyForm({ property, slug, onClose }: EditPropertyFormProps) {
-  const [form, setForm] = useState<UpdatePropertyDTO>(() => mapPropertyToForm(property));
+  // El mapper debe devolver los datos planos: mapsUrl, lat, lng, etc.
+  const [form, setForm] = useState<any>(() => mapPropertyToForm(property));
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setForm(mapPropertyToForm(property));
   }, [property]);
 
-  function handleChange(
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) {
+  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value, type } = e.target;
+    let finalValue: any;
 
-    if (name.includes(".")) {
-      const [parent, key] = name.split(".");
-      const parentValue = form[parent as keyof UpdatePropertyDTO];
-
-      const parentObj =
-        parentValue && typeof parentValue === "object" && !Array.isArray(parentValue)
-          ? parentValue
-          : {};
-
-      if (type === "checkbox") {
-        const target = e.target as HTMLInputElement;
-        setForm({ ...form, [parent]: { ...parentObj, [key]: target.checked } } as UpdatePropertyDTO);
-      } else if (type === "number") {
-        setForm({ ...form, [parent]: { ...parentObj, [key]: Number(value) } } as UpdatePropertyDTO);
-      } else {
-        setForm({ ...form, [parent]: { ...parentObj, [key]: value } } as UpdatePropertyDTO);
-      }
+    if (type === "checkbox") {
+      finalValue = (e.target as HTMLInputElement).checked;
+    } else if (type === "number") {
+      finalValue = value === "" ? 0 : Number(value);
     } else {
-      if (type === "checkbox") {
-        const target = e.target as HTMLInputElement;
-        setForm({ ...form, [name]: target.checked } as UpdatePropertyDTO);
-      } else if (type === "number") {
-        setForm({ ...form, [name]: Number(value) } as UpdatePropertyDTO);
-      } else {
-        setForm({ ...form, [name]: value } as UpdatePropertyDTO);
-      }
+      finalValue = value;
     }
+
+    setForm((prev: any) => ({ ...prev, [name]: finalValue }));
   }
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev: any) => ({ 
+          ...prev, 
+          images: [...(prev.images || []), reader.result as string] 
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeImage = (index: number) => {
+    setForm((prev: any) => ({ 
+      ...prev, 
+      images: prev.images.filter((_: any, i: number) => i !== index) 
+    }));
+  };
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await fetch(`/api/properties/${slug}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(form), 
       });
-      if (!res.ok) throw new Error("Error actualizando propiedad");
-      alert("Propiedad actualizada con éxito!");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Error al editar");
+      }
+      alert("¡Propiedad actualizada con éxito!");
       onClose();
-    } catch (error) {
-      console.error(error);
-      alert("Hubo un error al actualizar la propiedad");
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   }
 
-  // Tags dinámicos
-  const addTag = () => setForm({ ...form, tags: [...(form.tags ?? []), ""] });
-  const updateTag = (index: number, value: string) => {
-    const newTags = [...(form.tags ?? [])];
-    newTags[index] = value;
-    setForm({ ...form, tags: newTags });
-  };
-  const removeTag = (index: number) => {
-    const newTags = [...(form.tags ?? [])];
-    newTags.splice(index, 1);
-    setForm({ ...form, tags: newTags });
-  };
-
-  // Imágenes dinámicas
-  const addImage = (url: string) => setForm({ ...form, images: [...(form.images ?? []), url] });
-  const removeImage = (index: number) => {
-    const newImages = [...(form.images ?? [])];
-    newImages.splice(index, 1);
-    setForm({ ...form, images: newImages });
-  };
-
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !e.target.files[0]) return;
-    const file = e.target.files[0];
-
-    // Demo: convertir a base64, reemplazar con upload a servidor si querés
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (typeof reader.result === "string") addImage(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 bg-neutral-900 text-white rounded-lg space-y-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-4">Editar Propiedad</h1>
-        <button type="button" onClick={onClose} className="text-red-500 hover:text-red-700 font-semibold">✕ Cerrar</button>
-      </div>
-
-      {/* Título */}
-      <div>
-        <label className="block font-semibold">Título</label>
-        <input
-          type="text"
-          name="title"
-          value={form.title || ""}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        />
-      </div>
-
-      {/* Operación */}
-      <div>
-        <label className="block font-semibold">Operación</label>
-        <select
-          name="operationType"
-          value={form.operationType || ""}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        >
-          <option value="venta">Venta</option>
-          <option value="alquiler">Alquiler</option>
-        </select>
-      </div>
-
-      {/* Tipo de propiedad */}
-      <div>
-        <label className="block font-semibold">Tipo de Propiedad</label>
-        <select
-          name="propertyTypeSlug"
-          value={form.propertyTypeSlug || ""}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        >
-          <option value="">Seleccione</option>
-          <option value="casa">Casa</option>
-          <option value="departamento">Departamento</option>
-        </select>
-      </div>
-
-      {/* Zona */}
-      <div>
-        <label className="block font-semibold">Zona</label>
-        <select
-          name="zoneSlug"
-          value={form.zoneSlug || ""}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        >
-          <option value="">Seleccione</option>
-          <option value="centro">Centro</option>
-          <option value="norte">Norte</option>
-          <option value="sur">Sur</option>
-        </select>
-      </div>
-
-      {/* Dirección */}
-      <div className="grid grid-cols-3 gap-2">
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-neutral-900 text-white rounded-xl space-y-6 border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
+      
+      {/* HEADER */}
+      <div className="flex justify-between items-center border-b border-white/10 pb-4">
         <div>
-          <label className="block font-semibold">Calle</label>
-          <input
-            type="text"
-            name="address.street"
-            value={form.address?.street || ""}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+          <h2 className="text-2xl font-black italic uppercase tracking-tighter text-blue-500">Editar Propiedad</h2>
+          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest italic">Original: {property.title}</p>
+        </div>
+        <button type="button" onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors">Cerrar ✕</button>
+      </div>
+
+      {/* SECCIÓN 1: DATOS BÁSICOS */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="md:col-span-2">
+          <label className="text-xs font-bold text-gray-400 uppercase">Título *</label>
+          <input type="text" name="title" value={form.title || ""} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-blue-500" required />
         </div>
         <div>
-          <label className="block font-semibold">Número</label>
-          <input
-            type="text"
-            name="address.number"
-            value={form.address?.number || ""}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+          <label className="text-xs font-bold text-gray-400 uppercase">Precio *</label>
+          <input type="number" name="priceAmount" value={form.priceAmount ?? ""} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" required />
         </div>
         <div>
-          <label className="block font-semibold">CP</label>
-          <input
-            type="text"
-            name="address.zipCode"
-            value={form.address?.zipCode || ""}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-      </div>
-
-      {/* Precio */}
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <label className="block font-semibold">Precio</label>
-          <input
-            type="number"
-            name="price.amount"
-            value={form.price?.amount ?? 0}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-        <div>
-          <label className="block font-semibold">Moneda</label>
-          <select
-            name="price.currency"
-            value={form.price?.currency || "USD"}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          >
-            <option value="USD">USD</option>
-            <option value="ARS">ARS</option>
+          <label className="text-xs font-bold text-gray-400 uppercase">Moneda</label>
+          <select name="currency" value={form.currency || "USD"} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white">
+            <option value="USD" className="text-black">USD (Dólares)</option>
+            <option value="ARS" className="text-black">ARS (Pesos)</option>
           </select>
         </div>
       </div>
 
-      {/* Features */}
-      <div className="grid grid-cols-4 gap-2">
-        <div>
-          <label className="block font-semibold">Dormitorios</label>
-          <input
-            type="number"
-            name="features.bedrooms"
-            value={form.features?.bedrooms ?? 0}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-        <div>
-          <label className="block font-semibold">Baños</label>
-          <input
-            type="number"
-            name="features.bathrooms"
-            value={form.features?.bathrooms ?? 0}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-        <div>
-          <label className="block font-semibold">Total m²</label>
-          <input
-            type="number"
-            name="features.totalM2"
-            value={form.features?.totalM2 ?? 0}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-        <div>
-          <label className="block font-semibold">Cubiertos m²</label>
-          <input
-            type="number"
-            name="features.coveredM2"
-            value={form.features?.coveredM2 ?? 0}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+      {/* SECCIÓN 2: LOCALIZACIÓN GEOGRÁFICA */}
+      <div className="p-4 bg-blue-600/5 rounded-xl border border-blue-500/20 space-y-4">
+        <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest">Localización y Zona</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="text-xs font-bold text-gray-400 uppercase">Provincia *</label>
+            <select name="province" value={form.province || ""} onChange={handleChange} className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none text-white" required>
+              <option value="">Seleccionar...</option>
+              <option value="rio-negro" className="text-black">Río Negro</option>
+              <option value="neuquen" className="text-black">Neuquén</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-xs font-bold text-gray-400 uppercase">Localidad *</label>
+            <select name="city" value={form.city || ""} onChange={handleChange} className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none text-white" required disabled={!form.province}>
+              <option value="">Seleccionar...</option>
+              <option value="general-roca" className="text-black">General Roca</option>
+              <option value="cipolletti" className="text-black">Cipolletti</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-xs font-bold text-gray-400 uppercase">Barrio (Slug)</label>
+            <input type="text" name="barrio" value={form.barrio || ""} onChange={handleChange} placeholder="ej: barrio-norte" className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none" disabled={!form.city} />
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 mt-2">
-        <div>
-          <label className="block font-semibold">Ambientes</label>
-          <input
-            type="number"
-            name="features.rooms"
-            value={form.features?.rooms ?? 0}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+      {/* SECCIÓN 3: CONFIGURACIÓN DE MAPA (LOCATION) */}
+      <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-4">
+        <div className="flex items-center gap-2">
+           <span className="text-blue-500 text-lg">📍</span>
+           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Coordenadas y Google Maps</p>
         </div>
-        <div className="flex items-center gap-2 mt-6">
-          <input
-            type="checkbox"
-            name="features.garage"
-            checked={form.features?.garage ?? false}
-            onChange={handleChange}
-            className="h-5 w-5"
-          />
-          <label className="font-semibold">Garage</label>
-        </div>
-      </div>
-
-      {/* Flags */}
-      <div className="flex gap-4 mt-2">
-        <label className="flex items-center gap-1">
-          <input type="checkbox" name="flags.featured" checked={form.flags?.featured ?? false} onChange={handleChange} />
-          Destacada
-        </label>
-        <label className="flex items-center gap-1">
-          <input type="checkbox" name="flags.opportunity" checked={form.flags?.opportunity ?? false} onChange={handleChange} />
-          Oportunidad
-        </label>
-        <label className="flex items-center gap-1">
-          <input type="checkbox" name="flags.premium" checked={form.flags?.premium ?? false} onChange={handleChange} />
-          Premium
-        </label>
-      </div>
-
-      {/* Descripción */}
-      <div>
-        <label className="block font-semibold">Descripción</label>
-        <textarea
-          name="description"
-          value={form.description || ""}
-          onChange={handleChange}
-          rows={4}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        />
-      </div>
-
-      {/* Tags */}
-      <div>
-        <label className="block font-semibold">Tags</label>
-        {(form.tags ?? []).map((tag, i) => (
-          <div key={i} className="flex gap-2 mb-1">
-            <input
-              type="text"
-              value={tag}
-              onChange={(e) => updateTag(i, e.target.value)}
-              className="flex-1 p-2 rounded bg-gray-800 text-white border border-gray-600"
+        
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label className="text-xs font-bold text-gray-400 uppercase">Link o Iframe de Google Maps</label>
+            <input 
+              type="text" 
+              name="mapsUrl" 
+              value={form.mapsUrl || ""} 
+              onChange={handleChange} 
+              placeholder="Pegue aquí el link de compartir de Google Maps" 
+              className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none focus:border-blue-500 text-sm" 
             />
-            <button type="button" onClick={() => removeTag(i)} className="bg-red-600 px-2 rounded">X</button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-xs font-bold text-gray-400 uppercase">Latitud</label>
+            <input type="number" step="any" name="lat" value={form.lat ?? ""} onChange={handleChange} className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none" />
+          </div>
+          <div>
+            <label className="text-xs font-bold text-gray-400 uppercase">Longitud</label>
+            <input type="number" step="any" name="lng" value={form.lng ?? ""} onChange={handleChange} className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none" />
+          </div>
+        </div>
+      </div>
+
+      {/* SECCIÓN 4: DIRECCIÓN Y TIPO */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label className="text-xs font-bold text-gray-400 uppercase">Calle</label>
+          <input type="text" name="street" value={form.street || ""} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" />
+        </div>
+        <div>
+          <label className="text-xs font-bold text-gray-400 uppercase">Altura / Nro</label>
+          <input type="text" name="number" value={form.number || ""} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" />
+        </div>
+        <div>
+          <label className="text-xs font-bold text-gray-400 uppercase">Tipo de Propiedad</label>
+          <select name="propertyTypeSlug" value={form.propertyTypeSlug || "casa"} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white">
+            <option value="casa" className="text-black">Casa</option>
+            <option value="departamento" className="text-black">Departamento</option>
+            <option value="terreno" className="text-black">Terreno</option>
+            <option value="local" className="text-black">Local Comercial</option>
+          </select>
+        </div>
+      </div>
+
+      {/* SECCIÓN 5: CARACTERÍSTICAS TÉCNICAS */}
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-3 p-4 bg-white/5 rounded-xl border border-white/5">
+        {[
+          {l: "Dorm", n: "bedrooms"}, {l: "Baños", n: "bathrooms"}, 
+          {l: "Amb", n: "rooms"}, {l: "Total m2", n: "totalM2"}, 
+          {l: "Cub. m2", n: "coveredM2"}, {l: "Edad", n: "age"}
+        ].map((i) => (
+          <div key={i.n}>
+            <label className="text-[10px] font-bold text-gray-500 uppercase">{i.l}</label>
+            <input 
+              type="number" 
+              name={i.n} 
+              value={form[i.n] ?? ""} 
+              onChange={handleChange} 
+              className="w-full bg-transparent border-b border-white/20 p-1 outline-none focus:border-blue-500 transition-colors" 
+            />
           </div>
         ))}
-        <button type="button" onClick={addTag} className="bg-green-600 px-3 py-1 rounded mt-1">Agregar Tag</button>
       </div>
 
-      {/* Imágenes */}
-      <div>
-        <label className="block font-semibold mb-1">Imágenes</label>
-        <div className="flex flex-wrap gap-4 mb-2">
-          {(form.images ?? []).map((img, i) => (
-            <div key={i} className="relative w-32 h-32 border border-gray-600 rounded overflow-hidden">
-              <Image src={img} alt={`Imagen ${i}`} fill style={{ objectFit: "cover" }} />
-              <button
-                type="button"
-                onClick={() => removeImage(i)}
-                className="absolute top-1 right-1 bg-red-600 text-white px-1 rounded"
-              >
-                X
-              </button>
+      {/* SECCIÓN 6: MULTIMEDIA */}
+      <div className="space-y-4">
+        <label className="block text-sm font-bold uppercase tracking-tight">Galería de Imágenes</label>
+        <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
+          {form.images?.map((img: string, idx: number) => (
+            <div key={idx} className="relative aspect-square rounded-lg border border-white/10 overflow-hidden group">
+              <Image src={img} alt="preview" fill className="object-cover" unoptimized />
+              <button type="button" onClick={() => removeImage(idx)} className="absolute inset-0 bg-red-600/90 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity font-bold">✕</button>
             </div>
           ))}
+          <label className="relative aspect-square rounded-lg border-2 border-dashed border-white/10 flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all">
+            <input type="file" multiple accept="image/*" onChange={handleImageChange} className="hidden" />
+            <span className="text-2xl font-light text-gray-500">+</span>
+          </label>
         </div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="text-white"
-        />
       </div>
 
-      {/* Status */}
+      {/* SECCIÓN 7: FLAGS Y EXTRAS */}
+      <div className="flex flex-wrap gap-4 py-4 border-y border-white/5 uppercase text-[10px] font-bold">
+        {[
+          {label: "Destacada", name: "featured"},
+          {label: "Oportunidad", name: "opportunity"},
+          {label: "Premium", name: "premium"},
+          {label: "Cochera", name: "garage"}
+        ].map((check) => (
+          <label key={check.name} className="flex items-center gap-2 cursor-pointer hover:text-blue-400 transition-colors">
+            <input 
+              type="checkbox" 
+              name={check.name} 
+              checked={!!form[check.name]} 
+              onChange={handleChange} 
+              className="w-4 h-4 rounded accent-blue-600 bg-neutral-800" 
+            />
+            {check.label}
+          </label>
+        ))}
+      </div>
+
+      {/* SECCIÓN 8: DESCRIPCIÓN */}
       <div>
-        <label className="block font-semibold">Estado</label>
-        <select
-          name="status"
-          value={form.status || "active"}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        >
-          <option value="active">Activo</option>
-          <option value="inactive">Inactivo</option>
-        </select>
+        <label className="text-xs font-bold text-gray-400 uppercase">Descripción de la propiedad</label>
+        <textarea name="description" value={form.description || ""} onChange={handleChange} rows={4} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-blue-500 resize-none" />
       </div>
 
-      <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold mt-4">
-        Guardar Cambios
+      <button 
+        type="submit" 
+        disabled={loading}
+        className={`w-full ${loading ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'} py-4 rounded-xl font-black uppercase text-sm active:scale-[0.98] transition-all shadow-lg shadow-blue-600/20`}
+      >
+        {loading ? "Guardando cambios..." : "Actualizar Propiedad"}
       </button>
     </form>
   );

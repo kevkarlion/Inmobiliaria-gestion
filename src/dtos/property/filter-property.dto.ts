@@ -2,8 +2,12 @@
 export class PropertyFilterDTO {
   operationType?: string;
   propertyType?: string;
-  zone?: string;
   search?: string;
+
+  // 🔹 NUEVOS CAMPOS DE UBICACIÓN (Slugs)
+  province?: string;
+  city?: string;
+  barrio?: string;
 
   minPrice?: number;
   maxPrice?: number;
@@ -21,63 +25,49 @@ export class PropertyFilterDTO {
 
   constructor(query: any) {
     // 🔑 STRINGS
-    this.operationType =
-      query.operationType && query.operationType !== ""
-        ? query.operationType
-        : undefined;
+    this.operationType = query.operationType && query.operationType !== "" 
+      ? query.operationType 
+      : undefined;
 
-    this.propertyType =
-      query.propertyType && query.propertyType !== ""
-        ? query.propertyType
-        : undefined;
+    this.propertyType = query.propertyType && query.propertyType !== "" 
+      ? query.propertyType 
+      : undefined;
 
-    this.zone =
-      query.zone && query.zone !== ""
-        ? query.zone
-        : undefined;
+    this.search = query.search && query.search.trim() !== "" 
+      ? query.search.trim() 
+      : undefined;
 
-    this.search =
-      query.search && query.search.trim() !== ""
-        ? query.search.trim()
-        : undefined;
+    // 📍 UBICACIONES (Mapeo de Slugs desde la URL)
+    this.province = query.province && query.province !== "" 
+      ? query.province 
+      : undefined;
+
+    this.city = query.city && query.city !== "" 
+      ? query.city 
+      : undefined;
+
+    this.barrio = query.barrio && query.barrio !== "" 
+      ? query.barrio 
+      : undefined;
 
     // 🔢 NUMBERS
     this.minPrice = query.minPrice ? Number(query.minPrice) : undefined;
     this.maxPrice = query.maxPrice ? Number(query.maxPrice) : undefined;
-
     this.bedrooms = query.bedrooms ? Number(query.bedrooms) : undefined;
     this.bathrooms = query.bathrooms ? Number(query.bathrooms) : undefined;
-
     this.minM2 = query.minM2 ? Number(query.minM2) : undefined;
     this.maxM2 = query.maxM2 ? Number(query.maxM2) : undefined;
 
-    // ✅ BOOLEANS
-    this.garage =
-      query.garage === "true"
-        ? true
-        : query.garage === "false"
-        ? false
-        : undefined;
+    // ✅ BOOLEANS (Parsing de strings de URL a booleanos reales)
+    const parseBool = (val: any) => {
+      if (val === "true" || val === true) return true;
+      if (val === "false" || val === false) return false;
+      return undefined;
+    };
 
-    this.featured =
-      query.featured === "true"
-        ? true
-        : query.featured === "false"
-        ? false
-        : undefined;
-
-    this.premium =
-      query.premium === "true"
-        ? true
-        : query.premium === "false"
-        ? false
-        : undefined;
-
-    this.opportunity =
-      query.opportunity === "true"
-        ? true
-        : query.opportunity === "false"
-        ? false
-        : undefined;
+    this.garage = parseBool(query.garage);
+    this.featured = parseBool(query.featured);
+    this.premium = parseBool(query.premium);
+    this.opportunity = parseBool(query.opportunity);
   }
 }

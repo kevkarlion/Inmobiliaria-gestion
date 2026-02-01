@@ -1,17 +1,19 @@
-// domain/types/PropertyUI.types.ts
-// Tipo optimizado para la UI y consumo de componentes React
-
 export interface PropertyUI {
   id: string;
   title: string;
   slug: string;
   operationType: "venta" | "alquiler";
   
-  // Categoría y Ubicación (Nombres para mostrar)
+  // Categoría y Ubicación (Slugs para filtros y Nombres para mostrar)
   typeSlug: string;
   typeName: string;
-  zoneSlug: string;
-  zoneName: string;
+  
+  // 🔹 Nuevos campos de ubicación jerárquica
+  provinceSlug: string;
+  provinceName: string;
+  citySlug: string;
+  cityName: string;
+  zoneName: string; // Para mostrar ej: "General Roca, Río Negro"
 
   // Dirección física
   street: string;
@@ -20,7 +22,7 @@ export interface PropertyUI {
 
   // Precio y Moneda
   amount: number;
-  currency: string; // "USD" | "ARS"
+  currency: string;
 
   // Características y Medidas
   bedrooms: number;
@@ -29,7 +31,7 @@ export interface PropertyUI {
   coveredM2: number;
   rooms: number;
   garage: boolean;
-  age: number;        // ✨ Añadido para antigüedad
+  age: number;
 
   // Estado y Visibilidad
   featured: boolean;
@@ -40,10 +42,11 @@ export interface PropertyUI {
   // Contenido Multimedia y Texto
   tags: string[];
   images: string[];
-  description: string; // ✨ Añadido para el detalle
+  description: string;
 
   // Geolocalización
-  mapsUrl: string | null;
+  mapsUrl: string;
+  externalMapsUrl: string;
   lat: number;
   lng: number;
 }

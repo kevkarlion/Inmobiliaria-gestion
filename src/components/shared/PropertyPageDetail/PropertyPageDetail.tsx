@@ -57,9 +57,7 @@ export default async function PropertyPageDetail({
         </p>
       )}
 
-      <p className="text-gray-600 mb-2">
-        Tipo: {dto.propertyType?.name} • Zona: {dto.zone?.name}
-      </p>
+     
 
       {dto.features && (
         <div className="text-gray-600 mb-2 space-y-1">

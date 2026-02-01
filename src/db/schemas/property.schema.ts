@@ -1,12 +1,12 @@
 import { Schema, model, models } from "mongoose";
+import { IProperty } from "@/domain/interfaces/property.interface"; // Tu interfaz
 import { OperationType } from "@/domain/enums/operation-type.enum";
 import { PropertyStatus } from "@/domain/enums/property-status.enum";
 
-const PropertySchema = new Schema(
+const PropertySchema = new Schema<IProperty>(
   {
-    // 🔹 Core
     title: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, required: true, unique: true, index: true },
 
     operationType: {
       type: String,
@@ -22,26 +22,23 @@ const PropertySchema = new Schema(
       index: true,
     },
 
-    zone: {
-      type: Schema.Types.ObjectId,
-      ref: "Zone",
-      required: true,
-      index: true,
-    },
-
-    // 📝 Contenido
-    description: {
-      type: String,
-      trim: true,
-    },
+    description: { type: String, trim: true },
 
     address: {
       street: { type: String },
       number: { type: String },
       zipCode: { type: String },
+
+      // Relaciones territoriales
+      province: {
+        type: Schema.Types.ObjectId,
+        ref: "Province",
+        required: true,
+      },
+      city: { type: Schema.Types.ObjectId, ref: "City", required: true },
+      barrio: { type: Schema.Types.ObjectId, ref: "Barrio" }, // 👈 Ahora se llama barrio
     },
 
-    // 💰 Precio
     price: {
       amount: { type: Number, required: true, index: true },
       currency: {
@@ -51,36 +48,31 @@ const PropertySchema = new Schema(
       },
     },
 
-    // 🏠 Características
     features: {
-      bedrooms: Number,
-      bathrooms: Number,
-      totalM2: Number,
-      coveredM2: Number,
-      rooms: Number,
-      garage: Boolean,
+      bedrooms: { type: Number, default: 0 },
+      bathrooms: { type: Number, default: 0 },
+      totalM2: { type: Number, default: 0 },
+      coveredM2: { type: Number, default: 0 },
+      rooms: { type: Number, default: 0 },
+      garage: { type: Boolean, default: false },
     },
 
-    age: Number,
-
-    tags: {
-      type: [String],
-      index: true,
+    location: {
+      mapsUrl: { type: String },
+      lat: { type: Number },
+      lng: { type: Number },
     },
 
-    // 🚩 Flags comerciales
+    tags: { type: [String], index: true },
+
     flags: {
       featured: { type: Boolean, default: false, index: true },
       opportunity: { type: Boolean, default: false, index: true },
       premium: { type: Boolean, default: false, index: true },
     },
 
-    images: {
-      type: [String],
-      default: [],
-    },
+    images: { type: [String], default: [] },
 
-    // 🔒 Estado
     status: {
       type: String,
       enum: Object.values(PropertyStatus),
@@ -90,8 +82,11 @@ const PropertySchema = new Schema(
   },
   {
     timestamps: true,
-  }
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
+// Solo una exportación para toda la app
 export const PropertyModel =
-  models.Property || model("Property", PropertySchema);
+  models.Property || model<IProperty>("Property", PropertySchema);

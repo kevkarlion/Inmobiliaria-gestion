@@ -1,53 +1,50 @@
 // mappers/propertyToForm.mapper.ts
-//mapea datos de mi rta de mi backend a datos entendibles para mi formulario
-
 import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
-import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
 
-
-function normalizeOperation(
-  value: string
-): "venta" | "alquiler" {
-  return value === "alquiler" ? "alquiler" : "venta";
-}
-
-function normalizeCurrency(
-  value: string
-): "USD" | "ARS" {
-  return value === "ARS" ? "ARS" : "USD";
-}
-
-function normalizeStatus(
-  value?: string
-): "active" | "inactive" {
-  return value === "inactive" ? "inactive" : "active";
-}
-
-
-
-export function mapPropertyToForm(
-  property: PropertyResponseDTO
-): UpdatePropertyDTO {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function mapPropertyToForm(property: PropertyResponseDTO): any {
   return {
+    // Datos básicos
     title: property.title,
-    operationType: normalizeOperation(property.operationType),
-    propertyTypeSlug: property.propertyType.slug,
-    zoneSlug: property.zone.slug,
+    slug: property.slug,
+    operationType: property.operationType === "alquiler" ? "alquiler" : "venta",
+    propertyTypeSlug: property.propertyType?.slug || "casa",
 
-    address: property.address,
+    // Ubicación (Aplanado para el select/input)
+    province: property.address?.province?._id || property.address?.province || "", 
+    city: property.address?.city?._id || property.address?.city || "",
+    barrio: property.address?.barrio?._id || property.address?.barrio || "", 
+    street: property.address?.street || "",
+    number: property.address?.number || "",
+    zipCode: property.address?.zipCode || "",
 
-    price: {
-      amount: property.price.amount,
-      currency: normalizeCurrency(property.price.currency),
-    },
+    // Precio (Aplanado)
+    priceAmount: property.price?.amount || 0,
+    currency: property.price?.currency || "USD",
 
-    features: property.features,
-    flags: property.flags,
+    // Location / Mapa (Aplanado)
+    mapsUrl: property.location?.mapsUrl || "",
+    lat: property.location?.lat || 0,
+    lng: property.location?.lng || 0,
 
-    description: property.description,
+    // Características (Aplanado)
+    bedrooms: property.features?.bedrooms || 0,
+    bathrooms: property.features?.bathrooms || 0,
+    rooms: property.features?.rooms || 0,
+    totalM2: property.features?.totalM2 || 0,
+    coveredM2: property.features?.coveredM2 || 0,
+    garage: !!property.features?.garage,
+    age: property.age || 0,
+
+    // Flags (Aplanado)
+    featured: !!property.flags?.featured,
+    opportunity: !!property.flags?.opportunity,
+    premium: !!property.flags?.premium,
+
+    // Extras
+    description: property.description || "",
     tags: property.tags ?? [],
     images: property.images ?? [],
-    status: normalizeStatus(property.status),
+    status: property.status || "active",
   };
 }
-

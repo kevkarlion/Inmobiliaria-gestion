@@ -30,6 +30,7 @@ export class PropertyController {
       await connectDB();
       const body = await req.json();
       // 1️⃣ DTO de entrada
+      console.log('contoller create', body)
       const dto = new CreatePropertyDTO(body);
       console.log('dto', dto)
       // 2️⃣ Service
@@ -38,6 +39,7 @@ export class PropertyController {
       const response = new PropertyResponseDTO(property);
       return NextResponse.json(response, { status: 201 });
     } catch (error: unknown) {
+      console.error("🔴 ERROR EN CONTROLLER:", error); // 👈 AGREGA ESTO
       return this.handleError(error);
     }
   }
@@ -71,9 +73,9 @@ export class PropertyController {
 
 
 
-
    static async getBySlug(slug: string) {
     const property = await PropertyService.findBySlug(slug);
+    console.log('property controller ', property)
     return new PropertyResponseDTO(property);
   }
 

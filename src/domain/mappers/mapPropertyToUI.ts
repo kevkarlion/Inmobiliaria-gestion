@@ -2,28 +2,49 @@
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 
 function normalizeOperation(value: string): "venta" | "alquiler" {
-  if (value === "venta" || value === "alquiler") {
-    return value;
-  }
-  return "venta"; // default de seguridad
+  return (value === "venta" || value === "alquiler") ? value : "venta";
 }
 
 export function mapPropertyToUI(property: any): PropertyUI {
+  
+  // 1. Limpieza de URL de Maps para Iframe
+  const rawUrl = property.location?.mapsUrl || "";
+  let cleanEmbedUrl = rawUrl;
+  if (rawUrl.includes("<iframe")) {
+    const match = rawUrl.match(/src="([^"]+)"/);
+    cleanEmbedUrl = match ? match[1] : rawUrl;
+  }
+
+  // 2. URL Externa para botón
+  const street = property.address?.street || "";
+  const number = property.address?.number || "";
+  const city = property.address?.city?.name || "";
+  const externalSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${street} ${number} ${city}`)}`;
+
   return {
-    id: property.id || property._id?.toString(), 
-    title: property.title,
-    slug: property.slug,
+    id: property._id?.toString() || property.id, 
+    title: property.title || "Sin título",
+    slug: property.slug || "",
     operationType: normalizeOperation(property.operationType),
     
-    // Tipos y Zonas (Asumiendo que vienen poblados del DTO/DB)
+    // Categoría
     typeSlug: property.propertyType?.slug || "",
     typeName: property.propertyType?.name || "Propiedad",
-    zoneSlug: property.zone?.slug || "",
-    zoneName: property.zone?.name || "Consultar zona",
+
+    // 📍 UBICACIÓN (Basado en tu console.log)
+    provinceSlug: property.address?.province?.slug || "",
+    provinceName: property.address?.province?.name || "",
+    citySlug: property.address?.city?.slug || "",
+    cityName: property.address?.city?.name || "",
+    
+    // Nombre combinado para mostrar en la card (ej: "General Roca, Río Negro")
+    zoneName: property.address?.city?.name 
+      ? `${property.address.city.name}, ${property.address.province?.name || ""}`
+      : "Consultar ubicación",
 
     // Dirección
-    street: property.address?.street || "",
-    number: property.address?.number || "",
+    street: street,
+    number: number,
     zipCode: property.address?.zipCode || "",
 
     // Precio
@@ -37,21 +58,22 @@ export function mapPropertyToUI(property: any): PropertyUI {
     coveredM2: property.features?.coveredM2 || 0,
     rooms: property.features?.rooms || 0,
     garage: !!property.features?.garage,
-    age: property.age || 0, // Añadido
+    age: property.age || 0,
 
-    // Flags (Booleans)
+    // Flags
     featured: !!property.flags?.featured,
     opportunity: !!property.flags?.opportunity,
     premium: !!property.flags?.premium,
 
     // Metadata
     tags: property.tags || [],
-    images: property.images ?? [], 
+    images: property.images || [], 
     status: property.status || "active",
-    description: property.description || "", // Añadido
+    description: property.description || "",
 
-    // Ubicación (Georeferencia)
-    mapsUrl: property.location?.mapsUrl || null,
+    // Ubicación
+    mapsUrl: cleanEmbedUrl,
+    externalMapsUrl: externalSearchUrl,
     lat: property.location?.lat || 0,
     lng: property.location?.lng || 0,
   };

@@ -1,23 +1,41 @@
 // domain/types/Property.types.ts
-//interfaz que representa el dato después de ser procesado por tu servidor (luego del .populate()).
 
+/**
+ * Representa la propiedad procesada y lista para el Frontend.
+ * Es el resultado de aplicar .populate() y los mappers.
+ */
 export interface Property {
-  _id: string; // El ID de la propiedad misma
+  _id: string; 
   title: string;
-  slug: string; // Importante para las URLs
+  slug: string; 
   operationType: string;
 
-  // Corregido: Agregamos el _id que viene en tus items reales
   propertyType: {
     _id: string; 
     slug: string;
     name: string;
   };
 
-  zone: {
-    _id: string;
-    slug: string;
-    name: string;
+  // Reemplazamos zone por la estructura jerárquica poblada
+  address: {
+    street: string;
+    number: string;
+    zipCode: string;
+    province: {
+      _id: string;
+      slug: string;
+      name: string;
+    };
+    city: {
+      _id: string;
+      slug: string;
+      name: string;
+    };
+    barrio?: { // Opcional, puede no tener barrio
+      _id: string;
+      slug: string;
+      name: string;
+    };
   };
 
   price: {
@@ -34,12 +52,6 @@ export interface Property {
     garage: boolean;
   };
 
-  address: {
-    street: string;
-    number: string;
-    zipCode: string;
-  };
-
   flags: {
     featured: boolean;
     opportunity: boolean;
@@ -50,18 +62,20 @@ export interface Property {
   images: string[];
   description: string;
   status: "active" | "inactive";
-  createdAt?: string; // Mongoose timestamps
-  updatedAt?: string;
-  // Property.types.ts
-location: {
-  mapsUrl: string;
-  lat: number;
-  lng: number;
-};
+  
+  location: {
+    mapsUrl: string;
+    lat: number;
+    lng: number;
+  };
 
+  createdAt?: string; 
+  updatedAt?: string;
 }
 
-
+/**
+ * Formato de respuesta para listados paginados
+ */
 export interface FindAllPropertiesResult {
   items: Property[];
   meta: {

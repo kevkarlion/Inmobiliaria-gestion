@@ -1,4 +1,3 @@
-// domain/types/Property.types.ts
 import { Types } from "mongoose";
 
 /**
@@ -10,8 +9,8 @@ export interface IProperty {
   title: string;
   slug: string;
   operationType: "venta" | "alquiler";
-  propertyType: Types.ObjectId; // Referencia a PropertyType
-  zone: Types.ObjectId; // Referencia a Zone
+  propertyType: Types.ObjectId;
+
   price: {
     amount: number;
     currency: "USD" | "ARS";
@@ -20,6 +19,10 @@ export interface IProperty {
     street: string;
     number: string;
     zipCode: string;
+    // 🔹 Nuevas referencias obligatorias/opcionales
+    province: Types.ObjectId;
+    city: Types.ObjectId;
+    barrio?: Types.ObjectId;
   };
   features: {
     bedrooms: number;
@@ -36,7 +39,6 @@ export interface IProperty {
   };
   tags: string[];
   images: string[];
-  // Property.types.ts
   location: {
     mapsUrl: string;
     lat: number;
@@ -47,25 +49,42 @@ export interface IProperty {
   status: "active" | "inactive";
   createdAt?: Date;
   updatedAt?: Date;
+  age: number,
 }
 
 /**
- * Representa la propiedad después del .populate()
- *
+ * Representa la entidad de dominio después del .populate()
+ * Se usa en los Servicios y Mappers.
  */
 export interface Property extends Omit<
   IProperty,
-  "propertyType" | "zone" | "_id"
+  "propertyType" | "address" | "_id"
 > {
-  id: string; // El id transformado de _id a string
+  id: string; 
   propertyType: {
     _id: string;
     name: string;
     slug: string;
   };
-  zone: {
-    _id: string;
-    name: string;
-    slug: string;
+  // 🔹 Address transformado con objetos poblados
+  address: {
+    street: string;
+    number: string;
+    zipCode: string;
+    province: {
+      _id: string;
+      name: string;
+      slug: string;
+    };
+    city: {
+      _id: string;
+      name: string;
+      slug: string;
+    };
+    barrio?: {
+      _id: string;
+      name: string;
+      slug: string;
+    };
   };
 }
