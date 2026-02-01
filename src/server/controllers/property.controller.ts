@@ -31,6 +31,7 @@ export class PropertyController {
       const body = await req.json();
       // 1️⃣ DTO de entrada
       const dto = new CreatePropertyDTO(body);
+      console.log('dto', dto)
       // 2️⃣ Service
       const property = await PropertyService.create(dto);
       // 3️⃣ DTO de salida
@@ -58,7 +59,7 @@ export class PropertyController {
     const responseItems = items.map(
       (property) => new PropertyResponseDTO(property),
     );
-    console.log('responseItems', responseItems)
+    
     return NextResponse.json({
       items: responseItems,
       meta,

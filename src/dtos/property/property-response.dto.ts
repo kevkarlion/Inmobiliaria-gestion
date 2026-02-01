@@ -1,11 +1,10 @@
-// domain/dtos/PropertyResponse.dto.ts
 import { Property } from "@/domain/types/Property.types";
 
 export class PropertyResponseDTO {
   id: string;
   title: string;
   slug: string;
-  price: Property["price"];         // Extrae el tipo directamente de la interfaz
+  price: Property["price"];
   propertyType: Property["propertyType"]; 
   zone: Property["zone"];
   operationType: string;
@@ -18,8 +17,7 @@ export class PropertyResponseDTO {
   status?: string;
   location: Property["location"];
 
-
-  constructor(property: Property) { // <--- Aquí usamos la interfaz de "dato cocinado"
+  constructor(property: Property) {
     this.id = property._id.toString();
     this.title = property.title;
     this.slug = property.slug;
@@ -34,7 +32,6 @@ export class PropertyResponseDTO {
     this.images = property.images || [];
     this.description = property.description;
     this.status = property.status;
-    this.location = property.location;
-
+    this.location = property.location; // Ahora incluye mapsUrl, lat, lng
   }
 }

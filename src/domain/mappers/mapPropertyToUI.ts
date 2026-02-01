@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { Property } from "@/domain/types/Property.types";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 
 function normalizeOperation(value: string): "venta" | "alquiler" {
@@ -10,43 +9,50 @@ function normalizeOperation(value: string): "venta" | "alquiler" {
 }
 
 export function mapPropertyToUI(property: any): PropertyUI {
- 
   return {
-    id: property.id, // Usa ambos por compatibilidad
+    id: property.id || property._id?.toString(), 
     title: property.title,
-    operationType: normalizeOperation(property.operationType),
-    typeSlug: property.propertyType.slug,
-    typeName: property.propertyType.name,
-
     slug: property.slug,
+    operationType: normalizeOperation(property.operationType),
     
-    zoneSlug: property.zone.slug,
-    zoneName: property.zone.name,
+    // Tipos y Zonas (Asumiendo que vienen poblados del DTO/DB)
+    typeSlug: property.propertyType?.slug || "",
+    typeName: property.propertyType?.name || "Propiedad",
+    zoneSlug: property.zone?.slug || "",
+    zoneName: property.zone?.name || "Consultar zona",
 
-    street: property.address.street,
-    number: property.address.number,
-    zipCode: property.address.zipCode,
+    // Dirección
+    street: property.address?.street || "",
+    number: property.address?.number || "",
+    zipCode: property.address?.zipCode || "",
 
-    amount: property.price.amount,
-    currency: property.price.currency,
+    // Precio
+    amount: property.price?.amount || 0,
+    currency: property.price?.currency || "USD",
 
-    bedrooms: property.features.bedrooms,
-    bathrooms: property.features.bathrooms,
-    totalM2: property.features.totalM2,
-    coveredM2: property.features.coveredM2,
-    rooms: property.features.rooms,
-    garage: property.features.garage,
+    // Medidas y Ambientes
+    bedrooms: property.features?.bedrooms || 0,
+    bathrooms: property.features?.bathrooms || 0,
+    totalM2: property.features?.totalM2 || 0,
+    coveredM2: property.features?.coveredM2 || 0,
+    rooms: property.features?.rooms || 0,
+    garage: !!property.features?.garage,
+    age: property.age || 0, // Añadido
 
-    featured: property.flags.featured,
-    opportunity: property.flags.opportunity,
-    premium: property.flags.premium,
+    // Flags (Booleans)
+    featured: !!property.flags?.featured,
+    opportunity: !!property.flags?.opportunity,
+    premium: !!property.flags?.premium,
 
-    tags: property.tags,
+    // Metadata
+    tags: property.tags || [],
     images: property.images ?? [], 
-    status: property.status,
+    status: property.status || "active",
+    description: property.description || "", // Añadido
 
-     mapsUrl: property.location?.mapsUrl || null,
-    lat: property.location?.lat,
-    lng: property.location?.lng,
+    // Ubicación (Georeferencia)
+    mapsUrl: property.location?.mapsUrl || null,
+    lat: property.location?.lat || 0,
+    lng: property.location?.lng || 0,
   };
 }

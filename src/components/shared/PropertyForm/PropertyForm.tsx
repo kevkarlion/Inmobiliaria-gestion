@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
+import Image from "next/image";
 import { PropertyFormType } from "@/domain/types/PropertyFormType.types";
 
 interface CreatePropertyFormProps {
@@ -13,369 +16,159 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
     operationType: "venta",
     propertyTypeSlug: "",
     zoneSlug: "",
-    price: { amount: 0, currency: "USD" },
-    features: { bedrooms: 0, bathrooms: 0, totalM2: 0, coveredM2: 0, rooms: 0, garage: false },
-    flags: { featured: false, opportunity: false, premium: false },
-    address: { street: "", number: "", zipCode: "" },
-    age: 0,
+    priceAmount: 0,
+    currency: "USD",
+    bedrooms: 0,
+    bathrooms: 0,
+    totalM2: 0,
+    coveredM2: 0,
+    rooms: 0,
+    garage: false,
+    featured: false,
+    features: "",
+    opportunity: false,
+    premium: false,
+    street: "",
+    number: "",
+    zipCode: "",
+    mapsUrl: "",
+    lat: 0,
+    lng: 0,
     tags: [],
     images: [],
     description: "",
+    age: 0,
   });
 
-  // 🔹 Manejo de cambios tipado
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value, type } = e.target;
-
-    if (name.includes(".")) {
-      const [parent, key] = name.split(".");
-      const parentObj = form[parent as keyof PropertyFormType] || {};
-
-      if (type === "checkbox") {
-        const target = e.target as HTMLInputElement;
-        setForm({
-          ...form,
-          [parent]: {
-            ...parentObj,
-            [key]: target.checked,
-          },
-        } as PropertyFormType);
-      } else if (type === "number") {
-        setForm({
-          ...form,
-          [parent]: {
-            ...parentObj,
-            [key]: Number(value),
-          },
-        } as PropertyFormType);
-      } else {
-        setForm({
-          ...form,
-          [parent]: {
-            ...parentObj,
-            [key]: value,
-          },
-        } as PropertyFormType);
-      }
+    let finalValue: any;
+    if (type === "checkbox") {
+      finalValue = (e.target as HTMLInputElement).checked;
+    } else if (type === "number") {
+      finalValue = Number(value);
     } else {
-      if (type === "checkbox") {
-        const target = e.target as HTMLInputElement;
-        setForm({
-          ...form,
-          [name]: target.checked,
-        } as PropertyFormType);
-      } else if (type === "number") {
-        setForm({
-          ...form,
-          [name]: Number(value),
-        } as PropertyFormType);
-      } else {
-        setForm({
-          ...form,
-          [name]: value,
-        } as PropertyFormType);
-      }
+      finalValue = value;
     }
+    setForm((prev) => ({ ...prev, [name]: finalValue }));
   }
 
-  // 🔹 Envío del formulario
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev) => ({ ...prev, images: [...prev.images, reader.result as string] }));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeImage = (index: number) => {
+    setForm((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+  };
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-  
-
     try {
       const res = await fetch("/api/properties", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-
-      if (!res.ok) throw new Error("Error creando propiedad");
-
-   
-      
-      alert("Propiedad creada con éxito!");
+      if (!res.ok) throw new Error("Error");
+      alert("¡Propiedad creada!");
+      onClose();
     } catch (error) {
-      console.error(error);
-      alert("Hubo un error al crear la propiedad");
+      alert("Error al guardar");
     }
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-3xl mx-auto p-6 bg-neutral-900 text-white rounded-lg space-y-4"
-    >
-      {/* Título + cerrar */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-4">Crear Propiedad</h1>
-        <button
-          type="button"
-          onClick={onClose}
-          className="text-red-500 hover:text-red-700 font-semibold"
-        >
-          ✕ Cerrar
-        </button>
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-neutral-900 text-white rounded-xl space-y-4 border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
+      <div className="flex justify-between items-center border-b border-white/10 pb-4">
+        <h2 className="text-2xl font-black italic uppercase tracking-tighter">Nueva Propiedad</h2>
+        <button type="button" onClick={onClose} className="hover:text-red-500 transition-colors">Cerrar ✕</button>
       </div>
 
-      {/* Título */}
-      <div>
-        
-        <label className="block font-semibold">
-          Título <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        />
-      </div>
-
-      {/* Operación */}
-      <div>
-        <label className="block font-semibold">
-          Operación <span className="text-red-500">*</span>
-        </label>
-        <select
-          name="operationType"
-          value={form.operationType}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        >
-          <option value="venta">Venta</option>
-          <option value="alquiler">Alquiler</option>
-        </select>
-      </div>
-
-      {/* Tipo de propiedad */}
-      <div>
-        <label className="block font-semibold">
-          Tipo de Propiedad <span className="text-red-500">*</span>
-        </label>
-        <select
-          name="propertyTypeSlug"
-          value={form.propertyTypeSlug}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        >
-          <option value="">Seleccione</option>
-          <option value="casa">Casa</option>
-          <option value="departamento">Departamento</option>
-          <option value="terreno">Terreno</option>
-        </select>
-      </div>
-
-      {/* Zona */}
-      <div>
-        <label className="block font-semibold">
-          Zona <span className="text-red-500">*</span>
-        </label>
-        <select
-          name="zoneSlug"
-          value={form.zoneSlug}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        >
-          <option value="">Seleccione</option>
-          <option value="centro">Centro</option>
-          <option value="norte">Norte</option>
-          <option value="sur">Sur</option>
-        </select>
-      </div>
-
-      {/* Dirección */}
-      <div className="grid grid-cols-3 gap-2">
-        <div>
-          <label className="block font-semibold">Calle *</label>
-          <input
-            type="text"
-            name="address.street"
-            value={form.address.street}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="md:col-span-2">
+          <label className="text-xs font-bold text-gray-400 uppercase">Título</label>
+          <input type="text" name="title" value={form.title} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" required />
         </div>
         <div>
-          <label className="block font-semibold">Número</label>
-          <input
-            type="text"
-            name="address.number"
-            value={form.address.number}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+          <label className="text-xs font-bold text-gray-400 uppercase">Precio</label>
+          <input type="number" name="priceAmount" value={form.priceAmount} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" />
         </div>
         <div>
-          <label className="block font-semibold">CP</label>
-          <input
-            type="text"
-            name="address.zipCode"
-            value={form.address.zipCode}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-      </div>
-
-      {/* Precio */}
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <label className="block font-semibold">Precio *</label>
-          <input
-            type="number"
-            name="price.amount"
-            value={form.price.amount}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-        <div>
-          <label className="block font-semibold">Moneda</label>
-          <select
-            name="price.currency"
-            value={form.price.currency}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          >
-            <option value="USD">USD</option>
-            <option value="ARS">ARS</option>
+          <label className="text-xs font-bold text-gray-400 uppercase">Moneda</label>
+          <select name="currency" value={form.currency} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white">
+            <option value="USD" className="text-black">USD</option>
+            <option value="ARS" className='text-black'>ARS</option>
           </select>
         </div>
       </div>
 
-      {/* Features */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block font-semibold">Total m²</label>
-          <input
-            type="number"
-            name="features.totalM2"
-            value={form.features.totalM2}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+          <label className="text-xs font-bold text-gray-400 uppercase">Maps URL</label>
+          <input type="text" name="mapsUrl" value={form.mapsUrl} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" />
         </div>
         <div>
-          <label className="block font-semibold">Cubiertos m²</label>
-          <input
-            type="number"
-            name="features.coveredM2"
-            value={form.features.coveredM2}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+          <label className="text-xs font-bold text-gray-400 uppercase">Latitud</label>
+          <input type="number" name="lat" value={form.lat} onChange={handleChange} step="any" className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" />
         </div>
         <div>
-          <label className="block font-semibold">Dormitorios</label>
-          <input
-            type="number"
-            name="features.bedrooms"
-            value={form.features.bedrooms}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-        <div>
-          <label className="block font-semibold">Baños</label>
-          <input
-            type="number"
-            name="features.bathrooms"
-            value={form.features.bathrooms}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+          <label className="text-xs font-bold text-gray-400 uppercase">Longitud</label>
+          <input type="number" name="lng" value={form.lng} onChange={handleChange} step="any" className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 mt-2">
-        <div>
-          <label className="block font-semibold">Ambientes</label>
-          <input
-            type="number"
-            name="features.rooms"
-            value={form.features.rooms}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-          />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <input type="text" name="propertyTypeSlug" value={form.propertyTypeSlug} onChange={handleChange} placeholder="Categoría Slug" className="p-3 bg-white/5 border border-white/10 rounded-lg" />
+        <input type="text" name="zoneSlug" value={form.zoneSlug} onChange={handleChange} placeholder="Zona Slug" className="p-3 bg-white/5 border border-white/10 rounded-lg" />
+        <input type="text" name="street" value={form.street} onChange={handleChange} placeholder="Calle" className="p-3 bg-white/5 border border-white/10 rounded-lg" />
+        <input type="text" name="number" value={form.number} onChange={handleChange} placeholder="Altura" className="p-3 bg-white/5 border border-white/10 rounded-lg" />
+      </div>
+
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-3 p-4 bg-white/5 rounded-xl border border-white/5">
+        {[{l: "Dorm", n: "bedrooms"}, {l: "Baños", n: "bathrooms"}, {l: "Amb", n: "rooms"}, {l: "Total m2", n: "totalM2"}, {l: "Cub. m2", n: "coveredM2"}, {l: "Edad", n: "age"}].map((i) => (
+          <div key={i.n}>
+            <label className="text-[10px] font-bold text-gray-500 uppercase">{i.l}</label>
+            <input type="number" name={i.n} value={(form as any)[i.n]} onChange={handleChange} className="w-full bg-transparent border-b border-white/20 p-1 outline-none" />
+          </div>
+        ))}
+      </div>
+
+      <div className="space-y-4">
+        <label className="block text-sm font-bold uppercase">Galería</label>
+        <div className="relative w-full h-24 border-2 border-dashed border-white/10 rounded-xl flex items-center justify-center cursor-pointer">
+          <input type="file" multiple accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+          <span className="text-gray-500 text-xs uppercase">Click para subir</span>
         </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            name="features.garage"
-            checked={form.features.garage}
-            onChange={handleChange}
-            className="h-5 w-5"
-          />
-          <label className="font-semibold">Garage</label>
+        <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
+          {form.images.map((img, idx) => (
+            <div key={idx} className="relative aspect-square rounded border border-white/10 overflow-hidden">
+              <Image src={img} alt="preview" fill className="object-cover" unoptimized />
+              <button type="button" onClick={() => removeImage(idx)} className="absolute top-0 right-0 bg-red-600 text-[10px] px-1">✕</button>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Antigüedad */}
-      <div>
-        <label className="block font-semibold">Antigüedad (años)</label>
-        <input
-          type="number"
-          name="age"
-          value={form.age}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        />
+      <div className="flex flex-wrap gap-4 py-2 border-y border-white/5 uppercase text-[10px]">
+        {["featured", "opportunity", "premium", "garage"].map((check) => (
+          <label key={check} className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name={check} checked={(form as any)[check]} onChange={handleChange} className="w-4 h-4 rounded accent-blue-600" />
+            {check}
+          </label>
+        ))}
       </div>
 
-      {/* Flags */}
-      <div className="flex gap-4 mt-2">
-        <label className="flex items-center gap-1">
-          <input
-            type="checkbox"
-            name="flags.featured"
-            checked={form.flags.featured}
-            onChange={handleChange}
-          />
-          Destacada
-        </label>
-        <label className="flex items-center gap-1">
-          <input
-            type="checkbox"
-            name="flags.opportunity"
-            checked={form.flags.opportunity}
-            onChange={handleChange}
-          />
-          Oportunidad
-        </label>
-        <label className="flex items-center gap-1">
-          <input
-            type="checkbox"
-            name="flags.premium"
-            checked={form.flags.premium}
-            onChange={handleChange}
-          />
-          Premium
-        </label>
-      </div>
+      <textarea name="description" value={form.description} onChange={handleChange} rows={3} placeholder="Descripción..." className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" />
 
-      {/* Descripción */}
-      <div>
-        <label className="block font-semibold">Descripción</label>
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          rows={4}
-          className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600"
-        />
-      </div>
-
-      {/* Submit */}
-      <button
-        type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold mt-4"
-      >
-        Crear Propiedad
-      </button>
+      <button type="submit" className="w-full bg-blue-600 py-4 rounded-xl font-black uppercase text-sm active:scale-95 transition-all">Publicar</button>
     </form>
   );
 }

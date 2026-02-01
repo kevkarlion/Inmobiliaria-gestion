@@ -24,87 +24,68 @@ export class PropertyService {
   /**
    * Crea una nueva propiedad, valida referencias y retorna el objeto poblado.
    */
+  
+
   static async create(dto: CreatePropertyDTO): Promise<Property> {
-    // 1. Validar que las entidades relacionadas existan
+
+  
+    // 1. Validar entidades relacionadas
     const propertyType = await PropertyTypeRepository.findBySlug(
       dto.propertyTypeSlug,
     );
-    if (!propertyType) {
-      throw new BadRequestError(
-        `El tipo de propiedad '${dto.propertyTypeSlug}' no existe.`,
-      );
-    }
+    if (!propertyType)
+      throw new BadRequestError(`Tipo '${dto.propertyTypeSlug}' no existe.`);
 
     const zone = await ZoneRepository.findBySlug(dto.zoneSlug);
-    if (!zone) {
-      throw new BadRequestError(`La zona '${dto.zoneSlug}' no existe.`);
-    }
+    if (!zone) throw new BadRequestError(`Zona '${dto.zoneSlug}' no existe.`);
 
-    // 2. Generar Slug único (Lógica de negocio)
+    // 2. Generar Slug único
     let slug = slugify(dto.title, { lower: true, strict: true });
     let slugExists = await PropertyModel.findOne({ slug });
     let counter = 1;
-
     while (slugExists) {
       const newSlug = `${slugify(dto.title, { lower: true, strict: true })}-${counter}`;
       slugExists = await PropertyModel.findOne({ slug: newSlug });
-      if (!slugExists) {
-        slug = newSlug;
-      }
+      if (!slugExists) slug = newSlug;
       counter++;
     }
 
-    // 3. Mapear DTO a IProperty (Formato de Base de Datos)
+    // 3. Mapear DTO a IProperty
     const propertyToSave: Partial<IProperty> = {
       title: dto.title,
       slug: slug,
       operationType: dto.operationType as "venta" | "alquiler",
-      propertyType: propertyType._id, // Guardamos la referencia
-      zone: zone._id, // Guardamos la referencia
+      propertyType: propertyType._id,
+      zone: zone._id,
       price: {
         amount: dto.price.amount,
-        currency: (dto.price.currency as "USD" | "ARS") || "ARS",
+        currency: dto.price.currency as "USD" | "ARS", // 👈 Agrega el 'as "USD" | "ARS"'
       },
-      address: {
-        street: dto.address?.street || "",
-        number: dto.address?.number || "",
-        zipCode: dto.address?.zipCode || "",
-      },
+      address: dto.address,
+      location: dto.location, // Agregado
       features: {
-        bedrooms: dto.features?.bedrooms || 0,
-        bathrooms: dto.features?.bathrooms || 0,
-        rooms: 0, // Valor por defecto o extender DTO
-        totalM2: dto.features?.m2 || 0, // Mapeo de 'm2' a 'totalM2'
-        coveredM2: 0,
-        garage: !!dto.features?.garage,
+        bedrooms: dto.features.bedrooms,
+        bathrooms: dto.features.bathrooms,
+        rooms: dto.features.rooms,
+        totalM2: dto.features.totalM2,
+        coveredM2: dto.features.coveredM2,
+        garage: dto.features.garage,
       },
-      flags: {
-        featured: !!dto.flags?.featured,
-        opportunity: !!dto.flags?.opportunity,
-        premium: !!dto.flags?.premium,
-      },
+      flags: dto.flags,
+      description: dto.description,
       status: "active",
-      tags: [],
-      images: [],
+      tags: dto.tags,
+      images: dto.images,
     };
 
-    // 4. Guardar en Base de Datos
     const savedProperty = await PropertyRepository.create(propertyToSave);
 
-    // 5. Poblar datos para cumplir con la interfaz 'Property' de salida
-    // Esto es lo que permite que el PropertyResponseDTO reciba objetos y no IDs
     const result = await PropertyModel.findById(savedProperty._id)
       .populate("propertyType")
       .populate("zone")
       .lean();
 
-    if (!result) {
-      throw new Error(
-        "Error crítico: No se pudo recuperar la propiedad creada.",
-      );
-    }
-    console.log("Created property:", result);
-
+    if (!result) throw new Error("Error al recuperar la propiedad creada.");
     return result as unknown as Property;
   }
 
@@ -199,7 +180,7 @@ export class PropertyService {
       _id: doc._id.toString(),
     }));
 
-    console.log("normalized ", normalized);
+   
     return {
       items: normalized,
       meta: {
@@ -214,20 +195,19 @@ export class PropertyService {
   /**
    * GET /properties/:slug
    */
- // property.service.ts
-static async findBySlug(slug: string): Promise<Property> {
-  const property = await PropertyRepository.findBySlug(slug);
+  // property.service.ts
+  static async findBySlug(slug: string): Promise<Property> {
+    const property = await PropertyRepository.findBySlug(slug);
 
-  if (!property) {
-    throw new NotFoundError("Property not found");
+    if (!property) {
+      throw new NotFoundError("Property not found");
+    }
+
+    return {
+      ...property.toObject(),
+      _id: property._id.toString(),
+    };
   }
-
-  return {
-    ...property.toObject(),
-    _id: property._id.toString(),
-  };
-}
-
 
   // PUT /properties/:slug
   static async update(slug: string, payload: UpdatePropertyDTO) {
