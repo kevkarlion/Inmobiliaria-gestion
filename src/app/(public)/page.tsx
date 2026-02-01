@@ -3,17 +3,17 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import Image from "next/image";
 import {
-  Search,
+  
   MapPin,
-  Tag,
-  Home,
+
   ChevronRight,
-  X,
-  Globe,
+
 } from "lucide-react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import Link from "next/link";
+
+
 
 export default function HomePage() {
   const [properties, setProperties] = useState<PropertyUI[]>([]);
