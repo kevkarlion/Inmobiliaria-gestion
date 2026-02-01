@@ -19,7 +19,7 @@ async function getProperties(searchParams: SearchParams) {
   });
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/properties?${params.toString()}`,
+    `${process.env.BASE_URL}/api/properties?${params.toString()}`,
     { cache: "no-store" }
   );
 

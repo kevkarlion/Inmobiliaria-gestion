@@ -13,7 +13,7 @@ export default async function PropertyDetailPage({
   const { slug } = await params;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/properties/${slug}`,
+    `${process.env.BASE_URL}/api/properties/${slug}`,
     { cache: "no-store" }
   );
 
