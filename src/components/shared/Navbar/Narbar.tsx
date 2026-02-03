@@ -94,7 +94,7 @@ export default function Navbar() {
             <div className="lg:hidden shrink-0">
               <Link href="/">
                 <Image 
-                  src="/logo-navbar.png" // O el logo que resalte sobre azul
+                  src="/logo-blanco.png" // O el logo que resalte sobre azul
                   alt="Riquelme Propiedades" 
                   width={140} 
                   height={40} 
@@ -138,7 +138,7 @@ export default function Navbar() {
         {/* --- MOBILE MENU --- */}
         <div className={`
           lg:hidden absolute w-full bg-oxford transition-all duration-300 ease-in-out z-50 overflow-hidden shadow-xl
-          ${isOpen ? "max-h-[500px] border-t border-white/10" : "max-h-0"}
+          ${isOpen ? "max-h-125 border-t border-white/10" : "max-h-0"}
         `}>
           <div className="px-6 py-8 flex flex-col space-y-5">
             {menuItems.map((item) => (
