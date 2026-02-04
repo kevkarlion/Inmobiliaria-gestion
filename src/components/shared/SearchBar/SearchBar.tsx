@@ -58,15 +58,12 @@ export default function SearchBar() {
     (search.length > 0 || operation || type || province || city);
 
   return (
-    <div
-      className="relative w-full mx-auto font-montserrat overflow-x-hidden"
-      ref={containerRef}
-    >
+    <div className="relative w-full mx-auto font-montserrat" ref={containerRef}>
       {/* Contenedor Principal */}
       <div className="bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full shadow-2xl border border-white/40 p-1 md:p-1.5 flex flex-col md:flex-row items-center gap-1">
         
         {/* 1. SELECTORES */}
-        <div className="flex w-full md:w-auto items-center order-1 md:order-2 border-b md:border-b-0 border-gray-100">
+        <div className="flex w-full md:w-auto items-center order-1 md:order-2 border-b md:border-b-0 border-gray-100 overflow-hidden">
           
           <select
             value={province}
@@ -75,7 +72,8 @@ export default function SearchBar() {
               setCity("");
             }}
             className="
-              flex-1 min-w-0 md:w-32 lg:w-36
+              flex-1 md:w-32 lg:w-36
+              min-w-0 truncate overflow-hidden
               px-2 md:px-3
               py-3.5 md:py-3
               bg-transparent
@@ -88,21 +86,21 @@ export default function SearchBar() {
               appearance-none
               uppercase
               tracking-tighter
-              truncate
             "
           >
-            + <option value="">Pcia.</option>
-            <option value="rio-negro">RN</option>
-            <option value="neuquen">Nqn</option>
+            <option value="">Pcia.</option>
+            <option value="rio-negro">Río Negro</option>
+            <option value="neuquen">Neuquén</option>
           </select>
 
-          <div className="w-px h-4 md:h-6 bg-slate-200" />
+          <div className="w-px h-4 md:h-6 bg-slate-200 shrink-0" />
 
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
             className="
-              flex-1 min-w-0 md:w-32 lg:w-36
+              flex-1 md:w-32 lg:w-36
+              min-w-0 truncate overflow-hidden
               px-2 md:px-3
               py-3.5 md:py-3
               bg-transparent
@@ -115,7 +113,6 @@ export default function SearchBar() {
               appearance-none
               uppercase
               tracking-tighter
-              truncate
             "
           >
             <option value="">Tipo</option>
@@ -126,13 +123,14 @@ export default function SearchBar() {
             ))}
           </select>
 
-          <div className="w-px h-4 md:h-6 bg-slate-200" />
+          <div className="w-px h-4 md:h-6 bg-slate-200 shrink-0" />
 
           <select
             value={operation}
             onChange={(e) => setOperation(e.target.value)}
             className="
-              flex-1 min-w-0 md:w-28 lg:w-32
+              flex-1 md:w-28 lg:w-32
+              min-w-0 truncate overflow-hidden
               px-2 md:px-3
               py-3.5 md:py-3
               bg-transparent
@@ -145,7 +143,6 @@ export default function SearchBar() {
               appearance-none
               uppercase
               tracking-tighter
-              truncate
             "
           >
             <option value="">Operación</option>
@@ -155,7 +152,7 @@ export default function SearchBar() {
         </div>
 
         {/* 2. BÚSQUEDA */}
-        <div className="relative flex-1 min-w-0 w-full order-2 md:order-1">
+        <div className="relative flex-1 w-full order-2 md:order-1 min-w-0">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
             size={14}
