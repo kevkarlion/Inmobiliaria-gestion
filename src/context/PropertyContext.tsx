@@ -1,7 +1,13 @@
 // context/PropertyContext.tsx
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 
@@ -11,7 +17,9 @@ interface PropertyContextType {
   loading: boolean;
 }
 
-const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
+const PropertyContext = createContext<PropertyContextType | undefined>(
+  undefined,
+);
 
 // 2. El Provider: el componente que envuelve la app y hace el fetch
 export function PropertyProvider({ children }: { children: React.ReactNode }) {
@@ -34,12 +42,15 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     fetchProperties();
   }, []);
 
-  // Usamos useMemo para que el objeto del contexto no cambie 
+  // Usamos useMemo para que el objeto del contexto no cambie
   // a menos que cambien las propiedades o el estado de carga
-  const value = useMemo(() => ({
-    properties,
-    loading
-  }), [properties, loading]);
+  const value = useMemo<PropertyContextType>(
+    () => ({
+      properties,
+      loading,
+    }),
+    [properties, loading],
+  );
 
   return (
     <PropertyContext.Provider value={value}>

@@ -13,7 +13,7 @@ interface Props {
   isLoading?: boolean;
 }
 
-export default function PropertyGrid({ title, properties, isLoading }: Props) {
+export default function PropertyGrid({ title, subtitle, properties, isLoading }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -61,9 +61,7 @@ export default function PropertyGrid({ title, properties, isLoading }: Props) {
             </div>
 
             <p className="font-lora text-slate-600 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto italic">
-              Propiedades con condiciones especiales, ideales para quienes buscan una decisión inteligente. 
-              Inmuebles que destacan por su atractivo valor, disponibilidad inmediata o situaciones 
-              particulares que representan una excelente ocasión dentro del mercado.
+              {subtitle}
             </p>
             
             {/* Divisor Dorado */}

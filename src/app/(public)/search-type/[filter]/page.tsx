@@ -98,7 +98,7 @@ export default function SearchTypePage() {
   };
 
   return (
-    <main className="min-h-screen bg-black p-10">
+    <main className="min-h-screen bg-white p-10">
       <div className="max-w-7xl mx-auto flex gap-10">
 
         {/* SIDEBAR */}
