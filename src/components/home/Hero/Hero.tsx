@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     // CAMBIO: overflow-visible para que el dropdown pueda salir de la sección
     // Agregamos z-[30] para asegurar que gane a cualquier componente de abajo
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-visible z-30">
+    <section className="relative w-full min-h-[85vh] flex items-center justify-center overflow-visible z-30">
       {/* Background - Este SI debe estar recortado */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
@@ -20,7 +20,8 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative md:bottom-10 lg:bottom-20 z-10 w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center">
+      <div className="relative bottom-15
+       md:bottom-10 lg:bottom-20 z-10 w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center">
         <div className="text-center mb-8 lg:mb-12 space-y-4">
           <h1 className="text-white text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-montserrat tracking-tight leading-tight uppercase font-black italic">
             Estrategia para vender, <br />
