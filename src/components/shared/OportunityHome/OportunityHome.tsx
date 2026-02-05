@@ -23,6 +23,7 @@ export default async function OportunityHome() {
       title="Oportunidades"
       subtitle="Propiedades con condiciones especiales..."
       properties={properties}
+      filter="oportunidad"
     />
   );
 }

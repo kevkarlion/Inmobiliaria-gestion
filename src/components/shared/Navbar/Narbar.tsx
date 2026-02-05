@@ -25,7 +25,8 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="w-full shadow-sm">
+    <header className="w-full shadow-sm fixed top-0 left-0 z-50">
+
       {/* --- TOP BAR (Desktop Only) --- */}
       <div className="hidden lg:block bg-white-bg border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">

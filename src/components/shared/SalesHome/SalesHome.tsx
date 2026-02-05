@@ -25,6 +25,7 @@ export default async function SalesHome() {
       title="En venta"
       subtitle="Propiedades con condiciones especiales..."
       properties={properties}
+      filter="venta"
     />
   );
 }

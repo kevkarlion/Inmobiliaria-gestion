@@ -25,6 +25,7 @@ export default async function AlquilerHome() {
       title="En alquiler"
       subtitle="Propiedades con condiciones especiales..."
       properties={properties}
+      filter="alquiler"
     />
   );
 }

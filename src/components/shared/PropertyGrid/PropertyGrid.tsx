@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 import PropertyCardHome from "@/components/shared/PropertyCardHome/PropertyCardHome";
@@ -9,9 +10,15 @@ interface Props {
   title?: string;
   subtitle?: string;
   properties: PropertyUI[];
+  filter: "oportunidad" | "venta" | "alquiler";
 }
 
-export default function PropertyGrid({ title, subtitle, properties }: Props) {
+export default function PropertyGrid({
+  title,
+  subtitle,
+  properties,
+  filter,
+}: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -26,12 +33,16 @@ export default function PropertyGrid({ title, subtitle, properties }: Props) {
     }
   };
 
+  const getButtonText = () => {
+    if (filter === "oportunidad") return "Conocé todas las oportunidades";
+    if (filter === "venta") return "Conocé todas las ventas";
+    if (filter === "alquiler") return "Conocé todos los alquileres";
+    return "Ver todas";
+  };
+
   return (
-    /* CAMBIO CLAVE: 'bg-slate-50' es un gris muy suave que hace que las cards blancas 
-       tomen protagonismo y se sientan "fuera" de la pantalla.
-    */
     <section className="relative w-full py-8 bg-slate-100 overflow-hidden border-y border-slate-100">
-      {/* Patrón decorativo: Ahora con opacidad 0.4 para que sea sutil pero perceptible */}
+      {/* Patrón decorativo */}
       <div
         className="absolute inset-0 z-0 opacity-[0.4] pointer-events-none"
         style={{
@@ -40,7 +51,7 @@ export default function PropertyGrid({ title, subtitle, properties }: Props) {
       />
 
       <div className="max-w-350 mx-auto px-6 relative z-10">
-        {/* Cabecera Centrada */}
+        {/* Cabecera */}
         <div className="flex flex-col items-center text-center mb-16 space-y-5">
           <div className="max-w-4xl space-y-4">
             <div className="flex items-center justify-center gap-6">
@@ -63,7 +74,7 @@ export default function PropertyGrid({ title, subtitle, properties }: Props) {
               {subtitle}
             </p>
 
-            {/* Divisor Dorado */}
+            {/* Divisor */}
             <div className="flex justify-center items-center gap-3">
               <div className="w-2 h-2 rotate-45 border border-gold-sand bg-gold-sand/20" />
               <div className="w-16 h-px bg-gold-sand/40" />
@@ -72,9 +83,8 @@ export default function PropertyGrid({ title, subtitle, properties }: Props) {
           </div>
         </div>
 
-        {/* CONTENEDOR DEL CARRUSEL */}
+        {/* Carrusel */}
         <div className="relative group">
-          {/* Navegación Desktop: Con sombras más profundas para contrastar con el fondo gris */}
           <div className="hidden md:block">
             <button
               onClick={() => scroll("left")}
@@ -106,7 +116,7 @@ export default function PropertyGrid({ title, subtitle, properties }: Props) {
           </div>
         </div>
 
-        {/* Navegación móvil */}
+        {/* Mobile nav */}
         <div className="flex md:hidden justify-center gap-6 mt-2">
           <button
             onClick={() => scroll("left")}
@@ -120,6 +130,15 @@ export default function PropertyGrid({ title, subtitle, properties }: Props) {
           >
             <ChevronRight size={24} />
           </button>
+        </div>
+
+        {/* CTA final */}
+        <div className="flex justify-center mt-6 mb-14">
+          <Link className="" href={`/search-type/${filter}`}>
+            <button className="btn-cta  ">
+              {getButtonText()}
+            </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,19 +1,90 @@
 import React from "react";
 import Link from "next/link";
+import { Instagram, MessageCircle } from "lucide-react"; // Importamos MessageCircle para WhatsApp
+import Image from "next/image";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-900 text-white mt-8">
-      <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-        <p className="text-sm">&copy; {new Date().getFullYear()} Riquelme Propiedades. Todos los derechos reservados.</p>
-        <div className="flex space-x-4 mt-4 md:mt-0">
-          <Link href="/aviso-legal" className="text-gray-400 hover:text-white text-sm">
-            Aviso Legal
-          </Link>
-          <Link href="/contacto" className="text-gray-400 hover:text-white text-sm">
-            Contacto
-          </Link>
+    <footer className="relative bg-oxford text-white border-t border-white/10">
+      {/* Línea decorativa superior */}
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-gold-sand/60 to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-12">
+        
+        {/* Columna 1: Logo y Frase Genérica */}
+        <div className="flex flex-col gap-4">
+          <div className="w-40 h-16">
+            <div className="relative w-full h-full">
+              <Image
+                src="/logo-blanco.png"
+                alt="Riquelme Propiedades"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
+          <p className="text-sm text-white/60 leading-relaxed max-w-xs">
+            Expertos en gestión inmobiliaria. Encontrá el espacio ideal para tu próximo proyecto, hogar o inversión.
+          </p>
         </div>
+
+        {/* Columna 2: Menú de Navegación (Vertical) */}
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-sand">Explorar</h3>
+          <nav className="flex flex-col gap-3 text-xs uppercase tracking-widest">
+            <Link href="/" className="text-white/70 hover:text-gold-sand transition w-fit">
+              Inicio
+            </Link>
+            <Link href="/search-type/venta" className="text-white/70 hover:text-gold-sand transition w-fit">
+              Ventas
+            </Link>
+            <Link href="/search-type/alquiler" className="text-white/70 hover:text-gold-sand transition w-fit">
+              Alquileres
+            </Link>
+            <Link href="/search-type/oportunidad" className="text-white/70 hover:text-gold-sand transition w-fit">
+              Oportunidades
+            </Link>
+            <Link href="/contacto" className="text-white/70 hover:text-gold-sand transition w-fit">
+              Contacto
+            </Link>
+          </nav>
+        </div>
+
+        {/* Columna 3: Redes Sociales */}
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-sand">Nuestras redes</h3>
+          <div className="flex gap-4">
+            <a
+              href="https://wa.me/549XXXXXXXXXX"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-onyx transition-all group"
+              aria-label="WhatsApp"
+            >
+              <MessageCircle size={20} className="group-hover:scale-110 transition-transform" />
+            </a>
+
+            <a
+              href="https://instagram.com/tu_usuario"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-onyx transition-all group"
+              aria-label="Instagram"
+            >
+              <Instagram size={20} className="group-hover:scale-110 transition-transform" />
+            </a>
+          </div>
+          <p className="text-[10px] text-white/40 italic">
+            Seguinos para ver los nuevos ingresos.
+          </p>
+        </div>
+
+      </div>
+
+      {/* Copyright */}
+      <div className="border-t border-white/5 py-6 text-center text-[10px] text-white/40 tracking-[0.3em] uppercase">
+        © {new Date().getFullYear()} Riquelme Propiedades · Gestión Inmobiliaria
       </div>
     </footer>
   );

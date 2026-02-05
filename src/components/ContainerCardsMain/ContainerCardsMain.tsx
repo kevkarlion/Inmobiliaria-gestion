@@ -5,11 +5,11 @@ import AlquilerHome from "../shared/AlquilerHome/AlquilerHome";
 
 const ContainerCardsMain = () => {
   return (
-    <div className="py-16 bg-slate-100">
+    <section className="py-16 bg-slate-100">
       <OportunityHome />
       <SalesHome />
       <AlquilerHome />
-    </div>
+    </section>
   );
 };
 
