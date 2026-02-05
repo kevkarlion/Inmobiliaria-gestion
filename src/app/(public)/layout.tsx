@@ -32,7 +32,7 @@ export default function RootLayout({
       lang="es"
       className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
     >
-      <body className="antialiased">
+      <body className="antialiased bg-slate-100">
         <PropertyProvider>
           <MainLayout>{children}</MainLayout>
         </PropertyProvider>

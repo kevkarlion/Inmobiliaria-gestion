@@ -3,7 +3,7 @@ import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import SearchTypePage from "../shared/SearchTypePage/SearchTypePage";
 
 async function getProperties(filter: string) {
-  let url = `${process.env.NEXT_PUBLIC_API_URL}/api/properties`;
+  let url = `${process.env.BASE_URL}/api/properties`;
 
   if (filter === "venta" || filter === "alquiler") {
     url += `?operationType=${filter}`;

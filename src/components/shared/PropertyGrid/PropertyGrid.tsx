@@ -30,7 +30,7 @@ export default function PropertyGrid({ title, subtitle, properties }: Props) {
     /* CAMBIO CLAVE: 'bg-slate-50' es un gris muy suave que hace que las cards blancas 
        tomen protagonismo y se sientan "fuera" de la pantalla.
     */
-    <section className="relative w-full py-24 bg-slate-100 overflow-hidden border-y border-slate-100">
+    <section className="relative w-full py-8 bg-slate-100 overflow-hidden border-y border-slate-100">
       {/* Patrón decorativo: Ahora con opacidad 0.4 para que sea sutil pero perceptible */}
       <div
         className="absolute inset-0 z-0 opacity-[0.4] pointer-events-none"

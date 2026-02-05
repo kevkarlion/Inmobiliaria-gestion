@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     // CAMBIO: overflow-visible para que el dropdown pueda salir de la sección
     // Agregamos z-[30] para asegurar que gane a cualquier componente de abajo
-    <section className="relative w-full min-h-[85vh] flex items-center justify-center overflow-visible z-30">
+    <section className="relative w-full min-h-[85vh] bg-slate-100 flex items-center justify-center overflow-visible z-30">
       {/* Background - Este SI debe estar recortado */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
