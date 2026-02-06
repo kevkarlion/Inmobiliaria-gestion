@@ -5,7 +5,7 @@ import AlquilerHome from "../shared/AlquilerHome/AlquilerHome";
 
 const ContainerCardsMain = () => {
   return (
-    <section className="py-16 bg-slate-100">
+    <section className="py-16 bg-white-bg">
       <OportunityHome />
       <SalesHome />
       <AlquilerHome />

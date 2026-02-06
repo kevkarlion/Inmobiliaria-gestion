@@ -95,11 +95,11 @@ export default function SearchBar() {
               setProvince(e.target.value);
               setCity("");
             }}
-            className="flex-1 md:w-32 px-3 py-3 bg-transparent text-sm font-black uppercase tracking-tighter outline-none"
+            className="w-25 md:w-32 px-3 py-3 bg-transparent text-sm font-black uppercase tracking-tighter outline-none"
           >
             <option value="">Pcia.</option>
-            <option value="rio-negro">Río Negro</option>
-            <option value="neuquen">Neuquén</option>
+            <option value="rio-negro">RN</option>
+            <option value="neuquen">Nqn</option>
           </select>
 
           <div className="w-px h-6 bg-slate-200" />
@@ -107,7 +107,7 @@ export default function SearchBar() {
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="flex-1 md:w-32 px-3 py-3 bg-transparent text-sm font-black uppercase tracking-tighter outline-none"
+            className="w-35 md:w-32 px-3 py-3 bg-transparent text-sm font-black uppercase tracking-tighter outline-none"
           >
             <option value="">Tipo</option>
             {propertyTypes.map((t) => (
@@ -122,7 +122,7 @@ export default function SearchBar() {
           <select
             value={operation}
             onChange={(e) => setOperation(e.target.value)}
-            className="flex-1 md:w-32 px-3 py-3 bg-transparent text-sm font-black uppercase tracking-tighter outline-none"
+            className="w-35  md:w-32 px-3 py-3 bg-transparent text-sm font-black uppercase tracking-tighter outline-none"
           >
             <option value="">Operación</option>
             <option value="venta">Venta</option>
