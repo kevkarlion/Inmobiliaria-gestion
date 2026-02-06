@@ -41,7 +41,7 @@ export default function PropertyGrid({
   };
 
   return (
-    <section className="relative w-full py-8 bg-slate-100 overflow-hidden border-y border-slate-100">
+    <div className="relative w-full py-8 bg-slate-100 overflow-hidden border-y border-slate-100">
       {/* Patrón decorativo */}
       <div
         className="absolute inset-0 z-0 opacity-[0.4] pointer-events-none"
@@ -141,6 +141,6 @@ export default function PropertyGrid({
           </Link>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
