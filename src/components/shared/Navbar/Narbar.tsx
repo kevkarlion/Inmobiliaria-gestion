@@ -54,25 +54,32 @@ export default function Navbar() {
 
             {/* WhatsApp */}
             <a 
-              href="https://wa.me/123456789" 
+              href="https://wa.me/5492984582082" 
               target="_blank" 
               className="flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
               <MessageCircle className="text-gold-sand" size={20} />
               <div className="flex flex-col">
                 <span className="label-subtitle text-[10px]! text-blue-gray">WhatsApp</span>
-                <p className="text-[13px] font-semibold text-onyx font-montserrat">+54 9 11 1234-5678</p>
+                <p className="text-[13px] font-semibold text-onyx font-montserrat">+54 9 298 4582082</p>
               </div>
             </a>
 
             {/* Email */}
             <div className="flex items-center gap-3">
-              <Mail className="text-gold-sand" size={20} />
-              <div className="flex flex-col">
-                <span className="label-subtitle text-[10px]! text-blue-gray">Correo</span>
-                <p className="text-[13px] font-semibold text-onyx">info@riquelme.com</p>
-              </div>
-            </div>
+  <Mail className="text-gold-sand" size={20} />
+  <div className="flex flex-col">
+    <span className="label-subtitle text-[10px]! text-blue-gray">Correo</span>
+    <a 
+      href="mailto:diegoriquelme91@gmail.com?subject=Consulta%20Inmobiliaria"
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="text-[13px] font-semibold text-onyx hover:text-gold-sand transition-colors duration-200"
+    >
+      diegoriquelme91@gmail.com
+    </a>
+  </div>
+</div>
 
             {/* Horario */}
             <div className="flex items-center gap-3 border-l pl-8 border-gray-200">
