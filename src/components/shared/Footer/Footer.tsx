@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Instagram, MessageCircle } from "lucide-react"; // Importamos MessageCircle para WhatsApp
+import { Instagram, MessageCircle, Facebook } from "lucide-react"; 
 import Image from "next/image";
 
 const Footer: React.FC = () => {
@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-12">
         
-        {/* Columna 1: Logo y Frase Genérica */}
+        {/* Columna 1: Logo y Frase */}
         <div className="flex flex-col gap-4">
           <div className="w-40 h-16">
             <div className="relative w-full h-full">
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
           </p>
         </div>
 
-        {/* Columna 2: Menú de Navegación (Vertical) */}
+        {/* Columna 2: Menú de Navegación */}
         <div className="flex flex-col gap-4">
           <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-sand">Explorar</h3>
           <nav className="flex flex-col gap-3 text-xs uppercase tracking-widest">
@@ -55,28 +55,41 @@ const Footer: React.FC = () => {
         <div className="flex flex-col gap-4">
           <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-gold-sand">Nuestras redes</h3>
           <div className="flex gap-4">
+            {/* WhatsApp */}
             <a
-              href="https://wa.me/549XXXXXXXXXX"
+              href="https://wa.me/5492984582082?text=Hola!%20Me%20contacto%20desde%20la%20web."
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-onyx transition-all group"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-oxford transition-all group"
               aria-label="WhatsApp"
             >
               <MessageCircle size={20} className="group-hover:scale-110 transition-transform" />
             </a>
 
+            {/* Facebook */}
             <a
-              href="https://instagram.com/tu_usuario"
+              href="https://www.facebook.com/riquelmeprop?rdid=2QDa2IeJSjsrjxVN&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1C6P6AShqK%2F#"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-onyx transition-all group"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-oxford transition-all group"
+              aria-label="Facebook"
+            >
+              <Facebook size={20} className="group-hover:scale-110 transition-transform" />
+            </a>
+
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/riquelme.propiedades/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-oxford transition-all group"
               aria-label="Instagram"
             >
               <Instagram size={20} className="group-hover:scale-110 transition-transform" />
             </a>
           </div>
           <p className="text-[10px] text-white/40 italic">
-            Seguinos para ver los nuevos ingresos.
+            Seguinos para ver los nuevos ingresos diarios.
           </p>
         </div>
 
