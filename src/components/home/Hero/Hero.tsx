@@ -9,7 +9,7 @@ export default async function Hero() {
   const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
   
   // Pasamos el límite por query param para que el DTO lo capture
-  const res = await fetch(`${baseUrl}/api/properties?limit=500`, {
+  const res = await fetch(`${baseUrl}/api/properties?limit=20`, {
     next: { revalidate: 60 } // Cacheamos la respuesta de la API por 1 minuto
   });
 

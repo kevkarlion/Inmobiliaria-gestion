@@ -9,7 +9,7 @@ export default async function HomePage() {
     <main className="min-h-screen bg-white font-montserrat">
       <Hero />
       <ContainerCardsMain />
-    <AboutPreview />
+      <AboutPreview />
     </main>
   );
 }
