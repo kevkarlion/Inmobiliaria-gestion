@@ -354,4 +354,28 @@ if (payload.address) {
     await PropertyModel.deleteOne({ _id: property._id });
     return { message: "Property deleted successfully" };
   }
+
+
+  //para llamada del SearchBar y llamadas con filtros del home
+static async findByType(type: string, limit = 100) {
+    // Definimos los filtros basados en el "type" que viene de la URL
+    const filters: any = {};
+
+    if (type === "oportunidad") {
+      filters.opportunity = true;
+    } else if (type === "venta" || type === "alquiler") {
+      filters.operationType = type;
+    }
+
+    // Llamamos a tu método findAll existente
+    // Ajustamos la paginación y el orden según necesites
+    return await this.findAll({
+      filters,
+      pagination: { page: 1, limit, skip: 0 },
+      sort: { sort: { createdAt: -1 } }
+    });
+  }
+
+
+
 }

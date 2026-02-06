@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import { PropertyProvider } from "@/context/PropertyContext";
 import { Montserrat, Lora, Inter } from "next/font/google";
 import MainLayout from "@/components/shared/MinLayout";
+import WhatsAppButton from "@/components/shared/WhatsAppButton/WhatsAppButton";
 
 // Configuramos las fuentes
 const montserrat = Montserrat({
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className="antialiased bg-slate-100">
         <PropertyProvider>
           <MainLayout>{children}</MainLayout>
+          <WhatsAppButton />
         </PropertyProvider>
         
       </body>
