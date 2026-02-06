@@ -3,13 +3,15 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  MapPin, 
   Phone, 
   Mail, 
   Clock, 
   Menu, 
   X, 
-  MessageCircle 
+  MessageCircle,
+  Facebook,
+  Instagram,
+  Share2 // Usado como ícono de "redes"
 } from "lucide-react";
 
 export default function Navbar() {
@@ -28,12 +30,12 @@ export default function Navbar() {
     <header className="w-full shadow-sm fixed top-0 left-0 z-50">
 
       {/* --- TOP BAR (Desktop Only) --- */}
-      <div className="hidden lg:block bg-white-bg border-b border-gray-100">
+      <div className="hidden lg:block bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="shrink-0">
             <Image 
-              src="/logo-navbar.png" // Asegúrate de tener tu logo en public
+              src="/logo-navbar.png" 
               alt="Riquelme Propiedades" 
               width={180} 
               height={60} 
@@ -43,12 +45,30 @@ export default function Navbar() {
 
           {/* Contact Info Blocks */}
           <div className="flex flex-1 justify-end space-x-8">
-            {/* Dirección */}
+            
+            {/* Redes Sociales (Reemplaza Dirección) */}
             <div className="flex items-center gap-3">
-              <MapPin className="text-gold-sand" size={20} />
+              <Share2 className="text-gold-sand" size={20} />
               <div className="flex flex-col">
-                <span className="label-subtitle text-[10px]! text-blue-gray">Dirección</span>
-                <p className="text-[13px] font-semibold text-onyx">Calle Falsa 123, Ciudad</p>
+                <span className="label-subtitle text-[10px]! text-blue-gray uppercase tracking-wider">Seguinos</span>
+                <div className="flex gap-3 mt-0.5">
+                  <a 
+                    href="https://www.facebook.com/riquelmeprop?rdid=PADFXgf9WXGoL9Ql&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1C6P6AShqK%2F#" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-onyx hover:text-gold-sand transition-colors"
+                  >
+                    <Facebook size={16} />
+                  </a>
+                  <a 
+                    href="https://www.instagram.com/riquelme.propiedades/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-onyx hover:text-gold-sand transition-colors"
+                  >
+                    <Instagram size={16} />
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -56,6 +76,7 @@ export default function Navbar() {
             <a 
               href="https://wa.me/5492984582082" 
               target="_blank" 
+              rel="noopener noreferrer"
               className="flex items-center gap-3 hover:opacity-80 transition-opacity"
             >
               <MessageCircle className="text-gold-sand" size={20} />
@@ -67,19 +88,17 @@ export default function Navbar() {
 
             {/* Email */}
             <div className="flex items-center gap-3">
-  <Mail className="text-gold-sand" size={20} />
-  <div className="flex flex-col">
-    <span className="label-subtitle text-[10px]! text-blue-gray">Correo</span>
-    <a 
-      href="mailto:diegoriquelme91@gmail.com?subject=Consulta%20Inmobiliaria"
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="text-[13px] font-semibold text-onyx hover:text-gold-sand transition-colors duration-200"
-    >
-      diegoriquelme91@gmail.com
-    </a>
-  </div>
-</div>
+              <Mail className="text-gold-sand" size={20} />
+              <div className="flex flex-col">
+                <span className="label-subtitle text-[10px]! text-blue-gray">Correo</span>
+                <a 
+                  href="mailto:diegoriquelme91@gmail.com?subject=Consulta%20Inmobiliaria"
+                  className="text-[13px] font-semibold text-onyx hover:text-gold-sand transition-colors duration-200"
+                >
+                  diegoriquelme91@gmail.com
+                </a>
+              </div>
+            </div>
 
             {/* Horario */}
             <div className="flex items-center gap-3 border-l pl-8 border-gray-200">
@@ -98,11 +117,11 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             
-            {/* Logo Mobile: Ahora usa la etiqueta Image */}
+            {/* Logo Mobile */}
             <div className="lg:hidden shrink-0">
               <Link href="/">
                 <Image 
-                  src="/logo-blanco.png" // O el logo que resalte sobre azul
+                  src="/logo-blanco.png" 
                   alt="Riquelme Propiedades" 
                   width={140} 
                   height={40} 
@@ -125,13 +144,12 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Botón CTA o Mobile Toggle */}
+            {/* Tasar Ahora / Mobile Toggle */}
             <div className="flex items-center gap-4">
                <button className="hidden lg:block text-xs font-montserrat font-bold bg-gold-sand hover:bg-gold-hover text-oxford px-5 py-2.5 rounded-sm transition-all shadow-sm">
                   TASAR AHORA
                </button>
                
-               {/* Mobile Button */}
                <button 
                 className="lg:hidden p-2 text-gold-sand hover:text-white transition-colors" 
                 onClick={() => setIsOpen(!isOpen)}
@@ -161,18 +179,20 @@ export default function Navbar() {
             ))}
             
             <div className="pt-4 border-t border-white/10 flex flex-col space-y-4">
-               <a href="tel:123456" className="flex items-center gap-3 text-gold-sand text-sm font-bold font-montserrat tracking-tight">
+               <a href="tel:5492984582082" className="flex items-center gap-3 text-gold-sand text-sm font-bold font-montserrat tracking-tight">
                   <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
                     <Phone size={16} />
                   </div>
                   LLAMAR AHORA
                </a>
-               <a href="mailto:info@riquelme.com" className="flex items-center gap-3 text-gold-sand text-sm font-bold font-montserrat tracking-tight">
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                    <Mail size={16} />
-                  </div>
-                  ENVIAR MAIL
-               </a>
+               <div className="flex gap-4 pl-1">
+                  <a href="https://www.facebook.com/riquelmeprop?rdid=2QDa2IeJSjsrjxVN&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1C6P6AShqK%2F#" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gold-sand transition-colors">
+                    <Facebook size={20} />
+                  </a>
+                  <a href="https://www.instagram.com/riquelme.propiedades/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gold-sand transition-colors">
+                    <Instagram size={20} />
+                  </a>
+               </div>
             </div>
           </div>
         </div>

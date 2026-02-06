@@ -23,7 +23,7 @@ export default async function AlquilerHome() {
   return (
     <PropertyGrid
       title="En alquiler"
-      subtitle="Propiedades con condiciones especiales..."
+      subtitle="Encontrá el lugar ideal para vivir o trabajar. Ofrecemos una gestión de alquileres ágil y transparente, conectando a propietarios e inquilinos con seriedad y confianza. Revisamos cada propiedad para garantizar que tu próxima mudanza sea una experiencia sin complicaciones."
       properties={properties}
       filter="alquiler"
     />

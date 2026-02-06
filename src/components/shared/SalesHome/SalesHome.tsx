@@ -23,7 +23,7 @@ export default async function SalesHome() {
   return (
     <PropertyGrid
       title="En venta"
-      subtitle="Propiedades con condiciones especiales..."
+      subtitle="Contamos con una amplia cartera de inmuebles seleccionados bajo estrictos estándares de calidad. Te acompañamos en todo el proceso de compra, brindándote el asesoramiento técnico y legal necesario para que tu inversión sea segura y tu nuevo hogar, exactamente lo que soñaste."
       properties={properties}
       filter="venta"
     />
