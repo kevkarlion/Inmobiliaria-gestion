@@ -5,10 +5,10 @@ import ContainerCardsMain from "@/components/ContainerCardsMain/ContainerCardsMa
 
 export default async function HomePage() {
   return (
-    <main className="min-h-screen bg-white font-montserrat">
+    <section className="min-h-screen bg-white font-montserrat">
       <Hero />
       <ContainerCardsMain />
   
-    </main>
+    </section>
   );
 }
