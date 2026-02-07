@@ -67,9 +67,9 @@ export function mapPropertyToUI(property: any): PropertyUI {
 
     // Metadata
     tags: property.tags || [],
-    images: (property.images || [])
-  .slice(0, 1)
-  .map((img: any) => img.url),
+    images: Array.isArray(property.images) 
+      ? property.images.map((img: any) => typeof img === 'string' ? img : img.url)
+      : [],
 
 
     status: property.status || "active",

@@ -4,6 +4,8 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import { PropertyFormType } from "@/domain/types/PropertyFormType.types";
+// Importamos tu componente de subida
+import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
 
 interface CreatePropertyFormProps {
   onClose: () => void;
@@ -40,6 +42,7 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
     images: [],
     description: "",
   });
+  
 
   const [loading, setLoading] = useState(false);
 
@@ -58,12 +61,11 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
     setForm((prev) => ({ ...prev, [name]: finalValue }));
   }
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Para pruebas: agregamos una imagen fija desde public
-    const testImage = "/images/test.jpg"; // coloca tu imagen en public/images/test.jpg
+  // REEMPLAZADO: Función que recibe las URLs reales de Cloudinary
+  const handleImagesUpload = (urls: string[]) => {
     setForm(prev => ({
       ...prev,
-      images: [...prev.images, testImage],
+      images: [...prev.images, ...urls],
     }));
   };
 
@@ -226,15 +228,16 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         ))}
       </div>
 
-      {/* SECCIÓN 6: MULTIMEDIA */}
+      {/* SECCIÓN 6: MULTIMEDIA INTEGRADA CON CLOUDINARY */}
       <div className="space-y-4">
-        <label className="block text-sm font-bold uppercase tracking-tight">Galería de Imágenes</label>
-        <div className="relative w-full h-24 border-2 border-dashed border-white/10 rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/5 transition-all">
-          <input type="file" multiple accept="image/*" onChange={handleImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-          <div className="text-center">
-            <span className="text-gray-500 text-xs uppercase block font-bold">Arrastrar o click para subir</span>
-          </div>
-        </div>
+        <label className="block text-sm font-bold uppercase tracking-tight text-gray-400">Galería de Imágenes</label>
+        
+        {/* Usamos el componente CloudinaryUploader */}
+        <CloudinaryUploader 
+          onImageUpload={handleImagesUpload} 
+          folder="properties"
+        />
+
         <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
           {form.images.map((img, idx) => (
             <div key={idx} className="relative aspect-square rounded-lg border border-white/10 overflow-hidden group">

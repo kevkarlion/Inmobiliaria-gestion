@@ -21,6 +21,7 @@ export default function PropertyGrid({
   filter,
 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  console.log('properties cards home',properties)
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
