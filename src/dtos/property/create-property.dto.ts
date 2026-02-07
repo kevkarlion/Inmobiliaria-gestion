@@ -7,7 +7,8 @@ export class CreatePropertyDTO {
   propertyTypeSlug: string;
   description: string;
   age: number;
-  images: string[];
+  images: { url: string; alt?: string }[]
+
   tags: string[];
 
   price: { 

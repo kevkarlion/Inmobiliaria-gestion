@@ -14,197 +14,202 @@ import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
 import { NotFoundError, BadRequestError } from "@/server/errors/http-error";
 import { Province } from "@/db/schemas/province.schema";
 import { City } from "@/db/schemas/city.schema";
-import { Barrio } from "@/db/schemas/barrio.schema"
+import { Barrio } from "@/db/schemas/barrio.schema";
 import { Types } from "mongoose";
 
 export class PropertyService {
   /**
    * Crea una nueva propiedad, valida referencias y retorna el objeto poblado.
    */
- static async create(dto: CreatePropertyDTO): Promise<Property> {
-  console.log("Iniciando creación de propiedad por slugs:", dto);
+  static async create(dto: CreatePropertyDTO): Promise<Property> {
+    console.log("Iniciando creación de propiedad por slugs:", dto);
 
-  // 1. Validar Tipo de Propiedad (Slug)
-  const propertyType = await PropertyTypeRepository.findBySlug(dto.propertyTypeSlug);
-  if (!propertyType) throw new BadRequestError(`El tipo '${dto.propertyTypeSlug}' no existe.`);
+    // 1. Validar Tipo de Propiedad (Slug)
+    const propertyType = await PropertyTypeRepository.findBySlug(
+      dto.propertyTypeSlug,
+    );
+    if (!propertyType)
+      throw new BadRequestError(`El tipo '${dto.propertyTypeSlug}' no existe.`);
 
-  // 2. Traducir Slugs de Ubicación a IDs Reales
-  //busca por el slug, la provincia o ciudad
-  const [provinceDoc, cityDoc] = await Promise.all([
-    Province.findOne({ slug: dto.address.provinceSlug }),
-    City.findOne({ slug: dto.address.citySlug })
-  ]);
+    // 2. Traducir Slugs de Ubicación a IDs Reales
+    //busca por el slug, la provincia o ciudad
+    const [provinceDoc, cityDoc] = await Promise.all([
+      Province.findOne({ slug: dto.address.provinceSlug }),
+      City.findOne({ slug: dto.address.citySlug }),
+    ]);
 
-  if (!provinceDoc) throw new BadRequestError(`La provincia '${dto.address.provinceSlug}' no existe.`);
-  if (!cityDoc) throw new BadRequestError(`La localidad '${dto.address.citySlug}' no existe.`);
+    if (!provinceDoc)
+      throw new BadRequestError(
+        `La provincia '${dto.address.provinceSlug}' no existe.`,
+      );
+    if (!cityDoc)
+      throw new BadRequestError(
+        `La localidad '${dto.address.citySlug}' no existe.`,
+      );
 
-  // Validar Barrio si viene (Opcional)
-  let barrioId: Types.ObjectId | undefined = undefined;
+    // Validar Barrio si viene (Opcional)
+    let barrioId: Types.ObjectId | undefined = undefined;
 
-  if (dto.address.barrioSlug) {
-    const barrioDoc = await Barrio.findOne({ slug: dto.address.barrioSlug });
-    if (barrioDoc) {
-      barrioId = barrioDoc._id as Types.ObjectId;
-    } else {
-      console.warn(`Aviso: El barrio slug '${dto.address.barrioSlug}' no se encontró.`);
+    if (dto.address.barrioSlug) {
+      const barrioDoc = await Barrio.findOne({ slug: dto.address.barrioSlug });
+      if (barrioDoc) {
+        barrioId = barrioDoc._id as Types.ObjectId;
+      } else {
+        console.warn(
+          `Aviso: El barrio slug '${dto.address.barrioSlug}' no se encontró.`,
+        );
+      }
+    } // <--- ¡Esta es la llave que faltaba cerrar!
+
+    // 3. Generar Slug único para la propiedad
+    let slug = slugify(dto.title, { lower: true, strict: true });
+    let slugExists = await PropertyModel.findOne({ slug });
+    let counter = 1;
+    while (slugExists) {
+      const newSlug = `${slugify(dto.title, { lower: true, strict: true })}-${counter}`;
+      slugExists = await PropertyModel.findOne({ slug: newSlug });
+      if (!slugExists) slug = newSlug;
+      counter++;
     }
-  } // <--- ¡Esta es la llave que faltaba cerrar!
 
-  // 3. Generar Slug único para la propiedad
-  let slug = slugify(dto.title, { lower: true, strict: true });
-  let slugExists = await PropertyModel.findOne({ slug });
-  let counter = 1;
-  while (slugExists) {
-    const newSlug = `${slugify(dto.title, { lower: true, strict: true })}-${counter}`;
-    slugExists = await PropertyModel.findOne({ slug: newSlug });
-    if (!slugExists) slug = newSlug;
-    counter++;
+    // 4. Limpieza de Maps URL (Extract src de iframe)
+    let cleanMapsUrl = dto.location?.mapsUrl || "";
+    if (cleanMapsUrl.includes("<iframe")) {
+      const match = cleanMapsUrl.match(/src="([^"]+)"/);
+      cleanMapsUrl = match ? match[1] : cleanMapsUrl;
+    }
+
+    // 5. Mapear DTO a IProperty
+    const propertyToSave: Partial<IProperty> = {
+      title: dto.title,
+      slug: slug,
+      operationType: dto.operationType as "venta" | "alquiler",
+      propertyType: propertyType._id,
+      price: {
+        amount: dto.price.amount,
+        currency: dto.price.currency as "USD" | "ARS",
+      },
+      address: {
+        street: dto.address.street,
+        number: dto.address.number,
+        zipCode: dto.address.zipCode,
+        province: provinceDoc._id as Types.ObjectId,
+        city: cityDoc._id as Types.ObjectId,
+        barrio: barrioId,
+      },
+      location: {
+        mapsUrl: cleanMapsUrl,
+        lat: Number(dto.location?.lat) || 0,
+        lng: Number(dto.location?.lng) || 0,
+      },
+      features: { ...dto.features },
+      flags: { ...dto.flags },
+      description: dto.description || "",
+      age: Number(dto.age) || 0,
+      status: "active",
+      tags: dto.tags || [],
+      images: Array.isArray(dto.images) ? dto.images : [dto.images].filter(Boolean),
+
+
+
+    };
+
+    // 6. Persistir en Base de Datos
+    const savedProperty = await PropertyRepository.create(propertyToSave);
+
+    // 7. Recuperar con Populate (Vital para el ResponseDTO)
+    const result = await PropertyModel.findById(savedProperty._id)
+      .populate("propertyType")
+      .populate("address.province")
+      .populate("address.city")
+      .populate("address.barrio")
+      .lean();
+
+    if (!result) throw new Error("No se pudo recuperar la propiedad creada.");
+
+    // 8. Retorno final (Garantiza que siempre devuelve Property)
+    return {
+      ...result,
+      _id: result._id.toString(),
+    } as unknown as Property;
   }
-
-  // 4. Limpieza de Maps URL (Extract src de iframe)
-  let cleanMapsUrl = dto.location?.mapsUrl || "";
-  if (cleanMapsUrl.includes("<iframe")) {
-    const match = cleanMapsUrl.match(/src="([^"]+)"/);
-    cleanMapsUrl = match ? match[1] : cleanMapsUrl;
-  }
-
-  // 5. Mapear DTO a IProperty
-  const propertyToSave: Partial<IProperty> = {
-    title: dto.title,
-    slug: slug,
-    operationType: dto.operationType as "venta" | "alquiler",
-    propertyType: propertyType._id,
-    price: {
-      amount: dto.price.amount,
-      currency: dto.price.currency as "USD" | "ARS",
-    },
-    address: {
-      street: dto.address.street,
-      number: dto.address.number,
-      zipCode: dto.address.zipCode,
-      province: provinceDoc._id as Types.ObjectId,
-      city: cityDoc._id as Types.ObjectId,
-      barrio: barrioId,
-    },
-    location: {
-      mapsUrl: cleanMapsUrl,
-      lat: Number(dto.location?.lat) || 0,
-      lng: Number(dto.location?.lng) || 0,
-    },
-    features: { ...dto.features },
-    flags: { ...dto.flags },
-    description: dto.description || "",
-    age: Number(dto.age) || 0,
-    status: "active",
-    tags: dto.tags || [],
-    images: dto.images || [],
-  };
-
-  // 6. Persistir en Base de Datos
-  const savedProperty = await PropertyRepository.create(propertyToSave);
-
-  // 7. Recuperar con Populate (Vital para el ResponseDTO)
-  const result = await PropertyModel.findById(savedProperty._id)
-    .populate("propertyType")
-    .populate("address.province")
-    .populate("address.city")
-    .populate("address.barrio")
-    .lean();
-
-  if (!result) throw new Error("No se pudo recuperar la propiedad creada.");
-
-  // 8. Retorno final (Garantiza que siempre devuelve Property)
-  return {
-    ...result,
-    _id: result._id.toString(),
-  } as unknown as Property;
-}
-
 
   /**
    * GET /properties con filtros + paginación
    */
 
-  static async findAll(
+ static async findAll(
   query: QueryPropertyDTO,
 ): Promise<FindAllPropertiesResult> {
-  // 🔹 filtro base
-  const filter: any = {
-    status: "active",
-  };
+  const filter: any = { status: "active" };
   const f = query.filters;
 
-  // 🔍 filtros simples (limpieza de operationType duplicado)
-  if (f.operationType) {
-    filter.operationType = f.operationType.toLowerCase();
-  }
+  // filtros simples
+  if (f.operationType) filter.operationType = f.operationType.toLowerCase();
+  if (f.search) filter.title = { $regex: f.search, $options: "i" };
 
-  if (f.search) {
-    filter.title = { $regex: f.search, $options: "i" };
-  }
-
-  // 📍 FILTROS DE UBICACIÓN (Traducción de Slugs a IDs)
-  // ---------------------------------------------------------
-  
-  // 1. Provincia
+  // ubicación
   if (f.province) {
-    const provinceDoc = await Province.findOne({ slug: f.province });
+    const provinceDoc = await Province.findOne({ slug: f.province }).lean();
     if (provinceDoc) filter["address.province"] = provinceDoc._id;
   }
 
-  // 2. Ciudad
   if (f.city) {
-    const cityDoc = await City.findOne({ slug: f.city });
+    const cityDoc = await City.findOne({ slug: f.city }).lean();
     if (cityDoc) filter["address.city"] = cityDoc._id;
   }
 
-  // 3. Barrio
   if (f.barrio) {
-    const barrioDoc = await Barrio.findOne({ slug: f.barrio });
+    const barrioDoc = await Barrio.findOne({ slug: f.barrio }).lean();
     if (barrioDoc) filter["address.barrio"] = barrioDoc._id;
   }
 
-  // ---------------------------------------------------------
-
-  // 💰 precio
+  // precio
   if (f.minPrice !== undefined || f.maxPrice !== undefined) {
     filter["price.amount"] = {};
     if (f.minPrice !== undefined) filter["price.amount"].$gte = f.minPrice;
     if (f.maxPrice !== undefined) filter["price.amount"].$lte = f.maxPrice;
   }
 
-  // 🏷 tipo de propiedad
+  // tipo
   if (f.propertyType) {
     const type = await PropertyTypeRepository.findBySlug(f.propertyType);
     if (type) filter.propertyType = type._id;
   }
 
-  // 🛏 features
-  if (f.bedrooms !== undefined) filter["features.bedrooms"] = { $gte: f.bedrooms };
-  if (f.bathrooms !== undefined) filter["features.bathrooms"] = { $gte: f.bathrooms };
+  // features
+  if (f.bedrooms !== undefined)
+    filter["features.bedrooms"] = { $gte: f.bedrooms };
+  if (f.bathrooms !== undefined)
+    filter["features.bathrooms"] = { $gte: f.bathrooms };
 
-  // 🚩 flags
-  const flagKeys: Array<keyof typeof f> = ["featured", "premium", "opportunity"];
-  flagKeys.forEach((flag) => {
-    if (f[flag] !== undefined) {
-      filter[`flags.${flag}`] = f[flag];
+  // flags
+  ["featured", "premium", "opportunity"].forEach((flag) => {
+    if (f[flag as keyof typeof f] !== undefined) {
+      filter[`flags.${flag}`] = f[flag as keyof typeof f];
     }
   });
 
-  // 📄 paginación y orden
   const { skip, limit, page } = query.pagination;
   const sort = query.sort.sort;
 
-  // ⚡ queries en paralelo
-  const [items, total] = await Promise.all([
-    PropertyRepository.findAll(filter, { sort, skip, limit }),
-    PropertyRepository.count(filter),
-  ]);
+  // 👇 acá ya vienen objetos planos (gracias al .lean del repo)
+  const items = await PropertyRepository.findAll(filter, {
+    sort,
+    skip,
+    limit,
+  });
 
-  const normalized: Property[] = items.map((doc) => ({
-    ...doc.toObject(),
-    _id: doc._id.toString(),
-  }));
+  const total = await PropertyRepository.count(filter);
+
+const normalized = items.map((obj: any) => ({
+  ...obj,
+  _id: obj._id.toString(),
+  images: obj.images?.slice(0, 1) || [],
+}));
+
+
+
 
   return {
     items: normalized,
@@ -216,6 +221,7 @@ export class PropertyService {
     },
   };
 }
+
   /**
    * GET /properties/:slug
    */
@@ -243,108 +249,122 @@ export class PropertyService {
 
     // 1. Manejo del Tipo de Propiedad
     if (payload.propertyTypeSlug) {
-        const type = await PropertyTypeRepository.findBySlug(payload.propertyTypeSlug);
-        if (!type) throw new BadRequestError("Invalid property type");
-        updateData.propertyType = type._id;
+      const type = await PropertyTypeRepository.findBySlug(
+        payload.propertyTypeSlug,
+      );
+      if (!type) throw new BadRequestError("Invalid property type");
+      updateData.propertyType = type._id;
     }
 
     // 2. Manejo del Título y Slug
     if (payload.title && payload.title !== property.title) {
-        let newSlug = slugify(payload.title, { lower: true });
-        let slugExists = await PropertyModel.findOne({ slug: newSlug });
-        let counter = 1;
-        while (slugExists && slugExists._id.toString() !== property._id.toString()) {
-            newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
-            slugExists = await PropertyModel.findOne({ slug: newSlug });
-            counter++;
-        }
-        updateData.slug = newSlug;
-        updateData.title = payload.title;
-
-
+      let newSlug = slugify(payload.title, { lower: true });
+      let slugExists = await PropertyModel.findOne({ slug: newSlug });
+      let counter = 1;
+      while (
+        slugExists &&
+        slugExists._id.toString() !== property._id.toString()
+      ) {
+        newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
+        slugExists = await PropertyModel.findOne({ slug: newSlug });
+        counter++;
+      }
+      updateData.slug = newSlug;
+      updateData.title = payload.title;
     }
 
     // 3. 🔹 MERGE DE ADDRESS (Aquí estaba el fallo de validación)
     // 3. 🔹 MERGE DE ADDRESS (Búsqueda de IDs por Slug)
-if (payload.address) {
-    // Definimos las variables para los IDs
-    let provinceId = property.address?.province;
-    let cityId = property.address?.city;
+    if (payload.address) {
+      // Definimos las variables para los IDs
+      let provinceId = property.address?.province;
+      let cityId = property.address?.city;
 
-    // Si vienen slugs nuevos, buscamos los documentos para obtener sus _id
-    const [provinceDoc, cityDoc] = await Promise.all([
-        payload.address.province ? Province.findOne({ slug: payload.address.province }) : null,
-        payload.address.city ? City.findOne({ slug: payload.address.city }) : null
-    ]);
+      // Si vienen slugs nuevos, buscamos los documentos para obtener sus _id
+      const [provinceDoc, cityDoc] = await Promise.all([
+        payload.address.province
+          ? Province.findOne({ slug: payload.address.province })
+          : null,
+        payload.address.city
+          ? City.findOne({ slug: payload.address.city })
+          : null,
+      ]);
 
-    // Si los encontramos, actualizamos los IDs. Si no, mantenemos los que ya tenía la propiedad.
-    if (provinceDoc) provinceId = provinceDoc._id;
-    if (cityDoc) cityId = cityDoc._id;
+      // Si los encontramos, actualizamos los IDs. Si no, mantenemos los que ya tenía la propiedad.
+      if (provinceDoc) provinceId = provinceDoc._id;
+      if (cityDoc) cityId = cityDoc._id;
 
-    updateData.address = {
-        ...property.address, 
+      updateData.address = {
+        ...property.address,
         street: payload.address.street ?? property.address?.street,
         number: payload.address.number ?? property.address?.number,
         zipCode: payload.address.zipCode ?? property.address?.zipCode,
-        
+
         // Ahora sí, pasamos IDs reales (o undefined si no hay nada)
         province: provinceId,
         city: cityId,
         // Para barrio, si viene vacío del front (""), mandamos undefined para no romper el ObjectId
         barrio: payload.address.barrio || undefined,
-    };
-}
+      };
+    }
 
     // 4. Merge de Price
     if (payload.price) {
-        updateData.price = {
-            amount: payload.price.amount ?? property.price.amount,
-            currency: payload.price.currency ?? property.price.currency,
-        };
+      updateData.price = {
+        amount: payload.price.amount ?? property.price.amount,
+        currency: payload.price.currency ?? property.price.currency,
+      };
     }
 
     // 5. Merge de Features
     if (payload.features) {
-        updateData.features = {
-            ...property.features,
-            bedrooms: payload.features.bedrooms ?? property.features.bedrooms,
-            bathrooms: payload.features.bathrooms ?? property.features.bathrooms,
-            totalM2: payload.features.totalM2 ?? property.features.totalM2,
-            coveredM2: payload.features.coveredM2 ?? property.features.coveredM2,
-            rooms: payload.features.rooms ?? property.features.rooms,
-            garage: payload.features.garage ?? property.features.garage,
-        };
+      updateData.features = {
+        ...property.features,
+        bedrooms: payload.features.bedrooms ?? property.features.bedrooms,
+        bathrooms: payload.features.bathrooms ?? property.features.bathrooms,
+        totalM2: payload.features.totalM2 ?? property.features.totalM2,
+        coveredM2: payload.features.coveredM2 ?? property.features.coveredM2,
+        rooms: payload.features.rooms ?? property.features.rooms,
+        garage: payload.features.garage ?? property.features.garage,
+      };
     }
 
     // 6. Campos simples (Usamos in operator para verificar existencia en el DTO)
-    const simpleFields: (keyof UpdatePropertyDTO)[] = ['description', 'tags', 'images', 'status', 'age', 'operationType'];
-    simpleFields.forEach(field => {
-        if (payload[field] !== undefined) {
-            updateData[field as string] = payload[field];
-        }
+    const simpleFields: (keyof UpdatePropertyDTO)[] = [
+      "description",
+      "tags",
+      "images",
+      "status",
+      "age",
+      "operationType",
+    ];
+    simpleFields.forEach((field) => {
+      if (payload[field] !== undefined) {
+        updateData[field as string] = payload[field];
+      }
     });
 
     // 7. Merge de Location y limpieza de Iframe
     if (payload.location) {
-        let cleanMapsUrl = payload.location.mapsUrl ?? property.location?.mapsUrl;
-        if (cleanMapsUrl && cleanMapsUrl.includes("<iframe")) {
-            const match = cleanMapsUrl.match(/src="([^"]+)"/);
-            if (match && match[1]) cleanMapsUrl = match[1];
-        }
-        updateData.location = {
-            mapsUrl: cleanMapsUrl,
-            lat: payload.location.lat ?? property.location?.lat,
-            lng: payload.location.lng ?? property.location?.lng,
-        };
+      let cleanMapsUrl = payload.location.mapsUrl ?? property.location?.mapsUrl;
+      if (cleanMapsUrl && cleanMapsUrl.includes("<iframe")) {
+        const match = cleanMapsUrl.match(/src="([^"]+)"/);
+        if (match && match[1]) cleanMapsUrl = match[1];
+      }
+      updateData.location = {
+        mapsUrl: cleanMapsUrl,
+        lat: payload.location.lat ?? property.location?.lat,
+        lng: payload.location.lng ?? property.location?.lng,
+      };
     }
 
     // 8. Aplicar cambios al documento de Mongoose
     Object.assign(property, updateData);
 
     // 9. Guardar y Validar
-    await property.save(); 
+    await property.save();
     return property;
-}
+  }
 
   // DELETE /properties/:slug
   static async delete(slug: string) {
@@ -355,9 +375,8 @@ if (payload.address) {
     return { message: "Property deleted successfully" };
   }
 
-
   //para llamada del SearchBar y llamadas con filtros del home
-static async findByType(type: string, limit = 100) {
+  static async findByType(type: string, limit = 100) {
     // Definimos los filtros basados en el "type" que viene de la URL
     const filters: any = {};
 
@@ -372,10 +391,7 @@ static async findByType(type: string, limit = 100) {
     return await this.findAll({
       filters,
       pagination: { page: 1, limit, skip: 0 },
-      sort: { sort: { createdAt: -1 } }
+      sort: { sort: { createdAt: -1 } },
     });
   }
-
-
-
 }

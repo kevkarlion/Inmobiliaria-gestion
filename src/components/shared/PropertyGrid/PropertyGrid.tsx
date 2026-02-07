@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 import PropertyCardHome from "@/components/shared/PropertyCardHome/PropertyCardHome";
+import { BASE_URL } from "@/lib/config";
 
 interface Props {
   title?: string;
@@ -134,7 +135,7 @@ export default function PropertyGrid({
 
         {/* CTA final */}
         <div className="flex justify-center mt-6 mb-14">
-          <Link className="" href={`/search-type/${filter}`}>
+          <Link className="" href={`${BASE_URL}/search-type/${filter}`}>
             <button className="btn-cta  ">
               {getButtonText()}
             </button>

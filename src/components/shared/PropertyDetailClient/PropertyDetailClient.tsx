@@ -120,7 +120,7 @@ export function PropertyDetailClient({
             </div>
 
             <button className="btn-cta mt-10 bg-gold-sand text-black hover:bg-gold-hover">
-              Contactar agente
+              Contactar asesor
             </button>
           </div>
         </div>

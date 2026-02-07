@@ -1,26 +1,13 @@
 // @/components/home/Hero/Hero.tsx
 import Image from "next/image";
 import SearchBar from "@/components/shared/SearchBar/SearchBar";
-import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
+import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
 
 export default async function Hero() {
-  // 1. Llamada a la API (Capa HTTP)
-  // Usamos la URL absoluta (necesaria en el servidor)
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
-  
-  // Pasamos el límite por query param para que el DTO lo capture
-  const res = await fetch(`${baseUrl}/api/properties?limit=20`, {
-    next: { revalidate: 60 } // Cacheamos la respuesta de la API por 1 minuto
-  });
-
-  if (!res.ok) {
-    console.error("Fallo al nutrir el buscador");
-  }
-
-  const data = await res.json();
-  
-  // 2. Mapeamos los items que vienen del PropertyResponseDTO al formato de la UI
-  const allProperties = data.items ? data.items.map(mapPropertyToUI) : [];
+  /** * 1. Llamada a la función centralizada de servidor.
+   * Traemos 20 propiedades de forma directa para alimentar el autocompletado del buscador.
+   */
+  const allProperties = await getUiProperties({ limit: 20 });
 
   return (
     <section className="relative w-full min-h-[85vh] bg-slate-100 flex items-center justify-center overflow-visible z-30">

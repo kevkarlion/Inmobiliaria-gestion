@@ -1,22 +1,12 @@
 // components/home/OportunityHome.tsx
 import PropertyGrid from "@/components/shared/PropertyGrid/PropertyGrid";
-import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
-import { PropertyUI } from "@/domain/types/PropertyUI.types";
-
-async function getOpportunities() {
-  const res = await fetch(
-    `${process.env.BASE_URL}/api/properties?opportunity=true&limit=6`,
-    { cache: "no-store" } // o revalidate: 60
-  );
-
-  const data = await res.json();
-  return data.items;
-}
+import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
 
 export default async function OportunityHome() {
-  const items = await getOpportunities();
-
-  const properties: PropertyUI[] = items.map(mapPropertyToUI);
+  const properties = await getUiProperties({ 
+    isOpportunity: true, 
+    limit: 6 
+  });
 
   return (
     <PropertyGrid

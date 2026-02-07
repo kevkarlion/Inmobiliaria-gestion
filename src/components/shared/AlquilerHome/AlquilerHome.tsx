@@ -1,24 +1,12 @@
-// components/home/SalesHome.tsx
+// components/home/AlquilerHome.tsx
 import PropertyGrid from "@/components/shared/PropertyGrid/PropertyGrid";
-import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
-import { PropertyUI } from "@/domain/types/PropertyUI.types";
-
-
-
-async function getAlquiler() {
-  const res = await fetch(
-    `${process.env.BASE_URL}/api/properties?operationType=alquiler&limit=6`,
-    { cache: "no-store" } // o revalidate: 60
-  );
-
-  const data = await res.json();
-  return data.items;
-}
+import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
 
 export default async function AlquilerHome() {
-  const items = await getAlquiler();
-
-  const properties: PropertyUI[] = items.map(mapPropertyToUI);
+  const properties = await getUiProperties({ 
+    type: "alquiler", 
+    limit: 6 
+  });
 
   return (
     <PropertyGrid

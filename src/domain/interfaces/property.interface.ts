@@ -38,7 +38,9 @@ export interface IProperty {
     premium: boolean;
   };
   tags: string[];
-  images: string[];
+  images: { url: string; alt?: string }[];
+
+
   location: {
     mapsUrl: string;
     lat: number;
@@ -49,7 +51,7 @@ export interface IProperty {
   status: "active" | "inactive";
   createdAt?: Date;
   updatedAt?: Date;
-  age: number,
+  age: number;
 }
 
 /**
@@ -60,7 +62,7 @@ export interface Property extends Omit<
   IProperty,
   "propertyType" | "address" | "_id"
 > {
-  id: string; 
+  id: string;
   propertyType: {
     _id: string;
     name: string;

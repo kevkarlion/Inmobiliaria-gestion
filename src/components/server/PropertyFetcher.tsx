@@ -1,13 +1,21 @@
-// components/server/PropertyFetcher.tsx
-import { PropertyService } from "@/server/services/property.service";
-import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
-import SearchTypePage from "../shared/SearchTypePage/SearchTypePage";
+// // @/components/server/PropertyFetcher.tsx
+// import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
+// import SearchTypePage from "../shared/SearchTypePage/SearchTypePage";
 
-export default async function PropertyFetcher({ type }: { type: string }) {
-  // LLAMADA DIRECTA AL SERVICIO
-  const data = await PropertyService.findByType(type);
-  
-  const properties = data.items.map(mapPropertyToUI);
+// // Definimos la interfaz donde params es una Promesa
+// interface Props {
+//   params: Promise<{ type: string }>;
+// }
 
-  return <SearchTypePage properties={properties} filterParam={type} />;
-}
+// export default async function PropertyFetcher({ params }: Props) {
+//   // 1. DEBEMOS esperar a los params (Requisito Next.js 15+)
+//   const { type } = await params;
+
+//   // 2. Ahora pasamos el string ya resuelto
+//   const properties = await getUiProperties({ 
+//     type: type, 
+//     limit: 20 
+//   });
+
+//   return <SearchTypePage properties={properties} filterParam={type} />;
+// }

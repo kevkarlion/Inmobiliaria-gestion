@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -15,9 +14,9 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
     title: "",
     operationType: "venta",
     propertyTypeSlug: "casa",
-    province: "", // Envía slug (ej: "rio-negro")
-    city: "",     // Envía slug (ej: "general-roca")
-    barrio: "",   // Envía slug
+    province: "",
+    city: "",
+    barrio: "",
     priceAmount: 0,
     currency: "USD",
     bedrooms: 0,
@@ -31,7 +30,6 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
     street: "",
     number: "",
     zipCode: "",
-    // CAMPOS DE MAPA REQUERIDOS POR TU MAPPER
     mapsUrl: "",
     lat: 0,
     lng: 0,
@@ -61,24 +59,18 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
   }
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm((prev) => ({ 
-          ...prev, 
-          images: [...prev.images, reader.result as string] 
-        }));
-      };
-      reader.readAsDataURL(file);
-    });
+    // Para pruebas: agregamos una imagen fija desde public
+    const testImage = "/images/test.jpg"; // coloca tu imagen en public/images/test.jpg
+    setForm(prev => ({
+      ...prev,
+      images: [...prev.images, testImage],
+    }));
   };
 
   const removeImage = (index: number) => {
-    setForm((prev) => ({ 
-      ...prev, 
-      images: prev.images.filter((_, i) => i !== index) 
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
     }));
   };
 
@@ -108,7 +100,6 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-neutral-900 text-white rounded-xl space-y-6 border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
-      
       {/* HEADER */}
       <div className="flex justify-between items-center border-b border-white/10 pb-4">
         <div>
@@ -137,7 +128,7 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         </div>
       </div>
 
-      {/* SECCIÓN 2: LOCALIZACIÓN GEOGRÁFICA (SLUGS) */}
+      {/* SECCIÓN 2: LOCALIZACIÓN GEOGRÁFICA */}
       <div className="p-4 bg-blue-600/5 rounded-xl border border-blue-500/20 space-y-4">
         <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest">Localización y Zona</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -165,13 +156,12 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         </div>
       </div>
 
-      {/* SECCIÓN 3: MAPA DE GOOGLE (CRUCIAL PARA EL MAPPER) */}
+      {/* SECCIÓN 3: MAPA */}
       <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-4">
         <div className="flex items-center gap-2">
-           <span className="text-blue-500 text-lg">📍</span>
-           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Coordenadas y Google Maps</p>
+          <span className="text-blue-500 text-lg">📍</span>
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Coordenadas y Google Maps</p>
         </div>
-        
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="text-xs font-bold text-gray-400 uppercase">Link de Google Maps o Iframe</label>
@@ -183,10 +173,8 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
               placeholder="Pegue aquí el HTML del iframe o la URL de Maps" 
               className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none focus:border-blue-500 text-sm" 
             />
-            <p className="text-[9px] text-gray-500 mt-1 italic">Este link se usará para el mapa interactivo y el botón externo.</p>
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-bold text-gray-400 uppercase">Latitud</label>
@@ -220,13 +208,11 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         </div>
       </div>
 
-      {/* SECCIÓN 5: CARACTERÍSTICAS TÉCNICAS */}
+      {/* SECCIÓN 5: CARACTERÍSTICAS */}
       <div className="grid grid-cols-3 md:grid-cols-6 gap-3 p-4 bg-white/5 rounded-xl border border-white/5">
-        {[
-          {l: "Dorm", n: "bedrooms"}, {l: "Baños", n: "bathrooms"}, 
+        {[{l: "Dorm", n: "bedrooms"}, {l: "Baños", n: "bathrooms"}, 
           {l: "Amb", n: "rooms"}, {l: "Total m2", n: "totalM2"}, 
-          {l: "Cub. m2", n: "coveredM2"}, {l: "Edad", n: "age"}
-        ].map((i) => (
+          {l: "Cub. m2", n: "coveredM2"}, {l: "Edad", n: "age"}].map((i) => (
           <div key={i.n}>
             <label className="text-[10px] font-bold text-gray-500 uppercase">{i.l}</label>
             <input 
@@ -259,14 +245,12 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         </div>
       </div>
 
-      {/* SECCIÓN 7: FLAGS Y EXTRAS (Sincronizado con Mapper) */}
+      {/* SECCIÓN 7: FLAGS */}
       <div className="flex flex-wrap gap-4 py-4 border-y border-white/5 uppercase text-[10px] font-bold">
-        {[
-          {label: "Destacada", name: "featured"},
+        {[{label: "Destacada", name: "featured"},
           {label: "Oportunidad", name: "opportunity"},
           {label: "Premium", name: "premium"},
-          {label: "Cochera", name: "garage"}
-        ].map((check) => (
+          {label: "Cochera", name: "garage"}].map((check) => (
           <label key={check.name} className="flex items-center gap-2 cursor-pointer hover:text-blue-400 transition-colors">
             <input 
               type="checkbox" 

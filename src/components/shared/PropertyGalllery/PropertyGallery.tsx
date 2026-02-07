@@ -7,32 +7,30 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export function PropertyGallery({ images = [] }: { images?: string[] }) {
   const [index, setIndex] = useState(0);
 
-  if (!images.length)
+  // ⚡ Filtramos cualquier valor vacío o inválido
+  const validImages = images.filter(Boolean);
+
+  if (!validImages.length)
     return (
       <div className="w-full h-64 flex items-center justify-center bg-neutral-800 text-gray-500 rounded-xl border border-white/10">
         Sin imágenes disponibles
       </div>
     );
 
-  const prev = () => setIndex((i) => (i === 0 ? images.length - 1 : i - 1));
-  const next = () => setIndex((i) => (i === images.length - 1 ? 0 : i + 1));
+  const prev = () => setIndex((i) => (i === 0 ? validImages.length - 1 : i - 1));
+  const next = () => setIndex((i) => (i === validImages.length - 1 ? 0 : i + 1));
 
   return (
-    /* 1️⃣ Añadimos max-w y mx-auto para que respire en pantallas grandes */
     <div className="w-full max-w-5xl mx-auto px-2 sm:px-6">
-      
-      {/* 2️⃣ Cambiamos aspect-video por una altura máxima fija o un aspect ratio más cerrado */}
       <div className="relative w-full aspect-3/2 md:aspect-video max-h-125 rounded-2xl overflow-hidden shadow-2xl border border-white/5 bg-black">
         <Image
-          src={images[index]}
+          src={validImages[index]}
           alt={`Imagen ${index + 1}`}
           fill
-          priority // 3️⃣ Añadimos priority porque es la imagen principal
-          className="object-contain" // Cambia a "object-cover" si prefieres que llene siempre el espacio
+          priority
+          className="object-contain"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
         />
-        
-        {/* Controles con mejor estilo visual */}
         <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none">
           <button 
             onClick={prev} 
@@ -47,18 +45,15 @@ export function PropertyGallery({ images = [] }: { images?: string[] }) {
             <ChevronRight size={28} />
           </button>
         </div>
-
-        {/* Contador de fotos (Toque Premium) */}
         <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white tracking-widest border border-white/10">
-          {index + 1} / {images.length}
+          {index + 1} / {validImages.length}
         </div>
       </div>
 
-      {/* Miniaturas */}
       <div className="flex gap-3 mt-6 overflow-x-auto pb-4 no-scrollbar justify-center">
-        {images.map((img, i) => (
+        {validImages.map((img, i) => (
           <button 
-            key={img} 
+            key={i} // ⚡ Usamos índice en vez de `img` para evitar duplicados
             onClick={() => setIndex(i)} 
             className={`relative shrink-0 transition-all duration-300 rounded-xl overflow-hidden border-2 ${
               i === index ? "border-blue-600 scale-105 shadow-lg shadow-blue-500/20" : "border-transparent opacity-50 hover:opacity-100"

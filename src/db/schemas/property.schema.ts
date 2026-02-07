@@ -71,7 +71,10 @@ const PropertySchema = new Schema<IProperty>(
       premium: { type: Boolean, default: false, index: true },
     },
 
-    images: { type: [String], default: [] },
+    images: {
+      type: [String], // Array de strings
+      default: [],
+    },
 
     status: {
       type: String,
