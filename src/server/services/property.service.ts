@@ -16,6 +16,7 @@ import { Province } from "@/db/schemas/province.schema";
 import { City } from "@/db/schemas/city.schema";
 import { Barrio } from "@/db/schemas/barrio.schema";
 import { Types } from "mongoose";
+import { connectDB } from "@/db/connection";
 
 export class PropertyService {
   /**
@@ -140,6 +141,7 @@ export class PropertyService {
   static async findAll(
     query: QueryPropertyDTO,
   ): Promise<FindAllPropertiesResult> {
+    await connectDB();
     const filter: any = { status: "active" };
     const f = query.filters;
 
