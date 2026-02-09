@@ -140,7 +140,6 @@ export class PropertyService {
   static async findAll(
     query: QueryPropertyDTO,
   ): Promise<FindAllPropertiesResult> {
-   
     const filter: any = { status: "active" };
     const f = query.filters;
 
@@ -184,9 +183,10 @@ export class PropertyService {
       filter["features.bathrooms"] = { $gte: f.bathrooms };
 
     // flags
+    // flags (solo true)
     ["featured", "premium", "opportunity"].forEach((flag) => {
-      if (f[flag as keyof typeof f] !== undefined) {
-        filter[`flags.${flag}`] = f[flag as keyof typeof f];
+      if (f[flag as keyof typeof f] === true) {
+        filter[`flags.${flag}`] = true;
       }
     });
 
@@ -199,7 +199,7 @@ export class PropertyService {
       skip,
       limit,
     });
-    console.log('items all', items)
+    console.log("items all", items);
 
     const total = await PropertyRepository.count(filter);
 
@@ -208,7 +208,7 @@ export class PropertyService {
       _id: obj._id.toString(),
       images: obj.images || [],
     }));
-    console.log('normalized',normalized)
+    console.log("normalized", normalized);
     return {
       items: normalized,
       meta: {

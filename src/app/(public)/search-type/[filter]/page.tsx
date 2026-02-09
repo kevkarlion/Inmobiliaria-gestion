@@ -6,6 +6,8 @@ interface Props {
   params: Promise<{ filter: string }>;
 }
 
+
+
 export default async function Page({ params }: Props) {
   // 1. Resolvemos el parámetro de la URL (Next.js 15+)
   const { filter } = await params;
@@ -26,6 +28,7 @@ export default async function Page({ params }: Props) {
     limit: 50, // O el límite que prefieras para la búsqueda
   });
 
+  console.log('properties page', properties)
   // 4. Renderizamos directamente el componente de cliente
   return (
     <SearchTypePage 
