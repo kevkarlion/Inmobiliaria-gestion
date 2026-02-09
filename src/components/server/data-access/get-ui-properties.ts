@@ -12,6 +12,8 @@ export const getUiProperties = async (params: {
   isOpportunity?: boolean;
 }) => {
 
+  console.log('params getUi', params)
+
   await connectDB();
 
   const queryDto = new QueryPropertyDTO({
@@ -21,6 +23,7 @@ export const getUiProperties = async (params: {
     page: 1,
   });
 
+  console.log('queryDto', queryDto)
   const { items } = await PropertyService.findAll(queryDto);
   console.log('items', items)
 

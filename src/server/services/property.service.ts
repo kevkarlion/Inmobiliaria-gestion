@@ -183,11 +183,13 @@ export class PropertyService {
       filter["features.bathrooms"] = { $gte: f.bathrooms };
 
     // flags
-    ["featured", "premium", "opportunity"].forEach((flag) => {
-      if (f[flag as keyof typeof f] !== undefined) {
-        filter[`flags.${flag}`] = f[flag as keyof typeof f];
-      }
-    });
+    // flags (solo true)
+["featured", "premium", "opportunity"].forEach((flag) => {
+  if (f[flag as keyof typeof f] === true) {
+    filter[`flags.${flag}`] = true;
+  }
+});
+
 
     const { skip, limit, page } = query.pagination;
     const sort = query.sort.sort;

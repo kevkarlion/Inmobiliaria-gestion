@@ -13,6 +13,7 @@ export default async function Page({ params }: Props) {
   // 2. Mapeamos el 'filter' a lo que espera tu lógica de negocio
   // Si el filtro es "oportunidad", mandamos el flag isOpportunity
   const isOpportunity = filter === "oportunidad";
+  console.log('filter',filter)
   
   // Si no es oportunidad, asumimos que es un operationType (venta/alquiler)
   // Si es oportunidad, el operationType lo mandamos undefined para que traiga todas

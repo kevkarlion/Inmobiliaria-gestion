@@ -20,6 +20,7 @@ export default function SearchTypePage({ properties, filterParam }: Props) {
   const [minM2, setMinM2] = useState<number | "">("");
   const [bedrooms, setBedrooms] = useState<number | "">("");
   const [garage, setGarage] = useState(false);
+console.log(properties.length)
 
   const filtered = useMemo(() => {
     return properties.filter((p) => {
