@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // mappers/propertyToForm.mapper.ts
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 
@@ -11,9 +12,14 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     propertyTypeSlug: property.propertyType?.slug || "casa",
 
     // Ubicación (SOLO STRINGS)
-     province: property.address?.province?.slug || property.address?.province?.name || "",
+    province:
+      property.address?.province?.slug ||
+      property.address?.province?.name ||
+      "",
     city: property.address?.city?.slug || property.address?.city?.name || "",
     barrio: property.address?.barrio?.slug || property.address?.barrio || "",
+
+    
     street: property.address?.street || "",
     number: property.address?.number || "",
     zipCode: property.address?.zipCode || "",
@@ -44,7 +50,10 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     // Extras
     description: property.description || "",
     tags: property.tags ?? [],
-    images: property.images ?? [],
+    images: (property.images || []).map((img: any) =>
+      typeof img === "string" ? img : img.url,
+    ),
+
     status: property.status || "active",
   };
 }

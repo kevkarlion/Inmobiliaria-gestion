@@ -13,23 +13,23 @@ const DEFAULT_LIMIT = 12;
 
 export class PropertyRepository {
   static findAll(filter: any, options: FindAllOptions = {}) {
-    return PropertyModel.find(filter)
-      .select("title slug price propertyType address features flags images")
-        .lean()
-      .populate("propertyType", "name slug")
-      .populate("address.province", "name slug")
-      .populate("address.city", "name slug")
-      .populate("address.barrio", "name slug")
-      .sort(options.sort || { createdAt: -1 })
-      .skip(options.skip || 0)
-      .limit(options.limit ?? DEFAULT_LIMIT)
-      .lean(); // objetos planos → muchísimo más rápido
-  }
+  return PropertyModel.find(filter)
+    .select("title slug price propertyType address location  features flags images")
+    .populate("propertyType", "name slug")
+    .populate("address.province", "name slug")
+    .populate("address.city", "name slug")
+    .populate("address.barrio", "name slug")
+    .sort(options.sort || { createdAt: -1 })
+    .skip(options.skip || 0)
+    .limit(options.limit ?? DEFAULT_LIMIT)
+    .lean(); // ✅ SOLO ACÁ
+}
+
 
   static findBySlug(slug: string) {
     return (
       PropertyModel.findOne({ slug, status: "active" })
-        
+
         .populate("propertyType", "name slug")
         // 🔹 TAMBIÉN EN EL DETALLE:
         .populate("address.province")
