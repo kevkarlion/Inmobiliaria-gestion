@@ -140,6 +140,7 @@ export class PropertyService {
   static async findAll(
     query: QueryPropertyDTO,
   ): Promise<FindAllPropertiesResult> {
+   
     const filter: any = { status: "active" };
     const f = query.filters;
 
@@ -183,13 +184,11 @@ export class PropertyService {
       filter["features.bathrooms"] = { $gte: f.bathrooms };
 
     // flags
-    // flags (solo true)
-["featured", "premium", "opportunity"].forEach((flag) => {
-  if (f[flag as keyof typeof f] === true) {
-    filter[`flags.${flag}`] = true;
-  }
-});
-
+    ["featured", "premium", "opportunity"].forEach((flag) => {
+      if (f[flag as keyof typeof f] !== undefined) {
+        filter[`flags.${flag}`] = f[flag as keyof typeof f];
+      }
+    });
 
     const { skip, limit, page } = query.pagination;
     const sort = query.sort.sort;

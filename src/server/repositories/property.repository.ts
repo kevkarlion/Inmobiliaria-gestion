@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PropertyModel } from "@/db/schemas/property.schema";
+import { connectDB } from "@/db/connection";
 
 type SortOption = Record<string, 1 | -1>;
 
@@ -12,19 +13,21 @@ type FindAllOptions = {
 const DEFAULT_LIMIT = 12;
 
 export class PropertyRepository {
-  static findAll(filter: any, options: FindAllOptions = {}) {
-  return PropertyModel.find(filter)
-    .select("title slug price propertyType address location  features flags images")
-    .populate("propertyType", "name slug")
-    .populate("address.province", "name slug")
-    .populate("address.city", "name slug")
-    .populate("address.barrio", "name slug")
-    .sort(options.sort || { createdAt: -1 })
-    .skip(options.skip || 0)
-    .limit(options.limit ?? DEFAULT_LIMIT)
-    .lean(); // ✅ SOLO ACÁ
-}
-
+  static async findAll(filter: any, options: FindAllOptions = {}) {
+    await connectDB();
+    return PropertyModel.find(filter)
+      .select(
+        "title slug price propertyType address location  features flags images",
+      )
+      .populate("propertyType", "name slug")
+      .populate("address.province", "name slug")
+      .populate("address.city", "name slug")
+      .populate("address.barrio", "name slug")
+      .sort(options.sort || { createdAt: -1 })
+      .skip(options.skip || 0)
+      .limit(options.limit ?? DEFAULT_LIMIT)
+      .lean(); // ✅ SOLO ACÁ
+  }
 
   static findBySlug(slug: string) {
     return (
