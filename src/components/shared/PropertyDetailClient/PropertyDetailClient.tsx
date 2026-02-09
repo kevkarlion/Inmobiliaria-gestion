@@ -3,13 +3,13 @@
 
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import { PropertyGallery } from "@/components/shared/PropertyGalllery/PropertyGallery";
-import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
+import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { formatPrice } from "@/utils/formatPrice";
 
 export function PropertyDetailClient({
   property,
 }: {
-  property: PropertyResponseDTO;
+  property: PropertyResponse;
 }) {
   const p = mapPropertyToUI(property);
 
