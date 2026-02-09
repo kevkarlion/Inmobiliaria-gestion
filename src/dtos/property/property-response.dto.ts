@@ -1,58 +1,139 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// src/dtos/property/property-response.dto.ts
 import { Property } from "@/domain/types/Property.types";
 
-export class PropertyResponseDTO {
+/**
+ * Nodo simple para entidades pobladas (province, city, barrio)
+ */
+export type AddressNode = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+/**
+ * Shape del objeto que viaja a UI / API
+ * (solo datos planos, serializables)
+ */
+export interface PropertyResponse {
   id: string;
   title: string;
   slug: string;
-  price: Property["price"];
-  propertyType: Property["propertyType"];
+
+  price: {
+    amount: number;
+    currency: string;
+  };
+
+  propertyType: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+
   operationType: string;
-  address: Property["address"]; // 👈 Ahora incluye province, city y barrio poblados
+
+  address: {
+    street: string;
+    number: string;
+    zipCode: string;
+    province: AddressNode | null;
+    city: AddressNode | null;
+    barrio: AddressNode | null;
+  };
+
   features: Property["features"];
   flags: Property["flags"];
+
   tags: string[];
-  images: string[];
+  images: {
+    id?: string;
+    url: string;
+  }[];
+
   description?: string;
   status?: string;
-  location: Property["location"];
-  age?: number; // Añade esto
 
-  constructor(property: Property) {
-    // Usamos property._id porque viene del .lean() del service
-    this.id = property._id.toString();
-    this.title = property.title;
-    this.slug = property.slug;
-    this.price = {
+  location: {
+    mapsUrl: string;
+    lat: number;
+    lng: number;
+  };
+
+  antiguedad?: number;
+}
+
+/**
+ * Factory (reemplaza a la clase)
+ * Convierte Property (DB) → PropertyResponse (plano)
+ */
+export function propertyResponseDTO(property: Property): PropertyResponse {
+  return {
+    id: property._id.toString(),
+    title: property.title,
+    slug: property.slug,
+
+    price: {
       amount: property.price.amount,
       currency: property.price.currency,
-    };
-    this.propertyType = {
-      _id: property.propertyType._id.toString(),
+    },
+
+    propertyType: {
+      id: property.propertyType._id.toString(),
       name: property.propertyType.name,
       slug: property.propertyType.slug,
-    };
-    this.operationType = property.operationType;
+    },
 
-    // Mapeo dinámico de address (trae los nombres de provincia/ciudad gracias al populate)
-    this.address = {
+    operationType: property.operationType,
+
+    address: {
       street: property.address.street,
       number: property.address.number,
       zipCode: property.address.zipCode,
-      province: property.address.province,
-      city: property.address.city,
-      barrio: property.address.barrio, // Si es undefined, se mantiene así
-    };
 
-    this.features = property.features;
-    this.flags = property.flags;
-    this.tags = property.tags || [];
-    this.images = property.images || [];
-    this.description = property.description;
-    this.status = property.status;
-    this.location = {
+      province: property.address.province
+        ? {
+            id: property.address.province._id.toString(),
+            name: property.address.province.name,
+            slug: property.address.province.slug,
+          }
+        : null,
+
+      city: property.address.city
+        ? {
+            id: property.address.city._id.toString(),
+            name: property.address.city.name,
+            slug: property.address.city.slug,
+          }
+        : null,
+
+      barrio: property.address.barrio
+        ? {
+            id: property.address.barrio._id.toString(),
+            name: property.address.barrio.name,
+            slug: property.address.barrio.slug,
+          }
+        : null,
+    },
+
+    features: property.features,
+    flags: property.flags,
+
+    tags: property.tags || [],
+    images: (property.images || []).map((img: any) => ({
+      id: img._id?.toString(),
+      url: typeof img === "string" ? img : img.url,
+    })),
+
+    description: property.description,
+    status: property.status,
+
+    location: {
       mapsUrl: property.location?.mapsUrl || "",
       lat: property.location?.lat || 0,
       lng: property.location?.lng || 0,
-    };
-  }
+    },
+
+    antiguedad: property.antiguedad,
+  };
 }

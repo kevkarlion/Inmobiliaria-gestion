@@ -1,3 +1,4 @@
+//src/components/server/data-access/get-ui-properties.ts
 import { connectDB } from '@/db/connection'
 import { mapPropertyToUI } from '@/domain/mappers/mapPropertyToUI';
 import { QueryPropertyDTO } from '@/dtos/property/query-property.dto';

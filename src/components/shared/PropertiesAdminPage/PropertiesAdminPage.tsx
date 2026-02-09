@@ -1,65 +1,46 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// app/admin/properties/PropertiesAdminClient.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropertyCardAdmin from "@/components/shared/PropertyCardAdmin/PropertyCardAdmin";
 import PropertyForm from "@/components/shared/PropertyForm/PropertyForm";
 import EditPropertyForm from "@/components/shared/EditPropertyForm/EditPropertyForm";
+import { PropertyResponse } from "@/dtos/property/property-response.dto";
 
-export default function PropertiesAdminPage() {
-  const [properties, setProperties] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [editingProperty, setEditingProperty] = useState<any | null>(null);
+interface PropertiesAdminClientProps {
+  initialProperties: PropertyResponse[];
+}
+
+export default function PropertiesAdminClient({
+  initialProperties,
+}: PropertiesAdminClientProps) {
+  const [properties, setProperties] =
+    useState<PropertyResponse[]>(initialProperties);
+  const [editingProperty, setEditingProperty] =
+    useState<PropertyResponse | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
 
-  // 🚀 Cargar propiedades
-  async function fetchProperties() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/properties");
-
-      //data recibe formato ResponseDTO
-      const data = await res.json();
-      setProperties(data.items);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  // 🗑 Eliminar propiedad
   async function handleDelete(slug: string) {
     if (!confirm("¿Seguro quieres borrar esta propiedad?")) return;
-    try {
-      await fetch(`/api/properties/${slug}`, { method: "DELETE" });
-      fetchProperties(); // recargar listado
-    } catch (err) {
-      console.error(err);
-    }
+    await fetch(`/api/properties/${slug}`, { method: "DELETE" });
+    setProperties((p) => p.filter((x) => x.slug !== slug));
   }
 
-  // ✏️ Editar propiedad
-  function handleEdit(property: any) {
-    setEditingProperty(property);
-    setShowEditForm(true);
-  }
-
-  // ✨ Cerrar formularios
   function closeCreateForm() {
     setShowCreateForm(false);
-    fetchProperties();
   }
 
   function closeEditForm() {
     setShowEditForm(false);
     setEditingProperty(null);
-    fetchProperties();
+  }
+
+  function handleUpdate(updatedProperty: PropertyResponse) {
+    setProperties((prev) =>
+      prev.map((p) => (p.id === updatedProperty.id ? updatedProperty : p)),
+    );
+    closeEditForm();
   }
 
   return (
@@ -68,43 +49,39 @@ export default function PropertiesAdminPage() {
         <h1 className="text-2xl font-bold">Administrar Propiedades</h1>
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded"
-          onClick={() => { setEditingProperty(null); setShowCreateForm(true); }}
+          onClick={() => {
+            setEditingProperty(null);
+            setShowCreateForm(true);
+          }}
         >
           Crear nueva
         </button>
       </div>
 
-      {/* Formulario de creación */}
-      {showCreateForm && (
-        <PropertyForm
-          
-          onClose={closeCreateForm}
-        />
-      )}
+      {showCreateForm && <PropertyForm onClose={closeCreateForm} />}
 
-      {/* Formulario de edición */}
       {showEditForm && editingProperty && (
         <EditPropertyForm
           property={editingProperty}
-           slug={editingProperty?.slug} // 👈 PASAR EL SLUG AQUÍ
+          slug={editingProperty.slug}
           onClose={closeEditForm}
+          onUpdate={handleUpdate} // <-- NUEVO
         />
       )}
 
-      {loading ? (
-        <p>Cargando propiedades...</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {properties.map((p) => (
-            <PropertyCardAdmin
-              key={p.id}
-              property={p}
-              onDelete={handleDelete}
-              onEdit={() => handleEdit(p)}
-            />
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {properties.map((p) => (
+          <PropertyCardAdmin
+            key={p.id}
+            property={p}
+            onDelete={handleDelete}
+            onEdit={() => {
+              setEditingProperty(p);
+              setShowEditForm(true);
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

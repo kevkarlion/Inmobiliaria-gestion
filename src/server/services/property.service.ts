@@ -108,10 +108,9 @@ export class PropertyService {
       age: Number(dto.age) || 0,
       status: "active",
       tags: dto.tags || [],
-      images: Array.isArray(dto.images) ? dto.images : [dto.images].filter(Boolean),
-
-
-
+      images: Array.isArray(dto.images)
+        ? dto.images
+        : [dto.images].filter(Boolean),
     };
 
     // 6. Persistir en Base de Datos
@@ -138,89 +137,87 @@ export class PropertyService {
    * GET /properties con filtros + paginación
    */
 
- static async findAll(
-  query: QueryPropertyDTO,
-): Promise<FindAllPropertiesResult> {
-  const filter: any = { status: "active" };
-  const f = query.filters;
+  static async findAll(
+    query: QueryPropertyDTO,
+  ): Promise<FindAllPropertiesResult> {
+    const filter: any = { status: "active" };
+    const f = query.filters;
 
-  // filtros simples
-  if (f.operationType) filter.operationType = f.operationType.toLowerCase();
-  if (f.search) filter.title = { $regex: f.search, $options: "i" };
+    // filtros simples
+    if (f.operationType) filter.operationType = f.operationType.toLowerCase();
+    if (f.search) filter.title = { $regex: f.search, $options: "i" };
 
-  // ubicación
-  if (f.province) {
-    const provinceDoc = await Province.findOne({ slug: f.province }).lean();
-    if (provinceDoc) filter["address.province"] = provinceDoc._id;
-  }
-
-  if (f.city) {
-    const cityDoc = await City.findOne({ slug: f.city }).lean();
-    if (cityDoc) filter["address.city"] = cityDoc._id;
-  }
-
-  if (f.barrio) {
-    const barrioDoc = await Barrio.findOne({ slug: f.barrio }).lean();
-    if (barrioDoc) filter["address.barrio"] = barrioDoc._id;
-  }
-
-  // precio
-  if (f.minPrice !== undefined || f.maxPrice !== undefined) {
-    filter["price.amount"] = {};
-    if (f.minPrice !== undefined) filter["price.amount"].$gte = f.minPrice;
-    if (f.maxPrice !== undefined) filter["price.amount"].$lte = f.maxPrice;
-  }
-
-  // tipo
-  if (f.propertyType) {
-    const type = await PropertyTypeRepository.findBySlug(f.propertyType);
-    if (type) filter.propertyType = type._id;
-  }
-
-  // features
-  if (f.bedrooms !== undefined)
-    filter["features.bedrooms"] = { $gte: f.bedrooms };
-  if (f.bathrooms !== undefined)
-    filter["features.bathrooms"] = { $gte: f.bathrooms };
-
-  // flags
-  ["featured", "premium", "opportunity"].forEach((flag) => {
-    if (f[flag as keyof typeof f] !== undefined) {
-      filter[`flags.${flag}`] = f[flag as keyof typeof f];
+    // ubicación
+    if (f.province) {
+      const provinceDoc = await Province.findOne({ slug: f.province }).lean();
+      if (provinceDoc) filter["address.province"] = provinceDoc._id;
     }
-  });
 
-  const { skip, limit, page } = query.pagination;
-  const sort = query.sort.sort;
+    if (f.city) {
+      const cityDoc = await City.findOne({ slug: f.city }).lean();
+      if (cityDoc) filter["address.city"] = cityDoc._id;
+    }
 
-  // 👇 acá ya vienen objetos planos (gracias al .lean del repo)
-  const items = await PropertyRepository.findAll(filter, {
-    sort,
-    skip,
-    limit,
-  });
+    if (f.barrio) {
+      const barrioDoc = await Barrio.findOne({ slug: f.barrio }).lean();
+      if (barrioDoc) filter["address.barrio"] = barrioDoc._id;
+    }
 
-  const total = await PropertyRepository.count(filter);
+    // precio
+    if (f.minPrice !== undefined || f.maxPrice !== undefined) {
+      filter["price.amount"] = {};
+      if (f.minPrice !== undefined) filter["price.amount"].$gte = f.minPrice;
+      if (f.maxPrice !== undefined) filter["price.amount"].$lte = f.maxPrice;
+    }
 
-const normalized = items.map((obj: any) => ({
-  ...obj,
-  _id: obj._id.toString(),
-  images: obj.images?.slice(0, 1) || [],
-}));
+    // tipo
+    if (f.propertyType) {
+      const type = await PropertyTypeRepository.findBySlug(f.propertyType);
+      if (type) filter.propertyType = type._id;
+    }
 
+    // features
+    if (f.bedrooms !== undefined)
+      filter["features.bedrooms"] = { $gte: f.bedrooms };
+    if (f.bathrooms !== undefined)
+      filter["features.bathrooms"] = { $gte: f.bathrooms };
 
+    // flags
+    ["featured", "premium", "opportunity"].forEach((flag) => {
+      if (f[flag as keyof typeof f] !== undefined) {
+        filter[`flags.${flag}`] = f[flag as keyof typeof f];
+      }
+    });
 
+    const { skip, limit, page } = query.pagination;
+    const sort = query.sort.sort;
 
-  return {
-    items: normalized,
-    meta: {
-      total,
-      page,
+    // 👇 acá ya vienen objetos planos (gracias al .lean del repo)
+    const items = await PropertyRepository.findAll(filter, {
+      sort,
+      skip,
       limit,
-      pages: Math.ceil(total / limit),
-    },
-  };
-}
+    });
+    console.log('items all', items)
+
+    const total = await PropertyRepository.count(filter);
+
+    const normalized = items.map((obj: any) => ({
+      ...obj,
+      _id: obj._id.toString(),
+      images: obj.images || [],
+    }));
+    console.log('normalized',normalized)
+    return {
+      items: normalized,
+      meta: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
+    };
+  }
 
   /**
    * GET /properties/:slug

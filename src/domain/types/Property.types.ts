@@ -9,7 +9,7 @@ export interface Property {
   title: string;
   slug: string; 
   operationType: string;
-
+  antiguedad: number;
   propertyType: {
     _id: string; 
     slug: string;
