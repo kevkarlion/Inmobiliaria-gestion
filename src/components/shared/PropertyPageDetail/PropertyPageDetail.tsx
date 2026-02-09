@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { PropertyService } from "@/server/services/property.service";
-import { PropertyResponseDTO } from "@/dtos/property/property-response.dto";
+import { propertyResponseDTO } from "@/dtos/property/property-response.dto";
 
 interface PropertyPageProps {
   params: { slug: string };
@@ -18,7 +18,7 @@ export default async function PropertyPageDetail({
   if (!property) notFound();
 
   // 🔹 Creamos DTO para limpiar y tipar los datos
-  const dto = new PropertyResponseDTO(property);
+  const dto =  propertyResponseDTO(property);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
