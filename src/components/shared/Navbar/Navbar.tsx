@@ -27,7 +27,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="navbar-container w-full shadow-sm">
+    <header className="navbar-container w-full shadow-sm font-montserrat">
       
       {/* --- TOP BAR (Desktop Only) --- */}
       <div className="hidden lg:block bg-white border-b border-gray-100">

@@ -9,13 +9,12 @@ import {
   ArrowRight,
   MessageCircle,
 } from "lucide-react";
-import BackgroundLayer from "@/components/shared/BackgroundLayer/BackgroundLayer";
 
 interface TeamMember {
   name: string;
   title: string;
   image: string;
-  registration?: string; // Propiedad opcional para la matrícula
+  registration?: string;
 }
 
 const teamMembers: TeamMember[] = [
@@ -23,7 +22,7 @@ const teamMembers: TeamMember[] = [
     name: "Diego Riquelme",
     title: "Martillero Público y Corredor Inmobiliario",
     image: "/diego.webp",
-    registration: "Mat. N° 361-RP-2021", // Ejemplo de matrícula
+    registration: "Mat. N° 361-RP-2021",
   },
   { 
     name: "Fernanda Huebra", 
@@ -43,17 +42,31 @@ interface NosotrosContentProps {
 
 export default function NosotrosPage() {
   return (
-    <main className="min-h-screen relative overflow-hidden">
-      {/* --- BACKGROUND LAYER --- */}
-      <BackgroundLayer
-        src="/nosotros.webp"
-        grayscale={true}
-        overlayColor="black"
-        overlayOpacity={0.4}
-      />
+    <main className="min-h-screen relative">
+      
+      {/* --- HERO SECTION CON IMAGEN EXTENDIDA --- */}
+      {/* Usamos h-112.5 etc, pero la imagen adentro será más alta 
+          para absorber el "pull-to-refresh" 
+      */}
+      <section className="relative h-112.5 md:h-135 2xl:h-150 flex items-center justify-center overflow-hidden bg-slate-900">
+        
+        {/* --- CAPA DE IMAGEN (EL EFECTO) --- */}
+        <div className="absolute inset-0 z-0">
+          <div className="relative w-full h-[115%] -top-[10%] lg:h-full lg:top-0">
+            <Image
+              src="/nosotros.webp"
+              alt="Nosotros Riquelme Propiedades"
+              fill
+              className="object-cover grayscale"
+              priority
+              quality={90}
+            />
+            {/* Overlay para legibilidad */}
+            <div className="absolute inset-0 bg-black/50" />
+          </div>
+        </div>
 
-      {/* --- HERO SECTION --- */}
-      <section className="relative h-112.5 md:h-135 2xl:h-150 flex items-center justify-center overflow-hidden">
+        {/* --- CONTENIDO DEL HERO --- */}
         <div className="relative z-10 text-center px-6 mt-12">
           <h1 className="font-montserrat text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6">
             Nuestra <span className="text-gold-sand">Visión</span>
@@ -189,7 +202,6 @@ export default function NosotrosPage() {
                 <p className="font-lora text-gold-sand italic text-sm tracking-widest uppercase">
                   {member.title}
                 </p>
-                {/* Renderizado condicional de la matrícula */}
                 {member.registration && (
                   <p className="font-montserrat text-slate-500 text-[10px] mt-2 tracking-widest uppercase">
                     {member.registration}
