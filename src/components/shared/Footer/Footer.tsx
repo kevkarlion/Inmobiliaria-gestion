@@ -95,9 +95,22 @@ const Footer: React.FC = () => {
 
       </div>
 
-      {/* Copyright */}
-      <div className="border-t border-white/5 py-6 text-center text-[10px] text-white/40 tracking-[0.3em] uppercase">
-        © {new Date().getFullYear()} Riquelme Propiedades · Gestión Inmobiliaria
+      {/* Copyright & Firma */}
+      <div className="border-t border-white/5 py-6 flex flex-col items-center gap-2">
+        <p className="text-center text-[10px] text-white/40 tracking-[0.3em] uppercase">
+          © {new Date().getFullYear()} Riquelme Propiedades · Gestión Inmobiliaria
+        </p>
+        <p className="text-[9px] text-white/20 tracking-widest uppercase">
+          Desarrollado por{" "}
+          <a 
+            href="https://www.devwebpatagonia.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-gold-sand transition-colors duration-300 font-bold"
+          >
+            devweb Patagonia
+          </a>
+        </p>
       </div>
     </footer>
   );
