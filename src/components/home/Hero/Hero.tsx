@@ -1,26 +1,38 @@
 import SearchBar from "@/components/shared/SearchBar/SearchBar";
 import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
+import Image from "next/image";
 
 export default async function Hero() {
   const allProperties = await getUiProperties({ limit: 20 });
 
   return (
-    <section className="relative lg:top-15 w-full h-[95vh] flex items-center justify-center overflow-hidden">
+    <section className="relative lg:top-25 w-full h-[95vh] flex items-center justify-center overflow-hidden">
       
-      {/* Fondo responsivo: mobile y desktop */}
+      {/* Imagen responsive: mobile y desktop */}
       <div className="absolute inset-0 -z-10">
-        <picture>
-          {/* Imagen desktop: lg en adelante */}
-          <source srcSet="/bg-hero.webp" media="(min-width:1024px)" />
-          {/* Imagen mobile: menor a lg */}
-          <img
+        {/* Mobile */}
+        <div className="block lg:hidden w-full h-full relative ">
+          <Image
             src="/hero-mobile.webp"
-            alt="Fondo Hero"
-            className="w-full h-full object-cover"
+            alt="Hero Mobile"
+            fill
+            className="object-cover"
+            priority
           />
-        </picture>
-        {/* Overlay para opacidad */}
-        <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/40" /> {/* Overlay */}
+        </div>
+
+        {/* Desktop */}
+        <div className="hidden lg:block w-full h-full relative">
+          <Image
+            src="/bg-hero.webp"
+            alt="Hero Desktop"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/40" /> {/* Overlay */}
+        </div>
       </div>
 
       {/* Contenido */}

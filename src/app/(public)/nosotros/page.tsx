@@ -53,8 +53,8 @@ export default function NosotrosPage() {
       />
 
       {/* --- HERO SECTION --- */}
-      <section className="relative h-112.5 md:h-150 2xl:h-150 flex items-center justify-center overflow-hidden">
-        <div className="relative z-10 text-center px-6 mb-8">
+      <section className="relative h-112.5 md:h-135 2xl:h-150 flex items-center justify-center overflow-hidden">
+        <div className="relative z-10 text-center px-6 mt-12">
           <h1 className="font-montserrat text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6">
             Nuestra <span className="text-gold-sand">Visión</span>
           </h1>

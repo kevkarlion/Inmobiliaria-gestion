@@ -1,7 +1,6 @@
 import "@/app/globals.css";
 import { PropertyProvider } from "@/context/PropertyContext";
 import { Montserrat, Lora, Inter } from "next/font/google";
-import ScrollWrapper from "@/components/shared/ScrollWrapper/ScrollWrapper";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer/Footer";
 import WhatsAppButton from "@/components/shared/WhatsAppButton/WhatsAppButton";
@@ -30,18 +29,16 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${montserrat.variable} ${lora.variable} ${inter.variable} `}
+      className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
     >
       <body className="">
         <PropertyProvider>
-          <ScrollWrapper>
-            <Navbar />
-            <div className="flex flex-col min-h-dvh">
-              <main className="flex-1">{children}</main>
-              <Footer />
-              <WhatsAppButton />
-            </div>
-          </ScrollWrapper>
+          <Navbar />
+          <div className="flex flex-col">
+            <main>{children}</main>
+            <Footer />
+            <WhatsAppButton />
+          </div>
         </PropertyProvider>
       </body>
     </html>

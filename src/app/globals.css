@@ -20,10 +20,10 @@
 @layer base {
   html,
   body {
-    height: 100dvh;
-    overflow: hidden; /* matamos scroll nativo */
+    min-height: 100dvh; /* mínimo 100% de viewport */
+    overflow-y: auto;   /* scroll nativo */
     background: transparent;
-    overscroll-behavior: none;
+    overscroll-behavior: auto;
     color: var(--color-onyx);
     font-family: var(--font-inter);
     font-size: 16px;

@@ -61,7 +61,7 @@ export default function SearchTypePage({ properties, filterParam }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-white-bg pb-10 py-14 lg:pt-34">
+    <main className="min-h-screen bg-white-bg pb-10 py-14 pt-22 lg:pt-46">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 px-4">
         {/* BOTÓN MOBILE */}
         <button
