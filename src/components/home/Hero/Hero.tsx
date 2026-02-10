@@ -6,16 +6,9 @@ export default async function Hero() {
 
   return (
     <section
-      className="relative top-0 w-full h-[95dvh] xl:h-[110dvh] flex items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: "url('/hero-mobile.webp')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+      className="relative w-full min-h-screen xl:min-h-[110vh] flex items-center justify-center overflow-hidden
+                 bg-[url('/hero-mobile.webp')] lg:bg-[url('/bg-hero.webp')] bg-cover bg-center"
     >
-      {/* Fondo desktop */}
-      <div className="hidden lg:block absolute inset-0 bg-[url('/bg-hero.webp')] bg-cover bg-center" />
-
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/40" />
 
