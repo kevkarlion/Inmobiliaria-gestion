@@ -40,10 +40,10 @@ const teamMembers = [
 
 export default function NosotrosPage() {
   return (
-    <main className="min-h-screen bg-white overflow-hidden">
+    <main className="min-h-screen  bg-white overflow-hidden ">
       
       {/* --- HERO SECTION --- */}
-      <section className="relative h-112.5 md:h-120 2xl:h-130 flex items-center justify-center overflow-hidden bg-slate-900">
+      <section className="relative lg:top-18  h-112.5 md:h-150 2xl:h-150 flex items-center justify-center overflow-hidden bg-slate-900">
         <Image
           src="/nosotros.webp"
           alt="Gestión Inmobiliaria Riquelme"

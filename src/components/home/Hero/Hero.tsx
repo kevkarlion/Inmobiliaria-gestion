@@ -33,7 +33,7 @@ export default async function Hero() {
       <div className="absolute inset-0 bg-black/40 z-10" />
 
       {/* CONTENIDO */}
-      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center mb-32">
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center mb-16">
         <div className="text-center mb-8 lg:mb-12 space-y-4">
           <h1 className="text-white text-4xl xl:text-5xl font-montserrat uppercase font-black italic drop-shadow-md ">
             Estrategia para vender, <br />

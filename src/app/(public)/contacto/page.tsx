@@ -8,13 +8,13 @@ import {
   Clock,
   Facebook,
   Instagram,
-  Phone,
+  
   ArrowRight,
 } from "lucide-react";
 
 export default function ContactoPage() {
   return (
-    <main className="min-h-screen bg-white pt-32 lg:pt-24 pb-0">
+    <main className="min-h-screen bg-white pt-32 lg:pt-46 pb-0">
       {/* Patrón decorativo de fondo */}
       <div
         className="absolute inset-0 z-0 opacity-[0.3] pointer-events-none h-150"

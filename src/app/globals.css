@@ -31,15 +31,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  #app-scroll {
-    position: fixed;
-    inset: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    display: flex;
-    flex-direction: column;
-    z-index: 9999; /* clave absoluta */
-  }
+  
 }
 
 
