@@ -23,8 +23,9 @@
     overflow-y: auto;       /* scroll nativo */
     -webkit-overflow-scrolling: touch; /* suaviza scroll en iOS */
     overscroll-behavior-y: contain;   /* evita rebote blanco en mobile */
-
-    background-color: #000; /* fondo sólido detrás del hero */
+    
+    /* fondo sólido detrás del hero */
+    /* background-color: #000;  */
     color: var(--color-onyx);
     font-family: var(--font-inter);
     font-size: 16px;
@@ -36,7 +37,7 @@
 
 @media (min-width: 1024px) {
   body {
-    background-color: #000; 
+    /* background-color: #000;  */
     background-image: url("/bg-hero-blur.webp");
     background-size: cover;
     background-position: center;
