@@ -24,7 +24,8 @@
 
      /* suaviza scroll en iOS */
     /* -webkit-overflow-scrolling: touch; */
-    overscroll-behavior-y: none;   /* evita rebote blanco en mobile */
+    overscroll-behavior-y: contain; 
+    -webkit-overflow-scrolling: touch;
     
     /* fondo sólido detrás del hero */
     /* background-color: #000;  */
