@@ -9,7 +9,7 @@ export default async function Hero() {
    <section className="relative w-full min-h-screen xl:min-h-[110vh] flex flex-col">
   
   {/* --- IMAGEN DEL HERO: STICKY SOLO DENTRO DE LA SECCIÓN --- */}
-  <div className="absolute top-25 inset-0 -z-10">
+  <div className="absolute lg:top-25 inset-0 -z-10">
     {/* Mobile */}
     <div className="block lg:hidden w-full h-full relative ">
       <Image
