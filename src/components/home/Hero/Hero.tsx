@@ -7,29 +7,27 @@ export default async function Hero() {
 
   return (
     <section className="relative w-full h-[95vh] flex items-center justify-center overflow-hidden">
-      
       {/* LA IMAGEN: Ahora es parte de la sección. 
           Al hacer scroll agresivo, la sección entera rebota con su imagen. */}
       <Image
-  src="/hero-mobile.webp"
-  fill
-  priority
-  alt="Hero mobile"
-  placeholder="blur"
-  blurDataURL="/hero-mobile-blur.webp"
-  className="object-cover lg:hidden"
-/>
+        src="/hero-mobile.webp"
+        fill
+        priority
+        alt="Hero mobile"
+        placeholder="blur"
+        blurDataURL="/hero-mobile-blur.webp"
+        className="object-cover lg:hidden"
+      />
 
-<Image
-  src="/bg-hero.webp"
-  fill
-  priority
-  alt="Hero desktop"
-  placeholder="blur"
-  blurDataURL="/bg-hero-blur.webp"
-  className="hidden lg:block object-cover"
-/>
-
+      <Image
+        src="/bg-hero.webp"
+        fill
+        priority
+        alt="Hero desktop"
+        placeholder="blur"
+        blurDataURL="/bg-hero-blur.webp"
+        className="hidden lg:block object-cover"
+      />
 
       {/* OVERLAY (El ::before que mencionaste) */}
       <div className="absolute inset-0 bg-black/40 z-10" />
