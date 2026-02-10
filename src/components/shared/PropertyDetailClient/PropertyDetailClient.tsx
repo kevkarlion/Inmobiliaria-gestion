@@ -14,9 +14,9 @@ export function PropertyDetailClient({
   const p = mapPropertyToUI(property);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-14">
+    <section className="max-w-7xl mx-auto px-4 py-14 bg-white-bg">
       {/* CABECERA */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-black/10 pb-10">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-black/10 pb-10 pt-12 lg:pt-32">
         <div className="space-y-3">
           <div className="flex items-center gap-3">
             <span className="label-subtitle bg-black text-white px-3 py-1 rounded">

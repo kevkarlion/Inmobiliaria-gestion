@@ -94,18 +94,23 @@ export default function Navbar() {
           <div className="flex justify-between items-center h-16">
             
             {/* Logo Mobile */}
-            <div className="lg:hidden shrink-0">
-              <Link href="/">
-                <Image
-                  src="/logo-blanco.png"
-                  alt="Riquelme Propiedades"
-                  width={140}
-                  height={40}
-                  className="object-contain"
-                  priority
-                />
-              </Link>
-            </div>
+            {/* Logo Mobile */}
+<div className="lg:hidden shrink-0">
+  <button
+    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+    className="flex items-center"
+  >
+    <Image
+      src="/logo-blanco.png"
+      alt="Riquelme Propiedades"
+      width={140}
+      height={40}
+      className="object-contain"
+      priority
+    />
+  </button>
+</div>
+
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center space-x-10">
@@ -139,25 +144,44 @@ export default function Navbar() {
         </div>
 
         {/* --- MOBILE MENU --- */}
-        <div
-          className={`
-          lg:hidden absolute w-full bg-oxford transition-all duration-300 ease-in-out z-50 overflow-hidden shadow-xl
-          ${isOpen ? "max-h-125 border-t border-white/10" : "max-h-0"}
-        `}
-        >
-          <div className="px-6 py-8 flex flex-col space-y-5">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand transition-colors"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </div>
+        {/* --- MOBILE MENU --- */}
+<div
+  className={`
+    lg:hidden absolute w-full bg-oxford transition-all duration-300 ease-in-out z-50 overflow-hidden shadow-xl
+    ${isOpen ? "max-h-125 border-t border-white/10" : "max-h-0"}
+  `}
+>
+  <div className="px-6 py-8 flex flex-col space-y-5">
+    {/* Links del menú */}
+    {menuItems.map((item) => (
+      <Link
+        key={item.name}
+        href={item.href}
+        onClick={() => setIsOpen(false)}
+        className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand transition-colors"
+      >
+        {item.name}
+      </Link>
+    ))}
+
+    {/* Redes sociales */}
+    <div className="flex flex-col gap-4 mt-6 border-t border-white/10 pt-4">
+      <div className="flex items-center gap-3">
+        <Share2 className="text-gold-sand" size={20} />
+        <span className="text-white font-medium text-sm uppercase tracking-wide">Seguinos</span>
+      </div>
+      <div className="flex gap-4 pl-5">
+        <a href="#" className="text-white hover:text-gold-sand transition-colors">
+          <Facebook size={20} />
+        </a>
+        <a href="#" className="text-white hover:text-gold-sand transition-colors">
+          <Instagram size={20} />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
       </nav>
     </header>
   );
