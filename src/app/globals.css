@@ -21,7 +21,7 @@
   html, body {
     height: 100dvh;
     overflow: hidden; /* matamos scroll nativo */
-    background: transparent;
+    background: var(--color-white-bg);
     overscroll-behavior: none;
     color: var(--color-onyx);
     font-family: var(--font-inter);

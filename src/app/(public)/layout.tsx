@@ -30,9 +30,9 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
+      className={`${montserrat.variable} ${lora.variable} ${inter.variable} `}
     >
-      <body>
+      <body className="">
         <PropertyProvider>
           <Navbar />
           <ScrollWrapper>

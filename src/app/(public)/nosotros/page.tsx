@@ -1,57 +1,42 @@
 'use client';
 
-import React from 'react';
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 import { 
   Scale, 
   Lightbulb, 
   Handshake, 
   ArrowRight, 
-  MessageCircle
-} from 'lucide-react';
+  MessageCircle 
+} from "lucide-react";
+import BackgroundLayer from "@/components/shared/BackgroundLayer/BackgroundLayer";
 
-// Tipado para el sub-componente de contenido
 interface NosotrosContentProps {
   isMobile: boolean;
 }
 
 const teamMembers = [
-  {
-    name: 'Diego Riquelme',
-    title: 'Director & Martillero Público',
-    image: '/diego.webp',
-  },
-  {
-    name: 'Ana García',
-    title: 'Asesora Comercial',
-    image: '/chica1.webp',
-  },
-  {
-    name: 'Martín Soto',
-    title: 'Gestor de Contratos',
-    image: '/chica2.webp',
-  },
-  // {
-  //   name: 'Carolina Paz',
-  //   title: 'Administración & Marketing',
-  //   image: '/team/carolina-paz.jpg',
-  // },
+  { name: "Diego Riquelme", title: "Director & Martillero Público", image: "/diego.webp" },
+  { name: "Ana García", title: "Asesora Comercial", image: "/chica1.webp" },
+  { name: "Martín Soto", title: "Gestor de Contratos", image: "/chica2.webp" },
 ];
 
 export default function NosotrosPage() {
   return (
-    <main className="min-h-screen  bg-white overflow-hidden ">
-      
+    <main className="min-h-screen relative overflow-hidden">
+
+      {/* --- BACKGROUND LAYER --- */}
+      <BackgroundLayer
+  src="/nosotros.webp"
+  grayscale={true}
+  overlayColor="black"
+  overlayOpacity={0.4}
+/>
+
+
       {/* --- HERO SECTION --- */}
-      <section className="relative lg:top-18  h-112.5 md:h-150 2xl:h-150 flex items-center justify-center overflow-hidden bg-slate-900">
-        <Image
-          src="/nosotros.webp"
-          alt="Gestión Inmobiliaria Riquelme"
-          fill
-          className="object-cover object-center opacity-40 grayscale"
-          priority
-        />
-        <div className="relative z-15 text-center px-6 mb-8">
+      <section className="relative lg:top-12 h-112.5 md:h-150 2xl:h-150 flex items-center justify-center overflow-hidden">
+        <div className="relative z-10 text-center px-6 mb-8">
           <h1 className="font-montserrat text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6">
             Nuestra <span className="text-gold-sand">Visión</span>
           </h1>
@@ -61,7 +46,7 @@ export default function NosotrosPage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN 1: QUIÉNES SOMOS (CON ESTÉTICA UNIFICADA) --- */}
+      {/* --- SECCIÓN 1: QUIÉNES SOMOS --- */}
       <section className="relative py-20 bg-slate-100 border-y border-slate-100">
         <div
           className="absolute inset-0 z-0 opacity-[0.4] pointer-events-none"
@@ -89,17 +74,11 @@ export default function NosotrosPage() {
               <p className="font-lora text-slate-600 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto italic">
                 Asesoramiento profesional, transparente y con sólido respaldo técnico.
               </p>
-              <div className="flex justify-center items-center gap-3">
-                <div className="w-2 h-2 rotate-45 border border-gold-sand bg-gold-sand/20" />
-                <div className="w-16 h-px bg-gold-sand/40" />
-                <div className="w-2 h-2 rotate-45 border border-gold-sand bg-gold-sand/20" />
-              </div>
             </div>
           </div>
 
+          {/* GRID DE IMÁGENES Y CONTENIDO */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-12">
-            
-            {/* CONTENEDOR IMAGEN + MOBILE TEXT */}
             <div className="relative order-1 lg:order-2 h-150 sm:h-125 lg:h-100 w-full group">
               <div className="relative h-full w-full rounded-sm overflow-hidden shadow-2xl z-10 lg:border-8 border-white">
                 <Image
@@ -108,21 +87,15 @@ export default function NosotrosPage() {
                   fill
                   className="object-cover grayscale"
                 />
-                {/* Overlay dinámico para Mobile */}
                 <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/80 to-slate-900/40 lg:hidden" />
               </div>
-
-              {/* TEXTO SOLO MOBILE (Absolute sobre imagen) */}
               <div className="absolute inset-0 z-20 flex flex-col justify-end p-8 lg:hidden">
                 <NosotrosContent isMobile={true} />
               </div>
             </div>
-
-            {/* TEXTO SOLO DESKTOP (Grid normal) */}
             <div className="hidden lg:block order-2 lg:order-1">
               <NosotrosContent isMobile={false} />
             </div>
-
           </div>
         </div>
       </section>
@@ -149,7 +122,6 @@ export default function NosotrosPage() {
       {/* --- SECCIÓN 3: EQUIPO --- */}
       <section className="py-24 bg-slate-900 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gold-sand/5 rounded-full blur-[120px]" />
-        
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
             <h2 className="font-montserrat text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
@@ -157,7 +129,6 @@ export default function NosotrosPage() {
             </h2>
             <p className="font-lora text-slate-400 italic mt-4 text-lg">Profesionales dedicados a su éxito inmobiliario.</p>
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
             {teamMembers.map((member, index) => (
               <div key={index} className="text-center group">
@@ -183,32 +154,25 @@ export default function NosotrosPage() {
       </section>
 
       {/* --- FOOTER CTA --- */}
-      {/* --- FOOTER CTA --- */}
-<section className="py-24 bg-white text-center">
-  <div className="max-w-4xl mx-auto px-6">
-    <h2 className="font-montserrat text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter mb-8">
-      ¿Listo para su <span className="text-gold-sand">Próxima Inversión?</span>
-    </h2>
-    
-    <a 
-      href="https://wa.me/5492984582082" 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      className="inline-block"
-    >
-      <button className="flex items-center gap-4 bg-slate-900 text-white font-montserrat font-black py-5 px-12 uppercase text-xs tracking-[0.2em] hover:bg-gold-sand hover:text-slate-900 transition-all duration-500 shadow-2xl active:scale-95 group">
-        <MessageCircle size={20} className="text-gold-sand group-hover:text-slate-900 transition-colors" />
-        Hablemos hoy
-        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-      </button>
-    </a>
-  </div>
-</section>
+      <section className="py-24 bg-white text-center">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="font-montserrat text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter mb-8">
+            ¿Listo para su <span className="text-gold-sand">Próxima Inversión?</span>
+          </h2>
+          <a href="https://wa.me/5492984582082" target="_blank" rel="noopener noreferrer" className="inline-block">
+            <button className="flex items-center gap-4 bg-slate-900 text-white font-montserrat font-black py-5 px-12 uppercase text-xs tracking-[0.2em] hover:bg-gold-sand hover:text-slate-900 transition-all duration-500 shadow-2xl active:scale-95 group">
+              <MessageCircle size={20} className="text-gold-sand group-hover:text-slate-900 transition-colors" />
+              Hablemos hoy
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </a>
+        </div>
+      </section>
     </main>
   );
 }
 
-// Sub-componente interno para gestionar el contenido de "Nuestra Firma"
+// Sub-componente interno
 function NosotrosContent({ isMobile }: NosotrosContentProps) {
   const mainTextColor = isMobile ? "text-slate-100" : "text-slate-600";
   const quoteTextColor = isMobile ? "text-slate-300" : "text-slate-500";
@@ -222,7 +186,6 @@ function NosotrosContent({ isMobile }: NosotrosContentProps) {
         Acompañamos a nuestros clientes en cada etapa del proceso, ofreciéndoles información 
         clara para que puedan tomar decisiones patrimoniales con total seguridad.
       </p>
-      
       <p className={`font-montserrat text-sm md:text-base leading-relaxed border-l-4 border-gold-sand pl-6 italic ${quoteTextColor}`}>
         Nuestro compromiso es generar valor real, construyendo relaciones basadas en la seriedad, 
         el conocimiento y una atención personalizada que pone sus intereses en el centro.

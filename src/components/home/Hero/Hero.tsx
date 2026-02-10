@@ -9,10 +9,9 @@ export default async function Hero() {
   return (
     <section className="relative w-full h-[95vh] flex items-center justify-center overflow-hidden">
       {/* Fondo fijo de la sección */}
-      <BackgroundLayer src="/bg-hero.webp" />
+      <BackgroundLayer src="/bg-hero.webp" grayscale={false} overlayOpacity={0.4} />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/40 z-10" />
+      
 
       {/* Contenido */}
       <div className="relative z-20 w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center mb-16">
