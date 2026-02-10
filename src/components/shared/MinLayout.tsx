@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Navbar from "@/components/shared/Navbar/Narbar";
+import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer/Footer";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
