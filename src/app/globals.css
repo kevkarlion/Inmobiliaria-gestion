@@ -2,13 +2,13 @@
 
 @theme {
   /* --- Paleta de Colores --- */
-  --color-oxford: #001D3D;
-  --color-gold-sand: #E6B255;
-  --color-gold-hover: #D4A045;
-  --color-gold-secondary: #D6B57A;
+  --color-oxford: #001d3d;
+  --color-gold-sand: #e6b255;
+  --color-gold-hover: #d4a045;
+  --color-gold-secondary: #d6b57a;
   --color-onyx: #121212;
   --color-white-bg: #f1f5f9;
-  --color-blue-gray: #4A5568;
+  --color-blue-gray: #4a5568;
 
   /* --- Mapeo de Fuentes (Next.js variables) --- */
   --font-montserrat: var(--font-montserrat);
@@ -18,7 +18,8 @@
 
 /* --- Estilos Globales y Tipografía Responsiva --- */
 @layer base {
-  html, body {
+  html,
+  body {
     height: 100dvh;
     overflow: hidden; /* matamos scroll nativo */
     background: transparent;
@@ -30,58 +31,51 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
-  
 }
 
+@media (min-width: 1024px) {
+  body {
+    /* Desktop: Lora 20px */
 
-
-
-  @media (min-width: 1024px) {
-    body {
-      /* Desktop: Lora 20px */
-       
-        background-image: url('/bg-hero-blur.webp');
-      font-family: var(--font-lora);
-      font-size: 20px;
-    }
-  }
-
-  h1 {
-    font-family: var(--font-montserrat);
-    font-weight: 700;
-    text-transform: uppercase;
-    /* Móvil: 32px + 1px spacing */
-    font-size: 32px;
-    letter-spacing: 1px;
-    line-height: 1.2;
-  }
-
-  @media (min-width: 1024px) {
-    h1 {
-      /* Desktop: 48px a 56px + 2px spacing */
-      font-size: clamp(48px, 5vw, 56px);
-      letter-spacing: 2px;
-    }
-  }
-
-  h2 {
+    background-image: url("/bg-hero-blur.webp");
     font-family: var(--font-lora);
-    font-weight: 600;
-    text-transform: none; /* Estilo Sentencia */
-    /* Móvil: 26px */
-    font-size: 26px;
-    line-height: 1.3;
+    font-size: 20px;
   }
+}
 
-  @media (min-width: 1024px) {
-    h2 {
-      /* Desktop: 36px */
-      font-size: 36px;
-    }
+h1 {
+  font-family: var(--font-montserrat);
+  font-weight: 700;
+  text-transform: uppercase;
+  /* Móvil: 32px + 1px spacing */
+  font-size: 32px;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+@media (min-width: 1024px) {
+  h1 {
+    /* Desktop: 48px a 56px + 2px spacing */
+    font-size: clamp(48px, 5vw, 56px);
+    letter-spacing: 2px;
   }
+}
 
+h2 {
+  font-family: var(--font-lora);
+  font-weight: 600;
+  text-transform: none; /* Estilo Sentencia */
+  /* Móvil: 26px */
+  font-size: 26px;
+  line-height: 1.3;
+}
 
+@media (min-width: 1024px) {
+  h2 {
+    /* Desktop: 36px */
+    font-size: 36px;
+  }
+}
 
 /* --- Componentes de Utilidad --- */
 @layer components {
@@ -106,7 +100,7 @@
     transition: all 0.3s ease;
     border: none;
     cursor: pointer;
-    
+
     /* Móvil: Full Width + 15px */
     width: 100%;
     font-size: 15px;

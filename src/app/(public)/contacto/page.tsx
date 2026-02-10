@@ -14,7 +14,7 @@ import {
 
 export default function ContactoPage() {
   return (
-    <main className="min-h-screen bg-white pt-32 lg:pt-46 pb-0">
+    <main className="min-h-screen bg-white pt-32 lg:pt-52 pb-0">
       {/* Patrón decorativo de fondo */}
       <div
         className="absolute inset-0 z-0 opacity-[0.3] pointer-events-none h-150"

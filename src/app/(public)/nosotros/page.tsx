@@ -1,41 +1,59 @@
-'use client';
+"use client";
 
 import React from "react";
 import Image from "next/image";
-import { 
-  Scale, 
-  Lightbulb, 
-  Handshake, 
-  ArrowRight, 
-  MessageCircle 
+import {
+  Scale,
+  Lightbulb,
+  Handshake,
+  ArrowRight,
+  MessageCircle,
 } from "lucide-react";
 import BackgroundLayer from "@/components/shared/BackgroundLayer/BackgroundLayer";
+
+interface TeamMember {
+  name: string;
+  title: string;
+  image: string;
+  registration?: string; // Propiedad opcional para la matrícula
+}
+
+const teamMembers: TeamMember[] = [
+  {
+    name: "Diego Riquelme",
+    title: "Martillero Público y Corredor Inmobiliario",
+    image: "/diego.webp",
+    registration: "Mat. N° 361-RP-2021", // Ejemplo de matrícula
+  },
+  { 
+    name: "Fernanda Huebra", 
+    title: "Asesora Inmobiliaria", 
+    image: "/chica1.webp" 
+  },
+  { 
+    name: "Stefy Anaya", 
+    title: "Asesora Inmobiliaria", 
+    image: "/chica2.webp" 
+  },
+];
 
 interface NosotrosContentProps {
   isMobile: boolean;
 }
 
-const teamMembers = [
-  { name: "Diego Riquelme", title: "Director & Martillero Público", image: "/diego.webp" },
-  { name: "Ana García", title: "Asesora Comercial", image: "/chica1.webp" },
-  { name: "Martín Soto", title: "Gestor de Contratos", image: "/chica2.webp" },
-];
-
 export default function NosotrosPage() {
   return (
     <main className="min-h-screen relative overflow-hidden">
-
       {/* --- BACKGROUND LAYER --- */}
       <BackgroundLayer
-  src="/nosotros.webp"
-  grayscale={true}
-  overlayColor="black"
-  overlayOpacity={0.4}
-/>
-
+        src="/nosotros.webp"
+        grayscale={true}
+        overlayColor="black"
+        overlayOpacity={0.4}
+      />
 
       {/* --- HERO SECTION --- */}
-      <section className="relative lg:top-12 h-112.5 md:h-150 2xl:h-150 flex items-center justify-center overflow-hidden">
+      <section className="relative h-112.5 md:h-150 2xl:h-150 flex items-center justify-center overflow-hidden">
         <div className="relative z-10 text-center px-6 mb-8">
           <h1 className="font-montserrat text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6">
             Nuestra <span className="text-gold-sand">Visión</span>
@@ -72,12 +90,12 @@ export default function NosotrosPage() {
                 </div>
               </div>
               <p className="font-lora text-slate-600 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto italic">
-                Asesoramiento profesional, transparente y con sólido respaldo técnico.
+                Asesoramiento profesional, transparente y con sólido respaldo
+                técnico.
               </p>
             </div>
           </div>
 
-          {/* GRID DE IMÁGENES Y CONTENIDO */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-12">
             <div className="relative order-1 lg:order-2 h-150 sm:h-125 lg:h-100 w-full group">
               <div className="relative h-full w-full rounded-sm overflow-hidden shadow-2xl z-10 lg:border-8 border-white">
@@ -105,14 +123,36 @@ export default function NosotrosPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: Scale, title: 'Seriedad Operativa', desc: 'Procesos ejecutados bajo estrictos criterios legales para su tranquilidad.' },
-              { icon: Lightbulb, title: 'Visión de Mercado', desc: 'Analizamos tendencias reales para asegurar inversiones con futuro.' },
-              { icon: Handshake, title: 'Compromiso Directo', desc: 'Atención personalizada sin intermediarios, de profesional a profesional.' }
+              {
+                icon: Scale,
+                title: "Seriedad Operativa",
+                desc: "Procesos ejecutados bajo estrictos criterios legales para su tranquilidad.",
+              },
+              {
+                icon: Lightbulb,
+                title: "Visión de Mercado",
+                desc: "Analizamos tendencias reales para asegurar inversiones con futuro.",
+              },
+              {
+                icon: Handshake,
+                title: "Compromiso Directo",
+                desc: "Atención personalizada sin intermediarios, de profesional a profesional.",
+              },
             ].map((item, i) => (
-              <div key={i} className="p-10 bg-slate-50 border-b-4 border-slate-200 hover:border-gold-sand transition-all duration-500 group">
-                <item.icon size={48} className="text-slate-900 mb-6 group-hover:text-gold-sand transition-colors" />
-                <h4 className="font-montserrat text-xl font-black uppercase tracking-tighter text-slate-900 mb-4">{item.title}</h4>
-                <p className="font-lora text-slate-600 italic leading-relaxed">{item.desc}</p>
+              <div
+                key={i}
+                className="p-10 bg-slate-50 border-b-4 border-slate-200 hover:border-gold-sand transition-all duration-500 group"
+              >
+                <item.icon
+                  size={48}
+                  className="text-slate-900 mb-6 group-hover:text-gold-sand transition-colors"
+                />
+                <h4 className="font-montserrat text-xl font-black uppercase tracking-tighter text-slate-900 mb-4">
+                  {item.title}
+                </h4>
+                <p className="font-lora text-slate-600 italic leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -127,9 +167,11 @@ export default function NosotrosPage() {
             <h2 className="font-montserrat text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
               Nuestro <span className="text-gold-sand">Equipo</span>
             </h2>
-            <p className="font-lora text-slate-400 italic mt-4 text-lg">Profesionales dedicados a su éxito inmobiliario.</p>
+            <p className="font-lora text-slate-400 italic mt-4 text-lg">
+              Profesionales dedicados a su éxito inmobiliario.
+            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {teamMembers.map((member, index) => (
               <div key={index} className="text-center group">
                 <div className="relative w-full aspect-3/4 mb-6 overflow-hidden rounded-sm border border-white/10 group-hover:border-gold-sand transition-all duration-700">
@@ -144,9 +186,15 @@ export default function NosotrosPage() {
                 <h4 className="font-montserrat text-xl font-black text-white uppercase tracking-tighter mb-1 transition-colors group-hover:text-gold-sand">
                   {member.name}
                 </h4>
-                <p className="font-lora text-gold-sand italic text-sm tracking-widest">
+                <p className="font-lora text-gold-sand italic text-sm tracking-widest uppercase">
                   {member.title}
                 </p>
+                {/* Renderizado condicional de la matrícula */}
+                {member.registration && (
+                  <p className="font-montserrat text-slate-500 text-[10px] mt-2 tracking-widest uppercase">
+                    {member.registration}
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -157,13 +205,25 @@ export default function NosotrosPage() {
       <section className="py-24 bg-white text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="font-montserrat text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter mb-8">
-            ¿Listo para su <span className="text-gold-sand">Próxima Inversión?</span>
+            ¿Listo para su{" "}
+            <span className="text-gold-sand">Próxima Inversión?</span>
           </h2>
-          <a href="https://wa.me/5492984582082" target="_blank" rel="noopener noreferrer" className="inline-block">
+          <a
+            href="https://wa.me/5492984582082"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block"
+          >
             <button className="flex items-center gap-4 bg-slate-900 text-white font-montserrat font-black py-5 px-12 uppercase text-xs tracking-[0.2em] hover:bg-gold-sand hover:text-slate-900 transition-all duration-500 shadow-2xl active:scale-95 group">
-              <MessageCircle size={20} className="text-gold-sand group-hover:text-slate-900 transition-colors" />
+              <MessageCircle
+                size={20}
+                className="text-gold-sand group-hover:text-slate-900 transition-colors"
+              />
               Hablemos hoy
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight
+                size={20}
+                className="group-hover:translate-x-1 transition-transform"
+              />
             </button>
           </a>
         </div>
@@ -172,7 +232,6 @@ export default function NosotrosPage() {
   );
 }
 
-// Sub-componente interno
 function NosotrosContent({ isMobile }: NosotrosContentProps) {
   const mainTextColor = isMobile ? "text-slate-100" : "text-slate-600";
   const quoteTextColor = isMobile ? "text-slate-300" : "text-slate-500";
@@ -182,13 +241,17 @@ function NosotrosContent({ isMobile }: NosotrosContentProps) {
     <div className="space-y-6">
       <p className={`font-montserrat text-base md:text-lg leading-relaxed ${mainTextColor}`}>
         Somos una empresa inmobiliaria enfocada en brindar{" "}
-        <span className={`font-bold ${boldTextColor}`}>asesoramiento estratégico</span>. 
-        Acompañamos a nuestros clientes en cada etapa del proceso, ofreciéndoles información 
-        clara para que puedan tomar decisiones patrimoniales con total seguridad.
+        <span className={`font-bold ${boldTextColor}`}>
+          asesoramiento estratégico
+        </span>
+        . Acompañamos a nuestros clientes en cada etapa del proceso,
+        ofreciéndoles información clara para que puedan tomar decisiones
+        patrimoniales con total seguridad.
       </p>
       <p className={`font-montserrat text-sm md:text-base leading-relaxed border-l-4 border-gold-sand pl-6 italic ${quoteTextColor}`}>
-        Nuestro compromiso es generar valor real, construyendo relaciones basadas en la seriedad, 
-        el conocimiento y una atención personalizada que pone sus intereses en el centro.
+        Nuestro compromiso es generar valor real, construyendo relaciones
+        basadas en la seriedad, el conocimiento y una atención personalizada que
+        pone sus intereses en el centro.
       </p>
     </div>
   );

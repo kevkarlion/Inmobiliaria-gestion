@@ -27,18 +27,19 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="w-full shadow-sm fixed top-0 left-0 z-50 bg-oxford">
+    <header className="w-full shadow-sm fixed top-0 left-0 z-50 bg-oxford!">
       {/* --- TOP BAR (Desktop Only) --- */}
       <div className="hidden lg:block bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="shrink-0">
             <Image
-              src="/logo-navbar.png"
+              src="/logo-navbar.webp"
               alt="Riquelme Propiedades"
               width={180}
               height={60}
               className="object-contain"
+              priority
             />
           </Link>
 

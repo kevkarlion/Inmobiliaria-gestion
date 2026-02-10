@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
           <div className="w-40 h-16">
             <div className="relative w-full h-full">
               <Image
-                src="/logo-blanco.png"
+                src="/logo-blanco.webp"
                 alt="Riquelme Propiedades"
                 fill
                 className="object-contain"
