@@ -38,7 +38,7 @@
 @media (min-width: 1024px) {
   body {
     /* background-color: #000;  */
-    background-image: url("/bg-hero-blur.webp");
+    /* background-image: url("/bg-hero-blur.webp"); */
     background-size: cover;
     background-position: center;
     font-family: var(--font-lora);
