@@ -34,9 +34,10 @@ export default function RootLayout({
     >
       <body>
         <PropertyProvider>
+          <Navbar />
           <ScrollWrapper>
             <div className="flex flex-col min-h-dvh">
-              <Navbar />
+              
               <main className="flex-1">{children}</main>
               <Footer />
               <WhatsAppButton />
