@@ -17,12 +17,11 @@
 /* --- BASE: Configuración de Pantalla y Scroll --- */
 @layer base {
   html {
-    /* IMPORTANTE: El color de fondo del "universo" del navegador */
+    /* El Oxford de fondo es nuestro seguro de vida */
     background-color: #001d3d; 
     scroll-behavior: smooth;
   }
 
-  /* En escritorio el fondo base es blanco */
   @media (min-width: 1024px) {
     html {
       background-color: #ffffff;
@@ -30,13 +29,13 @@
   }
 
   body {
-    /* Permitimos scroll natural para recuperar el Pull-to-refresh */
     min-height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-y: auto; 
     
-    background-color: white;
+    /* Importante: dejamos que el fondo del html o el Hero manden */
+    background-color: transparent; 
     color: #121212;
     font-family: var(--font-inter);
     -webkit-font-smoothing: antialiased;
@@ -72,7 +71,7 @@ h2 {
     left: 0;
     width: 100%;
     z-index: 50;
-    /* Aseguramos que el header tenga fondo sólido para que no se vea el parche detrás */
+    /* En móvil, el Oxford sólido ayuda a que no se vea el corte de la foto */
     background-color: #001d3d; 
   }
 
@@ -82,15 +81,15 @@ h2 {
     }
   }
 
-  /* EL PARCHE: Tapa el hueco blanco al estirar la pantalla hacia abajo */
+  /* EL PARCHE: Tapa el hueco blanco del navegador */
   .navbar-container::before {
     content: "";
     position: absolute;
-    top: -500px; /* Se extiende 500px hacia arriba */
+    top: -500px;
     left: 0;
     width: 100%;
     height: 500px;
-    z-index: -1; /* Se mantiene detrás del contenido del header */
+    z-index: -1;
     pointer-events: none;
     background-color: #001d3d;
   }
