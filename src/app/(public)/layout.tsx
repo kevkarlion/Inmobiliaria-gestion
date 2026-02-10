@@ -5,19 +5,38 @@ import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer/Footer";
 import WhatsAppButton from "@/components/shared/WhatsAppButton/WhatsAppButton";
 
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["700"],
+});
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-lora",
+  weight: ["400", "600"],
+});
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["400", "600"],
+});
 
-const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat", weight: ["700"] });
-const lora = Lora({ subsets: ["latin"], variable: "--font-lora", weight: ["400", "600"] });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["400", "600"] });
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="es" className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}>
-      <body className="antialiased overflow-x-hidden bg-white"> {/* El fondo base ahora puede ser blanco normal */}
+    <html
+      lang="es"
+      id="app-scroll"
+      className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
+    >
+      <body>
         <PropertyProvider>
-          <div className="relative flex flex-col min-h-screen">
+          <div id="app-scroll" className="flex flex-col min-h-dvh">
             <Navbar />
-            {children}
+            <main className="flex-1">{children}</main>
             <Footer />
             <WhatsAppButton />
           </div>
