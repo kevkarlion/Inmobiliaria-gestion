@@ -19,7 +19,8 @@
 /* --- Estilos Globales y Tipografía Responsiva --- */
 @layer base {
   html, body {
-    background-color: var(--color-white-bg);
+    min-height: 100dvh;
+  background: transparent;
     color: var(--color-onyx);
     /* Móvil: Inter 16px */
     font-family: var(--font-inter);

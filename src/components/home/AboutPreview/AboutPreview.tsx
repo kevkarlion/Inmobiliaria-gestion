@@ -19,7 +19,7 @@ export default function AboutPreview() {
         }}
       />
 
-      <div className="max-w-350 mx-auto px-6 relative z-10">
+      <div className="max-w-350 mx-auto px-6 relative z-9">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* BLOQUE IMAGEN + TEXTO MOBILE */}

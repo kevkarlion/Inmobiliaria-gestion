@@ -51,7 +51,7 @@ export default function NosotrosPage() {
           className="object-cover object-center opacity-40 grayscale"
           priority
         />
-        <div className="relative z-10 text-center px-6 mb-8">
+        <div className="relative z-15 text-center px-6 mb-8">
           <h1 className="font-montserrat text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6">
             Nuestra <span className="text-gold-sand">Visión</span>
           </h1>
