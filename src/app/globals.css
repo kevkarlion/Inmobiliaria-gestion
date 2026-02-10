@@ -17,12 +17,14 @@
 /* --- Estilos Globales y Tipografía Responsiva --- */
 @layer base {
   html, body {
-    height: 100%;           /* cubre toda la ventana */
-    min-height: 100%;       /* asegura que no haya rebote */
+    min-height: 100dvh; 
+    height: 100dvh;      /* asegura que no haya rebote */
     overflow-x: hidden;     /* evita scroll horizontal */
     overflow-y: auto;       /* scroll nativo */
-    -webkit-overflow-scrolling: touch; /* suaviza scroll en iOS */
-    overscroll-behavior-y: contain;   /* evita rebote blanco en mobile */
+
+     /* suaviza scroll en iOS */
+    /* -webkit-overflow-scrolling: touch; */
+    overscroll-behavior-y: none;   /* evita rebote blanco en mobile */
     
     /* fondo sólido detrás del hero */
     /* background-color: #000;  */
@@ -128,6 +130,24 @@ h2 {
     }
   }
 
+  .navbar {
+  position: sticky; /* o fixed */
+  top: 0;
+  z-index: 50;
+}
+
+/* Este bloque crea un "parche" de color arriba del navbar */
+.navbar::before {
+  content: "";
+  position: absolute;
+  top: -100px; /* Se extiende hacia arriba fuera de la vista */
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: inherit; /* Toma el color del navbar */
+  z-index: -1;
+}
+
   .nav-float {
     position: absolute;
     top: 50%;
@@ -138,4 +158,13 @@ h2 {
     border-radius: 999px;
     backdrop-filter: blur(4px);
   }
+
+  @media (max-width: 1023px) {
+  .navbar::before {
+    /* Aquí usa el color exacto de tu variable bg-oxford */
+    background-color: #002147; /* Reemplaza por tu valor hexadecimal de 'oxford' */
+  }
+}
+
+  
 }
