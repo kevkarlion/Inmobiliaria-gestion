@@ -3,7 +3,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Phone,
   Mail,
   Clock,
   Menu,
@@ -27,7 +26,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="navbar-container w-full shadow-sm font-montserrat">
+    <header className="navbar-container w-full shadow-sm ">
       
       {/* --- TOP BAR (Desktop Only) --- */}
       <div className="hidden lg:block bg-white border-b border-gray-100">
@@ -50,17 +49,26 @@ export default function Navbar() {
               <div className="flex flex-col">
                 <span className="text-[10px] text-blue-gray uppercase tracking-wider">Seguinos</span>
                 <div className="flex gap-3 mt-0.5">
-                  <a href="#" className="text-onyx hover:text-gold-sand"><Facebook size={16} /></a>
-                  <a href="#" className="text-onyx hover:text-gold-sand"><Instagram size={16} /></a>
+                  <a href="#" className="text-onyx hover:text-gold-sand transition-colors"><Facebook size={16} /></a>
+                  <a href="#" className="text-onyx hover:text-gold-sand transition-colors"><Instagram size={16} /></a>
                 </div>
               </div>
             </div>
 
+            {/* Email - REINCORPORADO */}
+            <a href="mailto:info@riquelmepropiedades.com.ar" className="flex items-center gap-3 border-l pl-8 border-gray-100">
+              <Mail className="text-gold-sand" size={20} />
+              <div className="flex flex-col">
+                <span className="text-[10px] text-blue-gray uppercase tracking-wider">Email</span>
+                <p className="text-[13px] font-semibold text-onyx lowercase tracking-tight">info@riquelmepropiedades.com.ar</p>
+              </div>
+            </a>
+
             {/* WhatsApp */}
-            <a href="https://wa.me/5492984582082" className="flex items-center gap-3">
+            <a href="https://wa.me/5492984582082" className="flex items-center gap-3 border-l pl-8 border-gray-100">
               <MessageCircle className="text-gold-sand" size={20} />
               <div className="flex flex-col">
-                <span className="text-[10px] text-blue-gray">WhatsApp</span>
+                <span className="text-[10px] text-blue-gray uppercase tracking-wider">WhatsApp</span>
                 <p className="text-[13px] font-semibold text-onyx">+54 9 298 4582082</p>
               </div>
             </a>
@@ -69,7 +77,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3 border-l pl-8 border-gray-200">
               <Clock className="text-gold-sand" size={20} />
               <div className="flex flex-col">
-                <span className="text-[10px] text-blue-gray">Atención</span>
+                <span className="text-[10px] text-blue-gray uppercase tracking-wider">Atención</span>
                 <p className="text-[13px] font-semibold text-onyx uppercase">Lun a Vie 9 - 18hs</p>
               </div>
             </div>
@@ -78,9 +86,8 @@ export default function Navbar() {
       </div>
 
       {/* --- MAIN NAV (Blue Oxford) --- */}
-      {/* Forzamos el color de fondo para evitar el "blanco" en mobile */}
       <nav 
-        className="text-white relative z-10" 
+        className="text-white relative z-10 font-montserrat" 
         style={{ backgroundColor: '#001d3d' }}
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -115,12 +122,12 @@ export default function Navbar() {
 
             {/* Botón Tasar / Mobile Toggle */}
             <div className="flex items-center gap-4">
-              <a
-                href="#"
-                className="hidden lg:block text-xs font-bold bg-gold-sand hover:bg-gold-hover text-oxford px-5 py-2.5 rounded-sm"
+              <Link
+                href="/contacto"
+                className="hidden lg:block text-xs font-bold bg-gold-sand hover:bg-gold-hover text-oxford px-5 py-2.5 rounded-sm transition-all shadow-md active:scale-95"
               >
                 TASAR AHORA
-              </a>
+              </Link>
               <button
                 className="lg:hidden p-2 text-gold-sand focus:outline-none"
                 onClick={() => setIsOpen(!isOpen)}
@@ -134,7 +141,7 @@ export default function Navbar() {
         {/* --- MOBILE MENU --- */}
         <div
           className={`
-          lg:hidden absolute w-full bg-[#001d3d] transition-all duration-300 ease-in-out z-50 overflow-hidden shadow-xl
+          lg:hidden absolute w-full bg-oxford transition-all duration-300 ease-in-out z-50 overflow-hidden shadow-xl
           ${isOpen ? "max-h-125 border-t border-white/10" : "max-h-0"}
         `}
         >
@@ -144,7 +151,7 @@ export default function Navbar() {
                 key={item.name}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand"
+                className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand transition-colors"
               >
                 {item.name}
               </Link>
