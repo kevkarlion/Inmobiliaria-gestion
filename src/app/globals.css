@@ -14,101 +14,100 @@
   --font-inter: var(--font-inter);
 }
 
-/* --- Estilos Globales --- */
+/* --- BASE: Configuración de Pantalla y Scroll --- */
 @layer base {
   html {
-    /* El "fondo del universo" para que no se vea blanco al estirar */
-    background-color: var(--color-oxford); 
+    /* IMPORTANTE: El color de fondo del "universo" del navegador */
+    background-color: #001d3d; 
     scroll-behavior: smooth;
   }
 
+  /* En escritorio el fondo base es blanco */
   @media (min-width: 1024px) {
     html {
-      background-color: #ffffff; /* En desktop el tope es blanco */
+      background-color: #ffffff;
     }
   }
 
   body {
-    min-height: 100dvh; 
-    /* ¡IMPORTANTE!: Quitamos height: 100dvh para permitir el scroll y el refresh */
+    /* Permitimos scroll natural para recuperar el Pull-to-refresh */
+    min-height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
-    
-    /* Permitimos el rebote nativo pero lo camuflamos con el parche */
     overscroll-behavior-y: auto; 
     
     background-color: white;
-    color: var(--color-onyx);
+    color: #121212;
     font-family: var(--font-inter);
-    font-size: 16px;
-    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 }
 
-/* --- Tipografía --- */
+/* --- TIPOGRAFÍA --- */
 h1 {
   font-family: var(--font-montserrat);
   font-weight: 700;
   text-transform: uppercase;
   font-size: 32px;
-  letter-spacing: 1px;
   line-height: 1.2;
 }
 
 @media (min-width: 1024px) {
-  h1 {
-    font-size: clamp(48px, 5vw, 56px);
-    letter-spacing: 2px;
-  }
-  body {
-    font-family: var(--font-lora);
-    font-size: 20px;
-  }
+  h1 { font-size: clamp(48px, 5vw, 56px); }
+  body { font-family: var(--font-lora); font-size: 20px; }
 }
 
 h2 {
   font-family: var(--font-lora);
   font-weight: 600;
   font-size: 26px;
-  line-height: 1.3;
 }
 
-@media (min-width: 1024px) {
-  h2 { font-size: 36px; }
-}
-
-/* --- Componentes de Utilidad --- */
+/* --- COMPONENTES Y PARCHE DEL NAVBAR --- */
 @layer components {
-  /* EL PARCHE MAESTRO */
-  /* Usamos .navbar-container porque es la clase que pusimos en el <header> */
-  .navbar-container::before {
-    content: "";
-    position: absolute;
-    top: -400px; /* Cubre el hueco del estirón */
+  
+  .navbar-container {
+    position: fixed;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 400px;
-    z-index: -1;
-    pointer-events: none;
-    /* Color por defecto (Mobile: Oxford) */
+    z-index: 50;
+    /* Aseguramos que el header tenga fondo sólido para que no se vea el parche detrás */
     background-color: #001d3d; 
   }
 
   @media (min-width: 1024px) {
-    .navbar-container::before {
-      /* Color Desktop: Blanco */
+    .navbar-container {
       background-color: #ffffff;
     }
   }
 
+  /* EL PARCHE: Tapa el hueco blanco al estirar la pantalla hacia abajo */
+  .navbar-container::before {
+    content: "";
+    position: absolute;
+    top: -500px; /* Se extiende 500px hacia arriba */
+    left: 0;
+    width: 100%;
+    height: 500px;
+    z-index: -1; /* Se mantiene detrás del contenido del header */
+    pointer-events: none;
+    background-color: #001d3d;
+  }
+
+  @media (min-width: 1024px) {
+    .navbar-container::before {
+      background-color: #ffffff;
+    }
+  }
+
+  /* Utilidades adicionales */
   .label-subtitle {
     font-family: var(--font-inter);
     font-weight: 600;
     font-size: 14px;
     text-transform: uppercase;
     color: var(--color-gold-sand);
-    letter-spacing: 0.5px;
   }
 
   .btn-cta {
@@ -117,23 +116,16 @@ h2 {
     justify-content: center;
     font-family: var(--font-montserrat);
     font-weight: 700;
-    text-transform: uppercase;
-    background-color: var(--color-oxford);
+    background-color: #001d3d;
     color: white;
-    transition: all 0.3s ease;
     width: 100%;
-    font-size: 15px;
     padding: 14px 28px;
+    transition: background 0.3s;
   }
 
   @media (min-width: 1024px) {
-    .btn-cta {
-      width: auto;
-      font-size: 16px;
-    }
-    .btn-cta:hover {
-      background-color: var(--color-gold-hover);
-    }
+    .btn-cta { width: auto; }
+    .btn-cta:hover { background-color: var(--color-gold-hover); }
   }
 
   .nav-float {
