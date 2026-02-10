@@ -6,7 +6,7 @@ export default async function Hero() {
 
   return (
     <section
-      className="relative w-full h-[95dvh] xl:h-[110dvh] flex items-center justify-center overflow-hidden"
+      className="relative top-0 w-full h-[95dvh] xl:h-[110dvh] flex items-center justify-center overflow-hidden"
       style={{
         backgroundImage: "url('/hero-mobile.webp')",
         backgroundSize: "cover",
