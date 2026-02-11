@@ -1,6 +1,3 @@
-
-"use client";
-
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import { PropertyGallery } from "@/components/shared/PropertyGalllery/PropertyGallery";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
@@ -25,6 +22,16 @@ export function PropertyDetailClient({
             {p.opportunity && (
               <span className="label-subtitle bg-gold-sand text-black px-3 py-1 rounded">
                 Oportunidad
+              </span>
+            )}
+            {p.featured && (
+              <span className="label-subtitle bg-oxford text-white px-3 py-1 rounded">
+                Destacada
+              </span>
+            )}
+            {p.premium && (
+              <span className="label-subtitle bg-purple-600 text-white px-3 py-1 rounded">
+                Premium
               </span>
             )}
           </div>
@@ -79,8 +86,25 @@ export function PropertyDetailClient({
             <Item label="Dormitorios" value={p.bedrooms} />
             <Item label="Baños" value={p.bathrooms} />
             <Item label="Sup. Total" value={p.totalM2 ? `${p.totalM2} m²` : null} />
+            <Item label="Sup. Cubierta" value={p.coveredM2 ? `${p.coveredM2} m²` : null} />
             <Item label="Cochera" value={p.garage ? "Sí" : "No"} />
+            <Item label="Antigüedad" value={p.age ? `${p.age} años` : null} />
+            <Item label="Estado" value={p.status} />
           </div>
+
+          {/* Tags */}
+          {p.tags?.length > 0 && (
+            <div className="flex flex-wrap gap-3">
+              {p.tags.map((tag: string) => (
+                <span
+                  key={tag}
+                  className="text-sm bg-black/5 text-oxford px-4 py-1 rounded-full font-semibold"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* COLUMNA LATERAL */}
@@ -94,34 +118,44 @@ export function PropertyDetailClient({
               <Item label="Dirección" value={`${p.street} ${p.number}`} light />
               <Item label="Provincia" value={p.provinceName} light />
               <Item label="Localidad" value={p.cityName} light />
+              <Item label="Barrio" value={p.barrioName} light />
               <Item label="Código Postal" value={p.zipCode} light />
-
-              {p.mapsUrl && (
-                <div className="mt-6 border-t border-white/20 pt-6">
-                  <div className="w-full h-56 rounded-2xl overflow-hidden border border-white/10 mb-4">
-                    <iframe
-                      src={p.mapsUrl}
-                      className="w-full h-full"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                    />
-                  </div>
-                  <a
-                    href={p.externalMapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="label-subtitle text-gold-sand hover:text-white transition-colors flex justify-center bg-white/10 py-2 rounded-lg"
-                  >
-                    Abrir en Google Maps ↗
-                  </a>
-                </div>
-              )}
+              <Item label="Latitud" value={p.lat} light />
+              <Item label="Longitud" value={p.lng} light />
             </div>
 
-            <button className="btn-cta mt-10 bg-gold-sand text-black hover:bg-gold-hover">
-              Contactar asesor
-            </button>
+            {p.mapsUrl && (
+              <div className="mt-6 border-t border-white/20 pt-6">
+                <div className="w-full h-56 rounded-2xl overflow-hidden border border-white/10 mb-4">
+                  <iframe
+                    src={p.mapsUrl}
+                    className="w-full h-full"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+                <a
+                  href={p.externalMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="label-subtitle text-gold-sand hover:text-white transition-colors flex justify-center bg-white/10 py-2 rounded-lg"
+                >
+                  Abrir en Google Maps ↗
+                </a>
+              </div>
+            )}
+
+            {p.contactPhone && (
+              <a
+                href={`https://wa.me/54${p.contactPhone}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-cta mt-10 bg-gold-sand text-black hover:bg-gold-hover text-center"
+              >
+                Contactar asesor
+              </a>
+            )}
           </div>
         </div>
       </div>

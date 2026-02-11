@@ -4,27 +4,29 @@ export interface PropertyUI {
   slug: string;
   operationType: "venta" | "alquiler";
   
-  // Categoría y Ubicación (Slugs para filtros y Nombres para mostrar)
+  // Categoría
   typeSlug: string;
   typeName: string;
   
-  // 🔹 Nuevos campos de ubicación jerárquica
+  // Ubicación jerárquica
   provinceSlug: string;
   provinceName: string;
   citySlug: string;
   cityName: string;
-  zoneName: string; // Para mostrar ej: "General Roca, Río Negro"
+  barrioSlug: string;
+  barrioName: string;
+  zoneName: string;
 
   // Dirección física
   street: string;
   number: string;
   zipCode: string;
 
-  // Precio y Moneda
+  // Precio
   amount: number;
   currency: string;
 
-  // Características y Medidas
+  // Características
   bedrooms: number;
   bathrooms: number;
   totalM2: number;
@@ -33,16 +35,19 @@ export interface PropertyUI {
   garage: boolean;
   age: number;
 
-  // Estado y Visibilidad
+  // Estado
   featured: boolean;
   opportunity: boolean;
   premium: boolean;
   status: "active" | "inactive";
 
-  // Contenido Multimedia y Texto
+  // Contenido
   tags: string[];
   images: string[];
   description: string;
+
+  // Contacto
+  contactPhone: string;
 
   // Geolocalización
   mapsUrl: string;

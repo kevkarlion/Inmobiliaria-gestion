@@ -22,6 +22,7 @@ export default async function PropertyDetailPage({
   const property = await res.json();
   if (!property) notFound();
 
+  console.log('property detail',property)
   return <PropertyDetailClient property={property} />;
 }
 

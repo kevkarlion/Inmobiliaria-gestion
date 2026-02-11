@@ -6,8 +6,8 @@ function normalizeOperation(value: string): "venta" | "alquiler" {
 }
 
 export function mapPropertyToUI(property: any): PropertyUI {
-  
-  // 1. Limpieza de URL de Maps para Iframe
+
+  // 1. Limpieza de URL de Maps
   const rawUrl = property.location?.mapsUrl || "";
   let cleanEmbedUrl = rawUrl;
   if (rawUrl.includes("<iframe")) {
@@ -15,7 +15,7 @@ export function mapPropertyToUI(property: any): PropertyUI {
     cleanEmbedUrl = match ? match[1] : rawUrl;
   }
 
-  // 2. URL Externa para botón
+  // 2. URL externa Google Maps
   const street = property.address?.street || "";
   const number = property.address?.number || "";
   const city = property.address?.city?.name || "";
@@ -31,51 +31,55 @@ export function mapPropertyToUI(property: any): PropertyUI {
     typeSlug: property.propertyType?.slug || "",
     typeName: property.propertyType?.name || "Propiedad",
 
-    // 📍 UBICACIÓN (Basado en tu console.log)
+    // Ubicación
     provinceSlug: property.address?.province?.slug || "",
     provinceName: property.address?.province?.name || "",
     citySlug: property.address?.city?.slug || "",
     cityName: property.address?.city?.name || "",
-    
-    // Nombre combinado para mostrar en la card (ej: "General Roca, Río Negro")
+    barrioSlug: property.address?.barrio?.slug || "",
+    barrioName: property.address?.barrio?.name || "",
+
     zoneName: property.address?.city?.name 
       ? `${property.address.city.name}, ${property.address.province?.name || ""}`
       : "Consultar ubicación",
 
     // Dirección
-    street: street,
-    number: number,
+    street,
+    number,
     zipCode: property.address?.zipCode || "",
 
     // Precio
     amount: property.price?.amount || 0,
     currency: property.price?.currency || "USD",
 
-    // Medidas y Ambientes
+    // Medidas
     bedrooms: property.features?.bedrooms || 0,
     bathrooms: property.features?.bathrooms || 0,
     totalM2: property.features?.totalM2 || 0,
     coveredM2: property.features?.coveredM2 || 0,
     rooms: property.features?.rooms || 0,
     garage: !!property.features?.garage,
-    age: property.age || 0,
+    age: property.features?.age || 0,
 
     // Flags
     featured: !!property.flags?.featured,
     opportunity: !!property.flags?.opportunity,
     premium: !!property.flags?.premium,
 
-    // Metadata
+    // Contenido
     tags: property.tags || [],
     images: Array.isArray(property.images) 
-      ? property.images.map((img: any) => typeof img === 'string' ? img : img.url)
+      ? property.images.map((img: any) => typeof img === "string" ? img : img.url)
       : [],
-
-
-    status: property.status || "active",
     description: property.description || "",
 
-    // Ubicación
+    // Estado
+    status: property.status || "active",
+
+    // Contacto
+    contactPhone: property.contactPhone || "",
+
+    // Maps
     mapsUrl: cleanEmbedUrl,
     externalMapsUrl: externalSearchUrl,
     lat: property.location?.lat || 0,
