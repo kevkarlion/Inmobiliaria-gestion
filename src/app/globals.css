@@ -19,7 +19,7 @@
   html {
     /* El Oxford de fondo es nuestro seguro de vida */
     background-color: #001d3d; 
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth; */
   }
 
   @media (min-width: 1024px) {
