@@ -50,10 +50,18 @@ export default function Navbar() {
                   Seguinos
                 </span>
                 <div className="flex gap-3 mt-0.5">
-                  <a href="#" className="text-onyx hover:text-gold-sand transition-colors">
+                  <a
+                    href="https://www.facebook.com/riquelmeprop?rdid=2QDa2IeJSjsrjxVN&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1C6P6AShqK%2F#"
+                    target="_blank"
+                    className="text-onyx hover:text-gold-sand transition-colors"
+                  >
                     <Facebook size={16} />
                   </a>
-                  <a href="#" className="text-onyx hover:text-gold-sand transition-colors">
+                  <a
+                    href="https://www.instagram.com/riquelme.propiedades/"
+                    target="_blank"
+                    className="text-onyx hover:text-gold-sand transition-colors"
+                  >
                     <Instagram size={16} />
                   </a>
                 </div>
@@ -61,7 +69,12 @@ export default function Navbar() {
             </div>
 
             {/* Email */}
-            <a href="mailto:info@riquelmepropiedades.com.ar" className="flex items-center gap-3 border-l pl-8 border-gray-100">
+            <a
+              href="mailto:info@riquelmepropiedades.com.ar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 border-l pl-8 border-gray-100"
+            >
               <Mail className="text-gold-sand" size={20} />
               <div className="flex flex-col">
                 <span className="text-[10px] text-blue-gray uppercase tracking-wider">
@@ -74,7 +87,11 @@ export default function Navbar() {
             </a>
 
             {/* WhatsApp */}
-            <a href="https://wa.me/5492984582082" className="flex items-center gap-3 border-l pl-8 border-gray-100">
+            <a
+              href="https://wa.me/5492984582082"
+              target="_blank"
+              className="flex items-center gap-3 border-l pl-8 border-gray-100"
+            >
               <MessageCircle className="text-gold-sand" size={20} />
               <div className="flex flex-col">
                 <span className="text-[10px] text-blue-gray uppercase tracking-wider">
@@ -103,7 +120,10 @@ export default function Navbar() {
       </div>
 
       {/* --- MAIN NAV --- */}
-      <nav className="text-white relative z-10 font-montserrat" style={{ backgroundColor: "#001d3d" }}>
+      <nav
+        className="text-white relative z-10 font-montserrat"
+        style={{ backgroundColor: "#001d3d" }}
+      >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             {/* Logo Mobile */}
@@ -139,13 +159,13 @@ export default function Navbar() {
 
             {/* Botón */}
             <div className="flex items-center gap-4">
-              <Link
-                href="/contacto"
-                scroll
+              <a
+                href="https://wa.me/5492984582082"
+                target="_blank"
                 className="hidden lg:block text-xs font-bold bg-gold-sand hover:bg-gold-hover text-oxford px-5 py-2.5 rounded-sm transition-all shadow-md active:scale-95"
               >
                 TASAR AHORA
-              </Link>
+              </a>
               <button
                 className="lg:hidden p-2 text-gold-sand focus:outline-none"
                 onClick={() => setIsOpen(!isOpen)}
@@ -183,10 +203,18 @@ export default function Navbar() {
                 </span>
               </div>
               <div className="flex gap-4 pl-5">
-                <a href="#" className="text-white hover:text-gold-sand transition-colors">
+                <a
+                  href="https://www.facebook.com/riquelmeprop?rdid=2QDa2IeJSjsrjxVN&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1C6P6AShqK%2F#"
+                  target="_blank"
+                  className="text-white hover:text-gold-sand transition-colors"
+                >
                   <Facebook size={20} />
                 </a>
-                <a href="#" className="text-white hover:text-gold-sand transition-colors">
+                <a
+                  href="https://www.instagram.com/riquelme.propiedades/"
+                  target="_blank"
+                  className="text-white hover:text-gold-sand transition-colors"
+                >
                   <Instagram size={20} />
                 </a>
               </div>
