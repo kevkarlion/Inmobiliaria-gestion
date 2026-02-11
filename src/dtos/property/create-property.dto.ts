@@ -6,9 +6,8 @@ export class CreatePropertyDTO {
   operationType: string;
   propertyTypeSlug: string;
   description: string;
-  age: number;
-  images: { url: string; alt?: string }[]
-
+  contactPhone: string; // 👈 Agregado para contacto
+  images: { url: string; alt?: string }[];
   tags: string[];
 
   price: { 
@@ -20,9 +19,9 @@ export class CreatePropertyDTO {
     street: string; 
     number: string; 
     zipCode: string;
-    provinceSlug: string; // 👈 Ahora es Slug
-    citySlug: string;     // 👈 Ahora es Slug
-    barrioSlug?: string;  // 👈 Ahora es Slug
+    provinceSlug: string; 
+    citySlug: string;     
+    barrioSlug?: string;  
   };
   
   location: { mapsUrl: string; lat: number; lng: number };
@@ -34,18 +33,16 @@ export class CreatePropertyDTO {
     coveredM2: number; 
     rooms: number; 
     garage: boolean; 
+    age: number; // 👈 Movido aquí
     additionalInfo: string;
   };
   
   flags: { featured: boolean; premium: boolean; opportunity: boolean };
 
   constructor(data: any) {
-    // Validaciones básicas
     if (!data.title) throw new BadRequestError("El título es requerido");
     if (!data.priceAmount) throw new BadRequestError("El monto del precio es requerido");
     if (!data.propertyTypeSlug) throw new BadRequestError("El tipo de propiedad es requerido");
-    
-    // Validaciones de ubicación por Slug
     if (!data.province) throw new BadRequestError("La provincia es requerida");
     if (!data.city) throw new BadRequestError("La localidad es requerida");
 
@@ -53,7 +50,7 @@ export class CreatePropertyDTO {
     this.operationType = data.operationType;
     this.propertyTypeSlug = data.propertyTypeSlug;
     this.description = data.description || "";
-    this.age = Number(data.age) || 0;
+    this.contactPhone = data.contactPhone || ""; // 👈 Mapeo del teléfono
     this.images = data.images || [];
     this.tags = data.tags || [];
 
@@ -66,7 +63,6 @@ export class CreatePropertyDTO {
       street: data.street || "",
       number: data.number || "",
       zipCode: data.zipCode || "",
-      // Mapeamos lo que viene del form (province) al campo provinceSlug
       provinceSlug: data.province, 
       citySlug: data.city,         
       barrioSlug: data.barrio || undefined, 
@@ -85,6 +81,7 @@ export class CreatePropertyDTO {
       coveredM2: Number(data.coveredM2) || 0,
       rooms: Number(data.rooms) || 0,
       garage: Boolean(data.garage),
+      age: Number(data.age) || 0, // 👈 Mapeo dentro de features
       additionalInfo: data.additionalInfo || "",
     };
 

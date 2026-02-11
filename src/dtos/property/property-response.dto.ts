@@ -13,13 +13,13 @@ export type AddressNode = {
 
 /**
  * Shape del objeto que viaja a UI / API
- * (solo datos planos, serializables)
  */
 export interface PropertyResponse {
   id: string;
   title: string;
   slug: string;
-
+  contactPhone: string; // Raíz
+  
   price: {
     amount: number;
     currency: string;
@@ -42,7 +42,8 @@ export interface PropertyResponse {
     barrio: AddressNode | null;
   };
 
-  features: Property["features"];
+  // Aquí dentro viaja 'age' (antigüedad)
+  features: Property["features"]; 
   flags: Property["flags"];
 
   tags: string[];
@@ -59,19 +60,17 @@ export interface PropertyResponse {
     lat: number;
     lng: number;
   };
-
-  antiguedad?: number;
 }
 
 /**
- * Factory (reemplaza a la clase)
- * Convierte Property (DB) → PropertyResponse (plano)
+ * Factory: Convierte Property (DB) → PropertyResponse (API)
  */
-export function propertyResponseDTO(property: Property): PropertyResponse {
+export function propertyResponseDTO(property: any): PropertyResponse {
   return {
     id: property._id.toString(),
     title: property.title,
     slug: property.slug,
+    contactPhone: property.contactPhone || "", 
 
     price: {
       amount: property.price.amount,
@@ -116,7 +115,12 @@ export function propertyResponseDTO(property: Property): PropertyResponse {
         : null,
     },
 
-    features: property.features,
+    // Importante: property.features ya trae 'age' desde la base de datos
+    features: {
+      ...property.features,
+      age: property.features?.age || 0
+    }, 
+    
     flags: property.flags,
 
     tags: property.tags || [],
@@ -133,7 +137,5 @@ export function propertyResponseDTO(property: Property): PropertyResponse {
       lat: property.location?.lat || 0,
       lng: property.location?.lng || 0,
     },
-
-    antiguedad: property.antiguedad,
   };
 }

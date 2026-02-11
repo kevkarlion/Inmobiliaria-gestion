@@ -17,11 +17,11 @@ interface EditPropertyFormProps {
 export default function EditPropertyForm({ property, slug, onClose, onUpdate }: EditPropertyFormProps) {
   const [form, setForm] = useState<any>(() => mapPropertyToForm(property));
   const [loading, setLoading] = useState(false);
-  console.log('property',property)
+  console.log('property', property)
   useEffect(() => {
     setForm(mapPropertyToForm(property));
   }, [property]);
-
+  
   console.log('form', form)
 
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
@@ -39,7 +39,6 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
     setForm((prev: any) => ({ ...prev, [name]: finalValue }));
   }
 
-  // NUEVO: manejo de imágenes con Cloudinary
   const handleImagesUpload = (urls: string[]) => {
     setForm((prev: any) => ({
       ...prev,
@@ -67,9 +66,9 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
         const errData = await res.json();
         throw new Error(errData.message || "Error al editar");
       }
-       const updatedProperty: PropertyResponse = await res.json(); 
+      const updatedProperty: PropertyResponse = await res.json(); 
       alert("¡Propiedad actualizada con éxito!");
-      onUpdate(updatedProperty); // <--- avisamos al padre
+      onUpdate(updatedProperty);
       onClose();
     } catch (error: any) {
       alert(`Error: ${error.message}`);
@@ -90,12 +89,26 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
         <button type="button" onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors">Cerrar ✕</button>
       </div>
 
-      {/* SECCIÓN 1: DATOS BÁSICOS */}
+      {/* SECCIÓN 1: DATOS BÁSICOS Y CONTACTO */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-2">
           <label className="text-xs font-bold text-gray-400 uppercase">Título *</label>
           <input type="text" name="title" value={form.title || ""} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-blue-500" required />
         </div>
+        <div className="md:col-span-1">
+          <label className="text-xs font-bold text-gray-400 uppercase">Teléfono de Contacto</label>
+          <input type="text" name="contactPhone" value={form.contactPhone || ""} onChange={handleChange} placeholder="Ej: 2984123456" className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label className="text-xs font-bold text-gray-400 uppercase">Operación</label>
+          <select name="operationType" value={form.operationType || "venta"} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white">
+            <option value="venta" className="text-black">Venta</option>
+            <option value="alquiler" className="text-black">Alquiler</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="text-xs font-bold text-gray-400 uppercase">Precio *</label>
           <input type="number" name="priceAmount" value={form.priceAmount ?? ""} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" required />
@@ -136,27 +149,18 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
         </div>
       </div>
 
-      {/* SECCIÓN 3: CONFIGURACIÓN DE MAPA (LOCATION) */}
+      {/* SECCIÓN 3: CONFIGURACIÓN DE MAPA */}
       <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-4">
         <div className="flex items-center gap-2">
            <span className="text-blue-500 text-lg">📍</span>
            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Coordenadas y Google Maps</p>
         </div>
-        
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="text-xs font-bold text-gray-400 uppercase">Link o Iframe de Google Maps</label>
-            <input 
-              type="text" 
-              name="mapsUrl" 
-              value={form.mapsUrl || ""} 
-              onChange={handleChange} 
-              placeholder="Pegue aquí el link de compartir de Google Maps" 
-              className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none focus:border-blue-500 text-sm" 
-            />
+            <input type="text" name="mapsUrl" value={form.mapsUrl || ""} onChange={handleChange} placeholder="Pegue aquí el link" className="w-full p-3 bg-neutral-800 border border-white/10 rounded-lg outline-none focus:border-blue-500 text-sm" />
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-bold text-gray-400 uppercase">Latitud</label>
@@ -190,9 +194,16 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
         </div>
       </div>
 
-      {/* SECCIÓN 5: CARACTERÍSTICAS TÉCNICAS */}
+      {/* SECCIÓN 5: CARACTERÍSTICAS TÉCNICAS (CON ANTIGUEDAD) */}
       <div className="grid grid-cols-3 md:grid-cols-6 gap-3 p-4 bg-white/5 rounded-xl border border-white/5">
-        {[{l: "Dorm", n: "bedrooms"}, {l: "Baños", n: "bathrooms"}, {l: "Amb", n: "rooms"}, {l: "Total m2", n: "totalM2"}, {l: "Cub. m2", n: "coveredM2"}, {l: "Antiguedad", n: "age"}].map((i) => (
+        {[
+          {l: "Dorm", n: "bedrooms"}, 
+          {l: "Baños", n: "bathrooms"}, 
+          {l: "Amb", n: "rooms"}, 
+          {l: "Total m2", n: "totalM2"}, 
+          {l: "Cub. m2", n: "coveredM2"}, 
+          {l: "Antigüedad", n: "age"} // 👈 Corregido a 'age' para consistencia con el DTO
+        ].map((i) => (
           <div key={i.n}>
             <label className="text-[10px] font-bold text-gray-500 uppercase">{i.l}</label>
             <input type="number" name={i.n} value={form[i.n] ?? ""} onChange={handleChange} className="w-full bg-transparent border-b border-white/20 p-1 outline-none focus:border-blue-500 transition-colors" />
@@ -200,15 +211,10 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
         ))}
       </div>
 
-      {/* SECCIÓN 6: MULTIMEDIA CON CLOUDINARY */}
+      {/* SECCIÓN 6: MULTIMEDIA */}
       <div className="space-y-4">
         <label className="block text-sm font-bold uppercase tracking-tight">Galería de Imágenes</label>
-        
-        <CloudinaryUploader 
-          onImageUpload={handleImagesUpload} 
-          folder="properties"
-        />
-
+        <CloudinaryUploader onImageUpload={handleImagesUpload} folder="properties" />
         <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
           {form.images?.map((img: string, idx: number) => (
             <div key={idx} className="relative aspect-square rounded-lg border border-white/10 overflow-hidden group">
@@ -219,7 +225,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
         </div>
       </div>
 
-      {/* SECCIÓN 7: FLAGS Y EXTRAS */}
+      {/* SECCIÓN 7: FLAGS */}
       <div className="flex flex-wrap gap-4 py-4 border-y border-white/5 uppercase text-[10px] font-bold">
         {[{label: "Destacada", name: "featured"}, {label: "Oportunidad", name: "opportunity"}, {label: "Premium", name: "premium"}, {label: "Cochera", name: "garage"}].map((check) => (
           <label key={check.name} className="flex items-center gap-2 cursor-pointer hover:text-blue-400 transition-colors">

@@ -21,6 +21,12 @@ const PropertySchema = new Schema<IProperty>(
       required: true,
       index: true,
     },
+    // 👇 NUEVO CAMPO: contactPhone
+    contactPhone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
 
     description: { type: String, trim: true },
 
@@ -55,6 +61,7 @@ const PropertySchema = new Schema<IProperty>(
       coveredM2: { type: Number, default: 0 },
       rooms: { type: Number, default: 0 },
       garage: { type: Boolean, default: false },
+      age: { type: Number, default: 0 }, // 👈 Agregado aquí
     },
 
     location: {

@@ -2,7 +2,6 @@
 // mappers/propertyToForm.mapper.ts
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function mapPropertyToForm(property: PropertyResponse): any {
   return {
     // Datos básicos
@@ -10,6 +9,7 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     slug: property.slug,
     operationType: property.operationType === "alquiler" ? "alquiler" : "venta",
     propertyTypeSlug: property.propertyType?.slug || "casa",
+    contactPhone: property.contactPhone || "", // 👈 Ahora recibe el dato del DTO correctamente
 
     // Ubicación (SOLO STRINGS)
     province:
@@ -19,7 +19,6 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     city: property.address?.city?.slug || property.address?.city?.name || "",
     barrio: property.address?.barrio?.slug || property.address?.barrio || "",
 
-    
     street: property.address?.street || "",
     number: property.address?.number || "",
     zipCode: property.address?.zipCode || "",
@@ -40,7 +39,9 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     totalM2: property.features?.totalM2 || 0,
     coveredM2: property.features?.coveredM2 || 0,
     garage: !!property.features?.garage,
-    age: property.antiguedad || 0,
+    
+    // Antigüedad: Se mapea desde features.age del PropertyResponse
+    age: property.features?.age || 0, 
 
     // Flags
     featured: !!property.flags?.featured,

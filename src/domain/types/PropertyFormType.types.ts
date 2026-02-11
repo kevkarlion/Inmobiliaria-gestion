@@ -2,7 +2,7 @@ export interface PropertyFormType {
   title: string;
   operationType: string;
   propertyTypeSlug: string;
-  
+  contactPhone:string;
   // Ubicación por Entidades (IDs de MongoDB)
   province: string;   // ID Seleccionado
   city: string;       // ID Seleccionado

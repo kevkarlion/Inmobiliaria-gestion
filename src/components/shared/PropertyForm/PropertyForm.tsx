@@ -12,10 +12,11 @@ interface CreatePropertyFormProps {
 }
 
 export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps) {
-  const [form, setForm] = useState<PropertyFormType>({
+  const [form, setForm] = useState<PropertyFormType & { contactPhone: string }>({
     title: "",
     operationType: "venta",
     propertyTypeSlug: "casa",
+    contactPhone: '', // 👈 Agregado contacto inicial
     province: "",
     city: "",
     barrio: "",
@@ -42,7 +43,6 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
     images: [],
     description: "",
   });
-  
 
   const [loading, setLoading] = useState(false);
 
@@ -61,7 +61,6 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
     setForm((prev) => ({ ...prev, [name]: finalValue }));
   }
 
-  // REEMPLAZADO: Función que recibe las URLs reales de Cloudinary
   const handleImagesUpload = (urls: string[]) => {
     setForm(prev => ({
       ...prev,
@@ -105,25 +104,39 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
       {/* HEADER */}
       <div className="flex justify-between items-center border-b border-white/10 pb-4">
         <div>
-          <h2 className="text-2xl font-black italic uppercase tracking-tighter">Nueva Propiedad</h2>
-          <p className="text-[10px] text-gray-500 uppercase font-bold">Gestión de Inventario</p>
+          <h2 className="text-2xl font-black italic uppercase tracking-tighter text-blue-500">Nueva Propiedad</h2>
+          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-widest italic">Gestión de Inventario</p>
         </div>
         <button type="button" onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors">Cerrar ✕</button>
       </div>
 
-      {/* SECCIÓN 1: DATOS BÁSICOS */}
+      {/* SECCIÓN 1: DATOS BÁSICOS Y CONTACTO */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-2">
           <label className="text-xs font-bold text-gray-400 uppercase">Título *</label>
           <input type="text" name="title" value={form.title} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-blue-500" placeholder="Ej: Casa Moderna en Barrio Norte" required />
         </div>
+        <div className="md:col-span-1">
+          <label className="text-xs font-bold text-gray-400 uppercase">Teléfono de Contacto</label>
+          <input type="text" name="contactPhone" value={form.contactPhone} onChange={handleChange} placeholder="Ej: 2984123456" className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label className="text-xs font-bold text-gray-400 uppercase">Operación</label>
+          <select name="operationType" value={form.operationType} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white">
+            <option value="venta" className="text-black">Venta</option>
+            <option value="alquiler" className="text-black">Alquiler</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="text-xs font-bold text-gray-400 uppercase">Precio *</label>
           <input type="number" name="priceAmount" value={form.priceAmount || ""} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none" required />
         </div>
         <div>
           <label className="text-xs font-bold text-gray-400 uppercase">Moneda</label>
-          <select name="currency" value={form.currency} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white font-medium">
+          <select name="currency" value={form.currency} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white">
             <option value="USD" className="text-black">USD (Dólares)</option>
             <option value="ARS" className='text-black'>ARS (Pesos)</option>
           </select>
@@ -201,7 +214,7 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         </div>
         <div>
           <label className="text-xs font-bold text-gray-400 uppercase">Tipo de Propiedad</label>
-          <select name="propertyTypeSlug" value={form.propertyTypeSlug} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white font-medium">
+          <select name="propertyTypeSlug" value={form.propertyTypeSlug} onChange={handleChange} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none text-white">
             <option value="casa" className="text-black">Casa</option>
             <option value="terreno" className="text-black">Terreno</option>
             <option value="departamento" className="text-black">Departamento</option>
@@ -210,11 +223,16 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         </div>
       </div>
 
-      {/* SECCIÓN 5: CARACTERÍSTICAS */}
+      {/* SECCIÓN 5: CARACTERÍSTICAS TÉCNICAS */}
       <div className="grid grid-cols-3 md:grid-cols-6 gap-3 p-4 bg-white/5 rounded-xl border border-white/5">
-        {[{l: "Dorm", n: "bedrooms"}, {l: "Baños", n: "bathrooms"}, 
-          {l: "Amb", n: "rooms"}, {l: "Total m2", n: "totalM2"}, 
-          {l: "Cub. m2", n: "coveredM2"}, {l: "Edad", n: "age"}].map((i) => (
+        {[
+          {l: "Dorm", n: "bedrooms"}, 
+          {l: "Baños", n: "bathrooms"}, 
+          {l: "Amb", n: "rooms"}, 
+          {l: "Total m2", n: "totalM2"}, 
+          {l: "Cub. m2", n: "coveredM2"}, 
+          {l: "Antigüedad", n: "age"} // 👈 Cambiado de Edad a Antigüedad
+        ].map((i) => (
           <div key={i.n}>
             <label className="text-[10px] font-bold text-gray-500 uppercase">{i.l}</label>
             <input 
@@ -228,11 +246,9 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         ))}
       </div>
 
-      {/* SECCIÓN 6: MULTIMEDIA INTEGRADA CON CLOUDINARY */}
+      {/* SECCIÓN 6: MULTIMEDIA */}
       <div className="space-y-4">
         <label className="block text-sm font-bold uppercase tracking-tight text-gray-400">Galería de Imágenes</label>
-        
-        {/* Usamos el componente CloudinaryUploader */}
         <CloudinaryUploader 
           onImageUpload={handleImagesUpload} 
           folder="properties"
@@ -242,7 +258,7 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
           {form.images.map((img, idx) => (
             <div key={idx} className="relative aspect-square rounded-lg border border-white/10 overflow-hidden group">
               <Image src={img} alt="preview" fill className="object-cover" unoptimized />
-              <button type="button" onClick={() => removeImage(idx)} className="absolute inset-0 bg-red-600/90 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">✕</button>
+              <button type="button" onClick={() => removeImage(idx)} className="absolute inset-0 bg-red-600/90 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity font-bold">✕</button>
             </div>
           ))}
         </div>
@@ -250,10 +266,12 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
 
       {/* SECCIÓN 7: FLAGS */}
       <div className="flex flex-wrap gap-4 py-4 border-y border-white/5 uppercase text-[10px] font-bold">
-        {[{label: "Destacada", name: "featured"},
+        {[
+          {label: "Destacada", name: "featured"},
           {label: "Oportunidad", name: "opportunity"},
           {label: "Premium", name: "premium"},
-          {label: "Cochera", name: "garage"}].map((check) => (
+          {label: "Cochera", name: "garage"}
+        ].map((check) => (
           <label key={check.name} className="flex items-center gap-2 cursor-pointer hover:text-blue-400 transition-colors">
             <input 
               type="checkbox" 
@@ -273,7 +291,7 @@ export default function CreatePropertyForm({ onClose }: CreatePropertyFormProps)
         <textarea name="description" value={form.description} onChange={handleChange} rows={4} className="w-full p-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-blue-500 resize-none" />
       </div>
 
-      <button type="submit" disabled={loading} className={`w-full ${loading ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'} py-4 rounded-xl font-black uppercase text-sm active:scale-[0.98] transition-all`}>
+      <button type="submit" disabled={loading} className={`w-full ${loading ? 'bg-gray-600' : 'bg-blue-600 hover:bg-blue-700'} py-4 rounded-xl font-black uppercase text-sm active:scale-[0.98] transition-all shadow-lg shadow-blue-600/20`}>
         {loading ? "Publicando..." : "Publicar Propiedad"}
       </button>
     </form>

@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// backend/dto/UpdatePropertyDTO.ts
-
 export class UpdatePropertyDTO {
   title?: string;
   slug?: string;
   operationType?: "venta" | "alquiler";
   propertyTypeSlug?: string;
   description?: string;
-  age?: number;
+  contactPhone?: string; // 👈 1. Agregado en la raíz
   tags?: string[];
   status?: "active" | "inactive";
   images?: string[];
@@ -33,6 +31,7 @@ export class UpdatePropertyDTO {
     coveredM2?: number;
     rooms?: number;
     garage?: boolean;
+    age?: number; // 👈 2. Movido aquí dentro
   };
 
   flags?: {
@@ -48,18 +47,16 @@ export class UpdatePropertyDTO {
   };
 
   constructor(data: any) {
-    // 1. Campos raíz
     this.title = data.title;
     this.slug = data.slug;
     this.operationType = data.operationType;
     this.propertyTypeSlug = data.propertyTypeSlug;
     this.description = data.description;
-    this.age = Number(data.age) || 0;
+    this.contactPhone = data.contactPhone; // 👈 3. Mapeo de teléfono
     this.status = data.status;
-    this.images = data.images || [];
-    this.tags = data.tags || [];
+    this.images = data.images;
+    this.tags = data.tags;
 
-    // 2. Inflar Dirección (Evitando el CastError de ObjectId)
     this.address = {
       street: data.street,
       number: data.number,
@@ -69,34 +66,32 @@ export class UpdatePropertyDTO {
       barrio: data.barrio || undefined,
     };
 
-    // 3. Inflar Precio
-    this.price = {
-      amount: Number(data.priceAmount) || 0,
+    this.price = data.priceAmount ? {
+      amount: Number(data.priceAmount),
       currency: data.currency || "USD",
-    };
+    } : undefined;
 
-    // 4. Inflar Features
+    // 4. Age ahora se mapea dentro de features
     this.features = {
-      bedrooms: Number(data.bedrooms) || 0,
-      bathrooms: Number(data.bathrooms) || 0,
-      rooms: Number(data.rooms) || 0,
-      totalM2: Number(data.totalM2) || 0,
-      coveredM2: Number(data.coveredM2) || 0,
-      garage: Boolean(data.garage),
+      bedrooms: data.bedrooms !== undefined ? Number(data.bedrooms) : undefined,
+      bathrooms: data.bathrooms !== undefined ? Number(data.bathrooms) : undefined,
+      rooms: data.rooms !== undefined ? Number(data.rooms) : undefined,
+      totalM2: data.totalM2 !== undefined ? Number(data.totalM2) : undefined,
+      coveredM2: data.coveredM2 !== undefined ? Number(data.coveredM2) : undefined,
+      garage: data.garage !== undefined ? Boolean(data.garage) : undefined,
+      age: data.age !== undefined ? Number(data.age) : undefined, // 👈 Age aquí
     };
 
-    // 5. Inflar Flags
     this.flags = {
-      featured: Boolean(data.featured),
-      opportunity: Boolean(data.opportunity),
-      premium: Boolean(data.premium),
+      featured: data.featured !== undefined ? Boolean(data.featured) : undefined,
+      opportunity: data.opportunity !== undefined ? Boolean(data.opportunity) : undefined,
+      premium: data.premium !== undefined ? Boolean(data.premium) : undefined,
     };
 
-    // 6. Inflar Location (Asegurando que lat/lng sean números)
     this.location = {
-      mapsUrl: data.mapsUrl || "",
-      lat: data.lat ? Number(data.lat) : 0,
-      lng: data.lng ? Number(data.lng) : 0,
+      mapsUrl: data.mapsUrl,
+      lat: data.lat !== undefined ? Number(data.lat) : undefined,
+      lng: data.lng !== undefined ? Number(data.lng) : undefined,
     };
   }
 }

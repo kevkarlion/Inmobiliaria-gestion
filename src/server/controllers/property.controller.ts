@@ -35,7 +35,7 @@ export class PropertyController {
 
       const dto = new CreatePropertyDTO(body);
       const property = await PropertyService.create(dto);
-
+      console.log('property controller', property)
       const response = propertyResponseDTO(property);
       return NextResponse.json(response, { status: 201 });
     } catch (error: unknown) {
@@ -86,7 +86,7 @@ export class PropertyController {
       const dto = new UpdatePropertyDTO(body);
 
       const updatedProperty = await PropertyService.update(params.slug, dto);
-
+      console.log('updatedProperty de controller', updatedProperty)
       return NextResponse.json(propertyResponseDTO(updatedProperty));
     } catch (error: unknown) {
       return this.handleError(error);

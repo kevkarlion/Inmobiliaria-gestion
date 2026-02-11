@@ -10,7 +10,7 @@ export interface IProperty {
   slug: string;
   operationType: "venta" | "alquiler";
   propertyType: Types.ObjectId;
-
+  contactPhone?: string;
   price: {
     amount: number;
     currency: "USD" | "ARS";
@@ -31,6 +31,7 @@ export interface IProperty {
     coveredM2: number;
     rooms: number;
     garage: boolean;
+    age: number;
   };
   flags: {
     featured: boolean;
@@ -51,7 +52,7 @@ export interface IProperty {
   status: "active" | "inactive";
   createdAt?: Date;
   updatedAt?: Date;
-  age: number;
+  
 }
 
 /**

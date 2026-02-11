@@ -9,7 +9,7 @@ export interface Property {
   title: string;
   slug: string; 
   operationType: string;
-  antiguedad: number;
+  
   propertyType: {
     _id: string; 
     slug: string;
@@ -50,6 +50,7 @@ export interface Property {
     coveredM2: number;
     rooms: number;
     garage: boolean;
+    age: number;
   };
 
   flags: {
