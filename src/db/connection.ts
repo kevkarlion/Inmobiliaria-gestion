@@ -32,10 +32,10 @@ export const connectDB = async () => {
       serverSelectionTimeoutMS: 5000, // No esperar más de 5s
     };
 
-    console.log("📡 Iniciando nueva conexión a MongoDB...");
+   
     
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log("✅ Conexión exitosa a MongoDB");
+
       return mongoose;
     });
   }

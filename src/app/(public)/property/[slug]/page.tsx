@@ -16,13 +16,9 @@ export default async function PropertyDetailPage({
     `${process.env.BASE_URL}/api/properties/${slug}`,
     { cache: "no-store" }
   );
-
   if (!res.ok) notFound();
-
   const property = await res.json();
   if (!property) notFound();
-
-  console.log('property detail',property)
   return <PropertyDetailClient property={property} />;
 }
 

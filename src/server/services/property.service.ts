@@ -23,7 +23,7 @@ export class PropertyService {
    * Crea una nueva propiedad, valida referencias y retorna el objeto poblado.
    */
   static async create(dto: CreatePropertyDTO): Promise<Property> {
-    console.log("Iniciando creación de propiedad por slugs:", dto);
+  
 
     // 1. Validar Tipo de Propiedad (Slug)
     const propertyType = await PropertyTypeRepository.findBySlug(
@@ -196,7 +196,7 @@ export class PropertyService {
       skip,
       limit,
     });
-    console.log("items all", items);
+  
 
     const total = await PropertyRepository.count(filter);
 
@@ -205,7 +205,7 @@ export class PropertyService {
       _id: obj._id.toString(),
       images: obj.images || [],
     }));
-    console.log("normalized", normalized);
+  
     return {
       items: normalized,
       meta: {
@@ -223,7 +223,7 @@ export class PropertyService {
   // property.service.ts
   static async findBySlug(slug: string): Promise<Property> {
     const property = await PropertyRepository.findBySlug(slug);
-    console.log("property service", property);
+  
 
     if (!property) {
       throw new NotFoundError("Property not found");
@@ -238,7 +238,7 @@ export class PropertyService {
   // PUT /properties/:slug
   static async update(slug: string, payload: UpdatePropertyDTO) {
     const property = await PropertyRepository.findBySlug(slug);
-    console.log('property del service',property)
+   
     if (!property) throw new NotFoundError("Property not found");
 
     const updateData: Record<string, any> = {};

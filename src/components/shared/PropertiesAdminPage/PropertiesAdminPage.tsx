@@ -17,7 +17,7 @@ export default function PropertiesAdminClient({
   const [properties, setProperties] =
     useState<PropertyResponse[]>(initialProperties);
     
-    console.log('properties base',properties)
+
 
   const [editingProperty, setEditingProperty] =
     useState<PropertyResponse | null>(null);

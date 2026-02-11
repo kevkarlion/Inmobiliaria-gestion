@@ -12,7 +12,7 @@ async function createAdmin() {
 
   const exists = await UserModel.findOne({ email });
   if (exists) {
-    console.log("Admin ya existe");
+ 
     process.exit();
   }
 
@@ -24,7 +24,6 @@ async function createAdmin() {
     role: "admin",
   });
 
-  console.log("Admin creado");
   process.exit();
 }
 

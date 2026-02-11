@@ -9,7 +9,7 @@ export default async function PropertiesAdminPage() {
   const { items } = await PropertyService.findAll(new QueryPropertyDTO({}));
 
   const properties = items.map(p => propertyResponseDTO(p));
-  console.log('properties service', properties)
+  
 
   return <PropertiesAdminClient initialProperties={properties} />;
 }

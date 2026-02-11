@@ -17,12 +17,12 @@ interface EditPropertyFormProps {
 export default function EditPropertyForm({ property, slug, onClose, onUpdate }: EditPropertyFormProps) {
   const [form, setForm] = useState<any>(() => mapPropertyToForm(property));
   const [loading, setLoading] = useState(false);
-  console.log('property', property)
+ 
   useEffect(() => {
     setForm(mapPropertyToForm(property));
   }, [property]);
   
-  console.log('form', form)
+
 
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value, type } = e.target;
