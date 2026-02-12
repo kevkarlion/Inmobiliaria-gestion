@@ -1,3 +1,4 @@
+// layout.tsx
 import "@/app/globals.css";
 import { PropertyProvider } from "@/context/PropertyContext";
 import { Montserrat, Lora, Inter } from "next/font/google";
@@ -31,14 +32,17 @@ export default function RootLayout({
       lang="es"
       className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
     >
-      <body className="">
+      <body className="bg-[#001d3d] overflow-x-hidden">
         <PropertyProvider>
           <Navbar />
-          <div className="flex flex-col">
-            <main>{children}</main>
-            <Footer />
-            <WhatsAppButton />
-          </div>
+          
+          {/* Nada raro acá */}
+          <main className="flex flex-col">
+            {children}
+          </main>
+
+          <Footer />
+          <WhatsAppButton />
         </PropertyProvider>
       </body>
     </html>
