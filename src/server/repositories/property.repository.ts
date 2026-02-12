@@ -17,7 +17,7 @@ export class PropertyRepository {
     await connectDB();
     return PropertyModel.find(filter)
       .select(
-        "title slug price propertyType address location  features flags images contactPhone",
+        "title slug price propertyType address location  features flags images contactPhone description",
       )
       .populate("propertyType", "name slug")
       .populate("address.province", "name slug")

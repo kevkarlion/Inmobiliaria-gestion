@@ -1,4 +1,3 @@
-
 import React from "react";
 import Image from "next/image";
 import {
@@ -23,15 +22,15 @@ const teamMembers: TeamMember[] = [
     image: "/diego.webp",
     registration: "Mat. N° 361-RP-2021",
   },
-  { 
-    name: "Fernanda Huebra", 
-    title: "Asesora Inmobiliaria", 
-    image: "/chica1.webp" 
+  {
+    name: "Fernanda Huebra",
+    title: "Asesora Inmobiliaria",
+    image: "/chica1.webp",
   },
-  { 
-    name: "Stefy Anaya", 
-    title: "Asesora Inmobiliaria", 
-    image: "/chica2.webp" 
+  {
+    name: "Stefy Anaya",
+    title: "Asesora Inmobiliaria",
+    image: "/chica2.webp",
   },
 ];
 
@@ -42,13 +41,11 @@ interface NosotrosContentProps {
 export default function NosotrosPage() {
   return (
     <main className="min-h-screen relative">
-      
       {/* --- HERO SECTION CON IMAGEN EXTENDIDA --- */}
       {/* Usamos h-112.5 etc, pero la imagen adentro será más alta 
           para absorber el "pull-to-refresh" 
       */}
       <section className="relative h-112.5 md:h-135 2xl:h-150 flex items-center justify-center overflow-hidden bg-slate-900">
-        
         {/* --- CAPA DE IMAGEN (EL EFECTO) --- */}
         <div className="absolute inset-0 z-0">
           <div className="relative w-full h-[115%] -top-[10%] lg:h-full lg:top-0">
@@ -59,6 +56,8 @@ export default function NosotrosPage() {
               className="object-cover grayscale"
               priority
               quality={90}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+ZNPQAIXwM4ihSTfQAAAABJRU5ErkJggg=="
             />
             {/* Overlay para legibilidad */}
             <div className="absolute inset-0 bg-black/50" />
@@ -250,7 +249,9 @@ function NosotrosContent({ isMobile }: NosotrosContentProps) {
 
   return (
     <div className="space-y-6">
-      <p className={`font-montserrat text-base md:text-lg leading-relaxed ${mainTextColor}`}>
+      <p
+        className={`font-montserrat text-base md:text-lg leading-relaxed ${mainTextColor}`}
+      >
         Somos una empresa inmobiliaria enfocada en brindar{" "}
         <span className={`font-bold ${boldTextColor}`}>
           asesoramiento estratégico
@@ -259,7 +260,9 @@ function NosotrosContent({ isMobile }: NosotrosContentProps) {
         ofreciéndoles información clara para que puedan tomar decisiones
         patrimoniales con total seguridad.
       </p>
-      <p className={`font-montserrat text-sm md:text-base leading-relaxed border-l-4 border-gold-sand pl-6 italic ${quoteTextColor}`}>
+      <p
+        className={`font-montserrat text-sm md:text-base leading-relaxed border-l-4 border-gold-sand pl-6 italic ${quoteTextColor}`}
+      >
         Nuestro compromiso es generar valor real, construyendo relaciones
         basadas en la seriedad, el conocimiento y una atención personalizada que
         pone sus intereses en el centro.

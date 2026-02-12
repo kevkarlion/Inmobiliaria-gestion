@@ -5,7 +5,7 @@ import AboutPreview from "@/components/home/AboutPreview/AboutPreview";
 export default async function HomePage() {
   return (
     // Quitamos bg-white de aquí para que el Hero pueda ver el fondo del layout
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-white-bg">
       
       {/* El Hero es transparente por dentro */}
       <Hero />

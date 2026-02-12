@@ -32,7 +32,7 @@ export default function RootLayout({
       lang="es"
       className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
     >
-      <body className="bg-[#001d3d] overflow-x-hidden">
+      <body className="bg-oxford overflow-x-hidden">
         <PropertyProvider>
           <Navbar />
           

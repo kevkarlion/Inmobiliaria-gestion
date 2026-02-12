@@ -67,7 +67,7 @@ export default function SearchTypePage({ properties, filterParam }: Props) {
         <aside
           className={`${
             showFilters ? "block" : "hidden"
-          } lg:block lg:w-80 lg:bg-transparent lg:p-0 flex-shrink-0`}
+          } lg:block lg:w-80 lg:bg-transparent lg:p-0 shrink-0`}
         >
           <div className="bg-oxford p-8 rounded-3xl shadow-2xl w-full text-white border border-white/5">
             <h3 className="font-montserrat text-xl font-black uppercase tracking-tight border-l-4 border-gold-sand pl-4 mb-8 italic text-white">
