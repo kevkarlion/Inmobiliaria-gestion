@@ -81,7 +81,7 @@ export default function Navbar() {
                   Email
                 </span>
                 <p className="text-[13px] font-semibold text-onyx lowercase tracking-tight">
-                  info@riquelmepropiedades.com.ar
+                  diegoriquelme91@gmail.com
                 </p>
               </div>
             </a>
