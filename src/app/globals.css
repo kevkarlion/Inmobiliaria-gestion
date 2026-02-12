@@ -1,42 +1,18 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-oxford: #001d3d;
   --color-gold-sand: #e6b255;
   --color-gold-hover: #d4a045;
-  --color-gold-secondary: #d6b57a;
-  --color-onyx: #121212;
-  --color-white-bg: #f1f5f9;
-  --color-blue-gray: #4a5568;
   --font-montserrat: var(--font-montserrat);
   --font-lora: var(--font-lora);
   --font-inter: var(--font-inter);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
 }
 
-/* --- BASE: Configuración de Pantalla y Scroll --- */
 @layer base {
-  :root {
-    --radius: 0.625rem;
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.129 0.042 264.695);
-    /* Resto de tus variables oklch se mantienen igual en tu archivo local */
-  }
-
   html {
-    scrollbar-gutter: stable;
-    background-color: #001d3d;
+    background-color: #001d3d; /* el seguro de vida */
+    scroll-behavior: smooth;
   }
 
   @media (min-width: 1024px) {
@@ -47,47 +23,26 @@
 
   body {
     min-height: 100vh;
+    overflow-x: hidden;
+    background: transparent;
     font-family: var(--font-inter);
     -webkit-font-smoothing: antialiased;
-    @apply bg-background text-foreground;
-
-    /* EL FIX: Previene el movimiento lateral al abrir Selects/Modales */
-    overflow-x: hidden;
-    overflow-y: auto !important;
-    pointer-events: auto !important;
-    padding-right: 0px !important;
   }
 
-  * {
-    @apply border-border outline-ring/50;
-  }
-}
-
-/* --- TIPOGRAFÍA --- */
-h1 {
-  font-family: var(--font-montserrat);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 32px;
-  line-height: 1.2;
-}
-
-@media (min-width: 1024px) {
   h1 {
-    font-size: clamp(48px, 5vw, 56px);
+    font-family: var(--font-montserrat);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 32px;
+    line-height: 1.2;
   }
-  body {
-    font-family: var(--font-lora);
-    font-size: 20px;
+
+  @media (min-width: 1024px) {
+    h1 { font-size: clamp(48px, 5vw, 56px); }
+    body { font-family: var(--font-lora); font-size: 20px; }
   }
 }
 
-h2 {
-  font-weight: 600;
-  font-size: 26px;
-}
-
-/* --- COMPONENTES --- */
 @layer components {
   .navbar-container {
     position: fixed;
@@ -100,33 +55,27 @@ h2 {
 
   @media (min-width: 1024px) {
     .navbar-container {
-      background-color: #ffffff;
+      background-color: white;
     }
   }
 
+  /* parche mágico */
   .navbar-container::before {
     content: "";
     position: absolute;
-    top: -500px;
+    top: -600px;
     left: 0;
     width: 100%;
-    height: 500px;
+    height: 600px;
     z-index: -1;
     background-color: #001d3d;
+    pointer-events: none;
   }
 
   @media (min-width: 1024px) {
     .navbar-container::before {
-      background-color: #ffffff;
+      background-color: white;
     }
-  }
-
-  .label-subtitle {
-    font-family: var(--font-inter);
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-    color: var(--color-gold-sand);
   }
 
   .btn-cta {
@@ -135,42 +84,17 @@ h2 {
     justify-content: center;
     font-family: var(--font-montserrat);
     font-weight: 700;
-    
+    background-color: var(--color-gold-sand);
     color: white;
-    width: 100%;
     padding: 14px 28px;
     transition: background 0.3s;
   }
 
-  @media (min-width: 1024px) {
-    .btn-cta {
-      width: auto;
-     
-    }
-   
+  .btn-cta:hover {
+    background-color: var(--color-gold-hover);
   }
 }
 
-/* Utilidades adicionales */
-.label-subtitle {
-  font-family: var(--font-inter);
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-}
-
-.btn-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-montserrat);
-  font-weight: 700;
-  /* background-color: #001d3d; */
-  /* color: black; */
-  width: 100%;
-  padding: 14px 28px;
-  transition: background 0.3s;
-}
 
 @media (min-width: 1024px) {
   .btn-cta {

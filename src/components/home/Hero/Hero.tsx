@@ -6,11 +6,11 @@ export default async function Hero() {
   const allProperties = await getUiProperties({ limit: 20 });
 
   return (
-    <section className="relative w-full min-h-dvh flex items-center justify-center overflow-hidden">
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       
-      {/* --- IMAGEN DE FONDO EXTENDIDA (ANTI OVERSCROLL BLANCO) --- */}
+      {/* IMAGEN DE FONDO EXTENDIDA */}
       <div className="absolute inset-0 z-0">
-        <div className="relative w-full h-[120%] -top-[10%]">
+        <div className="relative w-full h-[125%] -top-[12%]">
           
           {/* Mobile */}
           <div className="relative w-full h-full block lg:hidden">
@@ -40,7 +40,7 @@ export default async function Hero() {
         </div>
       </div>
 
-      {/* --- CONTENIDO DEL HERO --- */}
+      {/* CONTENIDO */}
       <div className="relative z-20 w-full max-w-7xl mx-auto px-6 py-10 flex flex-col items-center text-center lg:mt-24">
         <h1 className="text-white text-4xl xl:text-5xl font-montserrat uppercase font-black italic drop-shadow-md mb-8">
           Estrategia para vender, <br />
