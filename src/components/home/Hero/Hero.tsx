@@ -9,7 +9,7 @@ export default async function Hero() {
     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       
       {/* IMAGEN DE FONDO EXTENDIDA */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 bg-white-bg">
         <div className="relative w-full h-[125%] -top-[12%]">
           
           {/* Mobile */}
