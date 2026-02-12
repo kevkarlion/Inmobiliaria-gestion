@@ -137,7 +137,7 @@ export default function PropertyGrid({
         {/* CTA final */}
         <div className="flex justify-center mt-6 mb-14">
           <Link className="" href={`${BASE_URL}/search-type/${filter}`}>
-            <button className="btn-cta  ">
+            <button className="btn-cta bg-oxford">
               {getButtonText()}
             </button>
           </Link>
