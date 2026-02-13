@@ -26,7 +26,7 @@ export default function SearchTypePage({ properties, filterParam }: Props) {
   const [provinceSelected, setProvinceSelected] = useState("");
   const [citySelected, setCitySelected] = useState("");
 
-  // 1. Opciones de filtros (Memoizadas para estabilidad total)
+  // 1. Opciones de filtros
   const provinceOptions = useMemo(() => {
     const map = new Map();
     properties.forEach(p => {
@@ -48,7 +48,11 @@ export default function SearchTypePage({ properties, filterParam }: Props) {
   }, [properties, provinceSelected]);
 
   const propertyTypes = useMemo(() => {
-    return [...new Set(properties.map((p) => p.typeSlug))].filter(Boolean);
+    const map = new Map();
+    properties.forEach(p => {
+        if(p.typeSlug && p.typeName) map.set(p.typeSlug, p.typeName);
+    });
+    return Array.from(map.entries());
   }, [properties]);
 
   // 2. Lógica de Filtrado
@@ -82,6 +86,12 @@ export default function SearchTypePage({ properties, filterParam }: Props) {
     setTypesSelected([]); setMinPrice(""); setMaxPrice(""); setCurrency("");
     setMinM2(""); setMaxM2(""); setBedrooms(""); setGarage(false);
     setProvinceSelected(""); setCitySelected("");
+  };
+
+  const toggleType = (slug: string) => {
+    setTypesSelected(prev => 
+      prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug]
+    );
   };
 
   return (
@@ -128,6 +138,26 @@ export default function SearchTypePage({ properties, filterParam }: Props) {
               </div>
 
               <div className="space-y-7">
+
+                {/* CATEGORÍA (Tipo de Propiedad) */}
+                <div className="space-y-3">
+                  <label className="text-gold-secondary block uppercase text-[10px] tracking-[0.2em] font-black">Categoría</label>
+                  <div className="flex flex-wrap gap-2">
+                    {propertyTypes.map(([slug, name]) => (
+                      <button
+                        key={slug}
+                        onClick={() => toggleType(slug)}
+                        className={`px-3 py-2 rounded-md font-bold text-[10px] uppercase transition-all border ${
+                          typesSelected.includes(slug) 
+                            ? "bg-gold-sand text-black border-gold-sand shadow-lg" 
+                            : "bg-white/5 text-white border-white/10 hover:bg-white/10"
+                        }`}
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 
                 {/* UBICACIÓN */}
                 <div className="space-y-3">
