@@ -35,7 +35,7 @@ export class PropertyController {
 
       const dto = new CreatePropertyDTO(body);
       const property = await PropertyService.create(dto);
-      console.log('property',property)
+     
       const response = propertyResponseDTO(property);
       return NextResponse.json(response, { status: 201 });
     } catch (error: unknown) {

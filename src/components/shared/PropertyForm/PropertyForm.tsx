@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useMemo } from "react";
 import Image from "next/image";
 import { PropertyFormType } from "@/domain/types/PropertyFormType.types";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
@@ -60,6 +60,62 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
 
   const [loading, setLoading] = useState(false);
 
+  // 1. DATA DE PROVINCIAS (Ordenadas)
+  const provinces = useMemo(() => [
+    { label: "Buenos Aires", value: "buenos-aires" },
+    { label: "Neuquén", value: "neuquen" },
+    { label: "Río Negro", value: "rio-negro" },
+    { label: "Otra Provincia", value: "otra-provincia" },
+  ].sort((a, b) => a.label.localeCompare(b.label)), []);
+
+  // 2. DATA DE LOCALIDADES (Mapeadas por provincia y ordenadas)
+  const citiesByProvince: Record<string, {label: string, value: string}[]> = {
+    "rio-negro": [
+      { label: "Allen", value: "allen" },
+      { label: "Catriel", value: "catriel" },
+      { label: "Cervantes", value: "cervantes" },
+      { label: "Cinco Saltos", value: "cinco-saltos" },
+      { label: "Cipolletti", value: "cipolletti" },
+      { label: "Choele Choel", value: "choele-choel" },
+      { label: "El Bolsón", value: "el-bolson" },
+      { label: "Fernández Oro", value: "fernandez-oro" },
+      { label: "General Roca", value: "general-roca" },
+      { label: "Ingeniero Huergo", value: "ingeniero-huergo" },
+      { label: "Las Grutas", value: "las-grutas" },
+      { label: "Mainqué", value: "mainque" },
+      { label: "San Carlos de Bariloche", value: "bariloche" },
+      { label: "Viedma", value: "viedma" },
+      { label: "Otras localidades (Río Negro)", value: "otras-rio-negro" },
+    ].sort((a, b) => a.label.localeCompare(b.label)),
+
+    "neuquen": [
+      { label: "Añelo", value: "anelo" },
+      { label: "Centenario", value: "centenario" },
+      { label: "Cutral Có", value: "cutral-co" },
+      { label: "Neuquén Capital", value: "neuquen-capital" },
+      { label: "Plaza Huincul", value: "plaza-huincul" },
+      { label: "Plottier", value: "plottier" },
+      { label: "San Martín de los Andes", value: "san-martin-de-los-andes" },
+      { label: "Villa La Angostura", value: "villa-la-angostura" },
+      { label: "Otras localidades (Neuquén)", value: "otras-neuquen" },
+    ].sort((a, b) => a.label.localeCompare(b.label)),
+
+    "buenos-aires": [
+      { label: "Bahía Blanca", value: "bahia-blanca" },
+      { label: "CABA", value: "caba" },
+      { label: "La Plata", value: "la-plata" },
+      { label: "Mar del Plata", value: "mar-del-plat" },
+      { label: "Pilar", value: "pilar" },
+      { label: "Tandil", value: "tandil" },
+      { label: "Tigre", value: "tigre" },
+      { label: "Otras localidades (Buenos Aires)", value: "otras-buenos-aires" },
+    ].sort((a, b) => a.label.localeCompare(b.label)),
+
+    "otra-provincia": [
+      { label: "Otra localidad / Consultar", value: "generica-consultar" }
+    ]
+  };
+
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value, type } = e.target;
     let finalValue: any;
@@ -75,7 +131,12 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
   }
 
   const handleSelectChange = (name: string, value: string) => {
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm(prev => {
+      const newState = { ...prev, [name]: value };
+      // Si cambia la provincia, reseteamos la ciudad para evitar inconsistencias
+      if (name === "province") newState.city = "";
+      return newState;
+    });
   };
 
   const handleCheckboxChange = (name: string, checked: boolean) => {
@@ -192,7 +253,6 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
           <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em]">Localización y Dirección</p>
         </div>
         
-        {/* Dropdowns de Ubicación */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Provincia *</Label>
@@ -201,8 +261,9 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
                 <SelectValue placeholder="Seleccionar Provincia" />
               </SelectTrigger>
               <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
-                <SelectItem value="rio-negro">Río Negro</SelectItem>
-                <SelectItem value="neuquen">Neuquén</SelectItem>
+                {provinces.map((p) => (
+                  <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -213,9 +274,9 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
                 <SelectValue placeholder="Seleccionar Ciudad" />
               </SelectTrigger>
               <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
-                <SelectItem value="general-roca">General Roca</SelectItem>
-                <SelectItem value="cipolletti">Cipolletti</SelectItem>
-                <SelectItem value="neuquen-capital">Neuquén Capital</SelectItem>
+                {form.province && citiesByProvince[form.province]?.map((c) => (
+                  <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -225,7 +286,6 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
           </div>
         </div>
 
-        {/* Calle, Altura y CP */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="md:col-span-2 space-y-2">
             <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Calle</Label>

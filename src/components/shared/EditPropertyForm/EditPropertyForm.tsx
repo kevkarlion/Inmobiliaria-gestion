@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { mapPropertyToForm } from "@/domain/mappers/propertyToForm.mapper";
@@ -31,12 +31,67 @@ interface EditPropertyFormProps {
 export default function EditPropertyForm({ property, slug, onClose, onUpdate }: EditPropertyFormProps) {
   const [form, setForm] = useState<any>(() => mapPropertyToForm(property));
   const [loading, setLoading] = useState(false);
-    console.log('property',property)
+
   useEffect(() => {
     setForm(mapPropertyToForm(property));
   }, [property]);
-console.log('form',form)
-  // Manejador estándar para inputs de texto/número
+
+  // 1. DATA DE PROVINCIAS (Ordenadas)
+  const provinces = useMemo(() => [
+    { label: "Buenos Aires", value: "buenos-aires" },
+    { label: "Neuquén", value: "neuquen" },
+    { label: "Río Negro", value: "rio-negro" },
+    { label: "Otra Provincia", value: "otra-provincia" },
+  ].sort((a, b) => a.label.localeCompare(b.label)), []);
+
+  // 2. DATA DE LOCALIDADES (Mapeadas por provincia y ordenadas)
+  const citiesByProvince: Record<string, {label: string, value: string}[]> = {
+    "rio-negro": [
+      { label: "Allen", value: "allen" },
+      { label: "Catriel", value: "catriel" },
+      { label: "Cervantes", value: "cervantes" },
+      { label: "Cinco Saltos", value: "cinco-saltos" },
+      { label: "Cipolletti", value: "cipolletti" },
+      { label: "Choele Choel" , value: "choele-choel" },
+      { label: "El Bolsón", value: "el-bolson" },
+      { label: "Fernández Oro", value: "fernandez-oro" },
+      { label: "General Roca", value: "general-roca" },
+      { label: "Ingeniero Huergo", value: "ingeniero-huergo" },
+      { label: "Las Grutas", value: "las-grutas" },
+      { label: "Mainqué", value: "mainque" },
+      { label: "San Carlos de Bariloche", value: "bariloche" },
+      { label: "Viedma", value: "viedma" },
+      { label: "Otras localidades (Río Negro)", value: "otras-rio-negro" },
+    ].sort((a, b) => a.label.localeCompare(b.label)),
+
+    "neuquen": [
+      { label: "Añelo", value: "anelo" },
+      { label: "Centenario", value: "centenario" },
+      { label: "Cutral Có", value: "cutral-co" },
+      { label: "Neuquén Capital", value: "neuquen-capital" },
+      { label: "Plaza Huincul", value: "plaza-huincul" },
+      { label: "Plottier", value: "plottier" },
+      { label: "San Martín de los Andes", value: "san-martin-de-los-andes" },
+      { label: "Villa La Angostura", value: "villa-la-angostura" },
+      { label: "Otras localidades (Neuquén)", value: "otras-neuquen" },
+    ].sort((a, b) => a.label.localeCompare(b.label)),
+
+    "buenos-aires": [
+      { label: "Bahía Blanca", value: "bahia-blanca" },
+      { label: "CABA", value: "caba" },
+      { label: "La Plata", value: "la-plata" },
+      { label: "Mar del Plata", value: "mar-del-plat" },
+      { label: "Pilar", value: "pilar" },
+      { label: "Tandil", value: "tandil" },
+      { label: "Tigre", value: "tigre" },
+      { label: "Otras localidades (Buenos Aires)", value: "otras-buenos-aires" },
+    ].sort((a, b) => a.label.localeCompare(b.label)),
+
+    "otra-provincia": [
+      { label: "Otra localidad / Consultar", value: "generica-consultar" }
+    ]
+  };
+
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value, type } = e.target;
     let finalValue: any;
@@ -52,9 +107,12 @@ console.log('form',form)
     setForm((prev: any) => ({ ...prev, [name]: finalValue }));
   }
 
-  // Helpers para componentes controlados de Shadcn
   const handleSelectChange = (name: string, value: string) => {
-    setForm((prev: any) => ({ ...prev, [name]: value }));
+    setForm((prev: any) => {
+      const newState = { ...prev, [name]: value };
+      if (name === "province") newState.city = ""; 
+      return newState;
+    });
   };
 
   const handleCheckboxChange = (name: string, checked: boolean) => {
@@ -124,7 +182,7 @@ console.log('form',form)
         <div className="md:col-span-1 space-y-2">
           <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tipo</Label>
           <Select value={form.propertyTypeSlug || "casa"} onValueChange={(v) => handleSelectChange("propertyTypeSlug", v)}>
-            <SelectTrigger className="bg-white/5 border-white/10 h-12">
+            <SelectTrigger className="bg-white/5 border-white/10 h-12 text-white">
               <SelectValue placeholder="Tipo" />
             </SelectTrigger>
             <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
@@ -184,25 +242,26 @@ console.log('form',form)
           <div className="space-y-2">
             <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Provincia *</Label>
             <Select value={form.province || ""} onValueChange={(v) => handleSelectChange("province", v)}>
-              <SelectTrigger className="bg-neutral-800 border-white/10 h-12">
+              <SelectTrigger className="bg-neutral-800 border-white/10 h-12 text-white">
                 <SelectValue placeholder="Provincia" />
               </SelectTrigger>
               <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
-                <SelectItem value="rio-negro">Río Negro</SelectItem>
-                <SelectItem value="neuquen">Neuquén</SelectItem>
+                {provinces.map((p) => (
+                  <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Localidad *</Label>
             <Select value={form.city || ""} onValueChange={(v) => handleSelectChange("city", v)} disabled={!form.province}>
-              <SelectTrigger className="bg-neutral-800 border-white/10 h-12">
+              <SelectTrigger className="bg-neutral-800 border-white/10 h-12 text-white">
                 <SelectValue placeholder="Ciudad" />
               </SelectTrigger>
               <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
-                <SelectItem value="general-roca">General Roca</SelectItem>
-                <SelectItem value="cipolletti">Cipolletti</SelectItem>
-                <SelectItem value="neuquen-capital">Neuquén Capital</SelectItem>
+                {form.province && citiesByProvince[form.province]?.map((c) => (
+                  <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

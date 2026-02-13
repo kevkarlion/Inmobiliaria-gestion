@@ -15,7 +15,7 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
   const [showEditForm, setShowEditForm] = useState(false);
 
 
-  console.log('initialProperties',initialProperties)
+  
 
   // Handlers de Lógica
   function handleCreate(newProperty: PropertyResponse) {
