@@ -18,7 +18,7 @@ export default function Navbar() {
 
   const menuItems = [
     { name: "Inicio", href: "/" },
-    { name: "Oportunidad", href: "/search-type/oportunidad" },
+    { name: "Oportunidades", href: "/search-type/oportunidad" },
     { name: "Venta", href: "/search-type/venta" },
     { name: "Alquiler", href: "/search-type/alquiler" },
     { name: "Nosotros", href: "/nosotros" },
