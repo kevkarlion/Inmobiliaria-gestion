@@ -25,7 +25,7 @@ const inter = Inter({
 
 // layout.tsx
 export const metadata = {
-  metadataBase: new URL("https://riquelmepropiedades.com.ar"), // tu dominio real
+  metadataBase: new URL("https://riquelmeprop.com.ar"), // tu dominio real
   title: {
     default: "Riquelme Propiedades | Inmobiliaria en General Roca",
     template: "%s | Riquelme Propiedades",
@@ -45,7 +45,7 @@ export const metadata = {
     title: "Riquelme Propiedades | Inmobiliaria en General Roca",
     description:
       "Encontrá casas, departamentos y terrenos en venta y alquiler en General Roca, Río Negro.",
-    url: "https://riquelmepropiedades.com.ar",
+    url: "https://riquelmeprop.com",
     siteName: "Riquelme Propiedades",
     locale: "es_AR",
     type: "website",
