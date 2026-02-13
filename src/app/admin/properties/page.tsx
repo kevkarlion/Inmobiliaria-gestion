@@ -1,4 +1,6 @@
 // app/admin/properties/page.tsx (SERVER)
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 import PropertiesAdminClient from "@/components/shared/PropertiesAdminPage/PropertiesAdminPage";
 import { PropertyService } from "@/server/services/property.service";
 import { propertyResponseDTO } from "@/dtos/property/property-response.dto";
