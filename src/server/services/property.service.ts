@@ -17,14 +17,13 @@ import { City } from "@/db/schemas/city.schema";
 import { Barrio } from "@/db/schemas/barrio.schema";
 import { Types } from "mongoose";
 import { connectDB } from "@/db/connection";
+import { revalidatePath } from "next/cache";
 
 export class PropertyService {
   /**
    * Crea una nueva propiedad, valida referencias y retorna el objeto poblado.
    */
   static async create(dto: CreatePropertyDTO): Promise<Property> {
-  
-
     // 1. Validar Tipo de Propiedad (Slug)
     const propertyType = await PropertyTypeRepository.findBySlug(
       dto.propertyTypeSlug,
@@ -39,9 +38,13 @@ export class PropertyService {
     ]);
 
     if (!provinceDoc)
-      throw new BadRequestError(`La provincia '${dto.address.provinceSlug}' no existe.`);
+      throw new BadRequestError(
+        `La provincia '${dto.address.provinceSlug}' no existe.`,
+      );
     if (!cityDoc)
-      throw new BadRequestError(`La localidad '${dto.address.citySlug}' no existe.`);
+      throw new BadRequestError(
+        `La localidad '${dto.address.citySlug}' no existe.`,
+      );
 
     // Validar Barrio si viene (Opcional)
     let barrioId: Types.ObjectId | undefined = undefined;
@@ -50,7 +53,9 @@ export class PropertyService {
       if (barrioDoc) {
         barrioId = barrioDoc._id as Types.ObjectId;
       } else {
-        console.warn(`Aviso: El barrio slug '${dto.address.barrioSlug}' no se encontró.`);
+        console.warn(
+          `Aviso: El barrio slug '${dto.address.barrioSlug}' no se encontró.`,
+        );
       }
     }
 
@@ -96,9 +101,9 @@ export class PropertyService {
         lat: Number(dto.location?.lat) || 0,
         lng: Number(dto.location?.lng) || 0,
       },
-      features: { 
-        ...dto.features, 
-        age: Number(dto.features.age) || 0 // 👈 Age ahora vive dentro de features
+      features: {
+        ...dto.features,
+        age: Number(dto.features.age) || 0, // 👈 Age ahora vive dentro de features
       },
       flags: { ...dto.flags },
       description: dto.description || "",
@@ -112,6 +117,12 @@ export class PropertyService {
     // 6. Persistir en Base de Datos
     const savedProperty = await PropertyRepository.create(propertyToSave);
 
+    // 🔥 INVALIDACIÓN
+    revalidatePath("/");
+    revalidatePath("/search-type/oportunidad");
+    revalidatePath("/search-type/venta");
+    revalidatePath("/search-type/alquiler");
+
     // 7. Recuperar con Populate
     const result = await PropertyModel.findById(savedProperty._id)
       .populate("propertyType")
@@ -121,13 +132,13 @@ export class PropertyService {
       .lean();
 
     if (!result) throw new Error("No se pudo recuperar la propiedad creada.");
-    
+
     // 8. Retorno final
     return {
       ...result,
       _id: result._id.toString(),
     } as unknown as Property;
-}
+  }
 
   /**
    * GET /properties con filtros + paginación
@@ -196,7 +207,6 @@ export class PropertyService {
       skip,
       limit,
     });
-  
 
     const total = await PropertyRepository.count(filter);
 
@@ -205,7 +215,7 @@ export class PropertyService {
       _id: obj._id.toString(),
       images: obj.images || [],
     }));
-  
+
     return {
       items: normalized,
       meta: {
@@ -223,7 +233,6 @@ export class PropertyService {
   // property.service.ts
   static async findBySlug(slug: string): Promise<Property> {
     const property = await PropertyRepository.findBySlug(slug);
-  
 
     if (!property) {
       throw new NotFoundError("Property not found");
@@ -238,13 +247,15 @@ export class PropertyService {
   // PUT /properties/:slug
   static async update(slug: string, payload: UpdatePropertyDTO) {
     const property = await PropertyRepository.findBySlug(slug);
-   
+
     if (!property) throw new NotFoundError("Property not found");
 
     const updateData: Record<string, any> = {};
 
     if (payload.propertyTypeSlug) {
-      const type = await PropertyTypeRepository.findBySlug(payload.propertyTypeSlug);
+      const type = await PropertyTypeRepository.findBySlug(
+        payload.propertyTypeSlug,
+      );
       if (!type) throw new BadRequestError("Invalid property type");
       updateData.propertyType = type._id;
     }
@@ -253,7 +264,10 @@ export class PropertyService {
       let newSlug = slugify(payload.title, { lower: true });
       let slugExists = await PropertyModel.findOne({ slug: newSlug });
       let counter = 1;
-      while (slugExists && slugExists._id.toString() !== property._id.toString()) {
+      while (
+        slugExists &&
+        slugExists._id.toString() !== property._id.toString()
+      ) {
         newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
         slugExists = await PropertyModel.findOne({ slug: newSlug });
         counter++;
@@ -264,8 +278,12 @@ export class PropertyService {
 
     if (payload.address) {
       const [provinceDoc, cityDoc] = await Promise.all([
-        payload.address.province ? Province.findOne({ slug: payload.address.province }) : null,
-        payload.address.city ? City.findOne({ slug: payload.address.city }) : null,
+        payload.address.province
+          ? Province.findOne({ slug: payload.address.province })
+          : null,
+        payload.address.city
+          ? City.findOne({ slug: payload.address.city })
+          : null,
       ]);
       updateData.address = {
         ...property.address,
@@ -309,10 +327,16 @@ export class PropertyService {
     }
 
     const simpleFields: (keyof UpdatePropertyDTO)[] = [
-      "description", "tags", "images", "status", "operationType", "contactPhone"
+      "description",
+      "tags",
+      "images",
+      "status",
+      "operationType",
+      "contactPhone",
     ];
     simpleFields.forEach((field) => {
-      if (payload[field] !== undefined) updateData[field as string] = payload[field];
+      if (payload[field] !== undefined)
+        updateData[field as string] = payload[field];
     });
 
     if (payload.location) {
@@ -331,7 +355,12 @@ export class PropertyService {
     // Aplicar cambios
     Object.assign(property, updateData);
     await property.save();
-    
+    revalidatePath("/");
+    revalidatePath("/search-type/oportunidad");
+    revalidatePath("/search-type/venta");
+    revalidatePath("/search-type/alquiler");
+    revalidatePath(`/propiedad/${property.slug}`);
+
     // Devolver con populate para el controlador
     const result = await PropertyModel.findById(property._id)
       .populate("propertyType")
@@ -343,13 +372,18 @@ export class PropertyService {
     return { ...result, _id: result!._id.toString() } as any;
   }
 
-
   // DELETE /properties/:slug
   static async delete(slug: string) {
     const property = await PropertyRepository.findBySlug(slug);
     if (!property) throw new NotFoundError("Property not found");
 
     await PropertyModel.deleteOne({ _id: property._id });
+
+    // 🔥 INVALIDACIÓN
+    revalidatePath("/");
+    revalidatePath("/search-type/oportunidad");
+    revalidatePath("/search-type/venta");
+    revalidatePath("/search-type/alquiler");
     return { message: "Property deleted successfully" };
   }
 

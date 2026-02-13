@@ -1,4 +1,5 @@
 // components/home/AlquilerHome.tsx
+export const revalidate = 120;
 import PropertyGrid from "@/components/shared/PropertyGrid/PropertyGrid";
 import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
 

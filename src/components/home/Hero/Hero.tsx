@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import SearchBar from "@/components/shared/SearchBar/SearchBar";
 import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
 import Image from "next/image";
