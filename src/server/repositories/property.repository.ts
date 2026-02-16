@@ -49,4 +49,14 @@ export class PropertyRepository {
   static create(data: any) {
     return PropertyModel.create(data);
   }
+
+
+  //SEO
+  static async findAllForSitemap() {
+  await connectDB();
+  return PropertyModel.find({ status: "active" })
+    .select("slug updatedAt")
+    .lean();
+}
+
 }

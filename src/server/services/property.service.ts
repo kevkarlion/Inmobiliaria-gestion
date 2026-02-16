@@ -406,4 +406,15 @@ export class PropertyService {
       sort: { sort: { createdAt: -1 } },
     });
   }
+
+
+  //SEO
+  // property.service.ts
+static async findAllForSitemap() {
+  return PropertyRepository.findAllForSitemap();
+}
+
+
+
+
 }
