@@ -232,6 +232,7 @@ export class PropertyService {
    */
   // property.service.ts
 static async findBySlug(slug: string) {
+  await connectDB();   // <-- ESTA ERA LA QUE FALTABA
   return await PropertyRepository.findBySlug(slug);
 }
 
