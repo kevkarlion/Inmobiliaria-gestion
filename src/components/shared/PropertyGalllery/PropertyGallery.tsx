@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -9,6 +9,13 @@ export function PropertyGallery({ images = [] }: { images?: string[] }) {
 
   // ⚡ Filtramos cualquier valor vacío o inválido
   const validImages = images.filter(Boolean);
+
+  // ⚡ Preload de la siguiente imagen
+  useEffect(() => {
+    if (!validImages.length) return;
+    const nextImg = new window.Image();
+    nextImg.src = validImages[(index + 1) % validImages.length];
+  }, [index, validImages]);
 
   if (!validImages.length)
     return (
@@ -27,24 +34,27 @@ export function PropertyGallery({ images = [] }: { images?: string[] }) {
           src={validImages[index]}
           alt={`Imagen ${index + 1}`}
           fill
-          priority
+          priority={index === 0}
+          quality={index === 0 ? 80 : 60}
           className="object-contain"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
         />
+
         <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none">
-          <button 
-            onClick={prev} 
+          <button
+            onClick={prev}
             className="pointer-events-auto bg-black/40 hover:bg-black/70 backdrop-blur-sm text-white p-3 rounded-full transition-all active:scale-90"
           >
             <ChevronLeft size={28} />
           </button>
-          <button 
-            onClick={next} 
+          <button
+            onClick={next}
             className="pointer-events-auto bg-black/40 hover:bg-black/70 backdrop-blur-sm text-white p-3 rounded-full transition-all active:scale-90"
           >
             <ChevronRight size={28} />
           </button>
         </div>
+
         <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white tracking-widest border border-white/10">
           {index + 1} / {validImages.length}
         </div>
@@ -52,15 +62,24 @@ export function PropertyGallery({ images = [] }: { images?: string[] }) {
 
       <div className="flex gap-3 mt-6 overflow-x-auto pb-4 no-scrollbar justify-center">
         {validImages.map((img, i) => (
-          <button 
-            key={i} // ⚡ Usamos índice en vez de `img` para evitar duplicados
-            onClick={() => setIndex(i)} 
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
             className={`relative shrink-0 transition-all duration-300 rounded-xl overflow-hidden border-2 ${
-              i === index ? "border-blue-600 scale-105 shadow-lg shadow-blue-500/20" : "border-transparent opacity-50 hover:opacity-100"
+              i === index
+                ? "border-blue-600 scale-105 shadow-lg shadow-blue-500/20"
+                : "border-transparent opacity-50 hover:opacity-100"
             }`}
           >
             <div className="relative w-20 h-14 sm:w-24 sm:h-16">
-              <Image src={img} alt={`Thumbnail ${i + 1}`} fill className="object-cover" unoptimized />
+              <Image
+                src={img}
+                alt={`Thumbnail ${i + 1}`}
+                fill
+                sizes="96px"
+                quality={40}
+                className="object-cover"
+              />
             </div>
           </button>
         ))}

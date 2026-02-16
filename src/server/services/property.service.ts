@@ -231,18 +231,10 @@ export class PropertyService {
    * GET /properties/:slug
    */
   // property.service.ts
-  static async findBySlug(slug: string): Promise<Property> {
-    const property = await PropertyRepository.findBySlug(slug);
+static async findBySlug(slug: string) {
+  return await PropertyRepository.findBySlug(slug);
+}
 
-    if (!property) {
-      throw new NotFoundError("Property not found");
-    }
-
-    return {
-      ...property.toObject(),
-      _id: property._id.toString(),
-    };
-  }
 
   // PUT /properties/:slug
   static async update(slug: string, payload: UpdatePropertyDTO) {

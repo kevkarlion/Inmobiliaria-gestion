@@ -1,10 +1,8 @@
-
-// app/(main)/propiedades/[slug]/page.tsx
+// app/(main)/propiedad/[slug]/page.tsx
 import { PropertyDetailClient } from "@/components/shared/PropertyDetailClient/PropertyDetailClient";
 import { notFound } from "next/navigation";
+import { PropertyService } from "@/server/services/property.service";
 
-
-// app/(main)/propiedades/[slug]/page.tsx
 export default async function PropertyDetailPage({
   params,
 }: {
@@ -12,15 +10,9 @@ export default async function PropertyDetailPage({
 }) {
   const { slug } = await params;
 
-  const res = await fetch(
-    `${process.env.BASE_URL}/api/properties/${slug}`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) notFound();
-  const property = await res.json();
+  const property = await PropertyService.findBySlug(slug);
+
   if (!property) notFound();
+
   return <PropertyDetailClient property={property} />;
 }
-
-
-

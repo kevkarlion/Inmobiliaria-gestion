@@ -30,16 +30,14 @@ export class PropertyRepository {
   }
 
   static findBySlug(slug: string) {
-    return (
-      PropertyModel.findOne({ slug, status: "active" })
+  return PropertyModel.findOne({ slug, status: "active" })
+    .populate("propertyType", "name slug")
+    .populate("address.province")
+    .populate("address.city")
+    .populate("address.barrio")
+    .lean(); // 👈 clave
+}
 
-        .populate("propertyType", "name slug")
-        // 🔹 TAMBIÉN EN EL DETALLE:
-        .populate("address.province")
-        .populate("address.city")
-        .populate("address.barrio")
-    );
-  }
 
   //paginacion
   static count(filter: any) {
