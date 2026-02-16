@@ -4,10 +4,14 @@ import PropertyGrid from "@/components/shared/PropertyGrid/PropertyGrid";
 import { getUiProperties } from "@/components/server/data-access/get-ui-properties";
 
 export default async function AlquilerHome() {
-  const properties = await getUiProperties({ 
-    type: "alquiler", 
-    limit: 6 
+  const properties = await getUiProperties({
+    type: "alquiler",
+    limit: 6,
   });
+
+  if (!properties || properties.length === 0) {
+    return null;
+  }
 
   return (
     <PropertyGrid

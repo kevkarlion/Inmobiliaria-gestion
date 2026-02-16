@@ -9,6 +9,10 @@ export default async function OportunityHome() {
     limit: 6 
   });
 
+   if (!properties || properties.length === 0) {
+    return null;
+  }
+
   return (
     <PropertyGrid
       title="Oportunidades"
