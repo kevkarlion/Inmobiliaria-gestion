@@ -28,12 +28,12 @@ export function PropertyDetailClient({
                 </span>
               )}
               {p.featured && (
-                <span className="label-subtitle bg-oxford text-white px-3 py-1 rounded">
+                <span className="label-subtitle font-montserrat bg-oxford text-white px-3 py-1 rounded">
                   Destacada
                 </span>
               )}
               {p.premium && (
-                <span className="label-subtitle bg-purple-600 text-white px-3 py-1 rounded">
+                <span className="label-subtitle font-montserrat bg-purple-600 text-white px-3 py-1 rounded">
                   Premium
                 </span>
               )}
