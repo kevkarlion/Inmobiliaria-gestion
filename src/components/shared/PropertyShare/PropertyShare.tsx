@@ -20,7 +20,6 @@ export default function PropertyShare({
   // URL absoluta SSR-safe
   const url = useMemo(() => {
     const base =
-      process.env.NEXT_PUBLIC_BASE_URL ||
       process.env.BASE_URL ||
       "https://riquelmeprop.com"
     return `${base}${pathname}`
