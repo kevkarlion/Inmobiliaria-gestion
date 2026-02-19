@@ -2,7 +2,7 @@ import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import { PropertyGallery } from "@/components/shared/PropertyGalllery/PropertyGallery";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { formatPrice } from "@/utils/formatPrice";
-import { PropertyShare } from "@/components/shared/PropertyShare/PropertyShare";
+import PropertyShare  from "@/components/shared/PropertyShare/PropertyShare";
 
 export function PropertyDetailClient({
   property,
