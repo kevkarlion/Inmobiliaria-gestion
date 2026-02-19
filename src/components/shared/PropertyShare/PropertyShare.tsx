@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
 
 interface PropertyShareProps {
@@ -15,18 +15,20 @@ export default function PropertyShare({
   zone,
 }: PropertyShareProps) {
   const pathname = usePathname()
+  const [copied, setCopied] = useState(false)
 
-  // URL absoluta SSR-safe (usa tu BASE_URL)
+  // URL absoluta SSR-safe
   const url = useMemo(() => {
     const base =
+      process.env.NEXT_PUBLIC_BASE_URL ||
       process.env.BASE_URL ||
-      "https://riquelmeprop.com" // fallback producción
+      "https://riquelmeprop.com"
     return `${base}${pathname}`
   }, [pathname])
 
   const shareText = `${title} | ${price} | ${zone}`
 
-  // Detecta soporte share sin estado ni efectos
+  // Seguro para SSR (no rompe hidratación)
   const canNativeShare =
     typeof navigator !== "undefined" && typeof navigator.share === "function"
 
@@ -68,14 +70,22 @@ export default function PropertyShare({
   const copyLink = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(url)
+
+      // Activamos toast (SIN useEffect, así evitamos loops)
+      setCopied(true)
+
+      // Se oculta solo después de 2 segundos
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
     } catch (error) {
       console.error("Copy link error:", error)
     }
   }, [url])
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      {/* Botón compartir nativo (móvil principalmente) */}
+    <div className="w-full flex flex-col gap-4 relative">
+      {/* Botón compartir nativo */}
       <button
         onClick={handleNativeShare}
         disabled={!canNativeShare}
@@ -113,6 +123,21 @@ export default function PropertyShare({
         >
           Copiar link
         </button>
+      </div>
+
+      {/* Toast moderno y sutil */}
+      <div
+        className={`pointer-events-none absolute left-1/2 -translate-x-1/2 top-full mt-3
+        px-4 py-2 rounded-lg text-sm font-medium
+        backdrop-blur-md bg-white/10 border border-white/20 text-white
+        shadow-xl transition-all duration-300
+        ${
+          copied
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2"
+        }`}
+      >
+        🔗 Enlace copiado
       </div>
     </div>
   )
