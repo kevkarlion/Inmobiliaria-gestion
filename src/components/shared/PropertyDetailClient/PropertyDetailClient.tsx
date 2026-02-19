@@ -2,6 +2,7 @@ import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import { PropertyGallery } from "@/components/shared/PropertyGalllery/PropertyGallery";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { formatPrice } from "@/utils/formatPrice";
+import { PropertyShare } from "@/components/shared/PropertyShare/PropertyShare";
 
 export function PropertyDetailClient({
   property,
@@ -161,8 +162,10 @@ export function PropertyDetailClient({
               )}
 
               {/* BOTÓN CENTRADO */}
-              {p.contactPhone && (
-                <div className="mt-10 flex justify-center w-full">
+              {/* ACCIONES */}
+              <div className="mt-10 flex flex-col gap-4 w-full">
+                {/* Contacto asesor (tu botón actual) */}
+                {p.contactPhone && (
                   <a
                     href={`https://wa.me/54${p.contactPhone}`}
                     target="_blank"
@@ -171,8 +174,15 @@ export function PropertyDetailClient({
                   >
                     Contactar asesor
                   </a>
-                </div>
-              )}
+                )}
+
+                {/* NUEVO: Compartir propiedad por slug */}
+                <PropertyShare
+                  title={p.title}
+                  price={`${p.currency} ${formatPrice(p.amount)}`}
+                  zone={p.zoneName}
+                />
+              </div>
             </div>
           </div>
         </div>
