@@ -238,132 +238,141 @@ static async findBySlug(slug: string) {
 
 
   // PUT /properties/:slug
-  static async update(slug: string, payload: UpdatePropertyDTO) {
-    const property = await PropertyRepository.findDocumentBySlug(slug);
+static async update(slug: string, payload: UpdatePropertyDTO) {
+  const property = await PropertyRepository.findDocumentBySlug(slug);
+  console.log('payload', payload);
 
-    if (!property) throw new NotFoundError("Property not found");
+  if (!property) throw new NotFoundError("Property not found");
 
-    const updateData: Record<string, any> = {};
+  const updateData: Record<string, any> = {};
 
-    if (payload.propertyTypeSlug) {
-      const type = await PropertyTypeRepository.findBySlug(
-        payload.propertyTypeSlug,
-      );
-      if (!type) throw new BadRequestError("Invalid property type");
-      updateData.propertyType = type._id;
-    }
-
-    if (payload.title && payload.title !== property.title) {
-      let newSlug = slugify(payload.title, { lower: true });
-      let slugExists = await PropertyModel.findOne({ slug: newSlug });
-      let counter = 1;
-      while (
-        slugExists &&
-        slugExists._id.toString() !== property._id.toString()
-      ) {
-        newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
-        slugExists = await PropertyModel.findOne({ slug: newSlug });
-        counter++;
-      }
-      updateData.slug = newSlug;
-      updateData.title = payload.title;
-    }
-
-    if (payload.address) {
-      const [provinceDoc, cityDoc] = await Promise.all([
-        payload.address.province
-          ? Province.findOne({ slug: payload.address.province })
-          : null,
-        payload.address.city
-          ? City.findOne({ slug: payload.address.city })
-          : null,
-      ]);
-      updateData.address = {
-        ...property.address,
-        street: payload.address.street ?? property.address?.street,
-        number: payload.address.number ?? property.address?.number,
-        zipCode: payload.address.zipCode ?? property.address?.zipCode,
-        province: provinceDoc ? provinceDoc._id : property.address?.province,
-        city: cityDoc ? cityDoc._id : property.address?.city,
-        barrio: payload.address.barrio || property.address?.barrio,
-      };
-    }
-
-    if (payload.price) {
-      updateData.price = {
-        ...property.price,
-        amount: payload.price.amount ?? property.price.amount,
-        currency: payload.price.currency ?? property.price.currency,
-      };
-    }
-
-    if (payload.features) {
-      updateData.features = {
-        ...property.features,
-        bedrooms: payload.features.bedrooms ?? property.features.bedrooms,
-        bathrooms: payload.features.bathrooms ?? property.features.bathrooms,
-        totalM2: payload.features.totalM2 ?? property.features.totalM2,
-        coveredM2: payload.features.coveredM2 ?? property.features.coveredM2,
-        rooms: payload.features.rooms ?? property.features.rooms,
-        garage: payload.features.garage ?? property.features.garage,
-        age: payload.features.age ?? property.features.age,
-      };
-    }
-
-    if (payload.flags) {
-      updateData.flags = {
-        ...property.flags,
-        featured: payload.flags.featured ?? property.flags?.featured,
-        opportunity: payload.flags.opportunity ?? property.flags?.opportunity,
-        premium: payload.flags.premium ?? property.flags?.premium,
-      };
-    }
-
-    const simpleFields: (keyof UpdatePropertyDTO)[] = [
-      "description",
-      "tags",
-      "images",
-      "status",
-      "operationType",
-      "contactPhone",
-    ];
-    simpleFields.forEach((field) => {
-      if (payload[field] !== undefined)
-        updateData[field as string] = payload[field];
-    });
-
-    if (payload.location) {
-      let cleanMapsUrl = payload.location.mapsUrl ?? property.location?.mapsUrl;
-      if (cleanMapsUrl?.includes("<iframe")) {
-        const match = cleanMapsUrl.match(/src="([^"]+)"/);
-        if (match) cleanMapsUrl = match[1];
-      }
-      updateData.location = {
-        mapsUrl: cleanMapsUrl,
-        lat: payload.location.lat ?? property.location?.lat,
-        lng: payload.location.lng ?? property.location?.lng,
-      };
-    }
-
-    // Aplicar cambios
-    Object.assign(property, updateData);
-    await property.save();
-    revalidatePath("/");
-    revalidatePath("/search-type/oportunidad");
-    revalidatePath("/search-type/venta");
-    revalidatePath("/search-type/alquiler");
-    revalidatePath(`/propiedad/${property.slug}`);
-
-    // Devolver con populate para el controlador
-    const result = await PropertyModel.findById(property._id)
-      .populate("propertyType")
-      .populate("address.province")
-      .populate("address.city")
-      .populate("address.barrio")
-      .lean();
-
-    return { ...result, _id: result!._id.toString() } as any;
+  // Tipo de propiedad
+  if (payload.propertyTypeSlug) {
+    const type = await PropertyTypeRepository.findBySlug(payload.propertyTypeSlug);
+    if (!type) throw new BadRequestError("Invalid property type");
+    updateData.propertyType = type._id;
   }
+
+  // Título y slug
+  if (payload.title && payload.title !== property.title) {
+    let newSlug = slugify(payload.title, { lower: true });
+    let slugExists = await PropertyModel.findOne({ slug: newSlug });
+    let counter = 1;
+    while (slugExists && slugExists._id.toString() !== property._id.toString()) {
+      newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
+      slugExists = await PropertyModel.findOne({ slug: newSlug });
+      counter++;
+    }
+    updateData.slug = newSlug;
+    updateData.title = payload.title;
+  }
+
+  // Dirección
+  if (payload.address) {
+    const [provinceDoc, cityDoc] = await Promise.all([
+      payload.address.province ? Province.findOne({ slug: payload.address.province }) : null,
+      payload.address.city ? City.findOne({ slug: payload.address.city }) : null,
+    ]);
+
+    property.address.street = payload.address.street ?? property.address?.street;
+    property.address.number = payload.address.number ?? property.address?.number;
+    property.address.zipCode = payload.address.zipCode ?? property.address?.zipCode;
+    property.address.province = provinceDoc ? provinceDoc._id : property.address?.province;
+    property.address.city = cityDoc ? cityDoc._id : property.address?.city;
+
+    // Barrio como string libre, permite vaciarlo
+    if ('barrio' in payload.address) {
+      property.address.barrio = payload.address.barrio ? payload.address.barrio.toString() : null;
+    }
+  }
+
+  // Precio
+  if (payload.price) {
+    updateData.price = {
+      ...property.price,
+      amount: payload.price.amount ?? property.price.amount,
+      currency: payload.price.currency ?? property.price.currency,
+    };
+  }
+
+  // Features
+  if (payload.features) {
+    updateData.features = {
+      ...property.features,
+      bedrooms: payload.features.bedrooms ?? property.features.bedrooms,
+      bathrooms: payload.features.bathrooms ?? property.features.bathrooms,
+      totalM2: payload.features.totalM2 ?? property.features.totalM2,
+      coveredM2: payload.features.coveredM2 ?? property.features.coveredM2,
+      rooms: payload.features.rooms ?? property.features.rooms,
+      garage: payload.features.garage ?? property.features.garage,
+      age: payload.features.age ?? property.features.age,
+    };
+  }
+
+  // Flags
+  if (payload.flags) {
+    updateData.flags = {
+      ...property.flags,
+      featured: payload.flags.featured ?? property.flags?.featured,
+      opportunity: payload.flags.opportunity ?? property.flags?.opportunity,
+      premium: payload.flags.premium ?? property.flags?.premium,
+    };
+  }
+
+  // Campos simples
+  const simpleFields: (keyof UpdatePropertyDTO)[] = [
+    "description",
+    "tags",
+    "images",
+    "status",
+    "operationType",
+    "contactPhone",
+  ];
+  simpleFields.forEach((field) => {
+    if (payload[field] !== undefined) updateData[field as string] = payload[field];
+  });
+
+  // Location
+  if (payload.location) {
+    let cleanMapsUrl = payload.location.mapsUrl ?? property.location?.mapsUrl;
+    if (cleanMapsUrl?.includes("<iframe")) {
+      const match = cleanMapsUrl.match(/src="([^"]+)"/);
+      if (match) cleanMapsUrl = match[1];
+    }
+    updateData.location = {
+      mapsUrl: cleanMapsUrl,
+      lat: payload.location.lat ?? property.location?.lat,
+      lng: payload.location.lng ?? property.location?.lng,
+    };
+  }
+
+  // Aplicar cambios
+  Object.assign(property, updateData);
+  await property.save();
+
+  // Revalidación de paths
+  revalidatePath("/");
+  revalidatePath("/search-type/oportunidad");
+  revalidatePath("/search-type/venta");
+  revalidatePath("/search-type/alquiler");
+  revalidatePath(`/propiedad/${property.slug}`);
+
+  // Devolver con populate
+  const result = await PropertyModel.findById(property._id)
+    .populate("propertyType")
+    .populate("address.province")
+    .populate("address.city")
+    .lean();
+
+  return {
+    ...result,
+    _id: result!._id.toString(),
+    address: {
+      ...result!.address,
+      barrio: result!.address.barrio ?? null, // string directo, puede ser null
+    },
+  } as any;
+}
 
   // DELETE /properties/:slug
   static async delete(slug: string) {

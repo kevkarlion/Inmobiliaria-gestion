@@ -10,6 +10,7 @@ export function PropertyDetailClient({
   property: PropertyResponse;
 }) {
   const p = mapPropertyToUI(property);
+  console.log('p', p)
 
   return (
     /* El section ahora es el contenedor de ancho completo para el background */

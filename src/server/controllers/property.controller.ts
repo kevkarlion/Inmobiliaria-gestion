@@ -83,6 +83,7 @@ export class PropertyController {
     try {
       await connectDB();
       const body = await req.json();
+      console.log('body', body)
       const dto = new UpdatePropertyDTO(body);
 
       const updatedProperty = await PropertyService.update(params.slug, dto);

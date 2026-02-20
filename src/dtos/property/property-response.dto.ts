@@ -6,7 +6,7 @@ import { Property } from "@/domain/types/Property.types";
  * Nodo simple para entidades pobladas (province, city, barrio)
  */
 export type AddressNode = {
-  id: string;
+  id: string | null; // barrio ahora puede no tener id
   name: string;
   slug: string;
 };
@@ -108,9 +108,12 @@ export function propertyResponseDTO(property: any): PropertyResponse {
 
       barrio: property.address.barrio
         ? {
-            id: property.address.barrio._id.toString(),
-            name: property.address.barrio.name,
-            slug: property.address.barrio.slug,
+            id: null, // ya no hay ObjectId
+            name: property.address.barrio.toString(),
+            slug: property.address.barrio
+              .toString()
+              .toLowerCase()
+              .replace(/\s+/g, "-"),
           }
         : null,
     },
@@ -118,7 +121,7 @@ export function propertyResponseDTO(property: any): PropertyResponse {
     // Importante: property.features ya trae 'age' desde la base de datos
     features: {
       ...property.features,
-      age: property.features?.age || 0
+      age: property.features?.age || 0,
     }, 
     
     flags: property.flags,

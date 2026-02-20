@@ -65,6 +65,7 @@ export default async function PropertyDetailPage({
   const { slug } = await params;
 
   const property = await PropertyService.findBySlug(slug);
+  console.log('property', property)
 
   if (!property) notFound();
 

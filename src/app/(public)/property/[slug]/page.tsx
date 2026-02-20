@@ -18,6 +18,7 @@ export default async function PropertyDetailPage({
   );
   if (!res.ok) notFound();
   const property = await res.json();
+  console.log('property', property)
   if (!property) notFound();
   return <PropertyDetailClient property={property} />;
 }

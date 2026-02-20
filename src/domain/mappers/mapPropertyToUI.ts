@@ -6,6 +6,7 @@ function normalizeOperation(value: string): "venta" | "alquiler" {
 }
 
 export function mapPropertyToUI(property: any): PropertyUI {
+  console.log('property mapper', property)
 
   // 1. Limpieza de URL de Maps
   const rawUrl = property.location?.mapsUrl || "";
@@ -15,7 +16,17 @@ export function mapPropertyToUI(property: any): PropertyUI {
     cleanEmbedUrl = match ? match[1] : rawUrl;
   }
 
-  // 2. URL externa Google Maps
+  // 2. Lógica para Barrio (Puede ser String u Objeto)
+  const rawBarrio = property.address?.barrio;
+  const barrioName = typeof rawBarrio === 'string' 
+    ? rawBarrio 
+    : (rawBarrio?.name || "");
+    
+  const barrioSlug = typeof rawBarrio === 'object' 
+    ? rawBarrio?.slug || "" 
+    : rawBarrio?.toLowerCase().replace(/\s+/g, '-') || "";
+
+  // 3. URL externa Google Maps (Corregido el template string)
   const street = property.address?.street || "";
   const number = property.address?.number || "";
   const city = property.address?.city?.name || "";
@@ -35,12 +46,12 @@ export function mapPropertyToUI(property: any): PropertyUI {
     provinceSlug: property.address?.province?.slug || "",
     provinceName: property.address?.province?.name || "",
     citySlug: property.address?.city?.slug || "",
-    cityName: property.address?.city?.name || "",
-    barrioSlug: property.address?.barrio?.slug || "",
-    barrioName: property.address?.barrio?.name || "",
+    cityName: city,
+    barrioSlug: barrioSlug,
+    barrioName: barrioName,
 
-    zoneName: property.address?.city?.name 
-      ? `${property.address.city.name}, ${property.address.province?.name || ""}`
+    zoneName: city 
+      ? `${city}${barrioName ? `, ${barrioName}` : ""}`
       : "Consultar ubicación",
 
     // Dirección

@@ -42,7 +42,7 @@ const PropertySchema = new Schema<IProperty>(
         required: true,
       },
       city: { type: Schema.Types.ObjectId, ref: "City", required: true },
-      barrio: { type: Schema.Types.ObjectId, ref: "Barrio" }, // 👈 Ahora se llama barrio
+      barrio: { type: String }, // 👈 Ahora se llama barrio
     },
 
     price: {
