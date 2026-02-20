@@ -30,14 +30,19 @@ export class PropertyRepository {
   }
 
   static findBySlug(slug: string) {
-  return PropertyModel.findOne({ slug, status: "active" })
-    .populate("propertyType", "name slug")
-    .populate("address.province")
-    .populate("address.city")
-    .populate("address.barrio")
-    .lean(); // 👈 clave
-}
+    return PropertyModel.findOne({ slug, status: "active" })
+      .populate("propertyType", "name slug")
+      .populate("address.province")
+      .populate("address.city")
+      .populate("address.barrio")
+      .lean(); // 👈 clave
+  }
 
+  // Repository
+  static findDocumentBySlug(slug: string) {
+    // Documento Mongoose REAL, sin .lean()
+    return PropertyModel.findOne({ slug, status: "active" });
+  }
 
   //paginacion
   static count(filter: any) {
@@ -48,13 +53,11 @@ export class PropertyRepository {
     return PropertyModel.create(data);
   }
 
-
   //SEO
   static async findAllForSitemap() {
-  await connectDB();
-  return PropertyModel.find({ status: "active" })
-    .select("slug updatedAt")
-    .lean();
-}
-
+    await connectDB();
+    return PropertyModel.find({ status: "active" })
+      .select("slug updatedAt")
+      .lean();
+  }
 }
