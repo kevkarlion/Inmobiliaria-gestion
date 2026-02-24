@@ -11,7 +11,17 @@ export async function POST(request: Request) {
     // 1. Verificar si el usuario ya existe
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
-      return NextResponse.json({ message: "El usuario ya existe" }, { status: 400 });
+      // Si el usuario ya existe, actualizamos la contraseña
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      existingUser.password = hashedPassword;
+      await existingUser.save();
+
+      return NextResponse.json(
+        { message: "Contraseña actualizada con éxito" },
+        { status: 200 }
+      );
     }
 
     // 2. Hashear la contraseña
