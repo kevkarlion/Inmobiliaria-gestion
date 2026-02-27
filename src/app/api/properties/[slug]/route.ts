@@ -23,7 +23,7 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const resolvedParams = await params;
-  console.log('resolvedParams',req)
+ 
 
   // Clonamos la petición para poder leer el body sin "gastarlo"
   // antes de que llegue al controlador

@@ -240,7 +240,7 @@ static async findBySlug(slug: string) {
   // PUT /properties/:slug
 static async update(slug: string, payload: UpdatePropertyDTO) {
   const property = await PropertyRepository.findDocumentBySlug(slug);
-  console.log('payload', payload);
+  
 
   if (!property) throw new NotFoundError("Property not found");
 

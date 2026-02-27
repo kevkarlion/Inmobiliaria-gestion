@@ -6,7 +6,7 @@ function normalizeOperation(value: string): "venta" | "alquiler" {
 }
 
 export function mapPropertyToUI(property: any): PropertyUI {
-  console.log('property mapper', property)
+  
 
   // 1. Limpieza de URL de Maps
   const rawUrl = property.location?.mapsUrl || "";
