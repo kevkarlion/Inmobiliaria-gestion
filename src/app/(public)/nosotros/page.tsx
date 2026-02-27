@@ -27,11 +27,11 @@ const teamMembers: TeamMember[] = [
     title: "Asesora Inmobiliaria",
     image: "/chica1.webp",
   },
-  {
-    name: "Stefy Anaya",
+  //{
+    /*name: "Stefy Anaya",
     title: "Asesora Inmobiliaria",
     image: "/chica2.webp",
-  },
+  },*/
 ];
 
 interface NosotrosContentProps {
@@ -182,10 +182,14 @@ export default function NosotrosPage() {
               Profesionales dedicados a su éxito inmobiliario.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+          {/* Flex + justify-center: 2, 3 o 4 cards siempre centradas en móvil y desktop */}
+          <div className="flex flex-wrap justify-center gap-10 md:gap-12 lg:gap-16">
             {teamMembers.map((member, index) => (
-              <div key={index} className="text-center group">
-                <div className="relative w-full aspect-3/4 mb-6 overflow-hidden rounded-sm border border-white/10 group-hover:border-gold-sand transition-all duration-700">
+              <div
+                key={index}
+                className="w-full max-w-[320px] sm:w-72 shrink-0 text-center group"
+              >
+                <div className="relative w-full aspect-3/4 mb-6 overflow-hidden rounded-sm border border-white/10 group-hover:border-gold-sand transition-all duration-700 mx-auto">
                   <Image
                     src={member.image}
                     alt={member.name}
