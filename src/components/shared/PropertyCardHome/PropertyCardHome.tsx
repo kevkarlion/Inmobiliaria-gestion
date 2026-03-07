@@ -12,7 +12,7 @@ interface Props {
 export default function PropertyCardHome({ property }: Props) {
   return (
     <Link 
-      href={`/property/${property.slug}`}
+      href={`/propiedad/${property.slug}`}
       className="group relative shrink-0 w-75 md:w-105 h-60 bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-white/10 block"
     >
       {/* Imagen de fondo */}

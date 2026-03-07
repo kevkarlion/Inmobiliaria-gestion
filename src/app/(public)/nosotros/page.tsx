@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import type { Metadata } from "next";
+import { getCanonicalUrl } from "@/lib/config";
 import {
   Scale,
   Lightbulb,
@@ -7,6 +9,15 @@ import {
   ArrowRight,
   MessageCircle,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Nosotros - Riquelme Propiedades en General Roca",
+  description:
+    "Conocé al equipo de Riquelme Propiedades, inmobiliaria en General Roca, Río Negro. Experiencia profesional en venta y alquiler de propiedades de alto valor.",
+  alternates: {
+    canonical: getCanonicalUrl("/nosotros"),
+  },
+};
 
 interface TeamMember {
   name: string;

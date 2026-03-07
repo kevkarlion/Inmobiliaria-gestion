@@ -3,6 +3,7 @@ import { PropertyDetailClient } from "@/components/shared/PropertyDetailClient/P
 import { notFound } from "next/navigation";
 import { PropertyService } from "@/server/services/property.service";
 import type { Metadata } from "next";
+import { getCanonicalUrl } from "@/lib/config";
 
 // ⚡ IMPORTANTE: metadata dinámica por slug (clave para compartir)
 export async function generateMetadata({
@@ -21,17 +22,42 @@ export async function generateMetadata({
     };
   }
 
-  const title = property.title;
-  const description =
-    property.description?.slice(0, 160) ||
-    `Propiedad en ${property.zoneName}`;
+  const operation =
+    property.operationType === "venta"
+      ? "en venta"
+      : property.operationType === "alquiler"
+      ? "en alquiler"
+      : "";
+
+  const locationParts = [
+    property.barrioName,
+    property.zoneName,
+    property.cityName || "General Roca",
+    property.provinceName || "Río Negro",
+  ].filter(Boolean);
+
+  const titleLocation = locationParts.slice(0, 2).join(", ");
+
+  const title = `${property.title} ${
+    operation ? `- ${operation}` : ""
+  }${titleLocation ? ` en ${titleLocation}` : ""}`;
+
+  const baseDescription =
+    property.description?.slice(0, 140) ||
+    `Propiedad ${operation || ""} en ${locationParts
+      .filter(Boolean)
+      .join(", ")}.`;
+
+  const description = `${baseDescription} Consultanos en Riquelme Propiedades, inmobiliaria en General Roca, Río Negro.`;
 
   const image = property.images?.[0];
 
   return {
-    metadataBase: new URL("https://riquelmeprop.com"), // 🔥 CLAVE
     title,
     description,
+    alternates: {
+      canonical: getCanonicalUrl(`/propiedad/${slug}`),
+    },
     openGraph: {
       title,
       description,

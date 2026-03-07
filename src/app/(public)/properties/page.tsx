@@ -3,12 +3,23 @@ export const dynamic = "force-dynamic";
 
 import PropertyCard from "@/components/shared/PropertyCard/PropertyCard";
 import Filters from "@/components/shared/Filters/Filters";
+import type { Metadata } from "next";
+import { getCanonicalUrl } from "@/lib/config";
 
 type SearchParams = {
   page?: string;
   operationType?: string;
   propertyType?: string;
   zone?: string;
+};
+
+export const metadata: Metadata = {
+  title: "Buscador de propiedades en General Roca",
+  description:
+    "Filtrá y buscá propiedades en venta y alquiler en General Roca, Río Negro, por tipo, operación y zona.",
+  alternates: {
+    canonical: getCanonicalUrl("/properties"),
+  },
 };
 
 async function getProperties(searchParams: SearchParams) {
@@ -28,18 +39,14 @@ async function getProperties(searchParams: SearchParams) {
   return res.json();
 }
 
-
-
 export default async function PropertiesPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  // ✅ ESTO ES OBLIGATORIO EN NEXT 15/16
   const resolvedSearchParams = await searchParams;
 
   const data = await getProperties(resolvedSearchParams);
-  
 
   return (
     <div className="max-w-6xl mx-auto p-4">

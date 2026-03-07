@@ -6,9 +6,19 @@ import {
   Clock,
   Facebook,
   Instagram,
-  
   ArrowRight,
 } from "lucide-react";
+import type { Metadata } from "next";
+import { getCanonicalUrl } from "@/lib/config";
+
+export const metadata: Metadata = {
+  title: "Contacto - Inmobiliaria en General Roca",
+  description:
+    "Contactá a Riquelme Propiedades en General Roca, Río Negro. Atención personalizada para venta, alquiler y tasación de propiedades.",
+  alternates: {
+    canonical: getCanonicalUrl("/contacto"),
+  },
+};
 
 export default function ContactoPage() {
   return (

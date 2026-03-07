@@ -41,7 +41,7 @@ if (!properties) {
       {properties.map((p) => (
         <Link
           key={p.id}
-          href={`/property/${p.slug}`}
+          href={`/propiedad/${p.slug}`}
           className="group bg-white rounded-3xl overflow-hidden shadow-xl hover:-translate-y-1 transition"
         >
           <div className="relative h-52">

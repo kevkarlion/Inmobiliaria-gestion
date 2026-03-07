@@ -143,9 +143,9 @@ export default function SearchBar({ initialProperties }: SearchBarProps) {
           <div className="p-2">
             {filtered.length > 0 ? (
               filtered.map((p) => (
-                <Link
+              <Link
                   key={p.id}
-                  href={`/property/${p.slug}`}
+                  href={`/propiedad/${p.slug}`}
                   className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-2xl transition-colors group"
                 >
                   <div className="relative h-14 w-14 rounded-xl overflow-hidden shrink-0">

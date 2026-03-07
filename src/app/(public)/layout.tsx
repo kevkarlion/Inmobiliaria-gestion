@@ -1,5 +1,6 @@
 // layout.tsx
 import "@/app/globals.css";
+import { SITE_URL } from "@/lib/config";
 import { PropertyProvider } from "@/context/PropertyContext";
 import { Montserrat, Lora, Inter } from "next/font/google";
 import Navbar from "@/components/shared/Navbar/Navbar";
@@ -25,7 +26,7 @@ const inter = Inter({
 
 // layout.tsx
 export const metadata = {
-  metadataBase: new URL("https://riquelmeprop.com.ar"), // tu dominio real
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Riquelme Propiedades | Inmobiliaria en General Roca",
     template: "%s | Riquelme Propiedades",
@@ -45,7 +46,7 @@ export const metadata = {
     title: "Riquelme Propiedades | Inmobiliaria en General Roca",
     description:
       "Encontrá casas, departamentos y terrenos en venta y alquiler en General Roca, Río Negro.",
-    url: "https://riquelmeprop.com",
+    url: SITE_URL,
     siteName: "Riquelme Propiedades",
     locale: "es_AR",
     type: "website",

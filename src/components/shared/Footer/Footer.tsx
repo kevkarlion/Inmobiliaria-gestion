@@ -36,13 +36,13 @@ const Footer: React.FC = () => {
             <Link href="/" className="text-white/70 hover:text-gold-sand transition w-fit">
               Inicio
             </Link>
-            <Link href="/search-type/venta" className="text-white/70 hover:text-gold-sand transition w-fit">
+            <Link href="/propiedades/venta" className="text-white/70 hover:text-gold-sand transition w-fit">
               Ventas
             </Link>
-            <Link href="/search-type/alquiler" className="text-white/70 hover:text-gold-sand transition w-fit">
+            <Link href="/propiedades/alquiler" className="text-white/70 hover:text-gold-sand transition w-fit">
               Alquileres
             </Link>
-            <Link href="/search-type/oportunidad" className="text-white/70 hover:text-gold-sand transition w-fit">
+            <Link href="/propiedades/oportunidad" className="text-white/70 hover:text-gold-sand transition w-fit">
               Oportunidades
             </Link>
             <Link href="/contacto" className="text-white/70 hover:text-gold-sand transition w-fit">

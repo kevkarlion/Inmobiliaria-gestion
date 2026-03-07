@@ -119,9 +119,9 @@ export class PropertyService {
 
     // 🔥 INVALIDACIÓN
     revalidatePath("/");
-    revalidatePath("/search-type/oportunidad");
-    revalidatePath("/search-type/venta");
-    revalidatePath("/search-type/alquiler");
+    revalidatePath("/propiedades/oportunidad");
+    revalidatePath("/propiedades/venta");
+    revalidatePath("/propiedades/alquiler");
 
     // 7. Recuperar con Populate
     const result = await PropertyModel.findById(savedProperty._id)
@@ -352,9 +352,9 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
 
   // Revalidación de paths
   revalidatePath("/");
-  revalidatePath("/search-type/oportunidad");
-  revalidatePath("/search-type/venta");
-  revalidatePath("/search-type/alquiler");
+  revalidatePath("/propiedades/oportunidad");
+  revalidatePath("/propiedades/venta");
+  revalidatePath("/propiedades/alquiler");
   revalidatePath(`/propiedad/${property.slug}`);
 
   // Devolver con populate
@@ -383,9 +383,9 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
 
     // 🔥 INVALIDACIÓN
     revalidatePath("/");
-    revalidatePath("/search-type/oportunidad");
-    revalidatePath("/search-type/venta");
-    revalidatePath("/search-type/alquiler");
+    revalidatePath("/propiedades/oportunidad");
+    revalidatePath("/propiedades/venta");
+    revalidatePath("/propiedades/alquiler");
     return { message: "Property deleted successfully" };
   }
 

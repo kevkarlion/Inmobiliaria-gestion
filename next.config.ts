@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/properties/:slug",
+        destination: "/propiedad/:slug",
+        permanent: true,
+      },
+      {
         source: "/search-type/:path*",
         destination: "/propiedades/:path*",
         permanent: true,
