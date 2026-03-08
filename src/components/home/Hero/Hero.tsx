@@ -49,7 +49,7 @@ export default async function Hero() {
                 </span>
 
                 {/* Título principal con gradiente parcial */}
-                <span className="text-3xl md:text-5xl lg:text-6xl font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
+                <span className="text-3xl md:text-5xl lg:text-[56px] font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
                   <span className="text-transparent bg-clip-text bg-linear-to-r from-gold-sand to-yellow-600 font-extrabold">
                     Casas, <span className="text-white/90">Departamentos</span>
                   </span>
@@ -60,7 +60,7 @@ export default async function Hero() {
               </h1>
 
               {/* Subtítulo SEO */}
-              <p className="mt-5 text-slate-200 text-base md:text-xl font-light leading-relaxed max-w-lg drop-shadow-md">
+              <p className="mt-2 text-slate-200 text-base md:text-xl font-light leading-relaxed max-w-lg drop-shadow-md">
                 Propiedades y terrenos en venta en{" "}
                 <span className="text-white font-medium italic underline decoration-gold-sand/40">
                   General Roca
@@ -72,10 +72,8 @@ export default async function Hero() {
             {/* BUSCADOR */}
             <div className="w-full flex justify-center">
               <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl">
-                <div className="backdrop-blur-md bg-white/5 p-1 md:p-2 rounded-xl border border-white/10 shadow-2xl z-200">
-                  <SearchBar initialProperties={allProperties} />
-                </div>
-
+                
+                <SearchBar initialProperties={allProperties} />
                 {/* Detalle inferior opcional */}
                 <p className="mt-3 text-white/40 text-[10px] md:text-xs uppercase tracking-[0.2em] text-center">
                   Explora las mejores oportunidades de inversión
