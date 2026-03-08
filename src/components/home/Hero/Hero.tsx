@@ -44,9 +44,9 @@ export default async function Hero() {
             <div className="max-w-2xl text-left mb-12 md:mb-8">
               <h1 className="flex flex-col items-start uppercase tracking-tighter">
                 {/* Keyword de confianza */}
-                <span className="text-gold-sand text-xs md:text-sm font-bold tracking-[0.4em] mb-3 drop-shadow-md">
-                  Inmobiliaria en General Roca
-                </span>
+                <span className="text-gold-sand text-xs md:text-sm font-bold tracking-[0.4em] mb-3 drop-shadow-md bg-black/40 px-2 py-1 rounded-md md:bg-transparent">
+  Inmobiliaria en General Roca
+</span>
 
                 {/* Título principal con gradiente parcial */}
                 <span className="text-3xl md:text-5xl lg:text-[56px] font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
