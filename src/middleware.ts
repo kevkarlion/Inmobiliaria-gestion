@@ -2,20 +2,55 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
+function getRedirectUrl(request: NextRequest): string | null {
+  const url = request.nextUrl;
+  const host = request.headers.get('host') || '';
+  const protocol = request.headers.get('x-forwarded-proto') ?? url.protocol.replace(':', '');
+
+  const isHttps = protocol === 'https';
+  const isWww = host.startsWith('www.');
+  const isLocalhost =
+    host.includes('localhost') ||
+    host.includes('127.0.0.1') ||
+    process.env.NODE_ENV === 'development';
+
+  // 🚫 Nunca redireccionar en desarrollo
+  if (isLocalhost) return null;
+
+  // 🔹 Solo redirigir si no está en HTTPS o si tiene www
+  if (!isHttps) {
+    return `https://${host}${url.pathname}${url.search}`;
+  }
+
+  if (isWww) {
+    const nonWwwHost = host.replace(/^www\./, '');
+    // Solo redirigir si el host es realmente www (evita loop)
+    if (nonWwwHost !== host) {
+      return `https://${nonWwwHost}${url.pathname}${url.search}`;
+    }
+  }
+
+  return null;
+}
+
 export async function middleware(request: NextRequest) {
+  // 🔹 Redirect SEO
+  const redirectUrl = getRedirectUrl(request);
+  if (redirectUrl) {
+    const status = process.env.NODE_ENV === 'production' ? 301 : 307;
+    return NextResponse.redirect(redirectUrl, status);
+  }
+
+  // 🔹 Protección /admin
   const token = request.cookies.get('admin_token')?.value;
   const { pathname } = request.nextUrl;
 
-  // 🔹 Redirigir /admin → /admin/properties
   if (pathname === '/admin') {
     return NextResponse.redirect(new URL('/admin/properties', request.url));
   }
 
-  // 🔹 Proteger rutas /admin (excepto /login)
   if (pathname.startsWith('/admin') && !pathname.includes('/login')) {
-    if (!token) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
-    }
+    if (!token) return NextResponse.redirect(new URL('/admin/login', request.url));
 
     try {
       const secret = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -29,7 +64,6 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// 🔹 Se aplica a todas las rutas excepto API, _next y assets
 export const config = {
   matcher: [
     '/((?!api|_next/static|_next/image|favicon.ico|icon.png|og-image.png).*)',
