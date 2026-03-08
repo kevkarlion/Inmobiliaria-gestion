@@ -60,4 +60,58 @@ export class PropertyRepository {
       .select("slug updatedAt")
       .lean();
   }
+
+  /**
+   * Combos (operación, tipo, ciudad) que tienen al menos una propiedad activa.
+   * Para armar el menú de navegación SEO sin ciudades/tipos vacíos.
+   */
+  static async getDistinctOperationTypeCity(): Promise<
+    { operationType: string; typeSlug: string; typeName: string; citySlug: string; cityName: string }[]
+  > {
+    await connectDB();
+    const rows = await PropertyModel.aggregate([
+      { $match: { status: "active" } },
+      {
+        $lookup: {
+          from: "propertytypes",
+          localField: "propertyType",
+          foreignField: "_id",
+          as: "pt",
+        },
+      },
+      { $unwind: "$pt" },
+      {
+        $lookup: {
+          from: "cities",
+          localField: "address.city",
+          foreignField: "_id",
+          as: "city",
+        },
+      },
+      { $unwind: "$city" },
+      {
+        $group: {
+          _id: {
+            op: "$operationType",
+            typeSlug: "$pt.slug",
+            typeName: "$pt.name",
+            citySlug: "$city.slug",
+            cityName: "$city.name",
+          },
+        },
+      },
+      { $sort: { "_id.cityName": 1, "_id.typeName": 1 } },
+      {
+        $project: {
+          _id: 0,
+          operationType: "$_id.op",
+          typeSlug: "$_id.typeSlug",
+          typeName: "$_id.typeName",
+          citySlug: "$_id.citySlug",
+          cityName: "$_id.cityName",
+        },
+      },
+    ]);
+    return rows;
+  }
 }

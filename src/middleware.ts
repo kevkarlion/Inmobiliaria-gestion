@@ -2,16 +2,51 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('admin_token')?.value;
-  const { pathname } = request.nextUrl; // Extraemos el pathname para que sea más limpio
+function getRedirectUrl(request: NextRequest): string | null {
+  const url = request.nextUrl;
+  const host = request.headers.get('host') || '';
+  const protocol = request.headers.get('x-forwarded-proto') ?? url.protocol.replace(':', '');
 
-  // 1. REDIRECCIÓN DE RAÍZ: Si entra a /admin a secas, mandarlo a properties
+  const isHttps = protocol === 'https';
+  const isWww = host.startsWith('www.');
+
+  const isLocalhost =
+    host.includes('localhost') ||
+    host.includes('127.0.0.1') ||
+    process.env.NODE_ENV === 'development';
+
+  // 🚫 Nunca redireccionar en desarrollo
+  if (isLocalhost) return null;
+
+  let targetUrl: string | null = null;
+
+  if (!isHttps) {
+    targetUrl = `https://${host}${url.pathname}${url.search}`;
+  } else if (isWww) {
+    const nonWwwHost = host.replace(/^www\./, '');
+    targetUrl = `https://${nonWwwHost}${url.pathname}${url.search}`;
+  }
+
+  return targetUrl;
+}
+
+export async function middleware(request: NextRequest) {
+  const redirectUrl = getRedirectUrl(request);
+
+  if (redirectUrl) {
+    const status = process.env.NODE_ENV === 'production' ? 301 : 307;
+    return NextResponse.redirect(redirectUrl, status);
+  }
+
+  const token = request.cookies.get('admin_token')?.value;
+  const { pathname } = request.nextUrl;
+
+  // 🔹 Si entra a /admin → redirigir a propiedades
   if (pathname === '/admin') {
     return NextResponse.redirect(new URL('/admin/properties', request.url));
   }
 
-  // 2. PROTECCIÓN DE RUTAS: Si intenta ir a cualquier parte de /admin (excepto login)
+  // 🔹 Proteger rutas admin
   if (pathname.startsWith('/admin') && !pathname.includes('/login')) {
     if (!token) {
       return NextResponse.redirect(new URL('/admin/login', request.url));
@@ -20,12 +55,9 @@ export async function middleware(request: NextRequest) {
     try {
       const secret = new TextEncoder().encode(process.env.JWT_SECRET);
       await jwtVerify(token, secret);
-      
-      // El token es válido, lo dejamos pasar
+
       return NextResponse.next();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      // Si el token expiró o es falso, al login
+    } catch {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
   }
@@ -34,5 +66,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|icon.png|og-image.png).*)',
+  ],
 };

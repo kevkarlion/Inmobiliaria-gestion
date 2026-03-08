@@ -18,6 +18,8 @@ import { Barrio } from "@/db/schemas/barrio.schema";
 import { Types } from "mongoose";
 import { connectDB } from "@/db/connection";
 import { revalidatePath } from "next/cache";
+import { buildPropertySeoSlug } from "@/lib/propertySlug";
+import type { NavMenuStructure, TypeMenuEntry } from "@/lib/seoUrls";
 
 export class PropertyService {
   /**
@@ -59,14 +61,17 @@ export class PropertyService {
       }
     }
 
-    // 3. Generar Slug único
-    let slug = slugify(dto.title, { lower: true, strict: true });
+    // 3. Generar Slug SEO único: tipo-titulo-ciudad (ej: terreno-el-mirador-general-roca)
+    let slug = buildPropertySeoSlug(
+      dto.propertyTypeSlug,
+      dto.title,
+      dto.address.citySlug
+    );
     let slugExists = await PropertyModel.findOne({ slug });
     let counter = 1;
     while (slugExists) {
-      const newSlug = `${slugify(dto.title, { lower: true, strict: true })}-${counter}`;
-      slugExists = await PropertyModel.findOne({ slug: newSlug });
-      if (!slugExists) slug = newSlug;
+      slug = `${buildPropertySeoSlug(dto.propertyTypeSlug, dto.title, dto.address.citySlug)}-${counter}`;
+      slugExists = await PropertyModel.findOne({ slug });
       counter++;
     }
 
@@ -253,17 +258,8 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
     updateData.propertyType = type._id;
   }
 
-  // Título y slug
+  // Título
   if (payload.title && payload.title !== property.title) {
-    let newSlug = slugify(payload.title, { lower: true });
-    let slugExists = await PropertyModel.findOne({ slug: newSlug });
-    let counter = 1;
-    while (slugExists && slugExists._id.toString() !== property._id.toString()) {
-      newSlug = `${slugify(payload.title, { lower: true })}-${counter}`;
-      slugExists = await PropertyModel.findOne({ slug: newSlug });
-      counter++;
-    }
-    updateData.slug = newSlug;
     updateData.title = payload.title;
   }
 
@@ -346,6 +342,28 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
     };
   }
 
+  // Regenerar slug SEO (tipo-titulo-ciudad) cuando cambian título, tipo o ciudad
+  let typeSlug = payload.propertyTypeSlug ?? null;
+  let citySlug = payload.address?.city ?? null;
+  if (!typeSlug || !citySlug) {
+    await property.populate("propertyType", "slug");
+    await property.populate("address.city", "slug");
+    typeSlug = typeSlug ?? (property as any).propertyType?.slug;
+    citySlug = citySlug ?? (property as any).address?.city?.slug;
+  }
+  const titleForSlug = payload.title ?? property.title;
+  if (typeSlug && citySlug) {
+    let newSlug = buildPropertySeoSlug(typeSlug, titleForSlug, citySlug);
+    let slugExists = await PropertyModel.findOne({ slug: newSlug });
+    let counter = 1;
+    while (slugExists && slugExists._id.toString() !== property._id.toString()) {
+      newSlug = `${buildPropertySeoSlug(typeSlug, titleForSlug, citySlug)}-${counter}`;
+      slugExists = await PropertyModel.findOne({ slug: newSlug });
+      counter++;
+    }
+    updateData.slug = newSlug;
+  }
+
   // Aplicar cambios
   Object.assign(property, updateData);
   await property.save();
@@ -411,12 +429,58 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
 
 
   //SEO
-  // property.service.ts
-static async findAllForSitemap() {
-  return PropertyRepository.findAllForSitemap();
-}
+  static async findAllForSitemap() {
+    return PropertyRepository.findAllForSitemap();
+  }
 
+  /** Estructura del menú navegación: operación → tipo → ciudades (solo con propiedades) */
+  static async getMenuStructure(): Promise<NavMenuStructure> {
+    const rows = await PropertyRepository.getDistinctOperationTypeCity();
+    const ventaMap = new Map<string, TypeMenuEntry>();
+    const alquilerMap = new Map<string, TypeMenuEntry>();
 
+    for (const r of rows) {
+      const op = r.operationType as "venta" | "alquiler";
+      if (op !== "venta" && op !== "alquiler") continue;
 
+      const map = op === "venta" ? ventaMap : alquilerMap;
+      const key = r.typeSlug;
+      if (!map.has(key)) {
+        map.set(key, {
+          typeSlug: r.typeSlug,
+          typeName: r.typeName,
+          cities: [],
+        });
+      }
+      const entry = map.get(key)!;
+      if (!entry.cities.some((c) => c.slug === r.citySlug)) {
+        entry.cities.push({ slug: r.citySlug, name: r.cityName });
+      }
+    }
 
+    const sortByTypeName = (a: TypeMenuEntry, b: TypeMenuEntry) =>
+      a.typeName.localeCompare(b.typeName);
+
+    return {
+      venta: Array.from(ventaMap.values()).sort(sortByTypeName),
+      alquiler: Array.from(alquilerMap.values()).sort(sortByTypeName),
+    };
+  }
+
+  /** Nombres de tipo y ciudad para metadata de listados SEO dinámicos */
+  static async getSeoListingNames(
+    typeSlug: string,
+    citySlug: string
+  ): Promise<{ typeName: string; cityName: string } | null> {
+    await connectDB();
+    const [typeDoc, cityDoc] = await Promise.all([
+      PropertyTypeRepository.findBySlug(typeSlug),
+      City.findOne({ slug: citySlug }).select("name").lean(),
+    ]);
+    if (!typeDoc || !cityDoc) return null;
+    return {
+      typeName: typeDoc.name,
+      cityName: (cityDoc as { name: string }).name,
+    };
+  }
 }

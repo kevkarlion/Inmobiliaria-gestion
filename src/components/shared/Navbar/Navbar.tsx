@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,22 +12,30 @@ import {
   Facebook,
   Instagram,
   Share2,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
+import { buildSeoListingUrl } from "@/lib/seoUrls";
+import type { NavMenuStructure } from "@/lib/seoUrls";
 
-export default function Navbar() {
+const NAV_COLOR = "#001d3d";
+
+interface NavbarProps {
+  menuStructure?: NavMenuStructure | null;
+}
+
+export default function Navbar({ menuStructure }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mobileVentaOpen, setMobileVentaOpen] = useState(false);
+  const [mobileAlquilerOpen, setMobileAlquilerOpen] = useState(false);
+  const [mobileTypeVenta, setMobileTypeVenta] = useState<string | null>(null);
+  const [mobileTypeAlquiler, setMobileTypeAlquiler] = useState<string | null>(null);
 
-  const menuItems = [
-    { name: "Inicio", href: "/" },
-    { name: "Oportunidades", href: "/propiedades/oportunidad" },
-    { name: "Venta", href: "/propiedades/venta" },
-    { name: "Alquiler", href: "/propiedades/alquiler" },
-    { name: "Nosotros", href: "/nosotros" },
-    { name: "Contacto", href: "/contacto" },
-  ];
+  const hasVenta = (menuStructure?.venta?.length ?? 0) > 0;
+  const hasAlquiler = (menuStructure?.alquiler?.length ?? 0) > 0;
 
   return (
-    <header className="navbar-container w-full shadow-sm ">
+    <header className="navbar-container w-full shadow-sm">
       {/* --- TOP BAR (Desktop Only) --- */}
       <div className="hidden lg:block bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -42,17 +51,15 @@ export default function Navbar() {
           </Link>
 
           <div className="flex flex-1 justify-end space-x-8">
-            {/* Redes */}
             <div className="flex items-center gap-3">
               <Share2 className="text-gold-sand" size={20} />
               <div className="flex flex-col">
-                <span className="text-[10px] text-blue-gray uppercase tracking-wider">
-                  Seguinos
-                </span>
+                <span className="text-[10px] text-blue-gray uppercase tracking-wider">Seguinos</span>
                 <div className="flex gap-3 mt-0.5">
                   <a
-                    href="https://www.facebook.com/riquelmeprop?rdid=2QDa2IeJSjsrjxVN&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1C6P6AShqK%2F#"
+                    href="https://www.facebook.com/riquelmeprop"
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="text-onyx hover:text-gold-sand transition-colors"
                   >
                     <Facebook size={16} />
@@ -60,6 +67,7 @@ export default function Navbar() {
                   <a
                     href="https://www.instagram.com/riquelme.propiedades/"
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="text-onyx hover:text-gold-sand transition-colors"
                   >
                     <Instagram size={16} />
@@ -68,51 +76,39 @@ export default function Navbar() {
               </div>
             </div>
 
-            {/* Email */}
             <a
-              href="mailto:info@riquelmepropiedades.com.ar"
+              href="mailto:diegoriquelme91@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 border-l pl-8 border-gray-100"
             >
               <Mail className="text-gold-sand" size={20} />
               <div className="flex flex-col">
-                <span className="text-[10px] text-blue-gray uppercase tracking-wider">
-                  Email
-                </span>
+                <span className="text-[10px] text-blue-gray uppercase tracking-wider">Email</span>
                 <p className="text-[13px] font-semibold text-onyx lowercase tracking-tight">
                   diegoriquelme91@gmail.com
                 </p>
               </div>
             </a>
 
-            {/* WhatsApp */}
             <a
               href="https://wa.me/5492984582082"
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-3 border-l pl-8 border-gray-100"
             >
               <MessageCircle className="text-gold-sand" size={20} />
               <div className="flex flex-col">
-                <span className="text-[10px] text-blue-gray uppercase tracking-wider">
-                  WhatsApp
-                </span>
-                <p className="text-[13px] font-semibold text-onyx">
-                  +54 9 298 4582082
-                </p>
+                <span className="text-[10px] text-blue-gray uppercase tracking-wider">WhatsApp</span>
+                <p className="text-[13px] font-semibold text-onyx">+54 9 298 4582082</p>
               </div>
             </a>
 
-            {/* Horario */}
             <div className="flex items-center gap-3 border-l pl-8 border-gray-200">
               <Clock className="text-gold-sand" size={20} />
               <div className="flex flex-col">
-                <span className="text-[10px] text-blue-gray uppercase tracking-wider">
-                  Atención
-                </span>
-                <p className="text-[13px] font-semibold text-onyx uppercase">
-                  Lun a Vie 9 - 18hs
-                </p>
+                <span className="text-[10px] text-blue-gray uppercase tracking-wider">Atención</span>
+                <p className="text-[13px] font-semibold text-onyx uppercase">Lun a Vie 9 - 18hs</p>
               </div>
             </div>
           </div>
@@ -122,15 +118,16 @@ export default function Navbar() {
       {/* --- MAIN NAV --- */}
       <nav
         className="text-white relative z-10 font-montserrat"
-        style={{ backgroundColor: "#001d3d" }}
+        style={{ backgroundColor: NAV_COLOR }}
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
-            {/* Logo Mobile */}
             <div className="lg:hidden shrink-0">
               <button
+                type="button"
                 onClick={() => window.scrollTo(0, 0)}
                 className="flex items-center"
+                aria-label="Inicio"
               >
                 <Image
                   src="/logo-blanco.png"
@@ -144,31 +141,159 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden lg:flex items-center space-x-10">
-              {menuItems.map((item) => (
+            <div className="hidden lg:flex items-center space-x-1">
+              <Link
+                href="/"
+                scroll
+                className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
+              >
+                Inicio
+              </Link>
+
+              {/* Comprar dropdown */}
+              {hasVenta ? (
+                <div className="relative group/nav py-5">
+                  <button
+                    type="button"
+                    className="text-sm font-medium hover:text-gold-sand transition-colors px-3 border-b-2 border-transparent hover:border-gold-sand flex items-center gap-1"
+                  >
+                    Comprar <ChevronDown size={14} />
+                  </button>
+                  <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all min-w-[220px]">
+                    <div className="bg-white text-oxford rounded-b shadow-xl border-t-2 border-gold-sand py-2">
+                      {/* Link para ver todas las propiedades de venta */}
+                      <Link
+                        href="/propiedades/venta"
+                        className="block px-4 py-2 text-sm hover:bg-gold-sand/10 hover:text-gold-sand font-semibold"
+                      >
+                        Ver todas
+                      </Link>
+
+                      {menuStructure!.venta.map((typeEntry) => (
+                        <div key={typeEntry.typeSlug} className="group/type relative">
+                          <div className="flex items-center justify-between px-4 py-2 hover:bg-slate-50">
+                            <span className="text-sm font-semibold">
+                              {typeEntry.typeName} en venta
+                            </span>
+                            <ChevronRight size={14} className="text-slate-400" />
+                          </div>
+                          <div className="absolute left-full top-0 ml-0 opacity-0 invisible group-hover/type:opacity-100 group-hover/type:visible transition-all min-w-[180px] bg-white rounded shadow-xl border py-2 z-10">
+                            {typeEntry.cities.map((city) => (
+                              <Link
+                                key={city.slug}
+                                href={buildSeoListingUrl(typeEntry.typeSlug, "venta", city.slug)}
+                                className="block px-4 py-2 text-sm hover:bg-gold-sand/10 hover:text-gold-sand"
+                              >
+                                {city.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <Link
-                  key={item.name}
-                  href={item.href}
+                  href="/propiedades/venta"
                   scroll
-                  className="text-sm font-medium hover:text-gold-sand transition-colors py-5 border-b-2 border-transparent hover:border-gold-sand"
+                  className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
                 >
-                  {item.name}
+                  Comprar
                 </Link>
-              ))}
+              )}
+
+              {/* Alquiler dropdown */}
+              {hasAlquiler ? (
+                <div className="relative group/nav py-5">
+                  <button
+                    type="button"
+                    className="text-sm font-medium hover:text-gold-sand transition-colors px-3 border-b-2 border-transparent hover:border-gold-sand flex items-center gap-1"
+                  >
+                    Alquilar <ChevronDown size={14} />
+                  </button>
+                  <div className="absolute top-full left-0 pt-0 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all min-w-[220px]">
+                    <div className="bg-white text-oxford rounded-b shadow-xl border-t-2 border-gold-sand py-2">
+                      {/* Link para ver todas las propiedades de alquiler */}
+                      <Link
+                        href="/propiedades/alquiler"
+                        className="block px-4 py-2 text-sm hover:bg-gold-sand/10 hover:text-gold-sand font-semibold"
+                      >
+                        Ver todas
+                      </Link>
+
+                      {menuStructure!.alquiler.map((typeEntry) => (
+                        <div key={typeEntry.typeSlug} className="group/type relative">
+                          <div className="flex items-center justify-between px-4 py-2 hover:bg-slate-50">
+                            <span className="text-sm font-semibold">
+                              {typeEntry.typeName} en alquiler
+                            </span>
+                            <ChevronRight size={14} className="text-slate-400" />
+                          </div>
+                          <div className="absolute left-full top-0 ml-0 opacity-0 invisible group-hover/type:opacity-100 group-hover/type:visible transition-all min-w-[180px] bg-white rounded shadow-xl border py-2 z-10">
+                            {typeEntry.cities.map((city) => (
+                              <Link
+                                key={city.slug}
+                                href={buildSeoListingUrl(typeEntry.typeSlug, "alquiler", city.slug)}
+                                className="block px-4 py-2 text-sm hover:bg-gold-sand/10 hover:text-gold-sand"
+                              >
+                                {city.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  href="/propiedades/alquiler"
+                  scroll
+                  className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
+                >
+                  Alquilar
+                </Link>
+              )}
+
+              <Link
+                href="/propiedades/oportunidad"
+                scroll
+                className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
+              >
+                Oportunidades
+              </Link>
+              <Link
+                href="/nosotros"
+                scroll
+                className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
+              >
+                Nosotros
+              </Link>
+              <Link
+                href="/contacto"
+                scroll
+                className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
+              >
+                Contacto
+              </Link>
             </div>
 
-            {/* Botón */}
             <div className="flex items-center gap-4">
               <a
                 href="https://wa.me/5492984582082"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="hidden lg:block text-xs font-bold bg-gold-sand hover:bg-gold-hover text-oxford px-5 py-2.5 rounded-sm transition-all shadow-md active:scale-95"
               >
                 TASAR AHORA
               </a>
               <button
+                type="button"
                 className="lg:hidden p-2 text-gold-sand focus:outline-none"
                 onClick={() => setIsOpen(!isOpen)}
+                aria-expanded={isOpen}
+                aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
               >
                 {isOpen ? <X size={28} /> : <Menu size={28} />}
               </button>
@@ -176,49 +301,186 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* --- MOBILE MENU --- */}
+        {/* --- MOBILE MENU (accordion) --- */}
         <div
-          className={`lg:hidden absolute w-full bg-oxford transition-all duration-300 ease-in-out z-50 overflow-hidden shadow-xl
-          ${isOpen ? "max-h-125 border-t border-white/10" : "max-h-0"}`}
+          className={`lg:hidden absolute w-full left-0 right-0 bg-oxford transition-all duration-300 ease-in-out z-50 overflow-hidden shadow-xl ${isOpen ? "max-h-[85vh] border-t border-white/10 overflow-y-auto" : "max-h-0"}`}
         >
-          <div className="px-6 py-8 flex flex-col space-y-5">
-            {menuItems.map((item) => (
+          <div className="px-6 py-6 flex flex-col gap-1">
+            <Link
+              href="/"
+              scroll
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand transition-colors py-2"
+            >
+              Inicio
+            </Link>
+
+            {/* Comprar accordion */}
+            {hasVenta ? (
+              <div className="border-b border-white/10 pb-2">
+                <button
+                  type="button"
+                  onClick={() => setMobileVentaOpen(!mobileVentaOpen)}
+                  className="w-full flex items-center justify-between text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand transition-colors py-2"
+                >
+                  Comprar <ChevronDown size={20} className={mobileVentaOpen ? "rotate-180" : ""} />
+                </button>
+                {mobileVentaOpen && (
+                  <div className="pl-4 mt-1 space-y-1">
+                    {/* Link para ver todas */}
+                    <Link
+                      href="/propiedades/venta"
+                      onClick={() => setIsOpen(false)}
+                      className="text-sm text-white/80 hover:text-gold-sand py-1"
+                    >
+                      Ver todas
+                    </Link>
+
+                    {menuStructure!.venta.map((typeEntry) => (
+                      <div key={typeEntry.typeSlug}>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setMobileTypeVenta((k) => (k === typeEntry.typeSlug ? null : typeEntry.typeSlug))
+                          }
+                          className="w-full flex items-center justify-between text-white/90 hover:text-gold-sand py-1.5 text-left"
+                        >
+                          {typeEntry.typeName} en venta
+                          <ChevronRight
+                            size={16}
+                            className={mobileTypeVenta === typeEntry.typeSlug ? "rotate-90" : ""}
+                          />
+                        </button>
+                        {mobileTypeVenta === typeEntry.typeSlug && (
+                          <div className="pl-4 flex flex-col gap-0.5 pb-2">
+                            {typeEntry.cities.map((city) => (
+                              <Link
+                                key={city.slug}
+                                href={buildSeoListingUrl(typeEntry.typeSlug, "venta", city.slug)}
+                                onClick={() => {
+                                  setIsOpen(false);
+                                  setMobileVentaOpen(false);
+                                  setMobileTypeVenta(null);
+                                }}
+                                className="text-sm text-white/80 hover:text-gold-sand py-1"
+                              >
+                                {city.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
               <Link
-                key={item.name}
-                href={item.href}
+                href="/propiedades/venta"
                 scroll
                 onClick={() => setIsOpen(false)}
-                className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand transition-colors"
+                className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
               >
-                {item.name}
+                Comprar
               </Link>
-            ))}
+            )}
 
-            {/* Redes mobile */}
-            <div className="flex flex-col gap-4 mt-6 border-t border-white/10 pt-4">
-              <div className="flex items-center gap-3">
-                <Share2 className="text-gold-sand" size={20} />
-                <span className="text-white font-medium text-sm uppercase tracking-wide">
-                  Seguinos
-                </span>
-              </div>
-              <div className="flex gap-4 pl-5">
-                <a
-                  href="https://www.facebook.com/riquelmeprop?rdid=2QDa2IeJSjsrjxVN&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1C6P6AShqK%2F#"
-                  target="_blank"
-                  className="text-white hover:text-gold-sand transition-colors"
+            {/* Alquilar accordion */}
+            {hasAlquiler ? (
+              <div className="border-b border-white/10 pb-2">
+                <button
+                  type="button"
+                  onClick={() => setMobileAlquilerOpen(!mobileAlquilerOpen)}
+                  className="w-full flex items-center justify-between text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand transition-colors py-2"
                 >
-                  <Facebook size={20} />
-                </a>
-                <a
-                  href="https://www.instagram.com/riquelme.propiedades/"
-                  target="_blank"
-                  className="text-white hover:text-gold-sand transition-colors"
-                >
-                  <Instagram size={20} />
-                </a>
+                  Alquilar <ChevronDown size={20} className={mobileAlquilerOpen ? "rotate-180" : ""} />
+                </button>
+                {mobileAlquilerOpen && (
+                  <div className="pl-4 mt-1 space-y-1">
+                    {/* Link para ver todas */}
+                    <Link
+                      href="/propiedades/alquiler"
+                      onClick={() => setIsOpen(false)}
+                      className="text-sm text-white/80 hover:text-gold-sand py-1"
+                    >
+                      Ver todas
+                    </Link>
+
+                    {menuStructure!.alquiler.map((typeEntry) => (
+                      <div key={typeEntry.typeSlug}>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setMobileTypeAlquiler((k) =>
+                              k === typeEntry.typeSlug ? null : typeEntry.typeSlug
+                            )
+                          }
+                          className="w-full flex items-center justify-between text-white/90 hover:text-gold-sand py-1.5 text-left"
+                        >
+                          {typeEntry.typeName} en alquiler
+                          <ChevronRight
+                            size={16}
+                            className={mobileTypeAlquiler === typeEntry.typeSlug ? "rotate-90" : ""}
+                          />
+                        </button>
+                        {mobileTypeAlquiler === typeEntry.typeSlug && (
+                          <div className="pl-4 flex flex-col gap-0.5 pb-2">
+                            {typeEntry.cities.map((city) => (
+                              <Link
+                                key={city.slug}
+                                href={buildSeoListingUrl(typeEntry.typeSlug, "alquiler", city.slug)}
+                                onClick={() => {
+                                  setIsOpen(false);
+                                  setMobileAlquilerOpen(false);
+                                  setMobileTypeAlquiler(null);
+                                }}
+                                className="text-sm text-white/80 hover:text-gold-sand py-1"
+                              >
+                                {city.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
+            ) : (
+              <Link
+                href="/propiedades/alquiler"
+                scroll
+                onClick={() => setIsOpen(false)}
+                className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
+              >
+                Alquilar
+              </Link>
+            )}
+
+            <Link
+              href="/propiedades/oportunidad"
+              scroll
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
+            >
+              Oportunidades
+            </Link>
+            <Link
+              href="/nosotros"
+              scroll
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
+            >
+              Nosotros
+            </Link>
+            <Link
+              href="/contacto"
+              scroll
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
+            >
+              Contacto
+            </Link>
           </div>
         </div>
       </nav>

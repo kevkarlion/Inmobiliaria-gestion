@@ -59,7 +59,7 @@ export default async function Page({ params }: Props) {
   const operationType = isOpportunity ? undefined : filter;
 
   const properties = await getUiProperties({
-    type: operationType,
+    operationType: operationType as "venta" | "alquiler" | undefined,
     isOpportunity,
     limit: 50,
   });

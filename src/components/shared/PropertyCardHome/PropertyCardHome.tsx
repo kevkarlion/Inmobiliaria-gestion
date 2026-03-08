@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, BedDouble, Square, ChevronRight, Sparkles } from "lucide-react";
+import {
+  MapPin,
+  BedDouble,
+  Square,
+  ChevronRight,
+  Sparkles,
+} from "lucide-react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 
 interface Props {
@@ -11,7 +17,7 @@ interface Props {
 
 export default function PropertyCardHome({ property }: Props) {
   return (
-    <Link 
+    <Link
       href={`/propiedad/${property.slug}`}
       className="group relative shrink-0 w-75 md:w-105 h-60 bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 border border-white/10 block"
     >
@@ -30,7 +36,6 @@ export default function PropertyCardHome({ property }: Props) {
 
       {/* Contenido Superpuesto */}
       <div className="relative z-20 h-full p-6 flex flex-col justify-between font-montserrat">
-        
         {/* Superior: Tags y Características */}
         <div className="flex justify-between items-start">
           <div className="flex flex-col gap-2">
@@ -44,15 +49,19 @@ export default function PropertyCardHome({ property }: Props) {
               </span>
             )}
           </div>
-          
+
           <div className="flex gap-1.5">
             <div className="flex items-center gap-1 backdrop-blur-md bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-white">
               <BedDouble size={12} className="text-gold-sand" />
-              <span className="text-[10px] font-bold">{property.rooms || 0}</span>
+              <span className="text-[10px] font-bold">
+                {property.rooms || 0}
+              </span>
             </div>
             <div className="flex items-center gap-1 backdrop-blur-md bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-white">
               <Square size={10} className="text-gold-sand" />
-              <span className="text-[10px] font-bold">{property.coveredM2 || 0}m²</span>
+              <span className="text-[10px] font-bold">
+                {property.coveredM2 || 0}m²
+              </span>
             </div>
           </div>
         </div>
@@ -71,8 +80,12 @@ export default function PropertyCardHome({ property }: Props) {
           <div className="flex items-end justify-between">
             <div className="space-y-0.5">
               <div className="text-white text-2xl font-black tracking-tighter leading-none">
-                <span className="text-gold-sand text-xs font-bold mr-0.5">{property.currency}</span>
-                {property.amount.toLocaleString("es-AR")}
+                <span className="text-gold-sand text-xs font-bold mr-0.5">
+                  {property.currency}
+                </span>
+                {property.amount
+                  ? property.amount.toLocaleString("es-AR")
+                  : "Consultar"}
               </div>
               <div className="flex items-center gap-1 text-white/60">
                 <MapPin size={12} className="text-gold-sand" />

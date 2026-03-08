@@ -6,6 +6,7 @@ import { Montserrat, Lora, Inter } from "next/font/google";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer/Footer";
 import WhatsAppButton from "@/components/shared/WhatsAppButton/WhatsAppButton";
+import { PropertyService } from "@/server/services/property.service";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -42,6 +43,13 @@ export const metadata = {
   ],
   authors: [{ name: "Riquelme Propiedades" }],
   creator: "Riquelme Propiedades",
+  alternates: {
+    canonical: SITE_URL,
+    languages: {
+      'es': SITE_URL,
+      'en': `${SITE_URL}/en`,
+    },
+  },
   openGraph: {
     title: "Riquelme Propiedades | Inmobiliaria en General Roca",
     description:
@@ -49,6 +57,7 @@ export const metadata = {
     url: SITE_URL,
     siteName: "Riquelme Propiedades",
     locale: "es_AR",
+    alternateLocale: "en_US",
     type: "website",
     images: [
       {
@@ -84,11 +93,18 @@ export const metadata = {
 };
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  let menuStructure = null;
+  try {
+    menuStructure = await PropertyService.getMenuStructure();
+  } catch {
+    // Si falla la DB (ej. build sin DB), el Navbar usa fallback a links simples
+  }
+
   return (
     <html
       lang="es"
@@ -96,9 +112,8 @@ export default function RootLayout({
     >
       <body className="bg-oxford overflow-x-hidden">
         <PropertyProvider>
-          <Navbar />
-          
-          {/* Nada raro acá */}
+          <Navbar menuStructure={menuStructure} />
+
           <main className="flex flex-col">
             {children}
           </main>

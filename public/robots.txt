@@ -1,5 +1,28 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /api
+
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /api
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /api
+Crawl-delay: 1
 
 Sitemap: https://riquelmeprop.com/sitemap.xml
+
+# Reglas de paginación para propiedades
+Allow: /propiedades?page=
+Allow: /propiedades/venta?page=
+Allow: /propiedades/alquiler?page=
+
+# Evitar indexing de parámetros de filtro redundantes
+Disallow: /propiedades?
+Disallow: /propiedades/?
+Disallow: /*?

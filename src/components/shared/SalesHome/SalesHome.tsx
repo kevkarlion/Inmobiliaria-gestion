@@ -5,7 +5,7 @@ import { getUiProperties } from "@/components/server/data-access/get-ui-properti
 
 export default async function SalesHome() {
   const properties = await getUiProperties({ 
-    type: "venta", 
+    operationType: "venta", 
     limit: 6 
   });
 

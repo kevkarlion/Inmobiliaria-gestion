@@ -5,7 +5,7 @@ import { getUiProperties } from "@/components/server/data-access/get-ui-properti
 
 export default async function AlquilerHome() {
   const properties = await getUiProperties({
-    type: "alquiler",
+    operationType: "alquiler",
     limit: 6,
   });
 
