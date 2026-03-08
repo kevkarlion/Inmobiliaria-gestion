@@ -8,15 +8,13 @@ export default async function Hero() {
 
   return (
     <section className="w-full bg-oxford">
-
       {/* BLOQUE HERO */}
-      <div className="relative w-full">
-
-        {/* IMAGEN MOBILE */}
+      <div className="relative w-full ">
+        {/* IMÁGENES */}
         <div className="block lg:hidden">
           <Image
             src="/hero-mobile.webp"
-            alt="Hero Mobile"
+            alt="Venta de casas, departamentos y terrenos en General Roca"
             width={1600}
             height={1000}
             priority
@@ -24,11 +22,10 @@ export default async function Hero() {
           />
         </div>
 
-        {/* IMAGEN DESKTOP */}
         <div className="hidden lg:block">
           <Image
             src="/bg-hero.webp"
-            alt="Hero Desktop"
+            alt="Propiedades exclusivas en General Roca - Riquelme Propiedades"
             width={2400}
             height={1400}
             priority
@@ -36,26 +33,58 @@ export default async function Hero() {
           />
         </div>
 
-        {/* OVERLAY */}
-        <div className="absolute inset-0 bg-black/40" />
+        {/* OVERLAY SUTIL */}
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/30 to-transparent lg:to-black/10" />
+        <div className="absolute inset-0 bg-linear-to-t from-oxford/40 via-transparent to-transparent" />
 
-        {/* CONTENIDO */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center mt-32">
-          <div className="w-full max-w-7xl mx-auto px-6 text-center">
-            
-            <h1 className="text-white text-4xl xl:text-5xl font-montserrat uppercase font-black italic mb-8 drop-shadow-2xl">
-              Estrategia para vender, <br />
-              <span className="text-gold-sand">visión para comprar.</span>
-            </h1>
+        {/* CONTENIDO PRINCIPAL */}
+        <div className="absolute inset-0 z-20 flex flex-col justify-center pt-32">
+          <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
+            {/* BLOQUE DE TEXTO */}
+            <div className="max-w-2xl text-left mb-12 md:mb-8">
+              <h1 className="flex flex-col items-start uppercase tracking-tighter">
+                {/* Keyword de confianza */}
+                <span className="text-gold-sand text-xs md:text-sm font-bold tracking-[0.4em] mb-3 drop-shadow-md">
+                  Inmobiliaria en General Roca
+                </span>
 
-            <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl mx-auto">
-              <SearchBar initialProperties={allProperties} />
+                {/* Título principal con gradiente parcial */}
+                <span className="text-3xl md:text-5xl lg:text-6xl font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-gold-sand to-yellow-600 font-extrabold">
+                    Casas, <span className="text-white/90">Departamentos</span>
+                  </span>
+                  <span className="text-white font-extrabold mt-1">
+                    y Loteos
+                  </span>
+                </span>
+              </h1>
+
+              {/* Subtítulo SEO */}
+              <p className="mt-5 text-slate-200 text-base md:text-xl font-light leading-relaxed max-w-lg drop-shadow-md">
+                Propiedades y terrenos en venta en{" "}
+                <span className="text-white font-medium italic underline decoration-gold-sand/40">
+                  General Roca
+                </span>{" "}
+                y todo el Alto Valle.
+              </p>
+            </div>
+
+            {/* BUSCADOR */}
+            <div className="w-full flex justify-center">
+              <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl">
+                <div className="backdrop-blur-md bg-white/5 p-1 md:p-2 rounded-xl border border-white/10 shadow-2xl z-200">
+                  <SearchBar initialProperties={allProperties} />
+                </div>
+
+                {/* Detalle inferior opcional */}
+                <p className="mt-3 text-white/40 text-[10px] md:text-xs uppercase tracking-[0.2em] text-center">
+                  Explora las mejores oportunidades de inversión
+                </p>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );
 }
-
