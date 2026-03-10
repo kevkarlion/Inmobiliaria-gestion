@@ -280,10 +280,10 @@ export default function SearchTypePage({
                     }}
                     className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-gold-sand outline-none text-white disabled:opacity-40"
                   >
-                    <option value="">Todas las Provincias</option>
+                    <option className="text-black" value="">Todas las Provincias</option>
 
                     {provinceOptions.map(([slug, name]) => (
-                      <option key={slug} value={slug}>
+                      <option key={slug} className="text-black" value={slug}>
                         {name}
                       </option>
                     ))}
@@ -295,10 +295,10 @@ export default function SearchTypePage({
                     onChange={(e) => setCitySelected(e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:border-gold-sand outline-none text-white disabled:opacity-40"
                   >
-                    <option value="">Todas las Localidades</option>
+                    <option className="text-black" value="">Todas las Localidades</option>
 
                     {cityOptions.map(([slug, name]) => (
-                      <option key={slug} value={slug}>
+                      <option key={slug} className="text-black" value={slug}>
                         {name}
                       </option>
                     ))}
