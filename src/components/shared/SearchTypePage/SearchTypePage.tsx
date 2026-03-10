@@ -272,6 +272,7 @@ export default function SearchTypePage({
                   </label>
 
                   <select
+                    key={`province-${provinceSelected}`}
                     value={provinceSelected}
                     disabled={isCityLocked}
                     onChange={(e) => {
@@ -290,6 +291,7 @@ export default function SearchTypePage({
                   </select>
 
                   <select
+                    key={`city-${citySelected}`}
                     value={citySelected}
                     disabled={isCityLocked}
                     onChange={(e) => setCitySelected(e.target.value)}
