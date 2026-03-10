@@ -188,6 +188,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
             <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
               <SelectItem value="casa">Casa</SelectItem>
               <SelectItem value="departamento">Departamento</SelectItem>
+              <SelectItem value="departamento-en-pozo">Depto. en Pozo</SelectItem>
               <SelectItem value="terreno">Terreno</SelectItem>
               <SelectItem value="loteos">Loteos</SelectItem>
             </SelectContent>

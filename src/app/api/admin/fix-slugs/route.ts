@@ -43,7 +43,7 @@ export async function GET() {
       const typeSlug = propertyTypeDoc.slug;
       const citySlug = cityDoc.slug;
       const middle = slugify(property.title, { lower: true, strict: true });
-      const newSlug = `${typeSlug}-${middle}-${citySlug}`;
+      const newSlug = `${middle}-${citySlug}`;
 
       console.log(`   → Nuevo slug: ${newSlug}`);
 

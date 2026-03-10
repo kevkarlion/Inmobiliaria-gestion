@@ -2,8 +2,8 @@ import slugify from "slugify";
 
 /**
  * Genera un slug SEO para la URL de detalle de propiedad.
- * Formato: {tipo}-{titulo-slugificado}-{ciudad}
- * Ej: terreno-el-mirador-general-roca
+ * Formato: {titulo-slugificado}-{ciudad}
+ * Ej: loteos-tronelli-general-roca
  */
 export function buildPropertySeoSlug(
   typeSlug: string,
@@ -11,6 +11,6 @@ export function buildPropertySeoSlug(
   citySlug: string
 ): string {
   const middle = slugify(title, { lower: true, strict: true });
-  if (!middle) return `${typeSlug}-${citySlug}`;
-  return `${typeSlug}-${middle}-${citySlug}`;
+  if (!middle) return `${citySlug}`;
+  return `${middle}-${citySlug}`;
 }

@@ -56,7 +56,7 @@ if (!properties) {
           <div className="p-5 space-y-2">
             <h3 className="font-montserrat font-bold text-sm uppercase">{p.title}</h3>
             <p className="text-xs text-blue-gray">
-              {p.typeName} · {p.zoneName}
+              {p.zoneName}
             </p>
             <p className="font-semibold">
               {p.currency} {formatAmount(p.amount)}

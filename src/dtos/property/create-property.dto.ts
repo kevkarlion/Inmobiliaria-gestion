@@ -56,6 +56,10 @@ export class CreatePropertyDTO {
     if (typePrefix === "loteos" && titleLower.includes("loteo")) {
       console.warn(`⚠️ El título "${data.title}" contiene "loteo". El slug quedará mejor si quitás esa palabra del título.`);
     }
+    // Validación especial para deptos en pozo
+    if (typePrefix === "departamento-en-pozo" && titleLower.includes("pozo")) {
+      console.warn(`⚠️ El título "${data.title}" contiene "pozo". El slug quedará mejor si quitás esa palabra del título.`);
+    }
 
     this.title = data.title;
     this.operationType = data.operationType;

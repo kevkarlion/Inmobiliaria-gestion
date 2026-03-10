@@ -56,6 +56,16 @@ export const SEO_CATEGORIES: SeoCategoryConfig[] = [
     citySlug: CITY_SLUG_GENERAL_ROCA,
     canonical: getCanonicalUrl("/loteos-en-venta-general-roca"),
   },
+  {
+    slug: "departamentos-en-pozo-en-venta-general-roca",
+    title: "Departamentos en Pozo en venta en General Roca",
+    description:
+      "Departamentos en pozo en venta en General Roca, Río Negro. Proyectos en construcción con financiación y entrega diferida.",
+    operationType: "venta",
+    propertyTypeSlug: "departamento-en-pozo",
+    citySlug: CITY_SLUG_GENERAL_ROCA,
+    canonical: getCanonicalUrl("/departamentos-en-pozo-en-venta-general-roca"),
+  },
 ];
 
 export const getSeoCategoryBySlug = (slug: string) =>
