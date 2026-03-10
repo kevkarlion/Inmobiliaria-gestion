@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { revalidatePath } from "next/cache";
 
 import { SEO_CATEGORIES, getSeoCategoryBySlug } from "@/lib/seoCategories";
 import { parseSeoListingSlug } from "@/lib/seoUrls";
@@ -10,6 +11,9 @@ import { getUiProperties } from "@/components/server/data-access/get-ui-properti
 import { PropertyService } from "@/server/services/property.service";
 
 import SearchTypePage from "@/components/shared/SearchTypePage/SearchTypePage";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type Params = Promise<{ seoCategory: string }>;
 type Props = { params: Params };

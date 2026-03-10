@@ -4,6 +4,9 @@ import AboutPreview from "@/components/home/AboutPreview/AboutPreview";
 import type { Metadata } from "next";
 import { getCanonicalUrl } from "@/lib/config";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Inmobiliaria en General Roca, Río Negro",
   description:

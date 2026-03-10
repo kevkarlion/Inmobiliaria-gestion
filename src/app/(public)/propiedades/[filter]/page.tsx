@@ -4,6 +4,9 @@ import SearchTypePage from "@/components/shared/SearchTypePage/SearchTypePage";
 import type { Metadata } from "next";
 import { getCanonicalUrl } from "@/lib/config";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface Props {
   params: Promise<{ filter: string }>;
 }
