@@ -365,15 +365,19 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
   }
 
   // Aplicar cambios
+  const oldSlug = property.slug; // Guardar slug viejo antes de guardar
   Object.assign(property, updateData);
   await property.save();
 
-  // Revalidación de paths
+  // Revalidación de paths - revalidar tanto old como new slug
   revalidatePath("/");
   revalidatePath("/propiedades/oportunidad");
   revalidatePath("/propiedades/venta");
   revalidatePath("/propiedades/alquiler");
-  revalidatePath(`/propiedad/${property.slug}`);
+  revalidatePath(`/propiedad/${oldSlug}`);
+  if (updateData.slug && updateData.slug !== oldSlug) {
+    revalidatePath(`/propiedad/${updateData.slug}`);
+  }
 
   // Devolver con populate
   const result = await PropertyModel.findById(property._id)

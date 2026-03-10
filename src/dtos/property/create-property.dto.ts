@@ -46,6 +46,13 @@ export class CreatePropertyDTO {
     if (!data.province) throw new BadRequestError("La provincia es requerida");
     if (!data.city) throw new BadRequestError("La localidad es requerida");
 
+    // Validar que el título no contenga el tipo de propiedad (evita slug duplicado)
+    const typePrefix = data.propertyTypeSlug.toLowerCase();
+    const titleLower = data.title.toLowerCase();
+    if (titleLower.startsWith(typePrefix + " ") || titleLower.startsWith(typePrefix + "-")) {
+      console.warn(`⚠️ El título "${data.title}" comienza con "${data.propertyTypeSlug}". El slug quedará mejor si quitás el tipo del título.`);
+    }
+
     this.title = data.title;
     this.operationType = data.operationType;
     this.propertyTypeSlug = data.propertyTypeSlug;

@@ -47,6 +47,15 @@ export class UpdatePropertyDTO {
   };
 
   constructor(data: any) {
+    // Validar que el título no contenga el tipo de propiedad (evita slug duplicado)
+    if (data.title && data.propertyTypeSlug) {
+      const typePrefix = data.propertyTypeSlug.toLowerCase();
+      const titleLower = data.title.toLowerCase();
+      if (titleLower.startsWith(typePrefix + " ") || titleLower.startsWith(typePrefix + "-")) {
+        console.warn(`⚠️ El título "${data.title}" comienza con "${data.propertyTypeSlug}". El slug quedará mejor si quitás el tipo del título.`);
+      }
+    }
+
     this.title = data.title;
     this.slug = data.slug;
     this.operationType = data.operationType;
