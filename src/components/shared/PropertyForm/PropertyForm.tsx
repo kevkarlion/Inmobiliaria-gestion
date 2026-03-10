@@ -202,9 +202,9 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
             </SelectTrigger>
             <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
               <SelectItem value="casa">Casa</SelectItem>
-              <SelectItem value="terreno">Terreno</SelectItem>
               <SelectItem value="departamento">Departamento</SelectItem>
-              <SelectItem value="local">Local Comercial</SelectItem>
+              <SelectItem value="terreno">Terreno</SelectItem>
+              <SelectItem value="loteos">Loteos</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -226,7 +226,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
           <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Precio *</Label>
-          <Input type="number" name="priceAmount" value={form.priceAmount || ""} onChange={handleChange} className="bg-white/5 border-white/10 h-12" required />
+          <Input type="text" inputMode="numeric" pattern="[0-9]*" name="priceAmount" value={form.priceAmount || ""} onChange={handleChange} className="bg-white/5 border-white/10 h-12" placeholder="Ej: 150000" required />
         </div>
         <div className="space-y-2">
           <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Moneda</Label>

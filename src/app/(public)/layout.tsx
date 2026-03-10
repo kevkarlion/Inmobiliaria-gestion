@@ -53,7 +53,7 @@ export const metadata = {
   openGraph: {
     title: "Riquelme Propiedades | Inmobiliaria en General Roca",
     description:
-      "Encontrá casas, departamentos y terrenos en venta y alquiler en General Roca, Río Negro.",
+      "Encontrá casas, departamentos, terrenos y loteos en venta y alquiler en General Roca, Río Negro.",
     url: SITE_URL,
     siteName: "Riquelme Propiedades",
     locale: "es_AR",

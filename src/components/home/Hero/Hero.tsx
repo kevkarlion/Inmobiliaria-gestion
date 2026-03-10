@@ -14,7 +14,7 @@ export default async function Hero() {
         <div className="block lg:hidden">
           <Image
             src="/hero-mobile.webp"
-            alt="Venta de casas, departamentos y terrenos en General Roca"
+            alt="Venta de casas, departamentos, terrenos y loteos en General Roca"
             width={1600}
             height={1000}
             priority

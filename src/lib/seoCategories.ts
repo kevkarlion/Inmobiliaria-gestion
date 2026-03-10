@@ -27,6 +27,16 @@ export const SEO_CATEGORIES: SeoCategoryConfig[] = [
     canonical: getCanonicalUrl("/casas-en-venta-general-roca"),
   },
   {
+    slug: "departamentos-en-venta-general-roca",
+    title: "Departamentos en venta en General Roca",
+    description:
+      "Departamentos en venta en General Roca, Río Negro. Departamentos modernos y proyectos en pozo con entrega inmediata.",
+    operationType: "venta",
+    propertyTypeSlug: "departamento",
+    citySlug: CITY_SLUG_GENERAL_ROCA,
+    canonical: getCanonicalUrl("/departamentos-en-venta-general-roca"),
+  },
+  {
     slug: "terrenos-en-venta-general-roca",
     title: "Terrenos en venta en General Roca",
     description:
@@ -42,7 +52,7 @@ export const SEO_CATEGORIES: SeoCategoryConfig[] = [
     description:
       "Loteos en venta en General Roca, Río Negro. Proyectos urbanísticos y lotes en cuotas con asesoramiento profesional.",
     operationType: "venta",
-    propertyTypeSlug: "loteo",
+    propertyTypeSlug: "loteos",
     citySlug: CITY_SLUG_GENERAL_ROCA,
     canonical: getCanonicalUrl("/loteos-en-venta-general-roca"),
   },

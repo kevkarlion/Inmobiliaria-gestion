@@ -50,7 +50,11 @@ export class CreatePropertyDTO {
     const typePrefix = data.propertyTypeSlug.toLowerCase();
     const titleLower = data.title.toLowerCase();
     if (titleLower.startsWith(typePrefix + " ") || titleLower.startsWith(typePrefix + "-")) {
-      console.warn(`⚠️ El título "${data.title}" comienza con "${data.propertyTypeSlug}". El slug quedará mejor si quitás el tipo del título.`);
+      console.warn(`⚠️ El título "${data.title}" comienza con "${data.propertyTypeSlug}". El slug ficará melhor si quitás el tipo del título.`);
+    }
+    // Validación especial para loteos
+    if (typePrefix === "loteos" && titleLower.includes("loteo")) {
+      console.warn(`⚠️ El título "${data.title}" contiene "loteo". El slug quedará mejor si quitás esa palabra del título.`);
     }
 
     this.title = data.title;

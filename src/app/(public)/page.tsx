@@ -7,7 +7,7 @@ import { getCanonicalUrl } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Inmobiliaria en General Roca, Río Negro",
   description:
-    "Inmobiliaria en General Roca, Río Negro. Encontrá casas, departamentos y terrenos en venta y alquiler con asesoramiento profesional en Riquelme Propiedades.",
+    "Inmobiliaria en General Roca, Río Negro. Encontrá casas, departamentos, terrenos y loteos en venta y alquiler con asesoramiento profesional en Riquelme Propiedades.",
   alternates: {
     canonical: getCanonicalUrl("/"),
   },
