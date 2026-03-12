@@ -1,8 +1,19 @@
+import {
+  Building2,
+  LayoutGrid,
+  BedDouble,
+  Bath,
+  Maximize,
+  Layout,
+  Car,
+  Calendar,
+  type LucideIcon,
+} from "lucide-react";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import { PropertyGallery } from "@/components/shared/PropertyGalllery/PropertyGallery";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { formatPrice } from "@/utils/formatPrice";
-import PropertyShare  from "@/components/shared/PropertyShare/PropertyShare";
+import PropertyShare from "@/components/shared/PropertyShare/PropertyShare";
 
 export function PropertyDetailClient({
   property,
@@ -86,10 +97,10 @@ export function PropertyDetailClient({
 
             {/* Ficha técnica */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 bg-white rounded-3xl border border-black/5 shadow-xl p-10">
-              <Item label="Tipo" value={p.typeName} />
-              <Item label="Ambientes" value={p.rooms} />
-              <Item label="Dormitorios" value={p.bedrooms} />
-              <Item label="Baños" value={p.bathrooms} />
+              <Item label="Tipo" value={p.typeName} icon={Building2} />
+              <Item label="Ambientes" value={p.rooms} icon={LayoutGrid} />
+              <Item label="Dormitorios" value={p.bedrooms} icon={BedDouble} />
+              <Item label="Baños" value={p.bathrooms} icon={Bath} />
               <Item
                 label="Sup. Total"
                 value={p.totalM2 ? `${p.totalM2} m²` : null}
