@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { buildSeoListingUrl } from "@/lib/seoUrls";
+import { pluralizePropertyType } from "@/lib/propertyTypeLabels";
 import type { NavMenuStructure } from "@/lib/seoUrls";
 
 const NAV_COLOR = "#001d3d";
@@ -173,7 +174,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                         <div key={typeEntry.typeSlug} className="group/type relative">
                           <div className="flex items-center justify-between px-4 py-2 hover:bg-slate-50">
                             <span className="text-sm font-semibold">
-                              {typeEntry.typeName} en venta
+                              {pluralizePropertyType(typeEntry.typeName)} en venta
                             </span>
                             <ChevronRight size={14} className="text-slate-400" />
                           </div>
@@ -226,7 +227,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                         <div key={typeEntry.typeSlug} className="group/type relative">
                           <div className="flex items-center justify-between px-4 py-2 hover:bg-slate-50">
                             <span className="text-sm font-semibold">
-                              {typeEntry.typeName} en alquiler
+                              {pluralizePropertyType(typeEntry.typeName)} en alquiler
                             </span>
                             <ChevronRight size={14} className="text-slate-400" />
                           </div>
@@ -345,7 +346,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                           }
                           className="w-full flex items-center justify-between text-white/90 hover:text-gold-sand py-1.5 text-left"
                         >
-                          {typeEntry.typeName} en venta
+                          {pluralizePropertyType(typeEntry.typeName)} en venta
                           <ChevronRight
                             size={16}
                             className={mobileTypeVenta === typeEntry.typeSlug ? "rotate-90" : ""}
@@ -417,7 +418,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                           }
                           className="w-full flex items-center justify-between text-white/90 hover:text-gold-sand py-1.5 text-left"
                         >
-                          {typeEntry.typeName} en alquiler
+                          {pluralizePropertyType(typeEntry.typeName)} en alquiler
                           <ChevronRight
                             size={16}
                             className={mobileTypeAlquiler === typeEntry.typeSlug ? "rotate-90" : ""}

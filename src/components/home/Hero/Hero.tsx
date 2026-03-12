@@ -14,7 +14,7 @@ export default async function Hero() {
         <div className="block lg:hidden">
           <Image
             src="/hero-mobile.webp"
-            alt="Venta de casas, departamentos, terrenos y loteos en General Roca"
+            alt="Venta de casas, departamentos y terrenos en General Roca"
             width={1600}
             height={1000}
             priority
@@ -45,8 +45,8 @@ export default async function Hero() {
               <h1 className="flex flex-col items-start uppercase tracking-tighter">
                 {/* Keyword de confianza */}
                 <span className="text-gold-sand text-xs md:text-sm font-bold tracking-[0.4em] mb-3 drop-shadow-md bg-black/40 px-2 py-1 rounded-md md:bg-transparent">
-  Inmobiliaria en General Roca
-</span>
+                  Inmobiliaria en General Roca
+                </span>
 
                 {/* Título principal con gradiente parcial */}
                 <span className="text-3xl md:text-5xl lg:text-[56px] font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
@@ -72,7 +72,6 @@ export default async function Hero() {
             {/* BUSCADOR */}
             <div className="w-full flex justify-center">
               <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl">
-                
                 <SearchBar initialProperties={allProperties} />
                 {/* Detalle inferior opcional */}
                 <p className="mt-3 text-white/40 text-[10px] md:text-xs uppercase tracking-[0.2em] text-center">

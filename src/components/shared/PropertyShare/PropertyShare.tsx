@@ -27,23 +27,20 @@ export default function PropertyShare({
 
   const shareText = `${title} | ${price} | ${zone}`
 
-  // Seguro para SSR (no rompe hidratación)
-  const canNativeShare =
-    typeof navigator !== "undefined" && typeof navigator.share === "function"
-
   const handleNativeShare = useCallback(async () => {
-    if (!canNativeShare) return
-
-    try {
-      await navigator.share({
-        title,
-        text: shareText,
-        url,
-      })
-    } catch (error) {
-      console.error("Native share error:", error)
+    // Verificar en el momento del click (evita hydration mismatch)
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title,
+          text: shareText,
+          url,
+        })
+      } catch (error) {
+        console.error("Native share error:", error)
+      }
     }
-  }, [canNativeShare, title, shareText, url])
+  }, [title, shareText, url])
 
   const shareWhatsapp = useCallback(() => {
     const wa = `https://wa.me/?text=${encodeURIComponent(
@@ -87,8 +84,7 @@ export default function PropertyShare({
       {/* Botón compartir nativo */}
       <button
         onClick={handleNativeShare}
-        disabled={!canNativeShare}
-        className="w-full py-3 px-4 rounded-xl font-montserrat font-bold uppercase tracking-wide bg-gold-sand text-black hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 px-4 rounded-xl font-montserrat font-bold uppercase tracking-wide bg-gold-sand text-black hover:opacity-90 transition"
       >
         Compartir propiedad
       </button>
