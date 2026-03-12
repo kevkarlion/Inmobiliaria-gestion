@@ -3,10 +3,10 @@ import {
   LayoutGrid,
   BedDouble,
   Bath,
-  Maximize,
-  Layout,
+  Maximize2,
   Car,
   Calendar,
+  Home,
   type LucideIcon,
 } from "lucide-react";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
@@ -96,22 +96,26 @@ export function PropertyDetailClient({
             )}
 
             {/* Ficha técnica */}
+            <h3 className="font-montserrat text-2xl font-black uppercase tracking-tight border-l-4 border-gold-sand pl-4 text-oxford mb-6">
+              Especificaciones Técnicas
+            </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 bg-white rounded-3xl border border-black/5 shadow-xl p-10">
-              <Item label="Tipo" value={p.typeName} icon={Building2} />
+              <Item label="Tipo" value={p.typeName} icon={Home} />
               <Item label="Ambientes" value={p.rooms} icon={LayoutGrid} />
               <Item label="Dormitorios" value={p.bedrooms} icon={BedDouble} />
               <Item label="Baños" value={p.bathrooms} icon={Bath} />
               <Item
                 label="Sup. Total"
                 value={p.totalM2 ? `${p.totalM2} m²` : null}
+                icon={Maximize2}
               />
               <Item
                 label="Sup. Cubierta"
                 value={p.coveredM2 ? `${p.coveredM2} m²` : null}
+                icon={Building2}
               />
-              <Item label="Cochera" value={p.garage ? "Sí" : "No"} />
-              <Item label="Antigüedad" value={p.age ? `${p.age} años` : null} />
-              <Item label="Estado" value={p.status} />
+              <Item label="Cochera" value={p.garage ? "Sí" : "No"} icon={Car} />
+              <Item label="Antigüedad" value={p.age ? `${p.age} años` : null} icon={Calendar} />
             </div>
 
             {/* Tags */}
@@ -206,18 +210,21 @@ export function PropertyDetailClient({
     label,
     value,
     light = false,
+    icon: Icon,
   }: {
     label: string;
     value: React.ReactNode;
     light?: boolean;
+    icon?: LucideIcon;
   }) {
     if (!value) return null;
 
     return (
       <div className="flex flex-col gap-0.5">
         <span
-          className={`label-subtitle ${light ? "text-gold-secondary" : "text-blue-gray"}`}
+          className={`label-subtitle flex items-center gap-1.5 ${light ? "text-gold-secondary" : "text-blue-gray"}`}
         >
+          {Icon && <Icon size={14} className={light ? "text-gold-secondary" : "text-gold-sand"} />}
           {label}
         </span>
         <span
