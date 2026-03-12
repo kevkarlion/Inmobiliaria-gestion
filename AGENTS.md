@@ -9,8 +9,7 @@ This file provides guidelines for agentic coding assistants operating in this re
 - **Database**: MongoDB with Mongoose ODM
 - **Authentication**: JWT-based with HTTP-only cookies
 - **Package Manager**: npm
-
----
+- **Linting**: ESLint v9 with flat config
 
 ## Commands
 ```bash
@@ -21,16 +20,43 @@ npm run start        # Start production server
 
 # Linting
 npm run lint         # Run ESLint on entire codebase
-npx eslint src/path/to/file.ts  # Lint specific file
+npx eslint . --ext .ts,.tsx  # Lint TypeScript files in current directory
 
 # Database
-npm run seed         # Run database seed script
+npm run seed         # Run database seed script (seeds/adress.ts)
 
 # TypeScript scripts
 npx tsx <script>     # Run TypeScript scripts directly
 ```
 
 **Note**: No test framework is currently configured.
+
+---
+
+## Project Structure
+```
+src/
+├── app/                    # Next.js App Router pages & API routes
+│   ├── api/               # API endpoints
+│   └── (routes)           # Page routes
+├── components/             # React components (UI)
+├── db/                    # Database connection & schemas
+├── domain/                # Domain logic
+│   ├── dtos/              # Data Transfer Objects
+│   ├── enums/             # TypeScript enums
+│   ├── interfaces/        # TypeScript interfaces
+│   ├── mappers/           # Data mappers (DB ↔ UI ↔ Form)
+│   ├── models/            # Mongoose models
+│   ├── property/          # Property domain
+│   ├── property-type/     # Property type domain
+│   └── zone/              # Zone domain
+├── lib/                   # Utility functions & config
+└── server/                # Server-side logic
+    ├── controllers/       # Route controllers
+    ├── errors/            # Custom error classes
+    ├── repositories/      # Data access layer
+    └── services/          # Business logic layer
+```
 
 ---
 
@@ -58,7 +84,7 @@ Import order: Next.js/React → External → @/ imports → Relative
 ### TypeScript (Strict Mode)
 - Always define explicit types for parameters and return types
 - Use `interfaces` for object shapes, `types` for unions/primitives
-- Avoid `any` - if needed, use `eslint-disable` comment with explanation
+- **Avoid `any`** - however, this codebase uses `/* eslint-disable @typescript-eslint/no-explicit-any */` at the top of files that receive raw request data (DTOs, controllers, mappers). This is an accepted pattern for parsing request bodies.
 - Use `unknown` when type is unknown, then narrow with type guards
 
 ```typescript
@@ -67,6 +93,17 @@ function getProperty(slug: string): Promise<Property | null> { ... }
 
 // ❌ Bad
 function getProperty(slug) { ... }
+```
+
+### Handling `any` for Request Data
+This codebase accepts `any` in DTOs and mappers with an eslint-disable comment:
+```typescript
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export class CreatePropertyDTO {
+  constructor(data: any) {
+    // ... validation and transformation
+  }
+}
 ```
 
 ### Naming Conventions
@@ -135,14 +172,29 @@ export async function POST(req: Request) {
 }
 ```
 
+### Async/Await Error Handling
+Wrap async controller calls with try-catch:
+```typescript
+export async function GET(req: Request) {
+  try {
+    await connectDB();
+    return PropertyController.getAll(req);
+  } catch (error) {
+    return PropertyController.handleError(error);
+  }
+}
+```
+
 ### Database Operations
 - Always call `connectDB()` at start of controller methods
 - Use services for business logic (`src/server/services/`)
 - Use Mongoose schemas in `src/domain/`
 
 ### Tailwind CSS
-Use `cn()` utility for conditional classes:
+Use `cn()` utility for conditional classes (import from `@/lib/utils`):
 ```typescript
+import { cn } from "@/lib/utils";
+
 <div className={cn("base-classes", isActive && "active-classes", className)}>
 ```
 
