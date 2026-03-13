@@ -6,6 +6,8 @@ export function pluralizePropertyType(type: string) {
         lote: "Lotes",
         local: "Locales",
         oficina: "Oficinas",
+        loteo: "Loteos",
+        loteos: "Loteos", // evita "loteoss"
       };
     
       const normalized = type.toLowerCase();

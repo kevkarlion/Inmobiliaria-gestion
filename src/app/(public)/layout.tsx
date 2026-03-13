@@ -1,4 +1,4 @@
-// layout.tsx
+// layout.tsx (nested layout - no html/body tags, those are in root layout)
 import "@/app/globals.css";
 import { SITE_URL } from "@/lib/config";
 import { PropertyProvider } from "@/context/PropertyContext";
@@ -7,6 +7,7 @@ import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer/Footer";
 import WhatsAppButton from "@/components/shared/WhatsAppButton/WhatsAppButton";
 import { PropertyService } from "@/server/services/property.service";
+import { Toaster } from "sonner";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -93,7 +94,7 @@ export const metadata = {
 };
 
 
-export default async function RootLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -106,22 +107,27 @@ export default async function RootLayout({
   }
 
   return (
-    <html
-      lang="es"
-      className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
-    >
-      <body className="bg-oxford overflow-x-hidden">
-        <PropertyProvider>
-          <Navbar menuStructure={menuStructure} />
+    <div className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}>
+      <PropertyProvider>
+        <Navbar menuStructure={menuStructure} />
 
-          <main className="flex flex-col">
-            {children}
-          </main>
+        <main className="flex flex-col">
+          {children}
+        </main>
 
-          <Footer />
-          <WhatsAppButton />
-        </PropertyProvider>
-      </body>
-    </html>
+        <Footer />
+        <WhatsAppButton />
+        <Toaster 
+          position="bottom-right" 
+          richColors 
+          toastOptions={{
+            style: {
+              background: '#fff',
+              border: '1px solid #e2e8f0',
+            },
+          }}
+        />
+      </PropertyProvider>
+    </div>
   );
 }

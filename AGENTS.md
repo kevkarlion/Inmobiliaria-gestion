@@ -22,14 +22,21 @@ npm run start        # Start production server
 npm run lint         # Run ESLint on entire codebase
 npx eslint . --ext .ts,.tsx  # Lint TypeScript files in current directory
 
+# Testing
+npm test             # Run all tests (vitest)
+npx vitest            # Run tests in watch mode
+npx vitest run        # Run tests once (same as npm test)
+npx vitest run file.test.ts  # Run a single test file
+npx vitest run --reporter=verbose  # Run with verbose output
+
 # Database
-npm run seed         # Run database seed script (seeds/adress.ts)
+npm run seed         # Run database seed script
 
 # TypeScript scripts
 npx tsx <script>     # Run TypeScript scripts directly
 ```
 
-**Note**: No test framework is currently configured.
+**Note**: Tests use Vitest with Node environment. Place test files with `.test.ts` or `.spec.ts` suffix.
 
 ---
 

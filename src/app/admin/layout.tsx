@@ -1,6 +1,7 @@
 // app/admin/layout.tsx
-import "@/app/globals.css"; // Tus estilos de Tailwind aquí
+import "@/app/globals.css";
 import type { Metadata } from "next";
+import AdminLayoutClient from "./AdminLayoutClient";
 
 export const metadata: Metadata = {
   robots: {
@@ -13,16 +14,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="es">
-      <body className="antialiased">
-        {children}
-      </body>
-    </html>
-  );
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return <AdminLayoutClient>{children}</AdminLayoutClient>;
 }

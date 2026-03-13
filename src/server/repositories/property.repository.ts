@@ -114,4 +114,32 @@ export class PropertyRepository {
     ]);
     return rows;
   }
+
+  /**
+   * Busca propiedades activas con filtros opcionales.
+   * Útil para el algoritmo de matching.
+   * 
+   * @param filter - Filtros adicionales (operationType, propertyType, etc.)
+   * @param options - Opciones de paginación y ordenamiento
+   */
+  static async findActiveProperties(
+    filter: Record<string, unknown> = {},
+    options: FindAllOptions = {}
+  ): Promise<any[]> {
+    await connectDB();
+    const baseFilter = { status: "active", ...filter };
+    
+    return PropertyModel.find(baseFilter)
+      .select(
+        "title slug price propertyType address location features flags images contactPhone description"
+      )
+      .populate("propertyType", "name slug")
+      .populate("address.province", "name slug")
+      .populate("address.city", "name slug")
+      .populate("address.barrio", "name slug")
+      .sort(options.sort || { createdAt: -1 })
+      .skip(options.skip || 0)
+      .limit(options.limit ?? 100)
+      .lean();
+  }
 }

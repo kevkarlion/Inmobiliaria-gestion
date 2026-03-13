@@ -5,8 +5,7 @@ import PropertyCardAdmin from "@/components/shared/PropertyCardAdmin/PropertyCar
 import CreatePropertyForm from "@/components/shared/PropertyForm/PropertyForm"; 
 import EditPropertyForm from "@/components/shared/EditPropertyForm/EditPropertyForm";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
-import { LogoutButton } from "@/components/shared/Admin/LogoutBtn";
-import { Building2, Plus, Home } from "lucide-react";
+import { Building2, Plus } from "lucide-react";
 
 export default function PropertiesAdminClient({ initialProperties }: { initialProperties: PropertyResponse[] }) {
   const [properties, setProperties] = useState<PropertyResponse[]>(initialProperties);
@@ -42,51 +41,29 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+    <div className="p-4 pb-20 md:p-8 md:pb-8">
       <div className="max-w-7xl mx-auto">
         
-        {/* HEADER DEL PANEL - Enfoque en Usuario y Status */}
-        <header className="flex flex-row items-center justify-between gap-6 mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-          <div className="flex items-center gap-4">
-            <div className="bg-slate-900 p-3 rounded-xl shadow-lg">
-              <Home className="text-white w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tighter italic">
-                Riquelme <span className="text-blue-600 font-normal">Propiedades</span>
-              </h1>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Admin Online</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <LogoutButton />
-          </div>
-        </header>
-
         {/* SECCIÓN DE ACCIONES DE LISTA */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 px-2">
           <div>
-            <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">Inventario Actual</h2>
-            <p className="text-slate-900 font-bold text-lg">{properties.length} Propiedades registradas</p>
+            <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-[0.2em]">Inventario Actual</h2>
+            <p className="text-slate-700 font-medium text-lg">{properties.length} Propiedades registradas</p>
           </div>
 
           <button
             onClick={() => setShowCreateForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-blue-600/20 flex items-center justify-center gap-3 transition-all active:scale-95 group"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-xl md:rounded-2xl shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group w-full md:w-auto"
           >
             <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-            <span className="uppercase text-xs tracking-widest">Publicar Nueva Propiedad</span>
+            <span className="uppercase text-xs tracking-widest">Publicar Nueva</span>
           </button>
         </div>
 
         {/* MODAL CREACIÓN */}
         {showCreateForm && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-4 animate-in fade-in duration-300">
-            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-[2.5rem] shadow-2xl">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-2 md:p-4 animate-in fade-in duration-300">
+            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl">
               <CreatePropertyForm 
                 onClose={() => setShowCreateForm(false)} 
                 onCreate={handleCreate} 
@@ -97,8 +74,8 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
 
         {/* MODAL EDICIÓN */}
         {showEditForm && editingProperty && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-4 animate-in fade-in duration-300">
-            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-[2.5rem] shadow-2xl">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-2 md:p-4 animate-in fade-in duration-300">
+            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl">
               <EditPropertyForm 
                 property={editingProperty} 
                 slug={editingProperty.slug} 
@@ -110,7 +87,7 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
         )}
 
         {/* GRID DE PROPIEDADES */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {properties.length > 0 ? (
             properties.map((p) => (
               <div key={p.id} className="group transition-all duration-300 hover:-translate-y-2">

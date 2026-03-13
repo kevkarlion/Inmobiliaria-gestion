@@ -30,7 +30,7 @@ export default function PropertyCardAdmin({ property, onDelete, onEdit }: Props)
           {property.flags?.premium && <span className="bg-purple-100 text-purple-700 text-[10px] px-2 py-0.5 rounded-full border border-purple-200">Premium</span>}
         </div>
 
-        <h2 className="text-lg font-bold text-slate-800 leading-tight mb-1">{property.propertyType?.name} {property.title}</h2>
+        <h2 className="text-lg font-bold text-slate-800 leading-tight mb-1">{property.title}</h2>
         <p className="text-xs text-slate-400 mb-3 font-mono">/{property.slug}</p>
 
         {/* Detalles en Grid */}
