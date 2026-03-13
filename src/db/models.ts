@@ -8,7 +8,6 @@
 
 // Modelos del dominio
 import "@/domain/models/User";
-import "@/domain/models/requirement.model";
 
 // Schemas de la base de datos
 import "@/db/schemas/client.schema";

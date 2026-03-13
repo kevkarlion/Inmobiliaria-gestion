@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 
 export interface RequirementDocument extends Document {
   clientId: any;
@@ -26,4 +26,4 @@ const RequirementSchema = new Schema<RequirementDocument>(
   { timestamps: true }
 );
 
-export const RequirementModel = model<RequirementDocument>("Requirement", RequirementSchema);
+export const RequirementModel = models.Requirement || model<RequirementDocument>("Requirement", RequirementSchema);

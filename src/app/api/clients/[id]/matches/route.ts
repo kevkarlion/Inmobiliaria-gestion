@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/db/connection";
 import { ClientModel } from "@/db/schemas/client.schema";
-import { RequirementModel } from "@/domain/models/requirement.model";
+import { RequirementModel } from "@/db/schemas/requirement.schema";
 import MatchingService from "@/server/services/matching.service";
 
 export async function GET(req: Request, context: { params: Promise<{ id: string }> }) {
