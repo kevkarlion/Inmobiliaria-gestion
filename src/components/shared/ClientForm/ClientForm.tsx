@@ -542,13 +542,12 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1">
-                Email *
+                Email
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
                 className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="juan@ejemplo.com"
               />

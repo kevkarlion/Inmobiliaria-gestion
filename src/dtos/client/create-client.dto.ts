@@ -110,13 +110,10 @@ export class CreateClientDTO {
     if (!data.name || data.name.trim() === "") {
       throw new BadRequestError("El nombre es requerido");
     }
-    if (!data.email || data.email.trim() === "") {
-      throw new BadRequestError("El email es requerido");
-    }
 
-    // Validar formato de email básico
+    // Validar formato de email (si se proporciona)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (data.email && !emailRegex.test(data.email)) {
+    if (data.email && data.email.trim() !== "" && !emailRegex.test(data.email)) {
       throw new BadRequestError("El formato del email es inválido");
     }
 

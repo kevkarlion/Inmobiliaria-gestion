@@ -100,10 +100,11 @@ const ClientSchema = new Schema<IClient>(
     },
     email: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
       lowercase: true,
       trim: true,
+      default: "",
     },
     phone: {
       type: String,
