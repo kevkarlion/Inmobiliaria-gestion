@@ -3,6 +3,7 @@
 
 import "@/app/globals.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Inter } from "next/font/google";
 import {
   Home,
@@ -10,6 +11,7 @@ import {
   Building2,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 import { Toaster } from "sonner";
 import { useState } from "react";
@@ -27,6 +29,7 @@ const navItems = [
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
 
   function openSidebar() {
     setSidebarOpen(true);
@@ -34,6 +37,15 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
   function closeSidebar() {
     setSidebarOpen(false);
+  }
+
+  async function handleLogout() {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/admin/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
   }
 
   return (
@@ -85,7 +97,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-slate-800 space-y-2">
           <Link
             href="/"
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
@@ -94,6 +106,13 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
             <Home className="w-5 h-5" />
             <span className="font-medium">Ver Sitio</span>
           </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors w-full"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">Cerrar Sesión</span>
+          </button>
         </div>
       </aside>
 

@@ -31,7 +31,11 @@ export class UpdatePropertyDTO {
     coveredM2?: number;
     rooms?: number;
     garage?: boolean;
-    age?: number; // 👈 2. Movido aquí dentro
+    garageType?: "cochera" | "entrada" | "ninguno";
+    width?: number;
+    length?: number;
+    age?: number;
+    services?: string[];
   };
 
   flags?: {
@@ -96,7 +100,11 @@ export class UpdatePropertyDTO {
       totalM2: data.totalM2 !== undefined ? Number(data.totalM2) : undefined,
       coveredM2: data.coveredM2 !== undefined ? Number(data.coveredM2) : undefined,
       garage: data.garage !== undefined ? Boolean(data.garage) : undefined,
-      age: data.age !== undefined ? Number(data.age) : undefined, // 👈 Age aquí
+      garageType: data.garageType || undefined,
+      width: data.width !== undefined ? Number(data.width) : undefined,
+      length: data.length !== undefined ? Number(data.length) : undefined,
+      age: data.age !== undefined ? Number(data.age) : undefined,
+      services: data.services || undefined,
     };
 
     this.flags = {

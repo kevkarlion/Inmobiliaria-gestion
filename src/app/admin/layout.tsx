@@ -1,7 +1,9 @@
 // app/admin/layout.tsx
+// Este layout es solo para /admin/login (página pública del admin)
+// Las rutas protegidas están en /admin/(protected)/
+
 import "@/app/globals.css";
 import type { Metadata } from "next";
-import AdminLayoutClient from "./AdminLayoutClient";
 
 export const metadata: Metadata = {
   robots: {
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <AdminLayoutClient>{children}</AdminLayoutClient>;
+export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
+  // El login no necesita layout especial, solo renderiza el children
+  // que es el formulario de login
+  return children;
 }

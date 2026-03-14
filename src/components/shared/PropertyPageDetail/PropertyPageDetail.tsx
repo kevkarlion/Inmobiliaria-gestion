@@ -61,12 +61,20 @@ export default async function PropertyPageDetail({
 
       {dto.features && (
         <div className="text-gray-600 mb-2 space-y-1">
-          <p>Dormitorios: {dto.features.bedrooms}</p>
-          <p>Baños: {dto.features.bathrooms}</p>
-          <p>Ambientes: {dto.features.rooms}</p>
-          <p>Total m²: {dto.features.totalM2}</p>
-          <p>Cubiertos m²: {dto.features.coveredM2}</p>
-          <p>Garage: {dto.features.garage ? "Sí" : "No"}</p>
+          {dto.features.bedrooms > 0 && <p>Dormitorios: {dto.features.bedrooms}</p>}
+          {dto.features.bathrooms > 0 && <p>Baños: {dto.features.bathrooms}</p>}
+          {dto.features.rooms > 0 && <p>Ambientes: {dto.features.rooms}</p>}
+          {dto.features.totalM2 > 0 && <p>Total m²: {dto.features.totalM2}</p>}
+          {dto.features.coveredM2 > 0 && <p>Cubiertos m²: {dto.features.coveredM2}</p>}
+          {dto.features.width > 0 && dto.features.length > 0 && <p>Dimensiones: {dto.features.width}m x {dto.features.length}m</p>}
+          {dto.features.width > 0 && dto.features.length === 0 && <p>Ancho: {dto.features.width}m</p>}
+          {dto.features.width === 0 && dto.features.length > 0 && <p>Largo: {dto.features.length}m</p>}
+          {dto.features.garageType && dto.features.garageType !== "ninguno" && (
+            <p>{dto.features.garageType === "cochera" ? "Cochera" : "Entrada de vehículo"}: Sí</p>
+          )}
+          {dto.features.services && dto.features.services.length > 0 && (
+            <p>Servicios: {dto.features.services.join(", ")}</p>
+          )}
         </div>
       )}
 

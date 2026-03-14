@@ -39,6 +39,10 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     totalM2: property.features?.totalM2 || 0,
     coveredM2: property.features?.coveredM2 || 0,
     garage: !!property.features?.garage,
+    garageType: property.features?.garageType || "ninguno",
+    width: property.features?.width || 0,
+    length: property.features?.length || 0,
+    services: property.features?.services || [],
     
     // Antigüedad: Se mapea desde features.age del PropertyResponse
     age: property.features?.age || 0, 

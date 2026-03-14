@@ -121,6 +121,10 @@ export function propertyResponseDTO(property: any): PropertyResponse {
     // Importante: property.features ya trae 'age' desde la base de datos
     features: {
       ...property.features,
+      garageType: property.features?.garageType || "ninguno",
+      width: property.features?.width || 0,
+      length: property.features?.length || 0,
+      services: property.features?.services || [],
       age: property.features?.age || 0,
     }, 
     

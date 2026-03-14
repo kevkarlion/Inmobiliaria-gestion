@@ -33,7 +33,11 @@ export class CreatePropertyDTO {
     coveredM2: number; 
     rooms: number; 
     garage: boolean; 
-    age: number; // 👈 Movido aquí
+    garageType: "cochera" | "entrada" | "ninguno";
+    width: number;
+    length: number;
+    age: number;
+    services: string[];
     additionalInfo: string;
   };
   
@@ -96,7 +100,11 @@ export class CreatePropertyDTO {
       coveredM2: Number(data.coveredM2) || 0,
       rooms: Number(data.rooms) || 0,
       garage: Boolean(data.garage),
-      age: Number(data.age) || 0, // 👈 Mapeo dentro de features
+      garageType: data.garageType || "ninguno",
+      width: Number(data.width) || 0,
+      length: Number(data.length) || 0,
+      age: Number(data.age) || 0,
+      services: data.services || [],
       additionalInfo: data.additionalInfo || "",
     };
 

@@ -52,7 +52,7 @@ export const SEO_CATEGORIES: SeoCategoryConfig[] = [
     description:
       "Loteos en venta en General Roca, Río Negro. Proyectos urbanísticos y lotes en cuotas con asesoramiento profesional.",
     operationType: "venta",
-    propertyTypeSlug: "loteos",
+    propertyTypeSlug: "loteo",
     citySlug: CITY_SLUG_GENERAL_ROCA,
     canonical: getCanonicalUrl("/loteos-en-venta-general-roca"),
   },

@@ -33,7 +33,11 @@ export interface PropertyUI {
   coveredM2: number;
   rooms: number;
   garage: boolean;
+  garageType: "cochera" | "entrada" | "ninguno";
+  width: number;
+  length: number;
   age: number;
+  services: string[];
 
   // Estado
   featured: boolean;

@@ -59,6 +59,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
       { label: "Ingeniero Huergo", value: "ingeniero-huergo" },
       { label: "Las Grutas", value: "las-grutas" },
       { label: "Mainqué", value: "mainque" },
+      { label: "Punta Colorada", value: "punta-colorada" },
       { label: "San Carlos de Bariloche", value: "bariloche" },
       { label: "Viedma", value: "viedma" },
       { label: "Otras localidades (Río Negro)", value: "otras-rio-negro" },
@@ -185,7 +186,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
             <SelectTrigger className="bg-white/5 border-white/10 h-12 text-white">
               <SelectValue placeholder="Tipo" />
             </SelectTrigger>
-            <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
+            <SelectContent className="bg-neutral-800 border-white/10 text-white z-[100]">
               <SelectItem value="casa">Casa</SelectItem>
               <SelectItem value="departamento">Departamento</SelectItem>
               <SelectItem value="departamento-en-pozo">Depto. en Pozo</SelectItem>
@@ -200,7 +201,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
             <SelectTrigger className="bg-white/5 border-white/10 h-12">
               <SelectValue placeholder="Tipo" />
             </SelectTrigger>
-            <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
+            <SelectContent className="bg-neutral-800 border-white/10 text-white z-[100]">
               <SelectItem value="venta">Venta</SelectItem>
               <SelectItem value="alquiler">Alquiler</SelectItem>
             </SelectContent>
@@ -220,7 +221,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
             <SelectTrigger className="bg-white/5 border-white/10 h-12">
               <SelectValue placeholder="Moneda" />
             </SelectTrigger>
-            <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
+            <SelectContent className="bg-neutral-800 border-white/10 text-white z-[100]">
               <SelectItem value="USD">USD (Dólares)</SelectItem>
               <SelectItem value="ARS">ARS (Pesos)</SelectItem>
             </SelectContent>
@@ -246,7 +247,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
               <SelectTrigger className="bg-neutral-800 border-white/10 h-12 text-white">
                 <SelectValue placeholder="Provincia" />
               </SelectTrigger>
-              <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
+              <SelectContent className="bg-neutral-800 border-white/10 text-white z-[100]">
                 {provinces.map((p) => (
                   <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
                 ))}
@@ -259,7 +260,7 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
               <SelectTrigger className="bg-neutral-800 border-white/10 h-12 text-white">
                 <SelectValue placeholder="Ciudad" />
               </SelectTrigger>
-              <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
+              <SelectContent className="bg-neutral-800 border-white/10 text-white z-[100]">
                 {form.province && citiesByProvince[form.province]?.map((c) => (
                   <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
                 ))}
@@ -307,6 +308,61 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
             </div>
           ))}
         </div>
+
+        {/* Ancho y Largo */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+          <div className="space-y-2">
+            <Label className="text-[10px] font-bold text-gray-500 uppercase">Ancho (m)</Label>
+            <Input 
+              type="number" 
+              name="width" 
+              value={form.width ?? ""} 
+              onChange={handleChange} 
+              className="bg-transparent border-0 border-b border-white/20 rounded-none px-0 focus-visible:ring-0 focus:border-blue-500 h-10 transition-colors" 
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-[10px] font-bold text-gray-500 uppercase">Largo (m)</Label>
+            <Input 
+              type="number" 
+              name="length" 
+              value={form.length ?? ""} 
+              onChange={handleChange} 
+              className="bg-transparent border-0 border-b border-white/20 rounded-none px-0 focus-visible:ring-0 focus:border-blue-500 h-10 transition-colors" 
+            />
+          </div>
+        </div>
+
+        {/* Servicios */}
+        <div className="mt-6">
+          <Label className="text-[10px] font-bold text-gray-500 uppercase block mb-3">Servicios</Label>
+          <div className="flex flex-wrap gap-4">
+            {[
+              { label: "Luz", value: "luz" },
+              { label: "Agua", value: "agua" },
+              { label: "Gas", value: "gas" },
+              { label: "Internet", value: "internet" },
+            ].map((service) => (
+              <label key={service.value} className="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={form.services?.includes?.(service.value) || false}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setForm((prev: any) => ({
+                      ...prev,
+                      services: checked 
+                        ? [...(prev.services || []), service.value]
+                        : (prev.services || []).filter((s: string) => s !== service.value)
+                    }));
+                  }}
+                  className="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-600 focus:ring-blue-600"
+                />
+                <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{service.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* SECCIÓN 5: MAPA */}
@@ -343,11 +399,37 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
 
       {/* SECCIÓN 7: FLAGS */}
       <div className="flex flex-wrap gap-8 py-6 border-y border-white/5">
+        {/* Tipo de cochera */}
+        <div className="flex items-center space-x-3 group">
+          <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+            Cochera
+          </Label>
+          <Select 
+            value={form.garageType || "ninguno"} 
+            onValueChange={(v: "cochera" | "entrada" | "ninguno") => {
+              setForm((prev: any) => ({
+                ...prev,
+                garageType: v,
+                garage: v !== "ninguno"
+              }));
+            }}
+          >
+            <SelectTrigger className="bg-white/5 border-white/10 w-40">
+              <SelectValue placeholder="Seleccionar" />
+            </SelectTrigger>
+            <SelectContent className="bg-neutral-800 border-white/10 text-white z-[100] max-h-[300px] overflow-y-auto">
+              <SelectItem value="ninguno">Sin cochera</SelectItem>
+              <SelectItem value="cochera">Cochera</SelectItem>
+              <SelectItem value="entrada">Entrada de vehículo</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Otros flags */}
         {[
           {label: "Destacada", name: "featured"},
           {label: "Oportunidad", name: "opportunity"},
           {label: "Premium", name: "premium"},
-          {label: "Cochera", name: "garage"}
         ].map((check) => (
           <div key={check.name} className="flex items-center space-x-3 group cursor-pointer">
             <Checkbox 

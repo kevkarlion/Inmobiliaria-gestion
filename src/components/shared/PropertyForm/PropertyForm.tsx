@@ -42,7 +42,11 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
     coveredM2: 0,
     rooms: 0,
     garage: false,
+    garageType: "ninguno",
+    width: 0,
+    length: 0,
     age: 0,
+    services: [],
     features: "",
     street: "",
     number: "",
@@ -83,6 +87,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
       { label: "Ingeniero Huergo", value: "ingeniero-huergo" },
       { label: "Las Grutas", value: "las-grutas" },
       { label: "Mainqué", value: "mainque" },
+      { label: "Punta Colorada", value: "punta-colorada" },
       { label: "San Carlos de Bariloche", value: "bariloche" },
       { label: "Viedma", value: "viedma" },
       { label: "Otras localidades (Río Negro)", value: "otras-rio-negro" },
@@ -326,6 +331,61 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
             </div>
           ))}
         </div>
+
+        {/* Ancho y Largo */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+          <div className="space-y-2">
+            <Label className="text-[9px] font-bold text-gray-500 uppercase tracking-tighter">Ancho (m)</Label>
+            <Input 
+              type="number" 
+              name="width" 
+              value={form.width || ""} 
+              onChange={handleChange} 
+              className="bg-transparent border-0 border-b border-white/20 rounded-none px-0 focus-visible:ring-0 focus:border-blue-500 transition-colors h-10" 
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-[9px] font-bold text-gray-500 uppercase tracking-tighter">Largo (m)</Label>
+            <Input 
+              type="number" 
+              name="length" 
+              value={form.length || ""} 
+              onChange={handleChange} 
+              className="bg-transparent border-0 border-b border-white/20 rounded-none px-0 focus-visible:ring-0 focus:border-blue-500 transition-colors h-10" 
+            />
+          </div>
+        </div>
+
+        {/* Servicios */}
+        <div className="mt-6">
+          <Label className="text-[9px] font-bold text-gray-500 uppercase tracking-tighter block mb-3">Servicios</Label>
+          <div className="flex flex-wrap gap-4">
+            {[
+              { label: "Luz", value: "luz" },
+              { label: "Agua", value: "agua" },
+              { label: "Gas", value: "gas" },
+              { label: "Internet", value: "internet" },
+            ].map((service) => (
+              <label key={service.value} className="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={form.services?.includes(service.value) || false}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setForm(prev => ({
+                      ...prev,
+                      services: checked 
+                        ? [...(prev.services || []), service.value]
+                        : (prev.services || []).filter((s: string) => s !== service.value)
+                    }));
+                  }}
+                  className="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-600 focus:ring-blue-600"
+                />
+                <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{service.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* SECCIÓN 5: GOOGLE MAPS */}
@@ -363,11 +423,37 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
 
       {/* SECCIÓN 7: ETIQUETAS DE ESTADO (Flags) */}
       <div className="flex flex-wrap gap-8 py-6 border-y border-white/5">
+        {/* Tipo de cochera */}
+        <div className="flex items-center space-x-3 group">
+          <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+            Cochera
+          </Label>
+          <Select 
+            value={form.garageType || "ninguno"} 
+            onValueChange={(v: "cochera" | "entrada" | "ninguno") => {
+              setForm(prev => ({
+                ...prev,
+                garageType: v,
+                garage: v !== "ninguno"
+              }));
+            }}
+          >
+            <SelectTrigger className="bg-white/5 border-white/10 w-40">
+              <SelectValue placeholder="Seleccionar" />
+            </SelectTrigger>
+            <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white">
+              <SelectItem value="ninguno">Sin cochera</SelectItem>
+              <SelectItem value="cochera">Cochera</SelectItem>
+              <SelectItem value="entrada">Entrada de vehículo</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Otros flags */}
         {[
           {label: "Destacada", name: "featured"},
           {label: "Oportunidad", name: "opportunity"},
           {label: "Premium", name: "premium"},
-          {label: "Cochera", name: "garage"}
         ].map((check) => (
           <div key={check.name} className="flex items-center space-x-3 group cursor-pointer">
             <Checkbox 

@@ -70,7 +70,11 @@ export function mapPropertyToUI(property: any): PropertyUI {
     coveredM2: property.features?.coveredM2 || 0,
     rooms: property.features?.rooms || 0,
     garage: !!property.features?.garage,
+    garageType: property.features?.garageType || "ninguno",
+    width: property.features?.width || 0,
+    length: property.features?.length || 0,
     age: property.features?.age || 0,
+    services: property.features?.services || [],
 
     // Flags
     featured: !!property.flags?.featured,

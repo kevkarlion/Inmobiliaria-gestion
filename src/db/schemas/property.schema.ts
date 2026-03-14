@@ -61,7 +61,19 @@ const PropertySchema = new Schema<IProperty>(
       coveredM2: { type: Number, default: 0 },
       rooms: { type: Number, default: 0 },
       garage: { type: Boolean, default: false },
-      age: { type: Number, default: 0 }, // 👈 Agregado aquí
+      garageType: { 
+        type: String, 
+        enum: ["cochera", "entrada", "ninguno"], 
+        default: "ninguno" 
+      },
+      width: { type: Number, default: 0 },
+      length: { type: Number, default: 0 },
+      age: { type: Number, default: 0 },
+      services: { 
+        type: [String], 
+        enum: ["luz", "agua", "gas", "internet"], 
+        default: [] 
+      },
     },
 
     location: {

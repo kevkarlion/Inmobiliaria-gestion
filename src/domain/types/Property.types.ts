@@ -50,7 +50,11 @@ export interface Property {
     coveredM2: number;
     rooms: number;
     garage: boolean;
+    garageType: "cochera" | "entrada" | "ninguno";
+    width: number;
+    length: number;
     age: number;
+    services: string[];
   };
 
   flags: {

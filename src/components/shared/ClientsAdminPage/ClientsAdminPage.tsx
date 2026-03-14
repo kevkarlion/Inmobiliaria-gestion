@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ClientCardAdmin from "@/components/shared/ClientCardAdmin/ClientCardAdmin";
 import ClientForm from "@/components/shared/ClientForm/ClientForm";
-import ClientNewModal from "@/app/admin/clients/components/ClientNewModal";
+import ClientNewModal from "@/app/admin/(protected)/clients/components/ClientNewModal";
 import ClientFilters from "@/components/shared/ClientFilters/ClientFilters";
 import { ClientResponse } from "@/dtos/client/client-response.dto";
 import { ClientStatus } from "@/domain/enums/client-status.enum";

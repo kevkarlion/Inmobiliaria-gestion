@@ -18,7 +18,11 @@ export interface PropertyFormType {
   coveredM2: number;
   rooms: number;
   garage: boolean;
+  garageType: "cochera" | "entrada" | "ninguno";
+  width: number;
+  length: number;
   age: number;
+  services: string[];
   features: string; // Info adicional
   
   // Dirección física

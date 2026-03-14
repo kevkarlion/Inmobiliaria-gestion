@@ -7,6 +7,11 @@ import {
   Car,
   Calendar,
   Home,
+  Zap,
+  Droplets,
+  Flame,
+  Wifi,
+  Ruler,
   type LucideIcon,
 } from "lucide-react";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
@@ -114,8 +119,31 @@ export function PropertyDetailClient({
                 value={p.coveredM2 ? `${p.coveredM2} m²` : null}
                 icon={Building2}
               />
-              <Item label="Cochera" value={p.garage ? "Sí" : "No"} icon={Car} />
+              {/* Ancho y Largo */}
+              <Item
+                label="Dimensiones"
+                value={(p.width && p.length) ? `${p.width}m x ${p.length}m` : (p.width ? `${p.width}m ancho` : (p.length ? `${p.length}m largo` : null))}
+                icon={Ruler}
+              />
+              {/* Cochera - solo mostrar si tiene valor */}
+              {p.garageType && p.garageType !== "ninguno" && (
+                <Item 
+                  label={p.garageType === "cochera" ? "Cochera" : "Entrada de vehículo"} 
+                  value="Sí"
+                  icon={Car} 
+                />
+              )}
               <Item label="Antigüedad" value={p.age ? `${p.age} años` : null} icon={Calendar} />
+              
+              {/* Servicios - solo mostrar si hay servicios */}
+              {p.services && p.services.length > 0 && (
+                <>
+                  {p.services.includes("luz") && <Item label="Luz" value={true} icon={Zap} />}
+                  {p.services.includes("agua") && <Item label="Agua" value={true} icon={Droplets} />}
+                  {p.services.includes("gas") && <Item label="Gas" value={true} icon={Flame} />}
+                  {p.services.includes("internet") && <Item label="Internet" value={true} icon={Wifi} />}
+                </>
+              )}
             </div>
 
             {/* Tags */}

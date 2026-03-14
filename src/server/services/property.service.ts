@@ -301,7 +301,11 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
       coveredM2: payload.features.coveredM2 ?? property.features.coveredM2,
       rooms: payload.features.rooms ?? property.features.rooms,
       garage: payload.features.garage ?? property.features.garage,
+      garageType: payload.features.garageType ?? property.features.garageType ?? "ninguno",
+      width: payload.features.width ?? property.features.width ?? 0,
+      length: payload.features.length ?? property.features.length ?? 0,
       age: payload.features.age ?? property.features.age,
+      services: payload.features.services ?? property.features.services ?? [],
     };
   }
 
