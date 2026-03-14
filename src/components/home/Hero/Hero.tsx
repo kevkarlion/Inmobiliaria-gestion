@@ -27,9 +27,9 @@ export default async function Hero() {
             src="/bg-hero.webp"
             alt="Propiedades exclusivas en General Roca - Riquelme Propiedades"
             width={2400}
-            height={1400}
+            height={1600}
             priority
-            className="w-full h-[96vh] object-cover"
+            className="w-full h-[110vh] object-cover"
           />
         </div>
 
@@ -38,13 +38,13 @@ export default async function Hero() {
         <div className="absolute inset-0 bg-linear-to-t from-oxford/40 via-transparent to-transparent" />
 
         {/* CONTENIDO PRINCIPAL */}
-        <div className="absolute inset-0 z-20 flex flex-col justify-center pt-32">
+        <div className="absolute inset-0 z-20 flex flex-col justify-center pt-32 pb-8">
           <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
             {/* BLOQUE DE TEXTO */}
             <div className="max-w-2xl text-left mb-12 md:mb-8">
               <h1 className="flex flex-col items-start uppercase tracking-tighter">
                 {/* Keyword de confianza */}
-                <span className="text-gold-sand text-xs md:text-sm font-bold tracking-[0.4em] mb-3 drop-shadow-md bg-black/40 px-2 py-1 rounded-md md:bg-transparent">
+                <span className="text-gold-sand text-xs md:text-sm md:mt-8  font-bold tracking-[0.4em] mb-1 drop-shadow-md bg-black/40 px-2 py-1 rounded-md md:bg-transparent">
                   Inmobiliaria en General Roca
                 </span>
 
