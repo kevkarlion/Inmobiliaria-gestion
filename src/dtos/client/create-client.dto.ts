@@ -83,7 +83,7 @@ interface SalePropertyDTO {
 
 export class CreateClientDTO {
   name: string;
-  email: string;
+  email: string | null;
   phone: string;
   status: ClientStatus;
   source: ClientSource;
@@ -118,7 +118,7 @@ export class CreateClientDTO {
     }
 
     this.name = data.name?.trim() || "";
-    this.email = data.email?.trim().toLowerCase() || "";
+    this.email = data.email?.trim() ? data.email.trim().toLowerCase() : null;
     
     // Normalizar status
     const statusInputRaw = (data.status ?? ClientStatus.ACTIVE).toString().toLowerCase();

@@ -104,7 +104,7 @@ const ClientSchema = new Schema<IClient>(
       unique: true,
       lowercase: true,
       trim: true,
-      default: "",
+      default: null,
     },
     phone: {
       type: String,

@@ -81,7 +81,7 @@ interface SalePropertyDTO {
 
 export class UpdateClientDTO {
   name?: string;
-  email?: string;
+  email?: string | null;
   phone?: string;
   status?: ClientStatus;
   source?: ClientSource;
@@ -112,7 +112,7 @@ export class UpdateClientDTO {
       }
       this.email = data.email.trim().toLowerCase();
     } else if (data.email === "") {
-      this.email = "";
+      this.email = null;
     }
 
     this.name = data.name?.trim();
