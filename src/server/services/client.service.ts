@@ -21,10 +21,12 @@ export class ClientService {
   static async create(dto: CreateClientDTO): Promise<ClientResponse> {
     await connectDB();
 
-    // 1. Validar email único
-    const existingClient = await ClientRepository.findByEmail(dto.email);
-    if (existingClient) {
-      throw new BadRequestError(`Ya existe un cliente con el email "${dto.email}"`);
+    // 1. Validar email único (solo si se proporciona)
+    if (dto.email && dto.email.trim() !== "") {
+      const existingClient = await ClientRepository.findByEmail(dto.email);
+      if (existingClient) {
+        throw new BadRequestError(`Ya existe un cliente con el email "${dto.email}"`);
+      }
     }
 
     // 2. Procesar propertyPreferences (zonas y features)
@@ -234,8 +236,8 @@ export class ClientService {
       throw new NotFoundError("Cliente no encontrado");
     }
 
-    // Validar email único (si cambia)
-    if (payload.email && payload.email !== existingClient.email) {
+    // Validar email único (si cambia y no está vacío)
+    if (payload.email !== undefined && payload.email.trim() !== "" && payload.email !== existingClient.email) {
       const duplicateClient = await ClientRepository.findByEmail(payload.email);
       if (duplicateClient) {
         throw new BadRequestError(`Ya existe un cliente con el email "${payload.email}"`);
