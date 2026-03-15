@@ -30,41 +30,47 @@ export interface ClientMatchResult {
   propertyTypeMatch: boolean;
   zoneMatch: boolean;
   priceOverlap: boolean;
+  priceBonus: number;
 }
 
 export class MatchingService {
   /**
    * Calcula el score de match entre dos preferencias de cliente
+   * 
+   * Reglas:
+   * - operationType debe ser complementario (compra ↔ venta)
+   * - propertyType debe coincidir
+   * - zona DEBE coincidir siempre → si no coincide, score = 0
+   * - precio (±20%) da un bonus adicional
    */
   static scoreClientMatch(pref1: any, pref2: any): number {
     if (!pref1 || !pref2) return 0;
     
-    let score = 0;
-    let totalWeight = 0;
+    // Verificar propertyType primero
+    if (!pref1.propertyType || !pref2.propertyType) return 0;
+    const propertyTypeMatch = pref1.propertyType === pref2.propertyType;
+    if (!propertyTypeMatch) return 0;
     
-    // Match de tipo de propiedad (30%)
-    const typeMatch = pref1.propertyType === pref2.propertyType;
-    if (pref1.propertyType && pref2.propertyType) {
-      score += typeMatch ? 0.3 : 0;
-      totalWeight += 0.3;
-    }
-    
-    // Match de zona (40%)
+    // Verificar zona - ES OBLIGATORIA
     const zoneMatch = this.zonesMatch(pref1.zones, pref2.zones);
-    if ((pref1.zones?.length > 0) && (pref2.zones?.length > 0)) {
-      score += zoneMatch ? 0.4 : 0;
-      totalWeight += 0.4;
-    }
+    if (!zoneMatch) return 0;
     
-    // Match de precio (30%)
-    const priceOverlap = this.priceOverlap(pref1.priceRange, pref2.priceRange);
+    // Base: propertyType + zona coinciden = 70%
+    let score = 0.7;
+    let priceBonus = 0;
+    
+    // Precio: si ambos tienen rango, verificar overlap con ±20%
     if (pref1.priceRange && pref2.priceRange) {
-      score += priceOverlap ? 0.3 : 0;
-      totalWeight += 0.3;
+      const priceBonusResult = this.priceBonus(pref1.priceRange, pref2.priceRange);
+      if (priceBonusResult > 0) {
+        // Bonus máximo de 30% si el precio coincide muy bien
+        priceBonus = priceBonusResult;
+        score += priceBonus;
+      }
     }
     
-    // Retornar score normalizado
-    return totalWeight > 0 ? Math.round((score / totalWeight) * 100) / 100 : 0;
+    // Retornar score max 1.0 (100%)
+    return Math.min(Math.round(score * 100) / 100, 1);
   }
 
   /**
@@ -105,7 +111,46 @@ export class MatchingService {
   }
 
   /**
-   * Verifica si hay solapamiento de precios
+   * Calcula bonus de precio (±20% de overlap)
+   * Retorna 0-0.3 (max 30% bonus)
+   */
+  static priceBonus(range1: any, range2: any): number {
+    if (!range1 || !range2) return 0;
+    
+    const min1 = range1.min ?? 0;
+    const max1 = range1.max ?? Infinity;
+    const min2 = range2.min ?? 0;
+    const max2 = range2.max ?? Infinity;
+    
+    // Si no hay rango de precio en ninguno, no hay bonus
+    if (min1 === 0 && max1 === Infinity && min2 === 0 && max2 === Infinity) return 0;
+    
+    // Verificar overlap
+    const overlapMin = Math.max(min1, min2);
+    const overlapMax = Math.min(max1, max2);
+    
+    if (overlapMin > overlapMax) return 0; // No hay overlap
+    
+    // Calcular overlap relativo al rango
+    const overlap = overlapMax - overlapMin;
+    const range1Size = max1 - min1;
+    const range2Size = max2 - min2;
+    
+    if (range1Size === 0 && range2Size === 0) {
+      // Ambos tienen un solo valor → coincide exactamente
+      return 0.3;
+    }
+    
+    // Porcentage de overlap
+    const avgRange = (range1Size + range2Size) / 2;
+    const overlapPercent = avgRange > 0 ? overlap / avgRange : 0;
+    
+    // Bonus proporcional (max 0.3)
+    return Math.min(overlapPercent * 0.3, 0.3);
+  }
+
+  /**
+   * Verifica si hay solapamiento de precios (legacy - mantener compatibilidad)
    */
   static priceOverlap(range1: any, range2: any): boolean {
     if (!range1 || !range2) return false;
@@ -164,6 +209,7 @@ export class MatchingService {
       let propertyTypeMatch = false;
       let zoneMatch = false;
       let priceOverlap = false;
+      let priceBonus = 0;
       
       for (const pref1 of propertyPrefs) {
         for (const pref2 of otherPrefs) {
@@ -173,19 +219,14 @@ export class MatchingService {
             operationMatch = targetOperations.includes(other.preferences?.operationType);
             propertyTypeMatch = pref1.propertyType === pref2.propertyType;
             zoneMatch = this.zonesMatch(pref1.zones, pref2.zones);
-            // Para precio: en compra vs venta, el precio del vendedor debe estar en rango del comprador
-            if (operationType === "compra" && other.preferences?.operationType === "venta") {
-              priceOverlap = this.priceOverlap(pref1.priceRange, pref2.priceRange);
-            } else if (operationType === "venta" && other.preferences?.operationType === "compra") {
-              // El precio que busca el comprador debe coincidir con lo que vende el vendedor
-              priceOverlap = this.priceOverlap(pref2.priceRange, pref1.priceRange);
-            } else {
-              priceOverlap = this.priceOverlap(pref1.priceRange, pref2.priceRange);
-            }
+            priceOverlap = this.priceOverlap(pref1.priceRange, pref2.priceRange);
+            priceBonus = score - 0.7; // El bonus es la diferencia sobre la base de 0.7
           }
         }
       }
       
+      // Score mínimo ahora es 0.7 (70%) si coincide todo excepto precio
+      // Si no hay zona, el score ya es 0 por scoreClientMatch
       if (bestScore >= minScore) {
         matches.push({
           clientId: other._id.toString(),
@@ -195,6 +236,7 @@ export class MatchingService {
           propertyTypeMatch,
           zoneMatch,
           priceOverlap,
+          priceBonus,
         });
       }
     }
