@@ -89,6 +89,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
       { label: "Mainqué", value: "mainque" },
       { label: "Punta Colorada", value: "punta-colorada" },
       { label: "San Carlos de Bariloche", value: "bariloche" },
+      { label: "Sierra Grande", value: "sierra-grande" },
       { label: "Viedma", value: "viedma" },
       { label: "Otras localidades (Río Negro)", value: "otras-rio-negro" },
     ].sort((a, b) => a.label.localeCompare(b.label)),
@@ -180,7 +181,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 bg-neutral-900 text-white rounded-2xl space-y-8 border border-white/10 shadow-2xl overflow-y-auto max-h-[90vh] relative scrollbar-hide">
+    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-8 bg-neutral-900 text-white rounded-2xl space-y-8 border border-white/10 shadow-2xl relative">
       
       {/* HEADER FIJO */}
       <div className="flex justify-between items-center border-b border-white/10 pb-6 sticky top-0 bg-neutral-900 z-60">

@@ -17,15 +17,29 @@
 @layer base {
   html {
     background-color: #001d3d; /* seguro de vida REAL */
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
 
   }
 
   body {
     min-height: 100vh;
     overflow-x: hidden;
+    scrollbar-gutter: stable;
     background: transparent;
     font-family: var(--font-inter);
     -webkit-font-smoothing: antialiased;
+  }
+
+  /**
+   * Algunas libs (ej: Radix) aplican "scroll lock" agregando `padding-right`
+   * al documento para compensar el scrollbar. Como usamos `scrollbar-gutter: stable`,
+   * esa compensación genera layout shift (se mueven las cards detrás del modal).
+   */
+  html[data-scroll-locked],
+  body[data-scroll-locked] {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
   }
 
   h1 {

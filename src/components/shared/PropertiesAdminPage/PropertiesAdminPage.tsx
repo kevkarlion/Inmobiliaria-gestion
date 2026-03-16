@@ -62,8 +62,11 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
 
         {/* MODAL CREACIÓN */}
         {showCreateForm && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-2 md:p-4 animate-in fade-in duration-300">
-            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-2 md:p-4 animate-in fade-in duration-300 overflow-x-hidden">
+            <div
+              className="w-full max-w-4xl max-h-[90vh] overflow-y-scroll overflow-x-hidden bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl"
+              style={{ scrollbarGutter: "stable" }}
+            >
               <CreatePropertyForm 
                 onClose={() => setShowCreateForm(false)} 
                 onCreate={handleCreate} 
@@ -74,8 +77,11 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
 
         {/* MODAL EDICIÓN */}
         {showEditForm && editingProperty && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-2 md:p-4 animate-in fade-in duration-300">
-            <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-100 flex items-center justify-center p-2 md:p-4 animate-in fade-in duration-300 overflow-x-hidden">
+            <div
+              className="w-full max-w-4xl max-h-[90vh] overflow-y-scroll overflow-x-hidden bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl"
+              style={{ scrollbarGutter: "stable" }}
+            >
               <EditPropertyForm 
                 property={editingProperty} 
                 slug={editingProperty.slug} 
