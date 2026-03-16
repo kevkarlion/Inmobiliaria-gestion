@@ -144,11 +144,24 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form), 
       });
+
+      const contentType = res.headers.get("content-type") || "";
+      const isJson = contentType.includes("application/json");
+
       if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || "Error al editar");
+        const errPayload = isJson ? await res.json().catch(() => null) : await res.text().catch(() => "");
+        const message =
+          (typeof errPayload === "object" && errPayload && "message" in errPayload && typeof (errPayload as any).message === "string"
+            ? (errPayload as any).message
+            : typeof errPayload === "string" && errPayload.trim()
+              ? errPayload
+              : "Error al editar");
+        throw new Error(message);
       }
-      const updatedProperty: PropertyResponse = await res.json(); 
+
+      if (!isJson) throw new Error("Respuesta inválida del servidor (no es JSON)");
+
+      const updatedProperty: PropertyResponse = await res.json();
       alert("¡Propiedad actualizada con éxito!");
       onUpdate(updatedProperty);
       onClose();

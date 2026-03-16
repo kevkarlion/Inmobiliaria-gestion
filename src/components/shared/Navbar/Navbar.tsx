@@ -174,7 +174,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                         <div key={typeEntry.typeSlug} className="group/type relative">
                           <div className="flex items-center justify-between px-4 py-2 hover:bg-slate-50">
                             <span className="text-sm font-semibold">
-                              {pluralizePropertyType(typeEntry.typeName)} en venta
+                              {pluralizePropertyType(typeEntry.typeName)}
                             </span>
                             <ChevronRight size={14} className="text-slate-400" />
                           </div>
@@ -227,7 +227,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                         <div key={typeEntry.typeSlug} className="group/type relative">
                           <div className="flex items-center justify-between px-4 py-2 hover:bg-slate-50">
                             <span className="text-sm font-semibold">
-                              {pluralizePropertyType(typeEntry.typeName)} en alquiler
+                              {pluralizePropertyType(typeEntry.typeName)}
                             </span>
                             <ChevronRight size={14} className="text-slate-400" />
                           </div>
@@ -332,9 +332,10 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                     <Link
                       href="/propiedades/venta"
                       onClick={() => setIsOpen(false)}
-                      className="text-sm text-white/80 hover:text-gold-sand py-1"
+                      className="group flex items-center justify-between rounded-md px-3 py-2 text-[13px] font-semibold uppercase tracking-wider text-gold-sand ring-1 ring-gold-sand/40 bg-gold-sand/10 hover:bg-gold-sand/15 transition-colors"
                     >
-                      Ver todas
+                      <span>Ver todas</span>
+                      <ChevronRight size={16} className="opacity-70 group-hover:opacity-100 transition-opacity" />
                     </Link>
 
                     {menuStructure!.venta.map((typeEntry) => (
@@ -344,16 +345,16 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                           onClick={() =>
                             setMobileTypeVenta((k) => (k === typeEntry.typeSlug ? null : typeEntry.typeSlug))
                           }
-                          className="w-full flex items-center justify-between text-white/90 hover:text-gold-sand py-1.5 text-left"
+                          className="w-full flex items-center justify-between text-white/75 hover:text-gold-sand py-1.5 text-left font-normal"
                         >
-                          {pluralizePropertyType(typeEntry.typeName)} en venta
+                          {pluralizePropertyType(typeEntry.typeName)}
                           <ChevronRight
                             size={16}
                             className={mobileTypeVenta === typeEntry.typeSlug ? "rotate-90" : ""}
                           />
                         </button>
                         {mobileTypeVenta === typeEntry.typeSlug && (
-                          <div className="pl-4 flex flex-col gap-0.5 pb-2">
+                          <div className="pl-4 flex flex-col gap-1 pb-2 pt-1">
                             {typeEntry.cities.map((city) => (
                               <Link
                                 key={city.slug}
@@ -363,9 +364,10 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                                   setMobileVentaOpen(false);
                                   setMobileTypeVenta(null);
                                 }}
-                                className="text-sm text-white/80 hover:text-gold-sand py-1"
+                                className="group/city relative rounded-md px-3 py-2 text-[13px] font-medium text-white/80 ring-1 ring-white/10 bg-white/5 hover:bg-gold-sand/10 hover:text-gold-sand transition-colors"
                               >
-                                {city.name}
+                                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-1 rounded-full bg-gold-sand/70 opacity-80" />
+                                <span className="pl-2">{city.name}</span>
                               </Link>
                             ))}
                           </div>
@@ -402,9 +404,10 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                     <Link
                       href="/propiedades/alquiler"
                       onClick={() => setIsOpen(false)}
-                      className="text-sm text-white/80 hover:text-gold-sand py-1"
+                      className="group flex items-center justify-between rounded-md px-3 py-2 text-[13px] font-semibold uppercase tracking-wider text-gold-sand ring-1 ring-gold-sand/40 bg-gold-sand/10 hover:bg-gold-sand/15 transition-colors"
                     >
-                      Ver todas
+                      <span>Ver todas</span>
+                      <ChevronRight size={16} className="opacity-70 group-hover:opacity-100 transition-opacity" />
                     </Link>
 
                     {menuStructure!.alquiler.map((typeEntry) => (
@@ -416,16 +419,16 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                               k === typeEntry.typeSlug ? null : typeEntry.typeSlug
                             )
                           }
-                          className="w-full flex items-center justify-between text-white/90 hover:text-gold-sand py-1.5 text-left"
+                          className="w-full flex items-center justify-between text-white/75 hover:text-gold-sand py-1.5 text-left font-normal"
                         >
-                          {pluralizePropertyType(typeEntry.typeName)} en alquiler
+                          {pluralizePropertyType(typeEntry.typeName)}
                           <ChevronRight
                             size={16}
                             className={mobileTypeAlquiler === typeEntry.typeSlug ? "rotate-90" : ""}
                           />
                         </button>
                         {mobileTypeAlquiler === typeEntry.typeSlug && (
-                          <div className="pl-4 flex flex-col gap-0.5 pb-2">
+                          <div className="pl-4 flex flex-col gap-1 pb-2 pt-1">
                             {typeEntry.cities.map((city) => (
                               <Link
                                 key={city.slug}
@@ -435,9 +438,10 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                                   setMobileAlquilerOpen(false);
                                   setMobileTypeAlquiler(null);
                                 }}
-                                className="text-sm text-white/80 hover:text-gold-sand py-1"
+                                className="group/city relative rounded-md px-3 py-2 text-[13px] font-medium text-white/80 ring-1 ring-white/10 bg-white/5 hover:bg-gold-sand/10 hover:text-gold-sand transition-colors"
                               >
-                                {city.name}
+                                <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-1 rounded-full bg-gold-sand/70 opacity-80" />
+                                <span className="pl-2">{city.name}</span>
                               </Link>
                             ))}
                           </div>
@@ -482,6 +486,33 @@ export default function Navbar({ menuStructure }: NavbarProps) {
             >
               Contacto
             </Link>
+
+            {/* Redes sociales (mobile) */}
+            <div className="mt-5 pt-4 border-t border-white/10">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-white/60 mb-3">
+                Seguinos
+              </p>
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://www.instagram.com/riquelme.propiedades/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-white/5 ring-1 ring-white/10 px-4 py-3 text-sm font-bold text-white/90 hover:bg-gold-sand/10 hover:text-gold-sand transition-colors"
+                >
+                  <Instagram size={18} />
+                  Instagram
+                </a>
+                <a
+                  href="https://www.facebook.com/riquelmeprop"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-white/5 ring-1 ring-white/10 px-4 py-3 text-sm font-bold text-white/90 hover:bg-gold-sand/10 hover:text-gold-sand transition-colors"
+                >
+                  <Facebook size={18} />
+                  Facebook
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </nav>

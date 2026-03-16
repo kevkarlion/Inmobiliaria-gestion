@@ -2,6 +2,7 @@ export function pluralizePropertyType(type: string) {
       const map: Record<string, string> = {
         casa: "Casas",
         departamento: "Departamentos",
+        "departamento en pozo": "Departamentos en Pozo",
         terreno: "Terrenos",
         lote: "Lotes",
         local: "Locales",

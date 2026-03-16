@@ -167,8 +167,22 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
         body: JSON.stringify(form),
       });
 
+      const contentType = res.headers.get("content-type") || "";
+      const isJson = contentType.includes("application/json");
+
+      if (!res.ok) {
+        const errPayload = isJson ? await res.json().catch(() => null) : await res.text().catch(() => "");
+        const message =
+          (typeof errPayload === "object" && errPayload && "message" in errPayload && typeof (errPayload as any).message === "string"
+            ? (errPayload as any).message
+            : typeof errPayload === "string" && errPayload.trim()
+              ? errPayload
+              : "Error al guardar");
+        throw new Error(message);
+      }
+
+      if (!isJson) throw new Error("Respuesta inválida del servidor (no es JSON)");
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Error al guardar");
 
       alert("¡Propiedad publicada con éxito!");
       if (onCreate) onCreate(data);

@@ -30,6 +30,29 @@ export function PropertyProvider({ children }: { children: React.ReactNode }) {
     async function fetchProperties() {
       try {
         const res = await fetch("/api/properties");
+        const contentType = res.headers.get("content-type") || "";
+        const isJson = contentType.includes("application/json");
+
+        if (!res.ok) {
+          const errPayload = isJson
+            ? await res.json().catch(() => null)
+            : await res.text().catch(() => "");
+
+          const message =
+            (typeof errPayload === "object" &&
+              errPayload &&
+              "message" in errPayload &&
+              typeof (errPayload as any).message === "string"
+              ? (errPayload as any).message
+              : typeof errPayload === "string" && errPayload.trim()
+                ? errPayload
+                : `Error fetching properties (HTTP ${res.status})`);
+
+          throw new Error(message);
+        }
+
+        if (!isJson) throw new Error("Respuesta inválida del servidor (no es JSON)");
+
         const data = await res.json();
         const mappedData = data.items.map(mapPropertyToUI);
         setProperties(mappedData);
