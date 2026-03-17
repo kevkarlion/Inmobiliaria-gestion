@@ -177,7 +177,21 @@ export class MatchingService {
     if (!currentClient) return [];
     
     const operationType = currentClient.preferences?.operationType;
-    const propertyPrefs = currentClient.preferences?.propertyPreferences || [];
+    
+    // Para "venta", usar saleProperty; para "compra"/"alquiler", usar propertyPreferences
+    let propertyPrefs: any[] = [];
+    let saleProperty = currentClient.saleProperty;
+    
+    if (operationType === "venta" && saleProperty) {
+      // Convertir saleProperty al formato de preference para matching
+      propertyPrefs = [{
+        propertyType: saleProperty.propertyType,
+        zones: saleProperty.zones || [],
+        priceRange: saleProperty.price ? { min: saleProperty.price, max: saleProperty.price } : undefined,
+      }];
+    } else {
+      propertyPrefs = currentClient.preferences?.propertyPreferences || [];
+    }
     
     if (propertyPrefs.length === 0) return [];
     
@@ -201,7 +215,20 @@ export class MatchingService {
     const matches: ClientMatchResult[] = [];
     
     for (const other of otherClients) {
-      const otherPrefs = other.preferences?.propertyPreferences || [];
+      // Obtener las preferencias del otro cliente (同样的逻辑)
+      let otherPrefs: any[] = [];
+      let otherSaleProperty = other.saleProperty;
+      
+      const otherOpType = other.preferences?.operationType;
+      if (otherOpType === "venta" && otherSaleProperty) {
+        otherPrefs = [{
+          propertyType: otherSaleProperty.propertyType,
+          zones: otherSaleProperty.zones || [],
+          priceRange: otherSaleProperty.price ? { min: otherSaleProperty.price, max: otherSaleProperty.price } : undefined,
+        }];
+      } else {
+        otherPrefs = other.preferences?.propertyPreferences || [];
+      }
       
       // Buscar el mejor match entre las preferencias
       let bestScore = 0;

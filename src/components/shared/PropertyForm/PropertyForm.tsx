@@ -165,6 +165,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
+        credentials: "include",
       });
 
       const contentType = res.headers.get("content-type") || "";
@@ -456,7 +457,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
             <SelectTrigger className="bg-white/5 border-white/10 w-40">
               <SelectValue placeholder="Seleccionar" />
             </SelectTrigger>
-            <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white">
+            <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
               <SelectItem value="ninguno">Sin cochera</SelectItem>
               <SelectItem value="cochera">Cochera</SelectItem>
               <SelectItem value="entrada">Entrada de vehículo</SelectItem>

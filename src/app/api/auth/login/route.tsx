@@ -1,4 +1,3 @@
-// app/api/auth/login/route.ts
 import { NextResponse } from "next/server";
 import { UserModel } from "@/domain/models/User";
 import { comparePassword } from "@/lib/password";
@@ -15,20 +14,24 @@ export async function POST(req: Request) {
   const ok = await comparePassword(password, user.password);
   if (!ok) return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 });
 
-  if (user.role !== "admin") return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+  // Allow both admin and user roles to login
+  // Admin gets full access, users get limited access
+  const token = signToken({ id: user._id.toString(), role: user.role, email: user.email });
 
-  // USAMOS TU FUNCIÓN signToken
-  const token = signToken({ id: user._id, role: user.role });
+  const res = NextResponse.json({ 
+    success: true,
+    user: { id: user._id, email: user.email, role: user.role },
+    token: token, // Send token in body for fallback
+  });
 
-  const res = NextResponse.json({ success: true });
-
-  // NOMBRE UNIFICADO: admin_token
+  const isProduction = process.env.NODE_ENV === "production";
+  
   res.cookies.set("admin_token", token, {
     httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
     path: "/",
-    maxAge: 60 * 60 * 24 * 7 // 7 días
+    maxAge: 60 * 60 * 24 * 30
   });
 
   return res;

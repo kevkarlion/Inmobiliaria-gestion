@@ -117,6 +117,10 @@ export class PropertyService {
       images: Array.isArray(dto.images)
         ? dto.images
         : [dto.images].filter(Boolean),
+      createdBy: dto.createdBy ? {
+        userId: new Types.ObjectId(dto.createdBy.userId),
+        email: dto.createdBy.email,
+      } : undefined,
     };
 
     // 6. Persistir en Base de Datos

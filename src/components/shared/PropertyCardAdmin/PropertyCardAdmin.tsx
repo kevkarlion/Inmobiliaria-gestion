@@ -1,6 +1,6 @@
 import React from "react";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
-import { MapPin, Maximize, Phone, Tag, Hash } from "lucide-react";
+import { MapPin, Maximize, Phone, Tag, Hash, User } from "lucide-react";
 import PropertyActions from "@/components/shared/PropertyCardsActions/PropertyCardsActions"; // Importamos el componente de cliente
 
 interface Props {
@@ -60,6 +60,14 @@ export default function PropertyCardAdmin({ property, onDelete, onEdit }: Props)
           <span>Cochera: <b>{property.features.garage ? 'Sí' : 'No'}</b></span>
           <span>Antigüedad: <b>{property.features.age} años</b></span>
         </div>
+
+        {/* Usuario que creó la propiedad */}
+        {property.createdBy && (
+          <div className="flex items-center gap-1 mt-3 text-[11px] text-slate-400 pt-2 border-t">
+            <User size={12} />
+            <span>Creado por: <span className="font-medium text-slate-600">{property.createdBy.email.split('@')[0]}</span></span>
+          </div>
+        )}
       </div>
 
       {/* Botones de Acción (Hidratados en el cliente) */}

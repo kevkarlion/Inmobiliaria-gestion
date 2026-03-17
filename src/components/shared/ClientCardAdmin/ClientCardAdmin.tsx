@@ -15,6 +15,7 @@ import {
   Edit,
   Trash2,
   Building2,
+  User,
 } from "lucide-react";
 
 interface Props {
@@ -142,6 +143,15 @@ export default function ClientCardAdmin({ client, onUpdate, onDelete }: Props) {
               <Phone className="w-4 h-4 text-slate-400 flex-shrink-0" />
               <span>{client.phone}</span>
             </div>
+            {client.location && (client.location.province || client.location.city || client.location.barrio) && (
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <MapPin className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                <span className="truncate text-xs">
+                  {[client.location.city, client.location.province].filter(Boolean).join(", ")}
+                  {client.location.barrio && ` (${client.location.barrio})`}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Preferencias */}
@@ -181,6 +191,23 @@ export default function ClientCardAdmin({ client, onUpdate, onDelete }: Props) {
                       <span className="text-slate-500">Dirección:</span>
                       <span className="font-medium text-slate-700 text-right truncate max-w-[120px]">
                         {client.saleProperty.address}
+                      </span>
+                    </div>
+                  )}
+                  {/* Show zones for saleProperty */}
+                  {client.saleProperty.zones && client.saleProperty.zones.length > 0 && (
+                    <div className="flex items-start gap-1 mt-2">
+                      <MapPin className="w-3 h-3 text-slate-400 mt-0.5 flex-shrink-0" />
+                      <span className="text-xs text-slate-500 truncate">
+                        {client.saleProperty.zones
+                          .map((z) => {
+                            const cityName = z.city?.name || z.cityName || "";
+                            const provinceName = z.province?.name || z.provinceName || "";
+                            const name = cityName || provinceName;
+                            return name ? `${name}${z.barrio ? ` (${z.barrio})` : ""}` : "";
+                          })
+                          .filter(Boolean)
+                          .join(", ") || "Sin zona"}
                       </span>
                     </div>
                   )}
@@ -255,6 +282,12 @@ export default function ClientCardAdmin({ client, onUpdate, onDelete }: Props) {
               <Calendar className="w-3 h-3" />
               <span>Creado: {formatDate(client.createdAt)}</span>
             </div>
+            {client.createdBy && (
+              <div className="flex items-center gap-1">
+                <User className="w-3 h-3" />
+                <span>{client.createdBy.email.split('@')[0]}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

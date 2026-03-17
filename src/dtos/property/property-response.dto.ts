@@ -60,6 +60,12 @@ export interface PropertyResponse {
     lat: number;
     lng: number;
   };
+
+  // Usuario que creó la propiedad
+  createdBy?: {
+    userId: string;
+    email: string;
+  };
 }
 
 /**
@@ -144,5 +150,11 @@ export function propertyResponseDTO(property: any): PropertyResponse {
       lat: property.location?.lat || 0,
       lng: property.location?.lng || 0,
     },
+
+    // Usuario que creó la propiedad
+    createdBy: property.createdBy ? {
+      userId: property.createdBy.userId?.toString() || "",
+      email: property.createdBy.email || "",
+    } : undefined,
   };
 }

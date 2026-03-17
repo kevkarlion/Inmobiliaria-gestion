@@ -77,6 +77,7 @@ export default function RequirementForm({
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
+        credentials: "include",
       });
 
       if (!res.ok) {

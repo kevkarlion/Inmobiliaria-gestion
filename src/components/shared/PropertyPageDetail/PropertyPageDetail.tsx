@@ -98,6 +98,13 @@ export default async function PropertyPageDetail({
           ))}
         </div>
       )}
+
+      {/* Información de creación */}
+      {dto.createdBy && (
+        <div className="mt-6 pt-4 border-t text-sm text-gray-500">
+          <p>Creado por: <span className="font-medium">{dto.createdBy.email.split('@')[0]}</span></p>
+        </div>
+      )}
     </div>
   );
 }

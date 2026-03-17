@@ -112,6 +112,12 @@ export interface ClientResponse {
     name: string;
   };
 
+  // Usuario que creó el cliente
+  createdBy?: {
+    userId: string;
+    email: string;
+  };
+
   interactions: {
     date: Date;
     type: string;
@@ -204,22 +210,40 @@ export function clientResponseDTO(client: any): ClientResponse {
     };
   });
 
-  return {
-    id: idVal,
-    name: client.name,
-    email: client.email,
-    phone: client.phone,
-    status: client.status,
-    source: client.source,
+    // Ubicación del cliente - igual que normalizeZone
+    const clientLocation = client.location;
+    let locationResult: { province?: string; city?: string; barrio?: string; } | undefined;
+    
+    if (clientLocation) {
+      // Si hay nombres guardados directamente, usarlos
+      if (clientLocation.provinceName || clientLocation.cityName) {
+        locationResult = {
+          province: clientLocation.provinceName || clientLocation.province,
+          city: clientLocation.cityName || clientLocation.city,
+          barrio: clientLocation.barrio,
+        };
+      } else {
+        // Si son ObjectIds poblados o strings simples
+        locationResult = {
+          province: clientLocation.province?.name || clientLocation.province,
+          city: clientLocation.city?.name || clientLocation.city,
+          barrio: clientLocation.barrio,
+        };
+      }
+    }
 
-    // Ubicación del cliente
-    location: client.location ? {
-      province: client.location.province,
-      city: client.location.city,
-      barrio: client.location.barrio,
-    } : undefined,
+    return {
+      id: idVal,
+      name: client.name,
+      email: client.email,
+      phone: client.phone,
+      status: client.status,
+      source: client.source,
 
-    preferences: {
+      // Ubicación del cliente
+      location: locationResult,
+
+      preferences: {
       operationType: client.preferences?.operationType || "compra",
       propertyPreferences,
     },
@@ -242,6 +266,12 @@ export function clientResponseDTO(client: any): ClientResponse {
           name: client.assignedTo.name || "",
         }
       : undefined,
+
+    // Usuario que creó el cliente
+    createdBy: client.createdBy ? {
+      userId: client.createdBy.userId?.toString() || "",
+      email: client.createdBy.email || "",
+    } : undefined,
 
     interactions: (client.interactions || []).map((interaction: any) => ({
       date: interaction.date,

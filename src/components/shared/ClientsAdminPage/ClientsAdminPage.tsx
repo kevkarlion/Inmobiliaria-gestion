@@ -54,7 +54,10 @@ export default function ClientsAdminClient({ initialClients }: Props) {
   async function handleDelete(id: string) {
     if (!confirm("¿Seguro quieres eliminar este cliente?")) return;
     try {
-      const res = await fetch(`/api/admin/clients/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/clients/${id}`, { 
+        method: "DELETE",
+        credentials: "include",
+      });
       if (res.ok) {
         setClients((c) => c.filter((x) => x.id !== id));
         toast.success("Cliente eliminado", {

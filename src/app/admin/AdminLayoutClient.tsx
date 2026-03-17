@@ -12,9 +12,11 @@ import {
   Menu,
   X,
   LogOut,
+  Shield,
+  FileText,
 } from "lucide-react";
 import { Toaster } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,14 +24,43 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
-const navItems = [
+// Base navigation items (visible to all)
+const baseNavItems = [
   { href: "/admin/properties", icon: Building2, label: "Propiedades" },
   { href: "/admin/clients", icon: Users, label: "Clientes" },
 ];
 
+// Admin-only navigation items
+const adminNavItems = [
+  { href: "/admin/users", icon: Shield, label: "Usuarios" },
+  { href: "/admin/audit-logs", icon: FileText, label: "Auditoría" },
+];
+
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
+
+  // Get user role and email from localStorage on mount
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token");
+    if (token) {
+      try {
+        // Decode JWT to get role and email (simple base64 decode)
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setUserRole(payload.role);
+        setUserEmail(payload.email);
+      } catch (e) {
+        console.error("Error decoding token:", e);
+      }
+    }
+  }, []);
+
+  const isAdmin = userRole === "admin";
+  const navItems = isAdmin 
+    ? [...baseNavItems, ...adminNavItems] 
+    : baseNavItems;
 
   function openSidebar() {
     setSidebarOpen(true);
@@ -41,6 +72,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
   async function handleLogout() {
     try {
+      localStorage.removeItem("admin_token");
       await fetch("/api/auth/logout", { method: "POST" });
       router.push("/admin/login");
     } catch (error) {
@@ -59,15 +91,23 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         `}
       >
         {/* Logo */}
-        <div className="p-4 lg:p-6 border-b border-slate-800 flex items-center justify-between">
-          <Link href="/admin/properties" className="block" onClick={closeSidebar}>
-            <h1 className="text-lg font-black uppercase tracking-tighter italic">
-              Riquelme <span className="text-blue-400 font-normal">Prop</span>
-            </h1>
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
-              Panel de Admin
-            </p>
-          </Link>
+        <div className="p-4 lg:p-6 border-b border-slate-800 flex items-start justify-between">
+          <div>
+            <Link href="/admin/properties" className="block" onClick={closeSidebar}>
+              <h1 className="text-lg font-black uppercase tracking-tighter italic">
+                Riquelme <span className="text-blue-400 font-normal">Prop</span>
+              </h1>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                Panel de Admin
+              </p>
+            </Link>
+            {/* Saludo al usuario */}
+            {userEmail && (
+              <p className="mt-3 text-sm text-slate-300">
+                Hola, <span className="font-semibold text-blue-400">{userEmail.split('@')[0]}</span>!
+              </p>
+            )}
+          </div>
           {/* Botón cerrar en mobile */}
           <button 
             className="lg:hidden p-2 hover:bg-slate-800 rounded-lg"

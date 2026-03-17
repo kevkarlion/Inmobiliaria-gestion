@@ -117,6 +117,12 @@ export interface IClient extends Document {
   notes: string;
   assignedTo?: Types.ObjectId;
 
+  // Usuario que creó el cliente
+  createdBy?: {
+    userId: Types.ObjectId;
+    email: string;
+  };
+
   interactions: {
     date: Date;
     type: "llamada" | "whatsapp" | "email" | "reunion" | "visita" | "nota";

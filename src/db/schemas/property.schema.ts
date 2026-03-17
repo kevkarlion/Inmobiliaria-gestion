@@ -101,6 +101,12 @@ const PropertySchema = new Schema<IProperty>(
       default: PropertyStatus.ACTIVE,
       index: true,
     },
+
+    // Usuario que creó la propiedad
+    createdBy: {
+      userId: { type: Schema.Types.ObjectId, ref: "User" },
+      email: { type: String },
+    },
   },
   {
     timestamps: true,

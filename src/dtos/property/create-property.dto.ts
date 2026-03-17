@@ -43,6 +43,9 @@ export class CreatePropertyDTO {
   
   flags: { featured: boolean; premium: boolean; opportunity: boolean };
 
+  // Usuario que crea la propiedad
+  createdBy?: { userId: string; email: string };
+
   constructor(data: any) {
     if (!data.title) throw new BadRequestError("El título es requerido");
     if (!data.priceAmount) throw new BadRequestError("El monto del precio es requerido");
@@ -113,5 +116,10 @@ export class CreatePropertyDTO {
       premium: Boolean(data.premium),
       opportunity: Boolean(data.opportunity),
     };
+
+    // Usuario que crea la propiedad
+    if (data.createdBy) {
+      this.createdBy = data.createdBy;
+    }
   }
 }

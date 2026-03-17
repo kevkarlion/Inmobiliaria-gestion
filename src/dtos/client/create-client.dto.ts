@@ -105,6 +105,9 @@ export class CreateClientDTO {
   notes: string;
   assignedTo?: string;
 
+  // Usuario que crea el cliente
+  createdBy?: { userId: string; email: string };
+
   constructor(data: any) {
     // Validaciones de campos obligatorios
     if (!data.name || data.name.trim() === "") {
@@ -118,7 +121,7 @@ export class CreateClientDTO {
     }
 
     this.name = data.name?.trim() || "";
-    this.email = data.email?.trim() ? data.email.trim().toLowerCase() : null;
+    this.email = data.email?.trim() ? data.email.trim().toLowerCase() : undefined;
     
     // Normalizar status
     const statusInputRaw = (data.status ?? ClientStatus.ACTIVE).toString().toLowerCase();
@@ -135,6 +138,11 @@ export class CreateClientDTO {
     this.phone = data.phone?.trim() || "";
     this.notes = data.notes || "";
     this.assignedTo = data.assignedTo;
+
+    // Usuario que crea el cliente
+    if (data.createdBy) {
+      this.createdBy = data.createdBy;
+    }
 
     // Procesar location
     if (data.location && typeof data.location === "object") {

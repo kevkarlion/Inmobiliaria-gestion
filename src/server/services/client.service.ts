@@ -105,7 +105,6 @@ export class ClientService {
     // 3. Mapear DTO a datos guardables
     const clientData: any = {
       name: dto.name,
-      email: dto.email,
       phone: dto.phone,
       status: dto.status,
       source: dto.source,
@@ -115,10 +114,19 @@ export class ClientService {
       },
       notes: dto.notes,
       assignedTo: dto.assignedTo ? new Types.ObjectId(dto.assignedTo) : undefined,
+      createdBy: dto.createdBy ? {
+        userId: new Types.ObjectId(dto.createdBy.userId),
+        email: dto.createdBy.email,
+      } : undefined,
       interactions: [],
       matches: [],
       lastActivityAt: new Date(),
     };
+
+    // Solo incluir email si tiene valor válido (no null ni undefined)
+    if (dto.email !== undefined && dto.email !== null && dto.email !== "") {
+      clientData.email = dto.email;
+    }
 
     // Agregar saleProperty si existe (solo para operación venta)
     if (dto.saleProperty) {
@@ -246,9 +254,17 @@ export class ClientService {
 
     const updateData: Record<string, any> = {};
 
+    // Location del cliente
+    if (payload.location !== undefined) {
+      updateData.location = payload.location;
+    }
+
     // Campos simples
     if (payload.name !== undefined) updateData.name = payload.name;
-    if (payload.email !== undefined) updateData.email = payload.email;
+    // Solo actualizar email si tiene valor válido (no null ni undefined)
+    if (payload.email !== undefined && payload.email !== null && payload.email !== "") {
+      updateData.email = payload.email;
+    }
     if (payload.phone !== undefined) updateData.phone = payload.phone;
     if (payload.status !== undefined) updateData.status = payload.status;
     if (payload.source !== undefined) updateData.source = payload.source;
@@ -347,7 +363,90 @@ export class ClientService {
 
     // Actualizar saleProperty si se proporciona
     if (payload.saleProperty !== undefined) {
-      updateData.saleProperty = payload.saleProperty;
+      // Procesar las zonas de saleProperty igual que propertyPreferences
+      const processedSaleProperty: any = { ...payload.saleProperty };
+      
+      if (payload.saleProperty.zones && Array.isArray(payload.saleProperty.zones)) {
+        const processedZones = await Promise.all(
+          payload.saleProperty.zones.map(async (zone: any) => {
+            const processedZone: any = {};
+
+            // Buscar provincia por slug o por nombre
+            if (zone.province) {
+              const provinceDoc = await Province.findOne({ 
+                $or: [{ slug: zone.province }, { name: { $regex: new RegExp(zone.province, 'i') } }] 
+              }).lean();
+              if (provinceDoc) {
+                processedZone.province = provinceDoc._id;
+                processedZone.provinceName = provinceDoc.name;
+              } else {
+                processedZone.provinceName = zone.province;
+              }
+            }
+
+            // Buscar ciudad por slug o por nombre
+            if (zone.city) {
+              const cityDoc = await City.findOne({ 
+                $or: [{ slug: zone.city }, { name: { $regex: new RegExp(zone.city, 'i') } }] 
+              }).lean();
+              if (cityDoc) {
+                processedZone.city = cityDoc._id;
+                processedZone.cityName = cityDoc.name;
+              } else {
+                processedZone.cityName = zone.city;
+              }
+            }
+
+            if (zone.barrio) {
+              processedZone.barrio = zone.barrio;
+            }
+
+            return processedZone;
+          })
+        );
+        processedSaleProperty.zones = processedZones;
+      }
+
+      // Procesar features según tipo de propiedad
+      if (payload.saleProperty.propertyType && payload.saleProperty.features) {
+        const propType = payload.saleProperty.propertyType;
+        const features = payload.saleProperty.features;
+        
+        if (propType === "terreno" || propType === "loteo") {
+          processedSaleProperty.features = {
+            mtsFrente: features.mtsFrente ? Number(features.mtsFrente) : undefined,
+            mtsFondo: features.mtsFondo ? Number(features.mtsFondo) : undefined,
+            mtsTotales: features.mtsTotales ? Number(features.mtsTotales) : undefined,
+          };
+        } else if (propType === "casa") {
+          processedSaleProperty.features = {
+            bedrooms: features.bedrooms ? Number(features.bedrooms) : undefined,
+            bathrooms: features.bathrooms ? Number(features.bathrooms) : undefined,
+            mtsCubiertos: features.mtsCubiertos ? Number(features.mtsCubiertos) : undefined,
+            mtsTotales: features.mtsTotales ? Number(features.mtsTotales) : undefined,
+            garage: features.garage,
+            garageCount: features.garageCount ? Number(features.garageCount) : undefined,
+            piso: features.piso ? Number(features.piso) : undefined,
+            antiguedad: features.antiguedad ? Number(features.antiguedad) : undefined,
+            estado: features.estado,
+          };
+        } else if (propType === "depto") {
+          processedSaleProperty.features = {
+            bedrooms: features.bedrooms ? Number(features.bedrooms) : undefined,
+            bathrooms: features.bathrooms ? Number(features.bathrooms) : undefined,
+            mtsCubiertos: features.mtsCubiertos ? Number(features.mtsCubiertos) : undefined,
+            mtsTotales: features.mtsTotales ? Number(features.mtsTotales) : undefined,
+            garage: features.garage,
+            garageCount: features.garageCount ? Number(features.garageCount) : undefined,
+            piso: features.piso ? Number(features.piso) : undefined,
+            antiguedad: features.antiguedad ? Number(features.antiguedad) : undefined,
+            estado: features.estado,
+            amenities: features.amenities,
+          };
+        }
+      }
+
+      updateData.saleProperty = processedSaleProperty;
     }
 
     // Actualizar timestamp de actividad

@@ -101,10 +101,8 @@ const ClientSchema = new Schema<IClient>(
     email: {
       type: String,
       required: false,
-      unique: true,
       lowercase: true,
       trim: true,
-      default: null,
     },
     phone: {
       type: String,
@@ -169,6 +167,12 @@ const ClientSchema = new Schema<IClient>(
     assignedTo: {
       type: Schema.Types.ObjectId,
       ref: "User",
+    },
+
+    // Usuario que creó el cliente
+    createdBy: {
+      userId: { type: Schema.Types.ObjectId, ref: "User" },
+      email: { type: String },
     },
 
     // Historial de interacciones

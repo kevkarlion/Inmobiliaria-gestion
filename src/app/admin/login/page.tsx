@@ -24,12 +24,16 @@ export default function AdminLogin() {
       });
 
       if (res.ok) {
+        const data = await res.json();
+        // Store token for API calls
+        if (data.token) {
+          localStorage.setItem("admin_token", data.token);
+        }
         window.location.href = "/admin/properties"; 
       } else {
         const data = await res.json();
         alert(data.error || "Error al ingresar");
       }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       alert("Error de conexión");
     } finally {

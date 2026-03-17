@@ -5,6 +5,7 @@ import { CreateClientDTO } from "@/dtos/client/create-client.dto";
 import { QueryClientDTO } from "@/dtos/client/query-client.dto";
 import { ClientResponse } from "@/dtos/client/client-response.dto";
 import { HttpError } from "@/server/errors/http-error";
+import { getCurrentUser } from "@/lib/auth";
 
 // GET /api/admin/clients - List all clients with filters and pagination
 export async function GET(req: Request) {
@@ -40,7 +41,19 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     await connectDB();
+    const currentUser = await getCurrentUser();
+    console.log("=== CLIENT CREATE DEBUG ===");
+    console.log("Current user:", currentUser);
+    console.log("===========================");
     const body = await req.json();
+
+    // Agregar información del usuario actual al body
+    if (currentUser) {
+      body.createdBy = {
+        userId: currentUser.id,
+        email: currentUser.email,
+      };
+    }
 
     // Normalize common enums to lowercase to align with DB schema
     if (body.preferences?.operationType) {

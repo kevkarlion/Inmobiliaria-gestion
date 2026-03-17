@@ -37,7 +37,9 @@ export default function ClientDetailClient({ client }: Props) {
   useEffect(() => {
     async function fetchSimilarClients() {
       try {
-        const res = await fetch(`/api/admin/clients/${client.id}/matches`);
+        const res = await fetch(`/api/admin/clients/${client.id}/matches`, {
+          credentials: "include",
+        });
         if (res.ok) {
           const data = await res.json();
           setSimilarClients(data.matches || []);
@@ -116,7 +118,7 @@ export default function ClientDetailClient({ client }: Props) {
           </div>
 
           {/* Contact info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-100">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-100">
             <div className="flex items-center gap-3">
               <Mail className="w-5 h-5 text-slate-400" />
               <div>
@@ -131,6 +133,18 @@ export default function ClientDetailClient({ client }: Props) {
                 <p className="font-medium text-slate-700">{client.phone}</p>
               </div>
             </div>
+            {client.location && (client.location.province || client.location.city || client.location.barrio) && (
+              <div className="flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-slate-400" />
+                <div>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">Ubicación</p>
+                  <p className="font-medium text-slate-700 text-sm">
+                    {[client.location.city, client.location.province].filter(Boolean).join(", ")}
+                    {client.location.barrio && ` (${client.location.barrio})`}
+                  </p>
+                </div>
+              </div>
+            )}
             <div className="flex items-center gap-3">
               <Calendar className="w-5 h-5 text-slate-400" />
               <div>
@@ -138,6 +152,15 @@ export default function ClientDetailClient({ client }: Props) {
                 <p className="font-medium text-slate-700">{formatDate(client.createdAt)}</p>
               </div>
             </div>
+            {client.createdBy && (
+              <div className="flex items-center gap-3">
+                <User className="w-5 h-5 text-slate-400" />
+                <div>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider">Creado por</p>
+                  <p className="font-medium text-slate-700">{client.createdBy.email.split('@')[0]}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -316,6 +339,32 @@ export default function ClientDetailClient({ client }: Props) {
                 >
                   📍 Ver en Google Maps
                 </a>
+              </div>
+            )}
+
+            {/* Zonas de la propiedad en venta */}
+            {client.saleProperty.zones && client.saleProperty.zones.length > 0 && (
+              <div className="mb-4 flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-slate-400 mt-1" />
+                <div className="flex flex-wrap gap-2">
+                  {client.saleProperty.zones.map((zone, zIdx) => {
+                    const cityName = zone.city?.name || zone.cityName || "";
+                    const provinceName = zone.province?.name || zone.provinceName || "";
+                    const displayName = cityName || provinceName;
+                    
+                    if (!displayName) return null;
+                    
+                    return (
+                      <span
+                        key={zIdx}
+                        className="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full"
+                      >
+                        {displayName}
+                        {zone.barrio && ` (${zone.barrio})`}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
             )}
 

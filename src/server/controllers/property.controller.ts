@@ -1,6 +1,7 @@
 
 import { connectDB } from "@/db/connection";
 import { PropertyService } from "../services/property.service";
+import { AuditService } from "../services/audit.service";
 import { NextResponse } from "next/server";
 import { HttpError } from "@/server/errors/http-error";
 import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
@@ -10,6 +11,7 @@ import {
 } from "@/dtos/property/property-response.dto";
 import { CreatePropertyDTO } from "@/dtos/property/create-property.dto";
 import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
+import { requireAdmin, getCurrentUser as getAuthenticatedUser } from "@/lib/auth";
 
 export class PropertyController {
   private static handleError(error: unknown) {
@@ -31,12 +33,38 @@ export class PropertyController {
   static async create(req: Request) {
     try {
       await connectDB();
+      const currentUser = await getAuthenticatedUser();
+      console.log("=== PROPERTY CREATE DEBUG ===");
+      console.log("Current user:", currentUser);
+      console.log("=============================");
       const body = await req.json();
+
+      // Agregar información del usuario actual al body
+      if (currentUser) {
+        body.createdBy = {
+          userId: currentUser.id,
+          email: currentUser.email,
+        };
+      }
 
       const dto = new CreatePropertyDTO(body);
       const property = await PropertyService.create(dto);
-     
+      
       const response = propertyResponseDTO(property);
+
+      // Audit log
+      if (currentUser) {
+        await AuditService.log({
+          action: "create",
+          entity: "property",
+          entityId: property._id.toString(),
+          userId: currentUser.id,
+          userEmail: currentUser.email,
+          description: `Propiedad creada: ${property.title}`,
+          changes: { title: property.title, slug: property.slug },
+        });
+      }
+
       return NextResponse.json(response, { status: 201 });
     } catch (error: unknown) {
       console.error("🔴 ERROR EN CONTROLLER:", error);
@@ -82,11 +110,29 @@ export class PropertyController {
   static async update(req: Request, { params }: { params: { slug: string } }) {
     try {
       await connectDB();
+      const currentUser = await getAuthenticatedUser();
       const body = await req.json();
       
       const dto = new UpdatePropertyDTO(body);
+      const existingProperty = await PropertyService.findBySlug(params.slug);
 
       const updatedProperty = await PropertyService.update(params.slug, dto);
+
+      // Audit log
+      if (currentUser) {
+        await AuditService.log({
+          action: "update",
+          entity: "property",
+          entityId: existingProperty._id.toString(),
+          userId: currentUser.id,
+          userEmail: currentUser.email,
+          description: `Propiedad actualizada: ${existingProperty.title}`,
+          changes: { 
+            title: { from: existingProperty.title, to: updatedProperty.title },
+            slug: params.slug,
+          },
+        });
+      }
 
       return NextResponse.json(propertyResponseDTO(updatedProperty));
     } catch (error: unknown) {
@@ -98,7 +144,24 @@ export class PropertyController {
   static async delete(req: Request, { params }: { params: { slug: string } }) {
     try {
       await connectDB();
+      const currentUser = await getAuthenticatedUser();
+      const existingProperty = await PropertyService.findBySlug(params.slug);
+
       const result = await PropertyService.delete(params.slug);
+
+      // Audit log
+      if (currentUser) {
+        await AuditService.log({
+          action: "delete",
+          entity: "property",
+          entityId: existingProperty._id.toString(),
+          userId: currentUser.id,
+          userEmail: currentUser.email,
+          description: `Propiedad eliminada: ${existingProperty.title}`,
+          changes: { title: existingProperty.title, slug: params.slug },
+        });
+      }
+
       return NextResponse.json(result);
     } catch (error: unknown) {
       return this.handleError(error);
