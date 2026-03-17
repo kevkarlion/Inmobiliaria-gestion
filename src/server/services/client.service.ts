@@ -370,11 +370,12 @@ export class ClientService {
     // Actualizar saleProperty si se proporciona
     if (payload.saleProperty !== undefined) {
       // Procesar las zonas de saleProperty igual que propertyPreferences
-      const processedSaleProperty: any = { ...payload.saleProperty };
+      const saleProp = payload.saleProperty as any;
+      const processedSaleProperty: any = { ...saleProp };
       
-      if (payload.saleProperty.zones && Array.isArray(payload.saleProperty.zones)) {
+      if (saleProp?.zones && Array.isArray(saleProp?.zones)) {
         const processedZones = await Promise.all(
-          payload.saleProperty.zones.map(async (zone: any) => {
+          saleProp.zones.map(async (zone: any) => {
             const processedZone: any = {};
 
             // Buscar provincia por slug o por nombre
@@ -414,9 +415,9 @@ export class ClientService {
       }
 
       // Procesar features según tipo de propiedad
-      if (payload.saleProperty.propertyType && payload.saleProperty.features) {
-        const propType = payload.saleProperty.propertyType;
-        const features = payload.saleProperty.features;
+      if (saleProp?.propertyType && saleProp?.features) {
+        const propType = saleProp.propertyType;
+        const features = saleProp.features as any;
         
         if (propType === "terreno" || propType === "loteo") {
           processedSaleProperty.features = {
