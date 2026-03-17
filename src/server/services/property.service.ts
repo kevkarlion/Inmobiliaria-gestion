@@ -155,10 +155,16 @@ export class PropertyService {
 
   static async findAll(
     query: QueryPropertyDTO,
+    currentUser?: { id: string; email: string; role: string; isAdmin?: boolean } | null,
   ): Promise<FindAllPropertiesResult> {
     await connectDB();
     const filter: any = { status: "active" };
     const f = query.filters;
+
+    // Si el usuario no es admin, solo mostrar sus propiedades
+    if (currentUser && !currentUser.isAdmin) {
+      filter["createdBy.userId"] = currentUser.id;
+    }
 
     // filtros simples
     if (f.operationType) filter.operationType = f.operationType.toLowerCase();

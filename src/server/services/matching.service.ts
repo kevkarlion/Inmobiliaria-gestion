@@ -25,6 +25,11 @@ export interface MatchingResult {
 export interface ClientMatchResult {
   clientId: string;
   clientName: string;
+  // Información del creador del cliente (para saber si es de otro asesor)
+  createdBy?: {
+    userId?: string;
+    email?: string;
+  };
   score: number;
   operationMatch: boolean;
   propertyTypeMatch: boolean;
@@ -258,6 +263,11 @@ export class MatchingService {
         matches.push({
           clientId: other._id.toString(),
           clientName: other.name,
+          // Información del creador del otro cliente (para saber si es de otro asesor)
+          createdBy: other.createdBy ? {
+            userId: other.createdBy.userId?.toString(),
+            email: other.createdBy.email,
+          } : undefined,
           score: bestScore,
           operationMatch,
           propertyTypeMatch,

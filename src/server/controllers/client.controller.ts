@@ -79,7 +79,10 @@ export class ClientController {
       const rawQuery = Object.fromEntries(searchParams);
       const queryDto = new QueryClientDTO(rawQuery);
 
-      const { items, meta } = await ClientService.findAll(queryDto);
+      // Obtener usuario actual para filtrar por createdBy si no es admin
+      const currentUser = await getAuthenticatedUser();
+
+      const { items, meta } = await ClientService.findAll(queryDto, currentUser);
 
       const responseItems: ClientResponse[] = items.map(clientResponseDTO);
 

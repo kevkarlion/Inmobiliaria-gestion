@@ -36,6 +36,7 @@ export async function requireAdmin() {
 
 /**
  * Retorna el usuario actual sin importar su rol (admin o user)
+ * Incluye el campo isAdmin para verificar permisos
  */
 export async function getCurrentUser() {
   // Try cookie first
@@ -55,7 +56,10 @@ export async function getCurrentUser() {
 
   try {
     const decoded: any = verifyToken(token);
-    return decoded;
+    return {
+      ...decoded,
+      isAdmin: decoded.role === "admin",
+    };
   } catch (e) {
     return null;
   }

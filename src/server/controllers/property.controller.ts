@@ -81,7 +81,10 @@ export class PropertyController {
       const rawQuery = Object.fromEntries(searchParams);
       const queryDto = new QueryPropertyDTO(rawQuery);
 
-      const { items, meta } = await PropertyService.findAll(queryDto);
+      // Obtener usuario actual para filtrar por createdBy si no es admin
+      const currentUser = await getAuthenticatedUser();
+
+      const { items, meta } = await PropertyService.findAll(queryDto, currentUser);
 
       const responseItems: PropertyResponse[] =
         items.map(propertyResponseDTO);

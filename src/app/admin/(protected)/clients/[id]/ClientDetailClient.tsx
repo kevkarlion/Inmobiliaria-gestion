@@ -17,12 +17,19 @@ import {
 
 interface ClientMatchResult {
   clientId: string;
-  clientName: string;
+  clientName: string | null;
+  // Información del creador del cliente (para saber si es de otro asesor)
+  createdBy?: {
+    userId?: string;
+    email?: string;
+  };
   score: number;
   operationMatch: boolean;
   propertyTypeMatch: boolean;
   zoneMatch: boolean;
   priceOverlap: boolean;
+  // Indicador de si es de otro asesor
+  isOtherAdvisor?: boolean;
 }
 
 interface Props {
@@ -448,42 +455,66 @@ export default function ClientDetailClient({ client }: Props) {
               Clientes con Intereses Similares
             </h2>
             <div className="space-y-3">
-              {similarClients.map((match) => (
-                <Link
-                  key={match.clientId}
-                  href={`/admin/clients/${match.clientId}`}
-                  className="block p-4 border border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-bold text-slate-800">{match.clientName}</p>
-                      <div className="flex gap-2 mt-1">
-                        {match.propertyTypeMatch && (
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                            Mismo tipo
-                          </span>
+              {similarClients.map((match) => {
+                // Usar el campo isOtherAdvisor que viene de la API
+                const isOtherAdvisor = match.isOtherAdvisor;
+                
+                return (
+                  <div
+                    key={match.clientId}
+                    className={`p-4 border rounded-xl ${
+                      isOtherAdvisor 
+                        ? "bg-amber-50 border-amber-200" 
+                        : "border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        {isOtherAdvisor ? (
+                          <div className="flex items-center gap-2 text-amber-700">
+                            <span className="font-medium">
+                              Hay un cliente con intereses similares en tu cartera
+                            </span>
+                          </div>
+                        ) : (
+                          <Link
+                            href={`/admin/clients/${match.clientId}`}
+                            className="block hover:text-blue-600"
+                          >
+                            <p className="font-bold text-slate-800">{match.clientName}</p>
+                          </Link>
                         )}
-                        {match.zoneMatch && (
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                            Misma zona
-                          </span>
-                        )}
-                        {match.priceOverlap && (
-                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
-                            Precio similar
-                          </span>
+                        
+                        {!isOtherAdvisor && (
+                          <div className="flex gap-2 mt-1">
+                            {match.propertyTypeMatch && (
+                              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                                Mismo tipo
+                              </span>
+                            )}
+                            {match.zoneMatch && (
+                              <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                                Misma zona
+                              </span>
+                            )}
+                            {match.priceOverlap && (
+                              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+                                Precio similar
+                              </span>
+                            )}
+                          </div>
                         )}
                       </div>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-2xl font-black text-blue-600">
-                        {Math.round(match.score * 100)}%
-                      </span>
-                      <p className="text-xs text-slate-400">compatibilidad</p>
+                      <div className="text-right">
+                        <span className="text-2xl font-black text-blue-600">
+                          {Math.round(match.score * 100)}%
+                        </span>
+                        <p className="text-xs text-slate-400">compatibilidad</p>
+                      </div>
                     </div>
                   </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

@@ -5,9 +5,14 @@ import PropertiesAdminClient from "@/components/shared/PropertiesAdminPage/Prope
 import { PropertyService } from "@/server/services/property.service";
 import { propertyResponseDTO } from "@/dtos/property/property-response.dto";
 import { QueryPropertyDTO } from "@/dtos/property/query-property.dto";
+import { getCurrentUser } from "@/lib/auth";
+import { cookies } from "next/headers";
 
 export default async function PropertiesAdminPage() {
-  const { items } = await PropertyService.findAll(new QueryPropertyDTO({}));
+  // Obtener usuario actual para filtrar
+  const currentUser = await getCurrentUser();
+  
+  const { items } = await PropertyService.findAll(new QueryPropertyDTO({}), currentUser);
   const properties = items.map(p => propertyResponseDTO(p));
 
   return (

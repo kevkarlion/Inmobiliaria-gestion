@@ -149,10 +149,16 @@ export class ClientService {
    */
   static async findAll(
     query: QueryClientDTO,
+    currentUser?: { id: string; email: string; role: string; isAdmin?: boolean } | null,
   ): Promise<{ items: ClientResponse[]; meta: { total: number; page: number; limit: number; pages: number } }> {
     await connectDB();
     const filter: any = {};
     const f = query.filters;
+
+    // Si el usuario no es admin, solo mostrar sus clientes
+    if (currentUser && !currentUser.isAdmin) {
+      filter["createdBy.userId"] = currentUser.id;
+    }
 
     // Filtros simples
     if (f.status) filter.status = f.status;
