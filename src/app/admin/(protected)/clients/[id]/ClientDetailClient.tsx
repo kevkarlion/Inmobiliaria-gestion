@@ -473,7 +473,7 @@ export default function ClientDetailClient({ client }: Props) {
                         {isOtherAdvisor ? (
                           <div className="flex items-center gap-2 text-amber-700">
                             <span className="font-medium">
-                              Hay un cliente con intereses similares en tu cartera
+                              El usuario {match.createdBy?.email?.split('@')[0] || 'desconocido'} tiene un cliente con intereses que hacen match
                             </span>
                           </div>
                         ) : (

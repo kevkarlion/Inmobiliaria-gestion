@@ -5,7 +5,8 @@ import PropertyCardAdmin from "@/components/shared/PropertyCardAdmin/PropertyCar
 import CreatePropertyForm from "@/components/shared/PropertyForm/PropertyForm"; 
 import EditPropertyForm from "@/components/shared/EditPropertyForm/EditPropertyForm";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
-import { Building2, Plus } from "lucide-react";
+import { Building2, Plus, MapPin, Edit, Trash2 } from "lucide-react";
+import Link from "next/link";
 
 export default function PropertiesAdminClient({ initialProperties }: { initialProperties: PropertyResponse[] }) {
   const [properties, setProperties] = useState<PropertyResponse[]>(initialProperties);
@@ -41,8 +42,8 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
   }
 
   return (
-    <div className="p-4 pb-20 md:p-8 md:pb-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="p-4 md:p-6">
+      <div className="w-full">
         
         {/* SECCIÓN DE ACCIONES DE LISTA */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 px-2">
@@ -92,40 +93,162 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
           </div>
         )}
 
-        {/* GRID DE PROPIEDADES */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-          {properties.length > 0 ? (
-            properties.map((p) => (
-              <div key={p.id} className="group transition-all duration-300 hover:-translate-y-2">
-                <PropertyCardAdmin
-                  property={p}
-                  onDelete={handleDelete}
-                  onEdit={(prop) => {
-                    setEditingProperty(prop);
-                    setShowEditForm(true);
-                  }}
-                />
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full bg-white border-2 border-dashed border-slate-200 rounded-[3rem] py-32 text-center shadow-inner">
-              <Building2 className="w-16 h-16 text-slate-200 mx-auto mb-6" />
-              <h3 className="text-slate-900 font-black uppercase text-xl tracking-tighter">No hay nada por aquí</h3>
-              <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mt-2">
-                Comienza cargando tu primera propiedad al sistema
-              </p>
-              <button 
-                 onClick={() => setShowCreateForm(true)}
-                 className="mt-8 bg-slate-900 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase hover:bg-slate-800 transition-colors"
-              >
-                Crear Propiedad
-              </button>
+        {/* VISTA DE TARJETAS (mobile + tablet) */}
+        {properties.length > 0 && (
+          <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {properties.map((p) => (
+              <PropertyCardAdmin
+                key={p.id}
+                property={p}
+                onDelete={handleDelete}
+                onEdit={(prop) => {
+                  setEditingProperty(prop);
+                  setShowEditForm(true);
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* TABLA DE PROPIEDADES (laptop en adelante) */}
+        {properties.length > 0 && (
+          <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="overflow-x-auto max-h-[calc(100vh-200px)]">
+              <table className="w-full text-sm min-w-[900px]">
+                <thead className="bg-slate-100 border-b border-slate-200 sticky top-0 z-10">
+                  <tr>
+                    <th className="text-left px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100">Tipo</th>
+                    <th className="text-left px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100">Título</th>
+                    <th className="text-left px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden md:table-cell">Dirección</th>
+                    <th className="text-right px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden lg:table-cell">Precio</th>
+                    <th className="text-center px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden sm:table-cell">m²</th>
+                    <th className="text-center px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden sm:table-cell">Amb.</th>
+                    <th className="text-center px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden sm:table-cell">Hab</th>
+                    <th className="text-center px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden md:table-cell">Baños</th>
+                    <th className="text-left px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden lg:table-cell">Creado</th>
+                    <th className="text-center px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {properties.map((p, index) => (
+                    <tr key={p.id} className={`transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-blue-50`}>
+                      {/* Tipo */}
+                      <td className="px-2 py-2">
+                        <span className="bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded font-medium uppercase">
+                          {p.propertyType?.name}
+                        </span>
+                      </td>
+                      
+                      {/* Título + Flags */}
+                      <td className="px-2 py-2">
+                        <div className="flex flex-wrap items-center gap-1 mb-1">
+                          {p.flags?.featured && <span className="bg-amber-100 text-amber-700 text-[9px] px-1 py-0.5 rounded-full">Dest.</span>}
+                          {p.flags?.opportunity && <span className="bg-rose-100 text-rose-700 text-[9px] px-1 py-0.5 rounded-full">Oport.</span>}
+                          {p.flags?.premium && <span className="bg-purple-100 text-purple-700 text-[9px] px-1 py-0.5 rounded-full">Prem.</span>}
+                        </div>
+                        <Link href={`/properties/${p.slug}`} target="_blank" className="font-medium text-slate-800 hover:text-blue-600 hover:underline text-xs block w-[180px] lg:w-[220px]">
+                          {p.title}
+                        </Link>
+                      </td>
+                      
+                      {/* Dirección */}
+                      <td className="px-2 py-2 hidden md:table-cell">
+                        <div className="text-slate-600 text-xs w-[120px] lg:w-[160px]">
+                          <div className="flex items-start gap-1">
+                            <MapPin size={11} className="text-slate-400 mt-0.5 flex-shrink-0" />
+                            <span className="break-words">{p.address.street} {p.address.number}</span>
+                          </div>
+                          {p.address.city && <span className="text-[10px] text-slate-400 block mt-0.5">{p.address.city.name}</span>}
+                        </div>
+                      </td>
+                      
+                      {/* Precio */}
+                      <td className="px-2 py-2 text-right hidden lg:table-cell">
+                        <div className="flex flex-col items-end">
+                          <span className="text-[9px] text-slate-400">{p.price.currency}</span>
+                          <span className="font-bold text-slate-800 text-[10px]">
+                            {p.price.amount.toLocaleString("es-AR")}
+                          </span>
+                        </div>
+                      </td>
+                      
+                      {/* m² */}
+                      <td className="px-1 py-2 text-center hidden sm:table-cell">
+                        <div className="flex flex-col items-center text-[10px] text-slate-600">
+                          {p.features.totalM2 && <span>{p.features.totalM2}m²</span>}
+                          {p.features.coveredM2 && p.features.coveredM2 !== p.features.totalM2 && (
+                            <span className="text-slate-400 text-[9px]">{p.features.coveredM2}cub</span>
+                          )}
+                        </div>
+                      </td>
+                      
+                      {/* Ambientes */}
+                      <td className="px-1 py-2 text-center hidden sm:table-cell">
+                        <span className="text-[10px] text-slate-600">{p.features.rooms || '-'}</span>
+                      </td>
+                      
+                      {/* Habitaciones */}
+                      <td className="px-1 py-2 text-center hidden sm:table-cell">
+                        <span className="text-[10px] text-slate-600">{p.features.bedrooms}</span>
+                      </td>
+                      
+                      {/* Baños */}
+                      <td className="px-1 py-2 text-center hidden md:table-cell">
+                        <span className="text-[10px] text-slate-600">{p.features.bathrooms}</span>
+                      </td>
+                      
+                      {/* Creado por */}
+                      <td className="px-2 py-2 hidden lg:table-cell">
+                        <span className="text-[10px] text-slate-500">{p.createdBy?.email?.split('@')[0] || '-'}</span>
+                      </td>
+                      
+                      {/* Acciones */}
+                      <td className="px-1 py-2">
+                        <div className="flex items-center justify-center gap-1">
+                          <button
+                            onClick={() => {
+                              setEditingProperty(p);
+                              setShowEditForm(true);
+                            }}
+                            className="p-1 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                            title="Editar"
+                          >
+                            <Edit size={12} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(p.slug)}
+                            className="p-1 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                            title="Eliminar"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* ESTADO VACÍO */}
+        {properties.length === 0 && (
+          <div className="bg-white border-2 border-dashed border-slate-200 rounded-xl py-16 text-center">
+            <Building2 className="w-12 h-12 text-slate-200 mx-auto mb-4" />
+            <h3 className="text-slate-900 font-bold text-lg">No hay propiedades</h3>
+            <p className="text-slate-400 text-sm mt-1">Comienza cargando tu primera propiedad</p>
+            <button 
+               onClick={() => setShowCreateForm(true)}
+               className="mt-6 bg-slate-900 text-white px-6 py-2 rounded-lg font-bold text-xs uppercase hover:bg-slate-800 transition-colors"
+            >
+              Crear Propiedad
+            </button>
+          </div>
+        )}
 
         {/* FOOTER SIMPLE */}
-        <footer className="mt-20 pb-10 text-center">
+        <footer className="mt-8 pb-6 text-center">
            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">
              Admin System &copy; {new Date().getFullYear()} - Riquelme Propiedades
            </p>

@@ -10,7 +10,7 @@ import {
   Users,
   Building2,
   Menu,
-  X,
+  ChevronLeft,
   LogOut,
   Shield,
   FileText,
@@ -37,7 +37,7 @@ const adminNavItems = [
 ];
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
@@ -55,6 +55,12 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         console.error("Error decoding token:", e);
       }
     }
+
+    // Restore sidebar state from localStorage
+    const savedState = localStorage.getItem("admin_sidebar_open");
+    if (savedState !== null) {
+      setSidebarOpen(savedState === "true");
+    }
   }, []);
 
   const isAdmin = userRole === "admin";
@@ -62,12 +68,15 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     ? [...baseNavItems, ...adminNavItems] 
     : baseNavItems;
 
-  function openSidebar() {
-    setSidebarOpen(true);
-  }
-
   function closeSidebar() {
     setSidebarOpen(false);
+  }
+
+  function toggleSidebar() {
+    const newState = !sidebarOpen;
+    setSidebarOpen(newState);
+    // Persist sidebar state
+    localStorage.setItem("admin_sidebar_open", String(newState));
   }
 
   async function handleLogout() {
@@ -85,51 +94,50 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
       {/* Sidebar */}
       <aside 
         className={`
-          w-64 bg-slate-900 text-white flex flex-col fixed h-full z-50 
-          transition-transform duration-300 lg:translate-x-0
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          bg-slate-900 text-white flex flex-col fixed h-full z-50 
+          transition-all duration-300 
+          ${sidebarOpen ? 'w-64 translate-x-0' : 'w-64 -translate-x-full lg:translate-x-0 lg:w-0 lg:overflow-hidden'}
         `}
       >
         {/* Logo */}
-        <div className="p-4 lg:p-6 border-b border-slate-800 flex items-start justify-between">
-          <div>
-            <Link href="/admin/properties" className="block" onClick={closeSidebar}>
-              <h1 className="text-lg font-black uppercase tracking-tighter italic">
+        <div className="p-3 lg:p-4 border-b border-slate-800 flex items-start justify-between">
+          <div className={sidebarOpen ? 'block' : 'hidden lg:block'}>
+            <Link href="/admin/properties" className="block">
+              <h1 className="text-base font-black uppercase tracking-tighter italic">
                 Riquelme <span className="text-blue-400 font-normal">Prop</span>
               </h1>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+              <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
                 Panel de Admin
               </p>
             </Link>
             {/* Saludo al usuario */}
             {userEmail && (
-              <p className="mt-3 text-sm text-slate-300">
+              <p className="mt-2 text-xs text-slate-300">
                 Hola, <span className="font-semibold text-blue-400">{userEmail.split('@')[0]}</span>!
               </p>
             )}
           </div>
-          {/* Botón cerrar en mobile */}
+          {/* Botón cerrar en mobile / toggle en desktop */}
           <button 
-            className="lg:hidden p-2 hover:bg-slate-800 rounded-lg"
-            onClick={closeSidebar}
-            aria-label="Cerrar menú"
+            className="p-2 hover:bg-slate-800 rounded-lg"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label={sidebarOpen ? "Cerrar menú" : "Abrir menú"}
           >
-            <X className="w-5 h-5" />
+            {sidebarOpen ? <ChevronLeft className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4">
-          <ul className="space-y-2">
+        <nav className={`flex-1 p-3 lg:p-4 ${!sidebarOpen ? 'lg:p-2' : ''}`}>
+          <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  onClick={closeSidebar}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-colors text-sm ${!sidebarOpen ? 'lg:justify-center lg:px-2' : ''}`}
                 >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
+                  <item.icon className="w-4 h-4 flex-shrink-0" />
+                  <span className={`font-medium text-xs ${!sidebarOpen ? 'lg:hidden' : ''}`}>{item.label}</span>
                 </Link>
               </li>
             ))}
@@ -137,21 +145,20 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-800 space-y-2">
+        <div className={`p-3 lg:p-4 border-t border-slate-800 space-y-1 ${!sidebarOpen ? 'lg:p-2 lg:space-y-1' : ''}`}>
           <Link
             href="/"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
-            onClick={closeSidebar}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 hover:bg-slate-800 hover:text-white transition-colors text-sm ${!sidebarOpen ? 'lg:justify-center lg:px-2' : ''}`}
           >
-            <Home className="w-5 h-5" />
-            <span className="font-medium">Ver Sitio</span>
+            <Home className="w-4 h-4 flex-shrink-0" />
+            <span className={`font-medium text-xs ${!sidebarOpen ? 'lg:hidden' : ''}`}>Ver Sitio</span>
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors w-full"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-500 hover:bg-red-500/10 hover:text-red-400 transition-colors w-full text-sm ${!sidebarOpen ? 'lg:justify-center lg:px-2' : ''}`}
           >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Cerrar Sesión</span>
+            <LogOut className="w-4 h-4 flex-shrink-0" />
+            <span className={`font-medium text-xs ${!sidebarOpen ? 'lg:hidden' : ''}`}>Cerrar Sesión</span>
           </button>
         </div>
       </aside>
@@ -165,17 +172,17 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         onClick={closeSidebar}
       />
 
-      {/* Botón hamburguesa - solo visible en mobile */}
+      {/* Botón flotante para mostrar/ocultar sidebar */}
       <button 
-        className="fixed top-4 left-4 z-30 lg:hidden p-2 bg-slate-900 text-white rounded-lg shadow-lg"
-        onClick={openSidebar}
-        aria-label="Abrir menú"
+        className="fixed top-4 left-4 z-30 p-2 bg-slate-900 text-white rounded-lg shadow-lg hover:bg-slate-800 transition-colors"
+        onClick={toggleSidebar}
+        aria-label={sidebarOpen ? "Ocultar menú" : "Mostrar menú"}
       >
-        <Menu className="w-6 h-6" />
+        {sidebarOpen ? <ChevronLeft className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {/* Main Content */}
-      <main className="flex-1 lg:ml-64 w-full pt-14 lg:pt-0">
+      {/* Main Content - usa todo el ancho cuando sidebar está oculto */}
+      <main className={`flex-1 w-full pt-14 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}`}>
         {children}
       </main>
       <Toaster 

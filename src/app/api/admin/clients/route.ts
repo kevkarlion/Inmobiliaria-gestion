@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/db/connection";
 import { ClientService } from "@/server/services/client.service";
+import { AuditService } from "@/server/services/audit.service";
 import { CreateClientDTO } from "@/dtos/client/create-client.dto";
 import { QueryClientDTO } from "@/dtos/client/query-client.dto";
 import { ClientResponse } from "@/dtos/client/client-response.dto";
@@ -68,6 +69,19 @@ export async function POST(req: Request) {
 
     const dto = new CreateClientDTO(body);
     const client = await ClientService.create(dto);
+
+    // Audit log
+    if (currentUser && client) {
+      await AuditService.log({
+        action: "create",
+        entity: "client",
+        entityId: client.id,
+        userId: currentUser.id,
+        userEmail: currentUser.email,
+        description: `Cliente creado: ${client.name}`,
+        changes: { name: client.name, email: client.email },
+      });
+    }
 
     return NextResponse.json(client, { status: 201 });
   } catch (error: unknown) {
