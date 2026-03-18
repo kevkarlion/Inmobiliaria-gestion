@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { AlertModal } from "@/components/ui/alert-modal";
 import {
   Select,
   SelectContent,
@@ -63,6 +64,17 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
   });
 
   const [loading, setLoading] = useState(false);
+
+  // Alert modal state
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlert = (title: string, message: string) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertModalOpen(true);
+  };
 
   // 1. DATA DE PROVINCIAS (Ordenadas)
   const provinces = useMemo(() => [
@@ -185,11 +197,13 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
       if (!isJson) throw new Error("Respuesta inválida del servidor (no es JSON)");
       const data = await res.json();
 
-      alert("¡Propiedad publicada con éxito!");
+      showAlert("Éxito", "¡Propiedad publicada con éxito!");
       if (onCreate) onCreate(data);
-      onClose();
+      setTimeout(() => {
+        onClose();
+      }, 1500);
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      showAlert("Error", error.message || "Ocurrió un error al publicar la propiedad");
     } finally {
       setLoading(false);
     }
@@ -506,6 +520,14 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
           </div>
         ) : "Publicar ahora"}
       </Button>
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModalOpen}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => setAlertModalOpen(false)}
+      />
     </form>
   );
 }

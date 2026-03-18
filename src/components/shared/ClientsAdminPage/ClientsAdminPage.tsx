@@ -10,6 +10,7 @@ import { ClientStatus } from "@/domain/enums/client-status.enum";
 import { ClientSource } from "@/domain/enums/client-source.enum";
 import { Users, Plus, UserPlus, Search } from "lucide-react";
 import { toast } from "sonner";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
 
 interface Props {
   initialClients: ClientResponse[];
@@ -21,6 +22,19 @@ export default function ClientsAdminClient({ initialClients }: Props) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<ClientStatus | "all">("all");
   const [sourceFilter, setSourceFilter] = useState<ClientSource | "all">("all");
+
+  // Confirm modal state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: (() => void) | null;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: null,
+  });
 
   // Filtrar clientes
   const filteredClients = clients.filter((client) => {
@@ -52,7 +66,16 @@ export default function ClientsAdminClient({ initialClients }: Props) {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("¿Seguro quieres eliminar este cliente?")) return;
+    setConfirmModal({
+      isOpen: true,
+      title: "Eliminar Cliente",
+      message: "¿Seguro quieres eliminar este cliente?",
+      onConfirm: () => executeDelete(id),
+    });
+  }
+
+  async function executeDelete(id: string) {
+    setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: null });
     try {
       const res = await fetch(`/api/admin/clients/${id}`, { 
         method: "DELETE",
@@ -163,6 +186,16 @@ export default function ClientsAdminClient({ initialClients }: Props) {
             Admin System &copy; {new Date().getFullYear()} - Riquelme Propiedades
           </p>
         </footer>
+
+        {/* Confirm Modal */}
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          title={confirmModal.title}
+          message={confirmModal.message}
+          confirmLabel="Eliminar"
+          onConfirm={() => confirmModal.onConfirm?.()}
+          onCancel={() => setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: null })}
+        />
       </div>
     </div>
   );

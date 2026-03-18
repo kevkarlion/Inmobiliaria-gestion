@@ -7,12 +7,26 @@ import EditPropertyForm from "@/components/shared/EditPropertyForm/EditPropertyF
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { Building2, Plus, MapPin, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
 
 export default function PropertiesAdminClient({ initialProperties }: { initialProperties: PropertyResponse[] }) {
   const [properties, setProperties] = useState<PropertyResponse[]>(initialProperties);
   const [editingProperty, setEditingProperty] = useState<PropertyResponse | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+
+  // Confirm modal state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: (() => void) | null;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: null,
+  });
 
 
   
@@ -24,7 +38,16 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
   }
 
   async function handleDelete(slug: string) {
-    if (!confirm("¿Seguro quieres borrar esta propiedad?")) return;
+    setConfirmModal({
+      isOpen: true,
+      title: "Eliminar Propiedad",
+      message: "¿Seguro quieres borrar esta propiedad?",
+      onConfirm: () => executeDelete(slug),
+    });
+  }
+
+  async function executeDelete(slug: string) {
+    setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: null });
     try {
       const res = await fetch(`/api/properties/${slug}`, { method: "DELETE" });
       if (res.ok) {
@@ -253,6 +276,16 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
              Admin System &copy; {new Date().getFullYear()} - Riquelme Propiedades
            </p>
         </footer>
+
+        {/* Confirm Modal */}
+        <ConfirmModal
+          isOpen={confirmModal.isOpen}
+          title={confirmModal.title}
+          message={confirmModal.message}
+          confirmLabel="Eliminar"
+          onConfirm={() => confirmModal.onConfirm?.()}
+          onCancel={() => setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: null })}
+        />
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { AlertModal } from "@/components/ui/alert-modal";
 import {
   Select,
   SelectContent,
@@ -31,6 +32,17 @@ interface EditPropertyFormProps {
 export default function EditPropertyForm({ property, slug, onClose, onUpdate }: EditPropertyFormProps) {
   const [form, setForm] = useState<any>(() => mapPropertyToForm(property));
   const [loading, setLoading] = useState(false);
+
+  // Alert modal state
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlert = (title: string, message: string) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertModalOpen(true);
+  };
 
   useEffect(() => {
     setForm(mapPropertyToForm(property));
@@ -162,11 +174,13 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
       if (!isJson) throw new Error("Respuesta inválida del servidor (no es JSON)");
 
       const updatedProperty: PropertyResponse = await res.json();
-      alert("¡Propiedad actualizada con éxito!");
+      showAlert("Éxito", "¡Propiedad actualizada con éxito!");
       onUpdate(updatedProperty);
-      onClose();
+      setTimeout(() => {
+        onClose();
+      }, 1500);
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      showAlert("Error", error.message || "Ocurrió un error al actualizar la propiedad");
     } finally {
       setLoading(false);
     }
@@ -480,6 +494,14 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
           </div>
         ) : "Guardar Cambios"}
       </Button>
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModalOpen}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => setAlertModalOpen(false)}
+      />
     </form>
   );
 }

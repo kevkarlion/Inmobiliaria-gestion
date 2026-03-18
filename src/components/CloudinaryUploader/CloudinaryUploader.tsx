@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { AlertModal } from "@/components/ui/alert-modal";
 
 interface CloudinaryUploaderProps {
   onImageUpload: (urls: string[]) => void; // acepta múltiples URLs
@@ -16,6 +17,17 @@ export default function CloudinaryUploader({
 }: CloudinaryUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  // Alert modal state
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlert = (title: string, message: string) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertModalOpen(true);
+  };
 
   const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -33,14 +45,14 @@ export default function CloudinaryUploader({
         // Validar tipo
         const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
         if (!allowedTypes.includes(file.type)) {
-          alert("Solo se permiten imágenes JPEG, PNG, GIF o WEBP");
+          showAlert("Tipo de archivo no válido", "Solo se permiten imágenes JPEG, PNG, GIF o WEBP");
           continue;
         }
 
         // Validar tamaño (máx 5MB)
         const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
-          alert("La imagen es demasiado grande. Máximo 5MB");
+          showAlert("Archivo demasiado grande", "La imagen es demasiado grande. Máximo 5MB");
           continue;
         }
 
@@ -67,7 +79,7 @@ export default function CloudinaryUploader({
       }
     } catch (err) {
       console.error(err);
-      alert("Error al subir las imágenes");
+      showAlert("Error de upload", "Error al subir las imágenes");
     } finally {
       setUploading(false);
       setProgress(0);
@@ -108,6 +120,14 @@ export default function CloudinaryUploader({
           ))}
         </div>
       )}
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModalOpen}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => setAlertModalOpen(false)}
+      />
     </div>
   );
 }

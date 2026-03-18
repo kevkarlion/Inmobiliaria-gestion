@@ -4,6 +4,7 @@ import { useState } from "react";
 import { UserResponse } from "@/dtos/user/user-response.dto";
 import { toast } from "sonner";
 import { Shield, ShieldOff, Plus, Search, X, Loader2, Calendar, MoreVertical, KeyRound } from "lucide-react";
+import { ConfirmModal } from "@/components/ui/confirm-modal";
 
 interface Props {
   initialUsers: UserResponse[];
@@ -32,6 +33,19 @@ export default function UsersAdminClient({ initialUsers }: Props) {
     email: "",
     password: "",
     role: "user" as "admin" | "user",
+  });
+
+  // Confirm modal state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: (() => void) | null;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: null,
   });
 
   // Filter users by search
@@ -75,10 +89,17 @@ export default function UsersAdminClient({ initialUsers }: Props) {
   }
 
   // Deactivate user
-  async function handleDeactivate(userId: string, userEmail: string) {
-    if (!confirm(`¿Estás seguro de desactivar al usuario "${userEmail}"?`)) {
-      return;
-    }
+  function handleDeactivate(userId: string, userEmail: string) {
+    setConfirmModal({
+      isOpen: true,
+      title: "Desactivar Usuario",
+      message: `¿Estás seguro de desactivar al usuario "${userEmail}"?`,
+      onConfirm: () => executeDeactivate(userId),
+    });
+  }
+
+  async function executeDeactivate(userId: string) {
+    setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: null });
 
     try {
       const res = await fetch(`/api/admin/users/${userId}`, {
@@ -493,6 +514,16 @@ export default function UsersAdminClient({ initialUsers }: Props) {
           </div>
         </div>
       )}
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmLabel="Desactivar"
+        onConfirm={() => confirmModal.onConfirm?.()}
+        onCancel={() => setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: null })}
+      />
 
       <div className="mt-4 text-center text-xs text-slate-400">
         Admin &copy; {new Date().getFullYear()}

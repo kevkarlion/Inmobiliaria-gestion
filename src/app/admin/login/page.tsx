@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { AlertModal } from "@/components/ui/alert-modal";
 import { Lock, User, Eye, EyeOff, Building2 } from "lucide-react";
 
 export default function AdminLogin() {
@@ -11,6 +12,17 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Alert modal state
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlert = (title: string, message: string) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertModalOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,10 +44,10 @@ export default function AdminLogin() {
         window.location.href = "/admin/properties"; 
       } else {
         const data = await res.json();
-        alert(data.error || "Error al ingresar");
+        showAlert("Error de autenticación", data.error || "Error al ingresar");
       }
-    } catch (error) {
-      alert("Error de conexión");
+    } catch {
+      showAlert("Error de conexión", "No se pudo conectar con el servidor. Por favor, intentá de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -119,6 +131,14 @@ export default function AdminLogin() {
           </p>
         </form>
       </div>
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModalOpen}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => setAlertModalOpen(false)}
+      />
     </div>
   );
 }
