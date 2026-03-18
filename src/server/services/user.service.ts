@@ -101,6 +101,28 @@ export class UserService {
   }
 
   /**
+   * Restablece la contraseña de un usuario por ID (admin only)
+   */
+  static async resetPasswordById(
+    id: string,
+    newPassword: string
+  ): Promise<void> {
+    await connectDB();
+
+    // Verificar que el usuario exista
+    const existingUser = await UserRepository.findById(id);
+    if (!existingUser) {
+      throw new NotFoundError("Usuario no encontrado");
+    }
+
+    // Hashear nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    // Actualizar contraseña
+    await UserRepository.updatePassword(id, hashedPassword);
+  }
+
+  /**
    * Actualiza un usuario
    */
   static async update(

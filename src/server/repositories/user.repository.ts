@@ -73,6 +73,10 @@ export class UserRepository {
     return UserModel.findByIdAndUpdate(id, { active: false }, { new: true }).lean();
   }
 
+  static async updatePassword(id: string, hashedPassword: string) {
+    return UserModel.findByIdAndUpdate(id, { password: hashedPassword }, { new: true }).lean();
+  }
+
   static async countByRole(role: UserRole) {
     return UserModel.countDocuments({ role, active: true });
   }
