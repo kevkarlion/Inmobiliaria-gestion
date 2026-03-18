@@ -86,6 +86,8 @@ export default function ClientsAdminClient({ initialClients }: Props) {
         toast.success("Cliente eliminado", {
           description: "El cliente ha sido eliminado correctamente.",
         });
+      } else {
+        toast.error("Error al eliminar cliente");
       }
     } catch (error) {
       console.error("Error deleting client:", error);

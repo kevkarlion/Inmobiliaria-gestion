@@ -6,6 +6,7 @@ import Image from "next/image";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { mapPropertyToForm } from "@/domain/mappers/propertyToForm.mapper";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
+import { toast } from "sonner";
 
 // Componentes de Shadcn/UI
 import { Input } from "@/components/ui/input";
@@ -174,13 +175,15 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
       if (!isJson) throw new Error("Respuesta inválida del servidor (no es JSON)");
 
       const updatedProperty: PropertyResponse = await res.json();
-      showAlert("Éxito", "¡Propiedad actualizada con éxito!");
+      toast.success("Propiedad editada correctamente", {
+        description: `Los cambios en ${updatedProperty.title} han sido guardados.`,
+      });
       onUpdate(updatedProperty);
       setTimeout(() => {
         onClose();
       }, 1500);
     } catch (error: any) {
-      showAlert("Error", error.message || "Ocurrió un error al actualizar la propiedad");
+      toast.error(error.message || "Ocurrió un error al actualizar la propiedad");
     } finally {
       setLoading(false);
     }

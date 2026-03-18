@@ -8,6 +8,7 @@ import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { Building2, Plus, MapPin, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
+import { toast } from "sonner";
 
 export default function PropertiesAdminClient({ initialProperties }: { initialProperties: PropertyResponse[] }) {
   const [properties, setProperties] = useState<PropertyResponse[]>(initialProperties);
@@ -52,9 +53,12 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
       const res = await fetch(`/api/properties/${slug}`, { method: "DELETE" });
       if (res.ok) {
         setProperties((p) => p.filter((x) => x.slug !== slug));
+        toast.success("Propiedad eliminada correctamente");
+      } else {
+        toast.error("Error al eliminar la propiedad");
       }
     } catch (error) {
-      console.error("Error deleting:", error);
+      toast.error("Error al eliminar la propiedad");
     }
   }
 

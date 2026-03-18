@@ -6,6 +6,7 @@ import Image from "next/image";
 import { PropertyFormType } from "@/domain/types/PropertyFormType.types";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
+import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -197,13 +198,15 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
       if (!isJson) throw new Error("Respuesta inválida del servidor (no es JSON)");
       const data = await res.json();
 
-      showAlert("Éxito", "¡Propiedad publicada con éxito!");
+      toast.success("Propiedad creada correctamente", {
+        description: `${data.title} ha sido publicada exitosamente.`,
+      });
       if (onCreate) onCreate(data);
       setTimeout(() => {
         onClose();
       }, 1500);
     } catch (error: any) {
-      showAlert("Error", error.message || "Ocurrió un error al publicar la propiedad");
+      toast.error(error.message || "Ocurrió un error al publicar la propiedad");
     } finally {
       setLoading(false);
     }
