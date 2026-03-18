@@ -3,6 +3,9 @@ import { ClientModel } from "@/db/schemas/client.schema";
 import { connectDB } from "@/db/connection";
 import { modelNames } from "mongoose";
 
+// Import Property model to register schema (required for populate on matches.property field)
+import "@/db/schemas/property.schema";
+
 type SortOption = Record<string, 1 | -1>;
 
 type FindAllOptions = {
