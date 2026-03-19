@@ -32,5 +32,7 @@ export function buildOgImageUrl(
   }
 
   const separator = absoluteUrl.includes("?") ? "&" : "?";
-  return `${absoluteUrl}${separator}fl=progressive,f_jpg,q_auto:best,w_1200,h_630,c_fill`;
+  // f_auto: deja que Cloudinary sirva el mejor formato (WebP, AVIF, JPEG)
+  // según lo que el crawler/WhatsApp soporte
+  return `${absoluteUrl}${separator}fl=progressive,f_auto,q_auto:best,w_1200,h_630,c_fill`;
 }
