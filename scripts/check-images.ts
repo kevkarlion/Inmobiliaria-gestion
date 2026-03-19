@@ -5,7 +5,7 @@ async function main() {
   const PropertySchema = new mongoose.Schema({}, { strict: false });
   const Property = mongoose.model("Property", PropertySchema);
 
-  const prop = await Property.findOne({ slug: "terreno-don-mariano-general-roca" }).lean();
+  const prop = await Property.findOne({ slug: "terreno-don-mariano-general-roca" }).lean() as { title?: string; images?: string[]; status?: string } | null;
 
   if (!prop) {
     console.log("Property not found");
