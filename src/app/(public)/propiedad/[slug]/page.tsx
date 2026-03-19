@@ -51,8 +51,12 @@ export async function generateMetadata({
 
   const description = `${baseDescription} Consultanos en Riquelme Propiedades, inmobiliaria en General Roca, Río Negro.`;
 
-  const image = property.images?.[0];
-  const optimizedImage = buildOgImageUrl(image);
+  // Handle both string and object formats for images
+  const rawImage = property.images?.[0];
+  const imageUrl = typeof rawImage === "string" 
+    ? rawImage 
+    : (rawImage as { url?: string })?.url || null;
+  const optimizedImage = buildOgImageUrl(imageUrl);
 
   return {
     title,
@@ -79,7 +83,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: image ? [image] : [],
+      images: imageUrl ? [imageUrl] : [],
     },
   };
 }

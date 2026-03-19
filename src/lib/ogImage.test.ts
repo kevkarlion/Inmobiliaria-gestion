@@ -1,5 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { buildOgImageUrl } from "./ogImage";
+
+// Mock the config module
+vi.mock("@/lib/config", () => ({
+  SITE_URL: "https://riquelmeprop.com",
+}));
 
 describe("buildOgImageUrl", () => {
   describe("Cloudinary URL transformation", () => {
@@ -55,11 +60,40 @@ describe("buildOgImageUrl", () => {
       const result = buildOgImageUrl(input);
       expect(result).toBe(input);
     });
+  });
 
+  describe("URL normalization", () => {
+    it("should prepend site URL to relative paths", () => {
+      const input = "/uploads/properties/123.jpg";
+      const result = buildOgImageUrl(input);
+      expect(result).toBe("https://riquelmeprop.com/uploads/properties/123.jpg");
+    });
+
+    it("should prepend https:// to URLs without protocol", () => {
+      const input = "images.example.com/pic.jpg";
+      const result = buildOgImageUrl(input);
+      expect(result).toBe("https://images.example.com/pic.jpg");
+    });
+
+    it("should handle relative paths with query params", () => {
+      const input = "/images/property.jpg?v=2";
+      const result = buildOgImageUrl(input);
+      expect(result).toBe("https://riquelmeprop.com/images/property.jpg?v=2");
+    });
+  });
+
+  describe("edge cases", () => {
     it("should handle empty string gracefully", () => {
       const result = buildOgImageUrl("");
       // Empty string is falsy, so returns null
       expect(result).toBeNull();
+    });
+
+    it("should handle Cloudinary relative URL", () => {
+      const input = "/res.cloudinary.com/demo/image/upload/sample.jpg";
+      const result = buildOgImageUrl(input);
+      // After making absolute, it should still contain Cloudinary and get transformed
+      expect(result).toContain("res.cloudinary.com");
     });
   });
 });
