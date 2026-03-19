@@ -1,20 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import PropertyCardAdmin from "@/components/shared/PropertyCardAdmin/PropertyCardAdmin";
 import CreatePropertyForm from "@/components/shared/PropertyForm/PropertyForm"; 
 import EditPropertyForm from "@/components/shared/EditPropertyForm/EditPropertyForm";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
-import { Building2, Plus, MapPin, Edit, Trash2 } from "lucide-react";
+import { Building2, Plus, MapPin, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { toast } from "sonner";
 
-export default function PropertiesAdminClient({ initialProperties }: { initialProperties: PropertyResponse[] }) {
+interface Props {
+  initialProperties: PropertyResponse[];
+  meta: { total: number; page: number; limit: number; pages: number };
+  page: number;
+}
+
+export default function PropertiesAdminClient({ initialProperties, meta, page }: Props) {
   const [properties, setProperties] = useState<PropertyResponse[]>(initialProperties);
+  const [currentMeta, setCurrentMeta] = useState(meta);
+  const [currentPage, setCurrentPage] = useState(page);
   const [editingProperty, setEditingProperty] = useState<PropertyResponse | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   // Confirm modal state
   const [confirmModal, setConfirmModal] = useState<{
@@ -29,13 +40,33 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
     onConfirm: null,
   });
 
+  async function goToPage(newPage: number) {
+    if (newPage < 1 || newPage > currentMeta.pages || newPage === currentPage) return;
+    setLoading(true);
+    setCurrentPage(newPage);
+    try {
+      const params = new URLSearchParams();
+      params.set("page", String(newPage));
+      const res = await fetch(`/api/properties?${params.toString()}`);
+      if (!res.ok) throw new Error("Error fetching page");
+      const data = await res.json();
+      setProperties(data.items);
+      setCurrentMeta(data.meta);
+      router.push(`/admin/properties?page=${newPage}`, { scroll: false });
+    } catch {
+      toast.error("Error al cargar la página");
+    } finally {
+      setLoading(false);
+    }
+  }
+
 
   
 
   // Handlers de Lógica
-  function handleCreate(newProperty: PropertyResponse) {
-    setProperties((prev) => [newProperty, ...prev]);
+  async function handleCreate(newProperty: PropertyResponse) {
     setShowCreateForm(false);
+    await refreshPage();
   }
 
   async function handleDelete(slug: string) {
@@ -52,20 +83,40 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
     try {
       const res = await fetch(`/api/properties/${slug}`, { method: "DELETE" });
       if (res.ok) {
-        setProperties((p) => p.filter((x) => x.slug !== slug));
         toast.success("Propiedad eliminada correctamente");
+        await refreshPage();
       } else {
         toast.error("Error al eliminar la propiedad");
       }
-    } catch (error) {
+    } catch {
       toast.error("Error al eliminar la propiedad");
     }
   }
 
   function handleUpdate(updatedProperty: PropertyResponse) {
-    setProperties((prev) => prev.map((p) => (p.id === updatedProperty.id ? updatedProperty : p)));
     setShowEditForm(false);
     setEditingProperty(null);
+    setProperties((prev) =>
+      prev.map((p) => (p.id === updatedProperty.id ? updatedProperty : p)),
+    );
+  }
+
+  async function refreshPage() {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.set("page", String(currentPage));
+      const res = await fetch(`/api/properties?${params.toString()}`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setProperties(data.items);
+      setCurrentMeta(data.meta);
+    } catch {
+      // Si falla el refresh, simplemente recargamos la página
+      router.refresh();
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -76,7 +127,14 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 px-2">
           <div>
             <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-[0.2em]">Inventario Actual</h2>
-            <p className="text-slate-700 font-medium text-lg">{properties.length} Propiedades registradas</p>
+            <p className="text-slate-700 font-medium text-lg">
+              {currentMeta.total} Propiedades registradas
+              {currentMeta.pages > 1 && (
+                <span className="text-slate-400 font-normal text-sm ml-2">
+                  — página {currentPage} de {currentMeta.pages}
+                </span>
+              )}
+            </p>
           </div>
 
           <button
@@ -270,6 +328,67 @@ export default function PropertiesAdminClient({ initialProperties }: { initialPr
                className="mt-6 bg-slate-900 text-white px-6 py-2 rounded-lg font-bold text-xs uppercase hover:bg-slate-800 transition-colors"
             >
               Crear Propiedad
+            </button>
+          </div>
+        )}
+
+        {/* PAGINATION CONTROLS */}
+        {currentMeta.pages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage <= 1 || loading}
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft size={16} />
+              Anterior
+            </button>
+
+            <div className="flex items-center gap-1">
+              {Array.from({ length: currentMeta.pages }, (_, i) => i + 1).map((p) => {
+                const show =
+                  p === 1 ||
+                  p === currentMeta.pages ||
+                  Math.abs(p - currentPage) <= 1;
+                const ellipsisBefore = p === 2 && currentPage > 4;
+                const ellipsisAfter =
+                  p === currentMeta.pages - 1 &&
+                  currentPage < currentMeta.pages - 3;
+
+                if (!show && !ellipsisBefore && !ellipsisAfter) return null;
+
+                if (ellipsisBefore || ellipsisAfter) {
+                  return (
+                    <span key={`ellipsis-${p}`} className="px-2 text-slate-400">
+                      …
+                    </span>
+                  );
+                }
+
+                return (
+                  <button
+                    key={p}
+                    onClick={() => goToPage(p)}
+                    disabled={loading}
+                    className={`min-w-[36px] h-9 flex items-center justify-center text-sm font-medium rounded-lg transition-colors ${
+                      p === currentPage
+                        ? "bg-blue-600 text-white"
+                        : "text-slate-700 bg-white border border-slate-200 hover:bg-slate-50"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage >= currentMeta.pages || loading}
+              className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              Siguiente
+              <ChevronRight size={16} />
             </button>
           </div>
         )}

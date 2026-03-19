@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PropertyService } from "@/server/services/property.service";
 import type { Metadata } from "next";
 import { getCanonicalUrl } from "@/lib/config";
+import { buildOgImageUrl } from "@/lib/ogImage";
 
 // ⚡ IMPORTANTE: metadata dinámica por slug (clave para compartir)
 export async function generateMetadata({
@@ -51,6 +52,7 @@ export async function generateMetadata({
   const description = `${baseDescription} Consultanos en Riquelme Propiedades, inmobiliaria en General Roca, Río Negro.`;
 
   const image = property.images?.[0];
+  const optimizedImage = buildOgImageUrl(image);
 
   return {
     title,
@@ -63,10 +65,10 @@ export async function generateMetadata({
       description,
       url: `/propiedad/${slug}`, // ahora relativa (mejor práctica)
       type: "website",
-      images: image
+      images: optimizedImage
         ? [
             {
-              url: image,
+              url: optimizedImage,
               width: 1200,
               height: 630,
             },

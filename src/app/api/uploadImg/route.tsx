@@ -34,6 +34,15 @@ export async function POST(req: Request) {
       ).end(buffer);
     });
 
+    // Dimension validation - warn if image is smaller than recommended 300x300px
+    if (result.width && result.height) {
+      if (result.width < 300 || result.height < 300) {
+        console.warn(
+          `[uploadImg] Image dimensions ${result.width}x${result.height}px are smaller than recommended 300x300px: ${result.secure_url}`
+        );
+      }
+    }
+
     return NextResponse.json({ 
       success: true, 
       data: [result.secure_url] 

@@ -8,6 +8,9 @@ import {
   Handshake,
   ArrowRight,
   MessageCircle,
+  Instagram,
+  Facebook,
+  Linkedin,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -24,6 +27,10 @@ interface TeamMember {
   title: string;
   image: string;
   registration?: string;
+  instagram?: string;
+  facebook?: string;
+  linkedin?: string;
+  whatsapp?: string;
 }
 
 const teamMembers: TeamMember[] = [
@@ -32,18 +39,46 @@ const teamMembers: TeamMember[] = [
     title: "Martillero Público y Corredor Inmobiliario",
     image: "/diego.webp",
     registration: "Mat. N° 361-RP-2021",
+    whatsapp: "https://wa.me/5492984582082",
+  },
+  {
+    name: "Candela Bonfanti",
+    title: "Asesora Inmobiliaria",
+    image: "/candela-bonfanti.webp",
+    
   },
   {
     name: "Fernanda Huebra",
     title: "Asesora Inmobiliaria",
     image: "/chica1.webp",
+    whatsapp: "https://wa.me/5492984396785"
   },
-  //{
-    /*name: "Stefy Anaya",
-    title: "Asesora Inmobiliaria",
-    image: "/chica2.webp",
-  },*/
+  {
+    name: "Kevin Riquelme",
+    title: "Asesor Inmobiliario & Estrategia Digital",
+    image: "/kevin-riquelme.webp",
+    instagram: "https://www.instagram.com/riquelmekevinandres?igsh=MWY1MXZ4cHA2eGcyYw%3D%3D&utm_source=qr",
+    facebook: "https://www.facebook.com/profile.php?id=61577873777985",
+    // linkedin: "https://www.linkedin.com/in/usuario",
+    whatsapp: "https://wa.me/5492984252859",
+  },
 ];
+
+function WhatsappIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M12.04 2C6.58 2 2.25 6.23 2.25 11.57c0 2.03.66 3.91 1.79 5.45L2 22l5.16-1.7a10.2 10.2 0 0 0 4.88 1.25h.01c5.46 0 9.79-4.23 9.79-9.57C21.84 6.23 17.5 2 12.04 2Zm-.02 17.14h-.01c-1.54 0-3.04-.42-4.35-1.22l-.31-.18-3.06 1.01 1-2.96-.2-.31a7.6 7.6 0 0 1-1.2-4.09c0-4.19 3.46-7.6 7.7-7.6 4.23 0 7.68 3.41 7.68 7.6 0 4.19-3.45 7.6-7.68 7.6Zm4.21-5.67c-.23-.12-1.37-.7-1.58-.78-.21-.08-.36-.12-.5.12-.15.23-.57.78-.7.94-.13.16-.26.17-.49.06-.23-.12-.96-.37-1.83-1.18-.68-.61-1.14-1.36-1.27-1.59-.13-.23-.01-.35.1-.47.1-.1.23-.26.34-.39.11-.13.15-.23.23-.39.08-.16.04-.29-.02-.41-.06-.12-.5-1.2-.68-1.64-.18-.44-.36-.37-.5-.38h-.43c-.15 0-.4.06-.61.29-.21.23-.8.78-.8 1.9 0 1.12.82 2.2.94 2.35.12.16 1.6 2.5 3.88 3.41.54.23.96.37 1.29.47.54.17 1.03.14 1.42.08.43-.06 1.37-.56 1.57-1.11.2-.55.2-1.02.14-1.11-.06-.09-.21-.15-.44-.27Z"
+      />
+    </svg>
+  );
+}
 
 interface NosotrosContentProps {
   isMobile: boolean;
@@ -193,12 +228,16 @@ export default function NosotrosPage() {
               Profesionales dedicados a su éxito inmobiliario.
             </p>
           </div>
-          {/* Flex + justify-center: 2, 3 o 4 cards siempre centradas en móvil y desktop */}
-          <div className="flex flex-wrap justify-center gap-10 md:gap-12 lg:gap-16">
+          {/* Grid responsive: 1 col en mobile, 2 o 3 según par/impar en desktop */}
+          <div
+            className={`grid grid-cols-1 gap-10 md:gap-12 lg:gap-16 justify-items-center ${
+              teamMembers.length % 2 === 0 ? "md:grid-cols-2" : "md:grid-cols-3"
+            }`}
+          >
             {teamMembers.map((member, index) => (
               <div
                 key={index}
-                className="w-full max-w-[320px] sm:w-72 shrink-0 text-center group"
+                className="w-full max-w-[320px] sm:w-72 text-center group"
               >
                 <div className="relative w-full aspect-3/4 mb-6 overflow-hidden rounded-sm border border-white/10 group-hover:border-gold-sand transition-all duration-700 mx-auto">
                   <Image
@@ -219,6 +258,57 @@ export default function NosotrosPage() {
                   <p className="font-montserrat text-slate-500 text-[10px] mt-2 tracking-widest uppercase">
                     {member.registration}
                   </p>
+                )}
+                {(member.instagram ||
+                  member.facebook ||
+                  member.linkedin ||
+                  member.whatsapp) && (
+                  <div className="mt-4 flex items-center justify-center gap-4 text-slate-400">
+                    {member.instagram && (
+                      <a
+                        href={member.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Instagram de ${member.name}`}
+                        className="hover:text-gold-sand transition-colors"
+                      >
+                        <Instagram size={20} />
+                      </a>
+                    )}
+                    {member.facebook && (
+                      <a
+                        href={member.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Facebook de ${member.name}`}
+                        className="hover:text-gold-sand transition-colors"
+                      >
+                        <Facebook size={20} />
+                      </a>
+                    )}
+                    {member.linkedin && (
+                      <a
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`LinkedIn de ${member.name}`}
+                        className="hover:text-gold-sand transition-colors"
+                      >
+                        <Linkedin size={20} />
+                      </a>
+                    )}
+                    {member.whatsapp && (
+                      <a
+                        href={member.whatsapp}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`WhatsApp de ${member.name}`}
+                        className="hover:text-gold-sand transition-colors"
+                      >
+                        <WhatsappIcon className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
                 )}
               </div>
             ))}
