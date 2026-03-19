@@ -2,10 +2,10 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent, useEffect, useMemo } from "react";
-import Image from "next/image";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { mapPropertyToForm } from "@/domain/mappers/propertyToForm.mapper";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
+import SortableImageGrid from "@/components/shared/SortableImage/SortableImageGrid";
 import { toast } from "sonner";
 
 // Componentes de Shadcn/UI
@@ -146,6 +146,10 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
       ...prev,
       images: prev.images.filter((_: any, i: number) => i !== index),
     }));
+  };
+
+  const handleReorder = (reorderedImages: string[]) => {
+    setForm((prev: any) => ({ ...prev, images: reorderedImages }));
   };
 
   async function handleSubmit(e: FormEvent) {
@@ -416,16 +420,11 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
       <div className="space-y-4">
         <Label className="block text-[10px] font-black uppercase tracking-widest text-gray-400">Galería de Imágenes</Label>
         <CloudinaryUploader onImageUpload={handleImagesUpload} folder="properties" />
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-4 mt-4">
-          {form.images?.map((img: string, idx: number) => (
-            <div key={idx} className="relative aspect-square rounded-xl border border-white/10 overflow-hidden group shadow-lg">
-              <Image src={img} alt="preview" fill className="object-cover transition-transform group-hover:scale-110" unoptimized />
-              <button type="button" onClick={() => removeImage(idx)} className="absolute inset-0 bg-red-600/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-xs font-bold">
-                ✕
-              </button>
-            </div>
-          ))}
-        </div>
+        <SortableImageGrid
+          images={form.images || []}
+          onReorder={handleReorder}
+          onRemove={removeImage}
+        />
       </div>
 
       {/* SECCIÓN 7: FLAGS */}

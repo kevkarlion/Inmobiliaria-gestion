@@ -202,6 +202,7 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
               <table className="w-full text-sm min-w-[900px]">
                 <thead className="bg-slate-100 border-b border-slate-200 sticky top-0 z-10">
                   <tr>
+                    <th className="text-center px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 w-14">Img</th>
                     <th className="text-left px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100">Tipo</th>
                     <th className="text-left px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100">Título</th>
                     <th className="text-left px-2 py-2 text-[10px] font-bold text-slate-600 uppercase tracking-wider bg-slate-100 hidden md:table-cell">Dirección</th>
@@ -217,6 +218,21 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
                 <tbody className="divide-y divide-slate-100">
                   {properties.map((p, index) => (
                     <tr key={p.id} className={`transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-blue-50`}>
+                      {/* Thumbnail */}
+                      <td className="px-1 py-1.5">
+                        {p.images?.[0]?.url ? (
+                          <img
+                            src={p.images[0].url}
+                            alt={p.title}
+                            className="w-10 h-10 rounded-lg object-cover mx-auto border border-slate-200"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg bg-slate-100 mx-auto flex items-center justify-center">
+                            <Building2 size={16} className="text-slate-300" />
+                          </div>
+                        )}
+                      </td>
+
                       {/* Tipo */}
                       <td className="px-2 py-2">
                         <span className="bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded font-medium uppercase">

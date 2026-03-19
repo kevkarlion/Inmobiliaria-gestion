@@ -2,10 +2,10 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent, useMemo } from "react";
-import Image from "next/image";
 import { PropertyFormType } from "@/domain/types/PropertyFormType.types";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
+import SortableImageGrid from "@/components/shared/SortableImage/SortableImageGrid";
 import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
@@ -168,6 +168,10 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
 
   const removeImage = (index: number) => {
     setForm((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+  };
+
+  const handleReorder = (reorderedImages: string[]) => {
+    setForm((prev) => ({ ...prev, images: reorderedImages }));
   };
 
   async function handleSubmit(e: FormEvent) {
@@ -442,16 +446,11 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
         <Label className="block text-[10px] font-black uppercase tracking-widest text-gray-400">Galería de Imágenes</Label>
         <CloudinaryUploader onImageUpload={handleImagesUpload} folder="properties" />
         
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-4 mt-4">
-          {form.images.map((img, idx) => (
-            <div key={idx} className="relative aspect-square rounded-xl border border-white/10 overflow-hidden group shadow-lg">
-              <Image src={img} alt="preview" fill className="object-cover transition-transform group-hover:scale-110" unoptimized />
-              <button type="button" onClick={() => removeImage(idx)} className="absolute inset-0 bg-red-600/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-xs font-bold">
-                ✕
-              </button>
-            </div>
-          ))}
-        </div>
+        <SortableImageGrid
+          images={form.images}
+          onReorder={handleReorder}
+          onRemove={removeImage}
+        />
       </div>
 
       {/* SECCIÓN 7: ETIQUETAS DE ESTADO (Flags) */}

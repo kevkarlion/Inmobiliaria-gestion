@@ -1,6 +1,6 @@
 import React from "react";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
-import { MapPin, Maximize, Phone, Tag, Hash, User } from "lucide-react";
+import { MapPin, Maximize, Phone, Tag, Hash, User, Building2 } from "lucide-react";
 import PropertyActions from "@/components/shared/PropertyCardsActions/PropertyCardsActions"; // Importamos el componente de cliente
 
 interface Props {
@@ -30,8 +30,27 @@ export default function PropertyCardAdmin({ property, onDelete, onEdit }: Props)
           {property.flags?.premium && <span className="bg-purple-100 text-purple-700 text-[10px] px-2 py-0.5 rounded-full border border-purple-200">Premium</span>}
         </div>
 
-        <h2 className="text-lg font-bold text-slate-800 leading-tight mb-1">{property.title}</h2>
-        <p className="text-xs text-slate-400 mb-3 font-mono">/{property.slug}</p>
+        <div className="flex gap-3 mb-2">
+          {/* Thumbnail */}
+          <div className="flex-shrink-0">
+            {property.images?.[0]?.url ? (
+              <img
+                src={property.images[0].url}
+                alt={property.title}
+                className="w-16 h-16 rounded-lg object-cover border border-slate-200"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-lg bg-slate-100 flex items-center justify-center border border-slate-200">
+                <Building2 size={24} className="text-slate-300" />
+              </div>
+            )}
+          </div>
+
+          <div className="min-w-0 flex flex-col justify-center">
+            <h2 className="text-lg font-bold text-slate-800 leading-tight mb-1">{property.title}</h2>
+            <p className="text-xs text-slate-400 font-mono truncate">/{property.slug}</p>
+          </div>
+        </div>
 
         {/* Detalles en Grid */}
         <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm text-slate-600 mb-4">
