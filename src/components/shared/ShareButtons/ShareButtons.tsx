@@ -23,20 +23,30 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
     }
   }
 
-  function shareOnFacebook() {
-    const fbAppUrl = `fb://facewebmodal/f?href=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`;
-    const fbWebUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`;
-    
-    // Intentar abrir la app primero, si falla abrir web
-    const start = Date.now();
-    window.location.href = fbAppUrl;
-    
-    // Después de 1.5s, si no redireccionó, abrir la web
-    setTimeout(() => {
-      if (Date.now() - start < 2000) {
-        window.open(fbWebUrl, "_blank");
+  async function shareNative() {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title,
+          text: `${title} - ${url}`,
+          url,
+        });
+      } else {
+        // Fallback: copiar link
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        toast.success("¡Link copiado!");
+        setTimeout(() => setCopied(false), 2000);
       }
-    }, 1500);
+    } catch {
+      // User cancelled or error - silently ignore
+    }
+  }
+
+  function shareOnFacebook() {
+    // Abrir Facebook en nueva pestaña con los parámetros corretos
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`;
+    window.open(fbUrl, "_blank", "noopener,noreferrer");
   }
 
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${title} - ${url}`)}`;
@@ -64,6 +74,16 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         aria-label="Compartir en Facebook"
       >
         <Facebook size={16} />
+      </button>
+
+      <button
+        type="button"
+        onClick={shareNative}
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-neutral-600 text-white hover:bg-neutral-700 transition-colors shrink-0"
+        aria-label="Compartir"
+        title="Más opciones"
+      >
+        <Share2 size={16} />
       </button>
 
       <button
