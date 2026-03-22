@@ -118,7 +118,7 @@ export default async function PublicLayout({
           <BlogScrollRestoration />
         </Suspense>
 
-        <main className="flex flex-col">
+        <main className="flex flex-col min-h-screen lg:bg-white">
           {children}
         </main>
 
