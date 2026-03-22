@@ -1,4 +1,5 @@
 // layout.tsx (nested layout - no html/body tags, those are in root layout)
+import { Suspense } from "react";
 import "@/app/globals.css";
 import { SITE_URL } from "@/lib/config";
 import { PropertyProvider } from "@/context/PropertyContext";
@@ -8,6 +9,8 @@ import Footer from "@/components/shared/Footer/Footer";
 import WhatsAppButton from "@/components/shared/WhatsAppButton/WhatsAppButton";
 import { PropertyService } from "@/server/services/property.service";
 import { Toaster } from "sonner";
+import { PublicBackground } from "@/components/shared/PublicBackground/PublicBackground";
+import BlogScrollRestoration from "@/components/shared/BlogScrollRestoration";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -108,8 +111,12 @@ export default async function PublicLayout({
 
   return (
     <div className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}>
+      <PublicBackground />
       <PropertyProvider>
         <Navbar menuStructure={menuStructure} />
+        <Suspense fallback={null}>
+          <BlogScrollRestoration />
+        </Suspense>
 
         <main className="flex flex-col">
           {children}

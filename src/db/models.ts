@@ -16,6 +16,7 @@ import "@/db/schemas/requirement.schema";
 import "@/db/schemas/province.schema";
 import "@/db/schemas/city.schema";
 import "@/db/schemas/barrio.schema";
+import "@/db/schemas/blog-post.schema";
 
 // Tipos de propiedad
 import "@/domain/property-type/property-type.schema";

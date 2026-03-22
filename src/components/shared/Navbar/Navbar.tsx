@@ -265,6 +265,12 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                 Oportunidades
               </Link>
               <Link
+                href="/novedades"
+                className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
+              >
+                Novedades
+              </Link>
+              <Link
                 href="/nosotros"
                 scroll
                 className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
@@ -469,6 +475,13 @@ export default function Navbar({ menuStructure }: NavbarProps) {
               className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
             >
               Oportunidades
+            </Link>
+            <Link
+              href="/novedades"
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
+            >
+              Novedades
             </Link>
             <Link
               href="/nosotros"

@@ -1,0 +1,65 @@
+"use client";
+
+import { useState } from "react";
+import { toast } from "sonner";
+import { Share2, Facebook, MessageCircle, Link2, Check } from "lucide-react";
+
+interface ShareButtonsProps {
+  url: string;
+  title: string;
+}
+
+export function ShareButtons({ url, title }: ShareButtonsProps) {
+  const [copied, setCopied] = useState(false);
+
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      toast.success("¡Link copiado!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("No se pudo copiar el link");
+    }
+  }
+
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`;
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mr-1">
+        Compartir
+      </span>
+
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors"
+        aria-label="Compartir en WhatsApp"
+      >
+        <MessageCircle size={16} />
+      </a>
+
+      <a
+        href={facebookUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+        aria-label="Compartir en Facebook"
+      >
+        <Facebook size={16} />
+      </a>
+
+      <button
+        type="button"
+        onClick={copyLink}
+        className="w-9 h-9 flex items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-300 hover:border-primary hover:text-primary transition-colors"
+        aria-label="Copiar link"
+      >
+        {copied ? <Check size={15} className="text-green-600" /> : <Link2 size={15} />}
+      </button>
+    </div>
+  );
+}

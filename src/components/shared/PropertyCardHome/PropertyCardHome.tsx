@@ -8,6 +8,8 @@ import {
   Square,
   ChevronRight,
   Sparkles,
+  Home,
+  Layers,
 } from "lucide-react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 
@@ -15,7 +17,12 @@ interface Props {
   property: PropertyUI;
 }
 
+const isLandType = (typeSlug?: string) => 
+  typeSlug === "terreno" || typeSlug === "loteo" || typeSlug === "lote";
+
 export default function PropertyCardHome({ property }: Props) {
+  const isLand = isLandType(property.typeSlug);
+  
   return (
     <Link
       href={`/propiedad/${property.slug}`}
@@ -51,18 +58,35 @@ export default function PropertyCardHome({ property }: Props) {
           </div>
 
           <div className="flex gap-1.5">
-            <div className="flex items-center gap-1 backdrop-blur-md bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-white">
-              <BedDouble size={12} className="text-gold-sand" />
-              <span className="text-[10px] font-bold">
-                {property.rooms || 0}
-              </span>
-            </div>
-            <div className="flex items-center gap-1 backdrop-blur-md bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-white">
-              <Square size={10} className="text-gold-sand" />
-              <span className="text-[10px] font-bold">
-                {property.coveredM2 || 0}m²
-              </span>
-            </div>
+            {/* Ambientes - solo si NO es terreno/loteo */}
+            {!isLand && property.rooms !== undefined && property.rooms > 0 && (
+              <div className="flex items-center gap-1 backdrop-blur-md bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-white">
+                <BedDouble size={12} className="text-gold-sand" />
+                <span className="text-[10px] font-bold">
+                  {property.rooms}
+                </span>
+              </div>
+            )}
+            
+            {/* M2 Cubiertos */}
+            {property.coveredM2 !== undefined && property.coveredM2 > 0 && (
+              <div className="flex items-center gap-1 backdrop-blur-md bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-white">
+                <Home size={10} className="text-gold-sand" />
+                <span className="text-[10px] font-bold">
+                  {property.coveredM2}m²
+                </span>
+              </div>
+            )}
+            
+            {/* M2 Total */}
+            {property.totalM2 !== undefined && property.totalM2 > 0 && (
+              <div className="flex items-center gap-1 backdrop-blur-md bg-white/5 px-2.5 py-1 rounded-full border border-white/10 text-white">
+                <Square size={10} className="text-gold-sand" />
+                <span className="text-[10px] font-bold">
+                  {property.totalM2}m²
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

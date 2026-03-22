@@ -52,10 +52,63 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 90],
     remotePatterns: [
+      // Cloudinary
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-        // Esto permite cualquier bucket de Cloudinary
+        pathname: "/**",
+      },
+      // Stock images - Unsplash
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      // Stock images - Pexels
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/**",
+      },
+      // Stock images - Pixabay
+      {
+        protocol: "https",
+        hostname: "cdn.pixabay.com",
+        pathname: "/**",
+      },
+      // Stock images - iStock
+      {
+        protocol: "https",
+        hostname: "www.istockphoto.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "media.istockphoto.com",
+        pathname: "/**",
+      },
+      // Stock images - Getty Images
+      {
+        protocol: "https",
+        hostname: "www.gettyimages.com",
+        pathname: "/**",
+      },
+      // Stock images - Shutterstock
+      {
+        protocol: "https",
+        hostname: "www.shutterstock.com",
+        pathname: "/**",
+      },
+      // Freelarge - common free stock
+      {
+        protocol: "https",
+        hostname: "freelarge.com",
+        pathname: "/**",
+      },
+      // Placeholder services
+      {
+        protocol: "https",
+        hostname: "placehold.co",
         pathname: "/**",
       },
     ],

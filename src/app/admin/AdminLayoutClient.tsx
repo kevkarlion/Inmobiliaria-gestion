@@ -14,6 +14,7 @@ import {
   LogOut,
   Shield,
   FileText,
+  Newspaper,
 } from "lucide-react";
 import { Toaster } from "sonner";
 import { useState, useEffect } from "react";
@@ -48,6 +49,7 @@ function useViewport() {
 const baseNavItems = [
   { href: "/admin/properties", icon: Building2, label: "Propiedades" },
   { href: "/admin/clients", icon: Users, label: "Clientes" },
+  { href: "/admin/novedades", icon: Newspaper, label: "Novedades" },
 ];
 
 // Admin-only navigation items
