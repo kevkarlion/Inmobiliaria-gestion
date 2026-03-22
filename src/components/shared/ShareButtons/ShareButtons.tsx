@@ -23,8 +23,23 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
     }
   }
 
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`;
-  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  function shareOnFacebook() {
+    const fbAppUrl = `fb://facewebmodal/f?href=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`;
+    const fbWebUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`;
+    
+    // Intentar abrir la app primero, si falla abrir web
+    const start = Date.now();
+    window.location.href = fbAppUrl;
+    
+    // Después de 1.5s, si no redireccionó, abrir la web
+    setTimeout(() => {
+      if (Date.now() - start < 2000) {
+        window.open(fbWebUrl, "_blank");
+      }
+    }, 1500);
+  }
+
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${title} - ${url}`)}`;
 
   return (
     <div className="flex flex-wrap items-center gap-2 sm:gap-2">
@@ -42,15 +57,14 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         <MessageCircle size={16} />
       </a>
 
-      <a
-        href={facebookUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        type="button"
+        onClick={shareOnFacebook}
         className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
         aria-label="Compartir en Facebook"
       >
         <Facebook size={16} />
-      </a>
+      </button>
 
       <button
         type="button"
