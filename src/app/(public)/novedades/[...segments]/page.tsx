@@ -191,7 +191,7 @@ async function PostView(slug: string) {
 
         {/* ── Share + breadcrumb bar ── */}
         <div className="max-w-4xl mx-auto px-4 pb-6 border-b border-neutral-100">
-          <div className="flex items-center justify-between py-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3">
             <nav className="flex items-center gap-2 text-xs text-neutral-400">
               <Link href="/" className="hover:text-primary transition-colors">Inicio</Link>
               <span>/</span>

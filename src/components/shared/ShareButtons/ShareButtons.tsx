@@ -27,8 +27,8 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mr-1">
+    <div className="flex flex-wrap items-center gap-2 sm:gap-2">
+      <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider w-full sm:w-auto sm:mr-1">
         Compartir
       </span>
 
@@ -36,7 +36,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-9 h-9 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600 transition-colors shrink-0"
         aria-label="Compartir en WhatsApp"
       >
         <MessageCircle size={16} />
@@ -46,7 +46,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         href={facebookUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+        className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
         aria-label="Compartir en Facebook"
       >
         <Facebook size={16} />
@@ -55,7 +55,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
       <button
         type="button"
         onClick={copyLink}
-        className="w-9 h-9 flex items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-300 hover:border-primary hover:text-primary transition-colors"
+        className="w-9 h-9 flex items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-600 dark:text-neutral-300 hover:border-primary hover:text-primary transition-colors shrink-0"
         aria-label="Copiar link"
       >
         {copied ? <Check size={15} className="text-green-600" /> : <Link2 size={15} />}
