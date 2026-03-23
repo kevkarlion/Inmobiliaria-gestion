@@ -119,10 +119,10 @@ export function TipTapEditor({
   }
 
   return (
-    <div className="border border-neutral-300 dark:border-neutral-700 rounded-lg overflow-hidden bg-white dark:bg-neutral-900">
-      {/* Toolbar */}
-      <div className="relative h-10 flex flex-wrap items-center gap-1 px-2 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
-        <div className="sticky top-0 z-10 flex flex-wrap items-center gap-1 h-full">
+    <div className="border border-neutral-300 dark:border-neutral-700 rounded-lg overflow-hidden bg-white dark:bg-neutral-900 flex flex-col max-h-[500px]">
+      {/* Toolbar - sticky */}
+      <div className="sticky top-0 z-20 flex-none h-10 flex flex-wrap items-center gap-1 px-2 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
+        <div className="flex flex-wrap items-center gap-1 h-full">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -253,8 +253,10 @@ export function TipTapEditor({
         </div>
       </div>
 
-      {/* Editor */}
-      <EditorContent editor={editor} />
+      {/* Editor - scrollable area */}
+      <div className="flex-1 overflow-y-auto">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }

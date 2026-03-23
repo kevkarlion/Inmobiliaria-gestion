@@ -1,3 +1,4 @@
+//novedades/[...segments]/page.tsx
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -131,16 +132,16 @@ async function PostView(slug: string) {
 
       <article className="min-h-screen bg-white">
         {/* ── Header full-bleed ── */}
-        <header className="relative h-[60vh] md:h-[70vh] lg:h-[80vh]">
+        <header className="relative mb-8 min-h-[80vh] md:min-h-[50vh] lg:min-h-[85vh]">
           {/* Botón Volver debajo de la navbar */}
-          <div className="absolute top-16 sm:top-20 left-4 z-20">
+          <div className="absolute top-16 left-4 z-20">
             <Link
               href="/novedades"
               scroll={false}
               className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-black/40 backdrop-blur-sm text-white/90 text-sm hover:bg-black/60 hover:text-white transition-colors"
             >
               <ArrowLeft size={14} />
-              <span className="hidden sm:inline">Volver</span>
+              Volver
             </Link>
           </div>
 
@@ -157,24 +158,24 @@ async function PostView(slug: string) {
           </div>
           
           {/* Gradiente oscuro superpuesto */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-          {/* Contenido - alinhado al final de la imagen */}
-          <div className="absolute bottom-0 left-0 right-0 max-w-4xl mx-auto px-4 pb-8 md:pb-12 lg:pb-16 pt-32 md:pt-40">
-            <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-4">
+          {/* Contenido - al fondo de la imagen */}
+          <div className="absolute bottom-0 left-0 right-0 max-w-4xl mx-auto px-4 pb-10 pt-28 md:pt-28 lg:pt-56">
+            <div className="flex flex-wrap items-center gap-2 mb-4">
               <CategoryBadge slug={ui.category} size="md" />
               <span className="flex items-center gap-1 text-xs text-white/70">
                 <Clock size={11} />
                 {ui.readingTime} min de lectura
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-montserrat text-white leading-tight mb-3 md:mb-4 max-w-3xl">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-montserrat text-white leading-tight mb-4 max-w-3xl">
               {ui.title}
             </h1>
-            <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed mb-4 md:mb-6">
+            <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed mb-6">
               {ui.excerpt}
             </p>
-            <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm text-white/60">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
               <span className="flex items-center gap-1.5">
                 <User size={14} />
                 {ui.author}

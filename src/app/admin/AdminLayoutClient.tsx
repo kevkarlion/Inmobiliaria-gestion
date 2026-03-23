@@ -260,7 +260,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
       )}
 
       {/* Main Content - usa todo el ancho cuando sidebar está oculto */}
-      <main className={`flex-1 w-full pt-14 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}`}>
+      <main className={`flex-1 w-full pt-14 bg-white ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}`}>
         {children}
       </main>
       <Toaster
