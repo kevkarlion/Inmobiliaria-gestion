@@ -110,7 +110,7 @@ export default async function PublicLayout({
   }
 
   return (
-    <div className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}>
+    <div className={`${montserrat.variable} ${lora.variable} ${inter.variable} min-h-screen`}>
       <PublicBackground />
       <PropertyProvider>
         <Navbar menuStructure={menuStructure} />
@@ -118,7 +118,7 @@ export default async function PublicLayout({
           <BlogScrollRestoration />
         </Suspense>
 
-        <main className="flex flex-col min-h-screen lg:bg-white">
+        <main className="flex flex-col min-h-screen w-full md:bg-white">
           {children}
         </main>
 
