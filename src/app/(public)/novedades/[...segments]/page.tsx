@@ -132,9 +132,9 @@ async function PostView(slug: string) {
 
       <article className="min-h-screen bg-white">
         {/* ── Header full-bleed ── */}
-        <header className="relative mb-8 min-h-[80vh] md:min-h-[50vh] lg:min-h-[85vh]">
-          {/* Botón Volver debajo de la navbar */}
-          <div className="absolute top-16 left-4 z-20">
+        <header className="relative mb-8 min-h-[calc(85vh-40px)] md:min-h-[calc(80vh-40px)] lg:min-h-[calc(100vh-40px)] xl:min-h-[calc(100vh-60px)] 2xl:min-h-[calc(100vh-80px)]">
+          {/* Botón Volver debajo del navbar */}
+          <div className="absolute top-[90px] md:top-[180px] lg:top-[190px] left-4 z-20">
             <Link
               href="/novedades"
               scroll={false}
@@ -145,8 +145,8 @@ async function PostView(slug: string) {
             </Link>
           </div>
 
-          {/* Imagen de fondo (o placeholder oscuro si no hay imagen) */}
-          <div className="absolute inset-0 bg-neutral-800">
+          {/* Imagen de fondo */}
+          <div className="absolute inset-0 bg-neutral-800 ">
             <SafeImage
               src={ui.featuredImage}
               alt=""
@@ -160,8 +160,8 @@ async function PostView(slug: string) {
           {/* Gradiente oscuro superpuesto */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-          {/* Contenido - al fondo de la imagen */}
-          <div className="absolute bottom-0 left-0 right-0 max-w-4xl mx-auto px-4 pb-10 pt-28 md:pt-28 lg:pt-56">
+          {/* Contenido - alineado al fondo con flex */}
+          <div className="absolute inset-0 flex flex-col justify-end max-w-4xl mx-auto px-4 pb-8 lg:pb-12 pt-[220px] md:pt-[245px] lg:pt-[265px]">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <CategoryBadge slug={ui.category} size="md" />
               <span className="flex items-center gap-1 text-xs text-white/70">
@@ -169,10 +169,10 @@ async function PostView(slug: string) {
                 {ui.readingTime} min de lectura
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-montserrat text-white leading-tight mb-4 max-w-3xl">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-montserrat text-white leading-tight mb-4 max-w-3xl">
               {ui.title}
             </h1>
-            <p className="text-base sm:text-lg text-white/80 max-w-2xl leading-relaxed mb-6">
+            <p className="text-base text-white/80 max-w-2xl leading-relaxed mb-6">
               {ui.excerpt}
             </p>
             <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
@@ -207,13 +207,13 @@ async function PostView(slug: string) {
         {/* ── Article body ── */}
         <div className="max-w-4xl mx-auto px-4 py-10 md:py-12">
           <div
-            className="prose prose-slate max-w-none
+            className="prose prose-slate prose-base md:prose-lg max-w-none
               prose-headings:font-montserrat prose-headings:font-bold
               prose-headings:text-neutral-900
               prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
               prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
               prose-p:text-neutral-700
-              prose-p:text-base prose-p:leading-loose
+              prose-p:leading-loose
               prose-a:text-primary prose-a:no-underline hover:prose-a:underline
               prose-img:rounded-2xl prose-img:shadow-lg prose-img:mx-auto prose-img:w-full
               prose-strong:text-neutral-900
