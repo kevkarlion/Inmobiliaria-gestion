@@ -132,6 +132,26 @@
     }
   }
 
+  /* parche mágico para evitar espacios blancos y problemas de scroll */
+  .navbar-container::before {
+    content: "";
+    position: absolute;
+    top: -200vh;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 200vh;
+    z-index: -1;
+    background-color: #001d3d;
+    pointer-events: none;
+  }
+
+  @media (min-width: 1024px) {
+    .navbar-container::before {
+      background-color: white;
+    }
+  }
+
   .btn-cta {
     display: inline-flex;
     align-items: center;
