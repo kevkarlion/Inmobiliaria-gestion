@@ -7,29 +7,29 @@ export default async function Hero() {
   const allProperties = await getUiProperties({ limit: 20 });
 
   return (
-    <section className="w-full bg-oxford">
+    <section className="w-full min-h-screen bg-oxford">
       {/* BLOQUE HERO */}
-      <div className="relative w-full ">
+      <div className="relative w-full min-h-screen">
         {/* IMÁGENES */}
-        <div className="block lg:hidden">
+        <div className="block lg:hidden absolute inset-0 -top-16">
           <Image
             src="/hero-mobile.webp"
             alt="Venta de casas, departamentos y terrenos en General Roca"
             width={1600}
             height={1000}
             priority
-            className="w-full h-[92vh] object-cover"
+            className="w-full h-[calc(100vh+64px)] object-cover"
           />
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:block absolute inset-0 -top-16 lg:top-0">
           <Image
             src="/bg-hero.webp"
             alt="Propiedades exclusivas en General Roca - Riquelme Propiedades"
             width={2400}
             height={1600}
             priority
-            className="w-full h-[110vh] object-cover"
+            className="w-full h-[calc(100vh+64px)] lg:h-[calc(100vh+120px)] object-cover"
           />
         </div>
 
@@ -49,7 +49,7 @@ export default async function Hero() {
                 </span>
 
                 {/* Título principal con gradiente parcial */}
-                <span className="text-3xl md:text-5xl lg:text-[56px] font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
+                <span className="text-2xl md:text-4xl lg:text-4xl xl:text-5xl font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
                   <span className="text-transparent bg-clip-text bg-linear-to-r from-gold-sand to-yellow-600 font-extrabold">
                     Casas, <span className="text-white/90">Departamentos</span>
                   </span>
@@ -60,7 +60,7 @@ export default async function Hero() {
               </h1>
 
               {/* Subtítulo SEO */}
-              <p className="mt-2 text-slate-200 text-base md:text-xl font-light leading-relaxed max-w-lg drop-shadow-md">
+              <p className="mt-2 text-slate-200 text-sm md:text-lg lg:text-base xl:text-lg font-light leading-relaxed max-w-lg drop-shadow-md">
                 Propiedades y terrenos en venta en{" "}
                 <span className="text-white font-medium italic underline decoration-gold-sand/40">
                   General Roca

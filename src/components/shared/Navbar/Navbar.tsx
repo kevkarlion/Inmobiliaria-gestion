@@ -118,7 +118,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
 
       {/* --- MAIN NAV --- */}
       <nav
-        className="text-white relative z-10 font-montserrat"
+        className="text-white relative z-40 font-montserrat"
         style={{ backgroundColor: NAV_COLOR }}
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -297,7 +297,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
               </a>
               <button
                 type="button"
-                className="lg:hidden p-2 text-gold-sand focus:outline-none"
+                className="lg:hidden p-2 text-gold-sand focus:outline-none z-[60]"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}
                 aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
