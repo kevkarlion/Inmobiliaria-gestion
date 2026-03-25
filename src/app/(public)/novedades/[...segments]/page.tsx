@@ -141,7 +141,7 @@ async function PostView(slug: string) {
           - Mobile: pt-20 (80px from top) for back button
           - LG+: pt-24 (96px) for back button to clear top bar + nav
         */}
-        <header className="relative mb-8 min-h-[60vh] sm:min-h-[70vh] lg:min-h-[85vh]">
+        <header className="relative mb-6 sm:mb-8 min-h-[63vh] sm:min-h-[68vh] lg:min-h-[88vh] xl:min-h-[92vh]">
           {/* Botón Volver debajo del navbar - siempre visible */}
           <div className="absolute top-16 lg:top-[154px] left-3 sm:left-4 z-30">
             <Link
@@ -171,8 +171,14 @@ async function PostView(slug: string) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
           {/* Contenido - alineado al fondo con flex, spacing dinámico según navbar */}
-          {/* Navbar heights: mobile=64px, laptop/desktop=154px */}
-          <div className="absolute inset-0 flex flex-col justify-end pb-6 sm:pb-8 lg:pb-12 pt-28 sm:pt-32 lg:pt-[170px] xl:pt-[180px] px-4 sm:px-6 lg:px-8 z-10">
+          {/* 
+            Breakpoints:
+            - Mobile: navbar 64px → pt-20 (80px)
+            - Tablet: navbar 64px → pt-24 (96px)  
+            - Laptop (lg): navbar 154px → pt-32 (128px) para que baje con la imagen más grande
+            - Desktop (xl): navbar 154px → pt-28 (112px)
+          */}
+          <div className="absolute inset-0 flex flex-col justify-end xl:justify-center pb-6 sm:pb-8 lg:pb-10 pt-24 sm:pt-28 lg:pt-[160px] xl:pt-[160px] 2xl:pt-[170px] px-4 sm:px-6 lg:px-8 z-10">
             <div className="max-w-4xl mx-auto w-full">
               {/* Meta info */}
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
