@@ -132,60 +132,80 @@ async function PostView(slug: string) {
 
       <article className="min-h-screen bg-white">
         {/* ── Header full-bleed ── */}
-        <header className="relative mb-8 min-h-[calc(85vh-40px)] md:min-h-[calc(80vh-40px)] lg:min-h-[calc(100vh-40px)] xl:min-h-[calc(100vh-60px)] 2xl:min-h-[calc(100vh-80px)]">
-          {/* Botón Volver debajo del navbar */}
-          <div className="absolute top-[90px] md:top-[180px] lg:top-[190px] left-4 z-20">
+        {/* 
+          Navbar heights:
+          - Mobile/LG below: 64px (h-16) 
+          - Desktop LG+: top bar ~72px + nav 64px = ~136px total
+          
+          We use:
+          - Mobile: pt-20 (80px from top) for back button
+          - LG+: pt-24 (96px) for back button to clear top bar + nav
+        */}
+        <header className="relative mb-8 min-h-[60vh] sm:min-h-[70vh] lg:min-h-[85vh]">
+          {/* Botón Volver debajo del navbar - siempre visible */}
+          <div className="absolute top-16 lg:top-[154px] left-3 sm:left-4 z-30">
             <Link
               href="/novedades"
               scroll={false}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-black/40 backdrop-blur-sm text-white/90 text-sm hover:bg-black/60 hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-black/50 backdrop-blur-sm text-white/90 text-xs sm:text-sm font-medium hover:bg-black/70 hover:text-white transition-all shadow-lg"
             >
               <ArrowLeft size={14} />
               Volver
             </Link>
           </div>
 
-          {/* Imagen de fondo */}
-          <div className="absolute inset-0 bg-neutral-800 ">
+          {/* Imagen de fondo - cover total */}
+          <div className="absolute inset-0 bg-neutral-800">
             <SafeImage
               src={ui.featuredImage}
               alt=""
               fill
+              loading="eager"
               className="object-cover"
               fallbackText=""
               darkPlaceholder
             />
           </div>
           
-          {/* Gradiente oscuro superpuesto */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          {/* Gradiente oscuro superpuesto - más suave para mejor legibilidad */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
-          {/* Contenido - alineado al fondo con flex */}
-          <div className="absolute inset-0 flex flex-col justify-end max-w-4xl mx-auto px-4 pb-8 lg:pb-12 pt-[220px] md:pt-[245px] lg:pt-[265px]">
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <CategoryBadge slug={ui.category} size="md" />
-              <span className="flex items-center gap-1 text-xs text-white/70">
-                <Clock size={11} />
-                {ui.readingTime} min de lectura
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-montserrat text-white leading-tight mb-4 max-w-3xl">
-              {ui.title}
-            </h1>
-            <p className="text-base text-white/80 max-w-2xl leading-relaxed mb-6">
-              {ui.excerpt}
-            </p>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
-              <span className="flex items-center gap-1.5">
-                <User size={14} />
-                {ui.author}
-              </span>
-              {ui.publishedAtFormatted && (
-                <span className="flex items-center gap-1.5">
-                  <Calendar size={14} />
-                  {ui.publishedAtFormatted}
+          {/* Contenido - alineado al fondo con flex, spacing dinámico según navbar */}
+          {/* Navbar heights: mobile=64px, laptop/desktop=154px */}
+          <div className="absolute inset-0 flex flex-col justify-end pb-6 sm:pb-8 lg:pb-12 pt-28 sm:pt-32 lg:pt-[170px] xl:pt-[180px] px-4 sm:px-6 lg:px-8 z-10">
+            <div className="max-w-4xl mx-auto w-full">
+              {/* Meta info */}
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+                <CategoryBadge slug={ui.category} size="sm" />
+                <span className="flex items-center gap-1 text-xs text-white/60">
+                  <Clock size={11} />
+                  {ui.readingTime} min de lectura
                 </span>
-              )}
+              </div>
+               
+              {/* Título - responsive sizing */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold font-montserrat text-white leading-tight mb-2 sm:mb-3 lg:mb-4 max-w-4xl drop-shadow-lg">
+                {ui.title}
+              </h1>
+               
+              {/* Excerpt - más legible */}
+              <p className="text-sm sm:text-base text-white/80 max-w-2xl leading-relaxed mb-3 sm:mb-4 lg:mb-5">
+                {ui.excerpt}
+              </p>
+              
+              {/* Author & date */}
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-white/50">
+                <span className="flex items-center gap-1.5">
+                  <User size={14} />
+                  {ui.author}
+                </span>
+                {ui.publishedAtFormatted && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={14} />
+                    {ui.publishedAtFormatted}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </header>
