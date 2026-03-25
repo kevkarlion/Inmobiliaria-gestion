@@ -7,22 +7,22 @@ export default async function Hero() {
   const allProperties = await getUiProperties({ limit: 20 });
 
   return (
-    <section className="w-full min-h-screen bg-oxford overflow-hidden">
-      {/* BLOQUE HERO - extendido para cubrir scroll bounce */}
-      <div className="relative w-full min-h-[110vh] -mb-[10vh]">
-        {/* IMÁGENES - cubriendo también el área de scroll bounce */}
-        <div className="block lg:hidden absolute inset-0">
+    <section className="w-full min-h-screen bg-oxford">
+      {/* BLOQUE HERO */}
+      <div className="relative w-full min-h-screen">
+        {/* IMÁGENES */}
+        <div className="block lg:hidden">
           <Image
             src="/hero-mobile.webp"
             alt="Venta de casas, departamentos y terrenos en General Roca"
             width={1600}
             height={1000}
             priority
-            className="w-full h-[110vh] object-cover"
+            className="w-full h-[92vh] object-cover"
           />
         </div>
 
-        <div className="hidden lg:block absolute inset-0">
+        <div className="hidden lg:block">
           <Image
             src="/bg-hero.webp"
             alt="Propiedades exclusivas en General Roca - Riquelme Propiedades"
