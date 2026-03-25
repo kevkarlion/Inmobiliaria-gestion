@@ -172,7 +172,7 @@ async function PostView(slug: string) {
 
           {/* Contenido - alineado al fondo con flex, spacing dinámico según navbar */}
           {/* Navbar heights: mobile=64px, laptop/desktop=154px */}
-          <div className="absolute inset-0 flex flex-col justify-end pb-6 sm:pb-8 lg:pb-12 pt-24 sm:pt-28 lg:pt-[195px] xl:pt-[195px] 2xl:pt-[195px] px-4 sm:px-6 lg:px-8 z-10">
+          <div className="absolute inset-0 flex flex-col justify-end pb-6 sm:pb-8 lg:pb-12 pt-24 sm:pt-28 lg:pt-[195px] xl:pt-[165px] 2xl:pt-[170px] px-4 sm:px-6 lg:px-8 z-10">
             <div className="max-w-4xl mx-auto w-full ">
               {/* Meta info */}
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
