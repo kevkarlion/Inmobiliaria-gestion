@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export function PublicBackground() {
   useEffect(() => {
-    document.documentElement.style.backgroundColor = "#001d3d";
+    // No establecemos fondo azul por defecto - cada página define el suyo propio
     return () => {
       document.documentElement.style.backgroundColor = "";
     };
