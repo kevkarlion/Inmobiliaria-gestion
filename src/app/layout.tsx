@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${montserrat.variable} ${lora.variable} ${inter.variable}`} suppressHydrationWarning>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased overflow-x-hidden max-w-full">{children}</body>
     </html>
   );
 }

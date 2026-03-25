@@ -11,14 +11,14 @@ export default async function Hero() {
       {/* BLOQUE HERO */}
       <div className="relative w-full min-h-screen">
         {/* IMÁGENES */}
-        <div className="block lg:hidden">
+        <div className="block lg:hidden absolute inset-0">
           <Image
             src="/hero-mobile.webp"
             alt="Venta de casas, departamentos y terrenos en General Roca"
             width={1600}
             height={1000}
             priority
-            className="w-full h-[92vh] object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
 
@@ -38,7 +38,7 @@ export default async function Hero() {
         <div className="absolute inset-0 bg-linear-to-t from-oxford/40 via-transparent to-transparent" />
 
         {/* CONTENIDO PRINCIPAL */}
-        <div className="absolute inset-0 z-20 flex flex-col justify-center pt-32 pb-8">
+        <div className="absolute inset-0 z-20 flex flex-col justify-center pt-16 pb-8">
           <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
             {/* BLOQUE DE TEXTO */}
             <div className="max-w-2xl text-left mb-12 md:mb-8">
