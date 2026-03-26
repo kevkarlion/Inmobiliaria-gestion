@@ -287,14 +287,12 @@ export default function Navbar({ menuStructure }: NavbarProps) {
             </div>
 
             <div className="flex items-center gap-4">
-              <a
-                href="https://wa.me/5492984582082"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/tasacion"
                 className="hidden lg:block text-xs font-bold bg-gold-sand hover:bg-gold-hover text-oxford px-5 py-2.5 rounded-sm transition-all shadow-md active:scale-95"
               >
                 TASAR AHORA
-              </a>
+              </Link>
               <button
                 type="button"
                 className="lg:hidden p-2 text-gold-sand focus:outline-none z-[60]"
@@ -498,6 +496,14 @@ export default function Navbar({ menuStructure }: NavbarProps) {
               className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"
             >
               Contacto
+            </Link>
+            <Link
+              href="/tasacion"
+              scroll
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold uppercase tracking-wider text-gold-sand hover:text-white py-2"
+            >
+              Tasación
             </Link>
 
             {/* Redes sociales (mobile) */}
