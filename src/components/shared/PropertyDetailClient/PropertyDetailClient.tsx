@@ -12,6 +12,8 @@ import {
   Flame,
   Wifi,
   Ruler,
+  Route,
+  Network,
   type LucideIcon,
 } from "lucide-react";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
@@ -142,6 +144,8 @@ export function PropertyDetailClient({
                   {p.services.includes("agua") && <Item label="Agua" value={true} icon={Droplets} />}
                   {p.services.includes("gas") && <Item label="Gas" value={true} icon={Flame} />}
                   {p.services.includes("internet") && <Item label="Internet" value={true} icon={Wifi} />}
+                  {p.services.includes("cloacas") && <Item label="Cloacas" value={true} icon={Network} />}
+                  {p.services.includes("cordon-cuneta") && <Item label="Cordón Cuneta" value={true} icon={Route} />}
                 </>
               )}
             </div>

@@ -71,7 +71,7 @@ const PropertySchema = new Schema<IProperty>(
       age: { type: Number, default: 0 },
       services: { 
         type: [String], 
-        enum: ["luz", "agua", "gas", "internet"], 
+        enum: ["luz", "agua", "gas", "internet", "cloacas", "cordon-cuneta"], 
         default: [] 
       },
     },

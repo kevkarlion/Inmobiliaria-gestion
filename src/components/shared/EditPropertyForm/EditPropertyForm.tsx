@@ -377,6 +377,8 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
               { label: "Agua", value: "agua" },
               { label: "Gas", value: "gas" },
               { label: "Internet", value: "internet" },
+              { label: "Cloacas", value: "cloacas" },
+              { label: "Cordón Cuneta", value: "cordon-cuneta" },
             ].map((service) => (
               <label key={service.value} className="flex items-center gap-2 cursor-pointer group">
                 <input
