@@ -85,7 +85,7 @@ export default function ContactoPage() {
 
           {/* Email Card */}
           <a
-            href="mailto:diegoriquelme91@gmail.com"
+            href="mailto:info@riquelmeprop.com"
             className="group p-10 bg-slate-50 border-b-4 border-slate-200 hover:border-gold-sand transition-all duration-500"
           >
             <div className="w-14 h-14 bg-slate-900 flex items-center justify-center text-gold-sand mb-8 group-hover:scale-110 transition-transform">
@@ -98,7 +98,7 @@ export default function ContactoPage() {
               Consultas y documentación.
             </p>
             <span className="flex items-center gap-2 font-montserrat text-sm font-bold text-slate-900">
-              diegoriquelme91@gmail.com{" "}
+              info@riquelmeprop.com{" "}
               <ArrowRight size={16} className="text-gold-sand" />
             </span>
           </a>

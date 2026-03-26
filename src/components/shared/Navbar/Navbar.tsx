@@ -78,7 +78,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
             </div>
 
             <a
-              href="mailto:diegoriquelme91@gmail.com"
+              href="mailto:info@riquelmeprop.com"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 border-l pl-8 border-gray-100"
@@ -87,7 +87,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
               <div className="flex flex-col">
                 <span className="text-[10px] text-blue-gray uppercase tracking-wider">Email</span>
                 <p className="text-[13px] font-semibold text-onyx lowercase tracking-tight">
-                  diegoriquelme91@gmail.com
+                  info@riquelmeprop.com
                 </p>
               </div>
             </a>
