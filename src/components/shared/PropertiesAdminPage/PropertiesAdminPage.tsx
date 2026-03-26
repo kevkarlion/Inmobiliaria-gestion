@@ -169,20 +169,8 @@ export default function PropertiesAdminClient({
       <div className="w-full">
         
         {/* SECCIÓN DE ACCIONES DE LISTA */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 px-2">
-          <div>
-            <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-[0.2em]">Inventario Actual</h2>
-            <p className="text-slate-700 font-medium text-lg">
-              {currentMeta.total} Propiedades registradas
-              {currentMeta.pages > 1 && (
-                <span className="text-slate-400 font-normal text-sm ml-2">
-                  — página {currentPage} de {currentMeta.pages}
-                </span>
-              )}
-            </p>
-          </div>
-
-          {/* Filter dropdown - available for all users */}
+        <div className="flex flex-col gap-4 mb-6 px-2">
+          {/* Filter dropdown - on its own row */}
           <div className="flex items-center gap-2">
             <select
               value={filter}
@@ -198,13 +186,25 @@ export default function PropertiesAdminClient({
             </select>
           </div>
 
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-xl md:rounded-2xl shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group w-full md:w-auto"
-          >
-            <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-            <span className="uppercase text-xs tracking-widest">Publicar Nueva</span>
-          </button>
+          {/* Info y botón en otra fila */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <p className="text-slate-700 font-medium text-sm">
+              {currentMeta.total} Propiedades registradas
+              {currentMeta.pages > 1 && (
+                <span className="text-slate-400 font-normal text-xs ml-1">
+                  — pág. {currentPage}/{currentMeta.pages}
+                </span>
+              )}
+            </p>
+
+            <button
+              onClick={() => setShowCreateForm(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-xl md:rounded-2xl shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group w-full md:w-auto"
+            >
+              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              <span className="uppercase text-xs tracking-widest">Publicar Nueva</span>
+            </button>
+          </div>
         </div>
 
         {/* MODAL CREACIÓN */}
