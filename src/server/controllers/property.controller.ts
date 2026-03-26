@@ -134,7 +134,8 @@ export class PropertyController {
       const existingProperty = await PropertyService.findBySlug(params.slug);
 
       // Verificar permisos: solo el admin o el propietario puede editar
-      const isOwner = currentUser && existingProperty.createdBy?.userId === currentUser.id;
+      const existingUserId = existingProperty.createdBy?.userId?.toString();
+      const isOwner = currentUser && existingUserId === currentUser.id;
       const isAdmin = currentUser?.role === "admin" || currentUser?.isAdmin;
       
       if (!currentUser || (!isOwner && !isAdmin)) {
@@ -176,7 +177,8 @@ export class PropertyController {
       const existingProperty = await PropertyService.findBySlug(params.slug);
 
       // Verificar permisos: solo el admin o el propietario puede eliminar
-      const isOwner = currentUser && existingProperty.createdBy?.userId === currentUser.id;
+      const existingUserId = existingProperty.createdBy?.userId?.toString();
+      const isOwner = currentUser && existingUserId === currentUser.id;
       const isAdmin = currentUser?.role === "admin" || currentUser?.isAdmin;
       
       if (!currentUser || (!isOwner && !isAdmin)) {
