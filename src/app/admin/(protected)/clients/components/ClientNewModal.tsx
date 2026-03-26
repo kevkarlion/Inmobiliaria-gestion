@@ -11,7 +11,7 @@ type Props = {
 export default function ClientNewModal({ onClose, onCreate }: Props) {
   return (
     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-[2.5rem] shadow-2xl">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl">
         <ClientForm
           onClose={onClose}
           onCreate={onCreate}

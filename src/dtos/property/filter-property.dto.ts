@@ -23,6 +23,9 @@ export class PropertyFilterDTO {
   premium?: boolean;
   opportunity?: boolean;
 
+  // Filter by user (for admin)
+  userId?: string;
+
   constructor(query: any) {
     // 🔑 STRINGS
     this.operationType = query.operationType && query.operationType !== "" 
@@ -69,5 +72,8 @@ export class PropertyFilterDTO {
     this.featured = parseBool(query.featured);
     this.premium = parseBool(query.premium);
     this.opportunity = parseBool(query.opportunity);
+
+    // User filter
+    this.userId = query.userId && query.userId !== "" ? query.userId : undefined;
   }
 }

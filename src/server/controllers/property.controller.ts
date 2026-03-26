@@ -81,8 +81,22 @@ export class PropertyController {
       const rawQuery = Object.fromEntries(searchParams);
       const queryDto = new QueryPropertyDTO(rawQuery);
 
-      // Obtener usuario actual para filtrar por createdBy si no es admin
+      // Handle filter parameter for admin views
+      const filterParam = searchParams.get("filter");
+      
+      // Get current user
       const currentUser = await getAuthenticatedUser();
+      
+      // If filter is "mine" or a specific user ID, apply user filter
+      if (filterParam && filterParam !== "all") {
+        if (filterParam === "mine" && currentUser) {
+          // User wants their own properties - use their ID
+          queryDto.filters.userId = currentUser.id;
+        } else if (filterParam !== "mine") {
+          // Admin filtering by specific user ID
+          queryDto.filters.userId = filterParam;
+        }
+      }
 
       const { items, meta } = await PropertyService.findAll(queryDto, currentUser);
 
@@ -119,6 +133,17 @@ export class PropertyController {
       const dto = new UpdatePropertyDTO(body);
       const existingProperty = await PropertyService.findBySlug(params.slug);
 
+      // Verificar permisos: solo el admin o el propietario puede editar
+      const isOwner = currentUser && existingProperty.createdBy?.userId === currentUser.id;
+      const isAdmin = currentUser?.role === "admin" || currentUser?.isAdmin;
+      
+      if (!currentUser || (!isOwner && !isAdmin)) {
+        return NextResponse.json(
+          { message: "No tenés permisos para editar esta propiedad" },
+          { status: 403 }
+        );
+      }
+
       const updatedProperty = await PropertyService.update(params.slug, dto);
 
       // Audit log
@@ -149,6 +174,17 @@ export class PropertyController {
       await connectDB();
       const currentUser = await getAuthenticatedUser();
       const existingProperty = await PropertyService.findBySlug(params.slug);
+
+      // Verificar permisos: solo el admin o el propietario puede eliminar
+      const isOwner = currentUser && existingProperty.createdBy?.userId === currentUser.id;
+      const isAdmin = currentUser?.role === "admin" || currentUser?.isAdmin;
+      
+      if (!currentUser || (!isOwner && !isAdmin)) {
+        return NextResponse.json(
+          { message: "No tenés permisos para eliminar esta propiedad" },
+          { status: 403 }
+        );
+      }
 
       const result = await PropertyService.delete(params.slug);
 

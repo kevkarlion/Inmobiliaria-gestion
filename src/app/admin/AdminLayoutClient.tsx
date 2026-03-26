@@ -49,11 +49,11 @@ function useViewport() {
 const baseNavItems = [
   { href: "/admin/properties", icon: Building2, label: "Propiedades" },
   { href: "/admin/clients", icon: Users, label: "Clientes" },
-  { href: "/admin/novedades", icon: Newspaper, label: "Novedades" },
 ];
 
 // Admin-only navigation items
 const adminNavItems = [
+  { href: "/admin/novedades", icon: Newspaper, label: "Novedades" },
   { href: "/admin/users", icon: Shield, label: "Usuarios" },
   { href: "/admin/audit-logs", icon: FileText, label: "Auditoría" },
 ];

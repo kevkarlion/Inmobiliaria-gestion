@@ -269,32 +269,32 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
       return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">mts Frente</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">mts Frente</label>
             <input
               type="number"
               value={pref.features.mtsFrente || ""}
               onChange={(e) => updateFeature("mtsFrente", e.target.value)}
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="10"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">mts Fondo</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">mts Fondo</label>
             <input
               type="number"
               value={pref.features.mtsFondo || ""}
               onChange={(e) => updateFeature("mtsFondo", e.target.value)}
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="20"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">mts Totales</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">mts Totales</label>
             <input
               type="number"
               value={pref.features.mtsTotales || ""}
               onChange={(e) => updateFeature("mtsTotales", e.target.value)}
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="200"
             />
           </div>
@@ -307,11 +307,11 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
         <div className="space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Habitaciones</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Habitaciones</label>
               <select
                 value={pref.features.bedrooms || ""}
                 onChange={(e) => updateFeature("bedrooms", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Seleccionar</option>
                 <option value="1">1</option>
@@ -322,11 +322,11 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Baños</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Baños</label>
               <select
                 value={pref.features.bathrooms || ""}
                 onChange={(e) => updateFeature("bathrooms", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Seleccionar</option>
                 <option value="1">1</option>
@@ -335,22 +335,22 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">mts Cubiertos</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">mts Cubiertos</label>
               <input
                 type="number"
                 value={pref.features.mtsCubiertos || ""}
                 onChange={(e) => updateFeature("mtsCubiertos", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="80"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">mts Totales</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">mts Totales</label>
               <input
                 type="number"
                 value={pref.features.mtsTotales || ""}
                 onChange={(e) => updateFeature("mtsTotales", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="150"
               />
             </div>
@@ -368,21 +368,21 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
               </label>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Antigüedad (años)</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Antigüedad (años)</label>
               <input
                 type="number"
                 value={pref.features.antiguedad || ""}
                 onChange={(e) => updateFeature("antiguedad", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="10"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Estado</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Estado</label>
               <select
                 value={pref.features.estado || ""}
                 onChange={(e) => updateFeature("estado", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Seleccionar</option>
                 <option value="nuevo">Nuevo</option>
@@ -400,11 +400,11 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
         <div className="space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Habitaciones</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Habitaciones</label>
               <select
                 value={pref.features.bedrooms || ""}
                 onChange={(e) => updateFeature("bedrooms", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Seleccionar</option>
                 <option value="1">1</option>
@@ -414,11 +414,11 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Baños</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Baños</label>
               <select
                 value={pref.features.bathrooms || ""}
                 onChange={(e) => updateFeature("bathrooms", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Seleccionar</option>
                 <option value="1">1</option>
@@ -427,53 +427,53 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">mts Cubiertos</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">mts Cubiertos</label>
               <input
                 type="number"
                 value={pref.features.mtsCubiertos || ""}
                 onChange={(e) => updateFeature("mtsCubiertos", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="50"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">mts Totales</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">mts Totales</label>
               <input
                 type="number"
                 value={pref.features.mtsTotales || ""}
                 onChange={(e) => updateFeature("mtsTotales", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="60"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Piso</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Piso</label>
               <input
                 type="number"
                 value={pref.features.piso || ""}
                 onChange={(e) => updateFeature("piso", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="3"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Antigüedad (años)</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Antigüedad (años)</label>
               <input
                 type="number"
                 value={pref.features.antiguedad || ""}
                 onChange={(e) => updateFeature("antiguedad", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="5"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Estado</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Estado</label>
               <select
                 value={pref.features.estado || ""}
                 onChange={(e) => updateFeature("estado", e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Seleccionar</option>
                 <option value="nuevo">Nuevo</option>
@@ -501,10 +501,10 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
   };
 
   return (
-    <div className="p-6 md:p-8 max-h-[90vh] overflow-y-auto">
+    <div className="p-3 md:p-4 max-h-[90vh] overflow-y-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tighter">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-sm font-semibold text-slate-800 uppercase tracking-tight">
           {isEdit ? "Editar Cliente" : "Nuevo Cliente"}
         </h2>
         <button
@@ -516,20 +516,20 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-xs">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Datos básicos */}
-        <div className="bg-slate-50 rounded-2xl p-6">
-          <h3 className="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wider">
+        <div className="bg-slate-50 rounded-xl p-4">
+          <h3 className="font-medium text-slate-700 mb-3 uppercase text-[10px] tracking-wider">
             Datos del Cliente
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Nombre completo *
               </label>
               <input
@@ -537,24 +537,24 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Juan Pérez"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Email
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="juan@ejemplo.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Teléfono *
               </label>
               <input
@@ -562,18 +562,18 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="+54 9 11 1234 5678"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Estado
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ClientStatus)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value={ClientStatus.ACTIVE}>Activo</option>
                 <option value={ClientStatus.INACTIVE}>Inactivo</option>
@@ -582,13 +582,13 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
               </select>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Fuente
               </label>
               <select
                 value={source}
                 onChange={(e) => setSource(e.target.value as ClientSource)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value={ClientSource.WEB}>Web</option>
                 <option value={ClientSource.REFERRAL}>Referido</option>
@@ -600,7 +600,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
 
             {/* Ubicación del cliente */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Ubicación
               </label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -608,21 +608,21 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                   type="text"
                   value={location.province}
                   onChange={(e) => setLocation({ ...location, province: e.target.value })}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Provincia"
                 />
                 <input
                   type="text"
                   value={location.city}
                   onChange={(e) => setLocation({ ...location, city: e.target.value })}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Localidad"
                 />
                 <input
                   type="text"
                   value={location.barrio}
                   onChange={(e) => setLocation({ ...location, barrio: e.target.value })}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Barrio"
                 />
               </div>
@@ -631,8 +631,8 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
         </div>
 
         {/* Tipo de operación */}
-        <div className="bg-slate-50 rounded-2xl p-6">
-          <h3 className="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wider">
+        <div className="bg-slate-50 rounded-xl p-4 space-y-3">
+          <h3 className="font-medium text-slate-700 mb-3 uppercase text-xs tracking-wider">
             Tipo de Operación
           </h3>
           <div className="flex gap-2">
@@ -641,9 +641,9 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                 key={op}
                 type="button"
                 onClick={() => setOperationType(op)}
-                className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+                className={`flex-1 py-2 px-3 rounded font-medium text-xs transition-all ${
                   operationType === op
-                    ? "bg-blue-600 text-white shadow-lg"
+                    ? "bg-blue-600 text-white shadow"
                     : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -657,7 +657,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
         {operationType !== "venta" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-slate-700 uppercase text-sm tracking-wider">
+            <h3 className="font-medium text-slate-700 uppercase text-xs tracking-wider">
               Preferencias de Propiedad
             </h3>
             <button
@@ -671,10 +671,10 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
           </div>
 
           {propertyPreferences.map((pref, index) => (
-            <div key={index} className="bg-slate-50 rounded-2xl p-6">
+            <div key={index} className="bg-slate-50 rounded-xl p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-slate-600 mb-1">
                     Tipo de propiedad
                   </label>
                   <select
@@ -685,7 +685,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                         features: {},
                       })
                     }
-                    className="w-full md:w-48 px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full md:w-40 px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="terreno">Terreno</option>
                     <option value="casa">Casa</option>
@@ -706,7 +706,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
 
               {/* Location */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-slate-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   Ubicación (Provincia / Localidad / Barrio)
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -719,7 +719,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                       newZones[0].province = e.target.value;
                       updatePropertyPreference(index, { zones: newZones });
                     }}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Provincia"
                   />
                   <input
@@ -731,7 +731,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                       newZones[0].city = e.target.value;
                       updatePropertyPreference(index, { zones: newZones });
                     }}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Localidad"
                   />
                   <input
@@ -743,7 +743,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                       newZones[0].barrio = e.target.value;
                       updatePropertyPreference(index, { zones: newZones });
                     }}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Barrio"
                   />
                 </div>
@@ -751,7 +751,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
 
               {/* Price Range */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-slate-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   Rango de precio (USD)
                 </label>
                 <div className="flex gap-2">
@@ -764,7 +764,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                       })
                     }
                     placeholder="Min"
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="number"
@@ -775,7 +775,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                       })
                     }
                     placeholder="Max"
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -790,14 +790,14 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
 
               {/* Notes for this property preference */}
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   Info adicional de este tipo de propiedad
                 </label>
                 <textarea
                   value={pref.notes}
                   onChange={(e) => updatePropertyPreference(index, { notes: e.target.value })}
                   rows={2}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   placeholder="Notas específicas sobre este tipo de propiedad..."
                 />
               </div>
@@ -808,18 +808,18 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
 
         {/* Sale Property - solo cuando es venta */}
         {operationType === "venta" && (
-          <div className="bg-slate-50 rounded-2xl p-6 space-y-4">
+          <div className="bg-slate-50 rounded-xl p-4 space-y-3">
             <h3 className="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wider flex items-center gap-2">
               🏠 Información de la Propiedad en Venta
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-1">Tipo de propiedad</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Tipo de propiedad</label>
                 <select
                   value={saleProperty.propertyType}
                   onChange={(e) => setSaleProperty({ ...saleProperty, propertyType: e.target.value as PropertyTypeOption, features: {} })}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="terreno">Terreno</option>
                   <option value="casa">Casa</option>
@@ -828,42 +828,42 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-600 mb-1">Precio (USD)</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Precio (USD)</label>
                 <input
                   type="number"
                   value={saleProperty.price}
                   onChange={(e) => setSaleProperty({ ...saleProperty, price: e.target.value })}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="150000"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Dirección</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Dirección</label>
               <input
                 type="text"
                 value={saleProperty.address}
                 onChange={(e) => setSaleProperty({ ...saleProperty, address: e.target.value })}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Av. Siempre Viva 123"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Link de Google Maps</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Link de Google Maps</label>
               <input
                 type="url"
                 value={saleProperty.googleMapsUrl}
                 onChange={(e) => setSaleProperty({ ...saleProperty, googleMapsUrl: e.target.value })}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="https://maps.google.com/..."
               />
             </div>
 
             {/* Ubicación de la propiedad en venta */}
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Ubicación (Provincia / Localidad / Barrio)
               </label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -876,7 +876,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                     newZones[0].province = e.target.value;
                     setSaleProperty({ ...saleProperty, zones: newZones });
                   }}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Provincia"
                 />
                 <input
@@ -888,7 +888,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                     newZones[0].city = e.target.value;
                     setSaleProperty({ ...saleProperty, zones: newZones });
                   }}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Localidad"
                 />
                 <input
@@ -900,7 +900,7 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                     newZones[0].barrio = e.target.value;
                     setSaleProperty({ ...saleProperty, zones: newZones });
                   }}
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Barrio"
                 />
               </div>
@@ -910,11 +910,11 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
             {(saleProperty.propertyType === "casa" || saleProperty.propertyType === "depto") && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">Habitaciones</label>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">Habitaciones</label>
                   <select
                     value={saleProperty.features.bedrooms || ""}
                     onChange={(e) => setSaleProperty({ ...saleProperty, features: { ...saleProperty.features, bedrooms: e.target.value } })}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Seleccionar</option>
                     <option value="1">1</option>
@@ -924,11 +924,11 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">Baños</label>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">Baños</label>
                   <select
                     value={saleProperty.features.bathrooms || ""}
                     onChange={(e) => setSaleProperty({ ...saleProperty, features: { ...saleProperty.features, bathrooms: e.target.value } })}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Seleccionar</option>
                     <option value="1">1</option>
@@ -937,22 +937,22 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">mts Cubiertos</label>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">mts Cubiertos</label>
                   <input
                     type="number"
                     value={saleProperty.features.mtsCubiertos || ""}
                     onChange={(e) => setSaleProperty({ ...saleProperty, features: { ...saleProperty.features, mtsCubiertos: e.target.value } })}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="80"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">mts Totales</label>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">mts Totales</label>
                   <input
                     type="number"
                     value={saleProperty.features.mtsTotales || ""}
                     onChange={(e) => setSaleProperty({ ...saleProperty, features: { ...saleProperty.features, mtsTotales: e.target.value } })}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="150"
                   />
                 </div>
@@ -962,32 +962,32 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
             {(saleProperty.propertyType === "terreno" || saleProperty.propertyType === "loteo") && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">mts Frente</label>
+                  <label className="block text-[10px] font-medium text-slate-600 mb-1">mts Frente</label>
                   <input
                     type="number"
                     value={saleProperty.features.mtsFrente || ""}
                     onChange={(e) => setSaleProperty({ ...saleProperty, features: { ...saleProperty.features, mtsFrente: e.target.value } })}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="10"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">mts Fondo</label>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">mts Fondo</label>
                   <input
                     type="number"
                     value={saleProperty.features.mtsFondo || ""}
                     onChange={(e) => setSaleProperty({ ...saleProperty, features: { ...saleProperty.features, mtsFondo: e.target.value } })}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="20"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-600 mb-1">mts Totales</label>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">mts Totales</label>
                   <input
                     type="number"
                     value={saleProperty.features.mtsTotales || ""}
                     onChange={(e) => setSaleProperty({ ...saleProperty, features: { ...saleProperty.features, mtsTotales: e.target.value } })}
-                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="200"
                   />
                 </div>
@@ -995,23 +995,23 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Descripción adicional</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Descripción adicional</label>
               <textarea
                 value={saleProperty.description}
                 onChange={(e) => setSaleProperty({ ...saleProperty, description: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 placeholder="Descripción de la propiedad..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Notas internas</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Notas internas</label>
               <textarea
                 value={saleProperty.notes}
                 onChange={(e) => setSaleProperty({ ...saleProperty, notes: e.target.value })}
                 rows={2}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 placeholder="Notas sobre esta venta..."
               />
             </div>
@@ -1019,34 +1019,34 @@ export function ClientForm({ client, onClose, onCreate, onUpdate }: Props) {
         )}
 
         {/* General Notes */}
-        <div className="bg-slate-50 rounded-2xl p-6">
-          <h3 className="font-bold text-slate-700 mb-4 uppercase text-sm tracking-wider">
+        <div className="bg-slate-50 rounded-xl p-4 space-y-3">
+          <h3 className="font-medium text-slate-700 mb-3 uppercase text-xs tracking-wider">
             Notas Adicionales del Cliente
           </h3>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}
-            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full px-2 py-1 bg-white border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             placeholder="Notas generales sobre el cliente..."
           />
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-4 pt-4">
+        <div className="flex gap-2 pt-3">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-4 px-6 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-colors"
+            className="flex-1 py-2 px-3 border border-slate-200 text-slate-600 font-medium rounded hover:bg-slate-50 transition-colors text-xs"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 py-4 px-6 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 py-2 px-3 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-xs"
           >
-            {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+            {loading && <Loader2 className="w-3 h-3 animate-spin" />}
             {isEdit ? "Guardar Cambios" : "Crear Cliente"}
           </button>
         </div>
