@@ -50,10 +50,13 @@ function getTransporter() {
     return null;
   }
 
+  // Use SSL for port 465, otherwise STARTTLS
+  const secure = port === 465;
+
   return nodemailer.createTransport({
     host,
     port,
-    secure: false,
+    secure,
     auth: {
       user,
       pass,

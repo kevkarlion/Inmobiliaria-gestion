@@ -24,7 +24,7 @@ export default async function Hero() {
 
         <div className="hidden lg:block">
           <Image
-            src="/bg-hero.webp"
+            src="/bg-hero1.webp"
             alt="Propiedades exclusivas en General Roca - Riquelme Propiedades"
             width={2400}
             height={1600}

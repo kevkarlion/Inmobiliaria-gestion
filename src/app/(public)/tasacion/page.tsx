@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function TasacionPage() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-white">
       <TasacionHero />
       
       <section id="tasacion-form" className="py-10 lg:py-14 bg-white">

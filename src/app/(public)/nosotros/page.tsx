@@ -87,37 +87,53 @@ interface NosotrosContentProps {
 export default function NosotrosPage() {
   return (
     <main className="min-h-screen relative">
-      {/* --- HERO SECTION CON IMAGEN EXTENDIDA --- */}
-      {/* Usamos h-112.5 etc, pero la imagen adentro será más alta 
-          para absorber el "pull-to-refresh" 
-      */}
-      <section className="relative h-112.5 md:h-135 2xl:h-150 flex items-center justify-center overflow-hidden bg-slate-900">
-        {/* --- CAPA DE IMAGEN (EL EFECTO) --- */}
-        <div className="absolute inset-0 z-0">
-          <div className="relative w-full h-[115%] -top-[10%] lg:h-full lg:top-0">
-            <Image
-              src="/nosotros.webp"
-              alt="Nosotros Riquelme Propiedades"
-              fill
-              className="object-cover grayscale"
-              priority
-              quality={90}
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+ZNPQAIXwM4ihSTfQAAAABJRU5ErkJggg=="
-            />
-            {/* Overlay para legibilidad */}
-            <div className="absolute inset-0 bg-black/50" />
-          </div>
-        </div>
+      {/* --- HERO SECTION --- */}
+      <section className="relative overflow-hidden pt-20 sm:pt-24 md:pt-28 pb-2 sm:pb-4 min-h-[85vh]">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat grayscale"
+          style={{
+            backgroundImage: "url('/nosotros.webp')",
+          }}
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#001d3d]/80 via-[#001d3d]/60 to-[#001d3d]/90" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e6b255] via-[#d4a045] to-[#e6b255]" />
 
-        {/* --- CONTENIDO DEL HERO --- */}
-        <div className="relative z-10 text-center px-6 mt-12">
-          <h1 className="font-montserrat text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none mb-6">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16 text-center">
+          {/* Logo */}
+          <div className="flex justify-center mb-4 sm:mb-6">
+            <div className="relative w-20 h-8 sm:w-28 sm:h-10">
+              <Image
+                src="/logo-blanco.webp"
+                alt="Riquelme Propiedades"
+                fill
+                className="object-contain object-center brightness-150"
+              />
+            </div>
+          </div>
+
+          {/* Subtitle */}
+          <p className="font-semibold text-xs sm:text-sm uppercase tracking-[0.2em] mb-2 sm:mb-3 text-[#e6b255]">
+            Nuestra firma
+          </p>
+
+          {/* Title */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-3 sm:mb-4 uppercase tracking-tight text-white" style={{ fontFamily: "var(--font-montserrat)" }}>
             Nuestra <span className="text-gold-sand">Visión</span>
           </h1>
-          <p className="font-lora text-slate-300 text-lg md:text-2xl italic max-w-2xl mx-auto">
+
+          {/* Description */}
+          <p className="text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-white/80">
             Estrategia aplicada a activos inmobiliarios de alto valor.
           </p>
+
+          {/* Decorative element */}
+          <div className="flex items-center justify-center gap-2 mt-5 sm:mt-6">
+            <div className="w-8 h-px bg-[#e6b255]" />
+            <div className="w-2 h-2 rounded-full bg-[#e6b255]" />
+            <div className="w-8 h-px bg-[#e6b255]" />
+          </div>
         </div>
       </section>
 

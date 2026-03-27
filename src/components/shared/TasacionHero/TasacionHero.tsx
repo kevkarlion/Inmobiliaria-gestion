@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowRight, Shield } from "lucide-react";
 
 export default function TasacionHero() {
@@ -12,50 +13,63 @@ export default function TasacionHero() {
   };
 
   return (
-    <section className="relative min-h-[70vh] md:min-h-[50vh] lg:min-h-[40vh] flex items-center justify-center overflow-hidden pt-16 md:pt-20 lg:pt-[206px] pb-6">
+    <section className="relative overflow-hidden pt-20 sm:pt-24 md:pt-28 pb-2 sm:pb-4">
       {/* Background image */}
-      <div 
-        className="absolute inset-0 z-0"
-      >
-        <img 
-          src="/bg-hero.webp" 
-          alt="Background"
-          className="w-full h-full object-cover opacity-15"
-        />
-      </div>
-      
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/bg-tasacion.webp')",
+        }}
+      />
       {/* Gradient overlay */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-white via-white/95 to-slate-50" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#001d3d]/80 via-[#001d3d]/60 to-[#001d3d]/90" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e6b255] via-[#d4a045] to-[#e6b255]" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 md:pt-28 lg:pt-[160px]">
-        <div className="text-center max-w-2xl mx-auto">
-          {/* Main headline */}
-          <h1 className="font-montserrat text-3xl md:text-3xl lg:text-4xl font-black text-slate-900 uppercase tracking-tight leading-tight mb-3">
-            ¿Querés saber cuánto vale tu{" "}
-            <span className="text-gold-sand">propiedad?</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="font-lora text-base md:text-base text-slate-600 italic max-w-lg mx-auto mb-6 leading-relaxed">
-            Obtené una tasación precisa del mercado de General Roca. 
-            Te contactamos en menos de 24 horas.
-          </p>
-
-          {/* CTA Button */}
-          <button
-            onClick={scrollToForm}
-            className="inline-flex items-center gap-2 bg-slate-900 text-white font-montserrat font-bold py-3 px-8 uppercase text-xs tracking-[0.1em] hover:bg-gold-sand hover:text-slate-900 transition-all duration-500 shadow-lg active:scale-95"
-          >
-            Solicitar tasación
-            <ArrowRight size={16} />
-          </button>
-
-          {/* Trust copy */}
-          <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-500">
-            <Shield size={14} className="text-gold-sand" />
-            <span>Sin compromiso</span>
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16 text-center">
+        {/* Logo */}
+        <div className="flex justify-center mb-4 sm:mb-6">
+          <div className="relative w-20 h-8 sm:w-28 sm:h-10">
+            <Image
+              src="/logo-blanco.webp"
+              alt="Riquelme Propiedades"
+              fill
+              className="object-contain object-center brightness-150"
+            />
           </div>
         </div>
+
+        {/* Subtitle */}
+        <p className="font-semibold text-xs sm:text-sm uppercase tracking-[0.2em] mb-2 sm:mb-3 text-[#e6b255]">
+          Tasación profesional
+        </p>
+
+        {/* Main headline */}
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-3 sm:mb-4 uppercase tracking-tight text-white" style={{ fontFamily: "var(--font-montserrat)" }}>
+          ¿Cuánto vale tu<br className="hidden sm:block" /> propiedad?
+        </h1>
+
+        {/* Description */}
+        <p className="text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-white/80">
+          Obtené una tasación precisa del mercado de General Roca. 
+          Te contactamos en menos de 24 horas.
+        </p>
+
+        {/* CTA Button */}
+        <button
+          onClick={scrollToForm}
+          className="inline-flex items-center gap-2 bg-gold-sand text-oxford font-montserrat font-bold py-3 px-8 uppercase text-xs tracking-widest hover:bg-white transition-all duration-500 shadow-lg active:scale-95 mt-6 sm:mt-8"
+        >
+          Solicitar tasación
+          <ArrowRight size={16} />
+        </button>
+
+        {/* Trust copy */}
+        <div className="flex items-center justify-center gap-2 mt-4 sm:mt-5">
+          <div className="w-8 h-px bg-[#e6b255]" />
+          <Shield size={14} className="text-[#e6b255]" />
+          <div className="w-8 h-px bg-[#e6b255]" />
+        </div>
+        <span className="text-xs text-white/60 mt-2 block">Sin compromiso</span>
       </div>
     </section>
   );

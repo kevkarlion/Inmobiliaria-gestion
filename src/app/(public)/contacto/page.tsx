@@ -1,5 +1,6 @@
 // app/contacto/page.tsx
 import React from "react";
+import Image from "next/image";
 import {
   Mail,
   MessageCircle,
@@ -22,43 +23,58 @@ export const metadata: Metadata = {
 
 export default function ContactoPage() {
   return (
-    <main className="min-h-screen bg-white pt-32 lg:pt-52 pb-0">
-      {/* Patrón decorativo de fondo */}
-      <div
-        className="absolute inset-0 z-0 opacity-[0.3] pointer-events-none h-150"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23cbd5e1' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
+    <main className="min-h-screen bg-white">
+      {/* --- HERO SECTION --- */}
+      <section className="relative overflow-hidden pt-20 sm:pt-24 md:pt-28 pb-2 sm:pb-4 min-h-[85vh]">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80')",
+          }}
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#001d3d]/80 via-[#001d3d]/60 to-[#001d3d]/90" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e6b255] via-[#d4a045] to-[#e6b255]" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* --- CABECERA --- */}
-        <div className="flex flex-col items-center text-center mb-20 space-y-5">
-          <div className="max-w-4xl space-y-4">
-            <div className="flex items-center justify-center gap-6">
-              <div className="hidden md:flex items-center">
-                <div className="w-12 lg:w-20 h-px bg-slate-200" />
-                <div className="w-1.5 h-1.5 rounded-full bg-gold-sand ml-2" />
-              </div>
-              <h1 className="font-montserrat text-4xl md:text-5xl 2xl:text-6xl font-black text-slate-900 uppercase tracking-tighter shrink-0">
-                Contacto
-              </h1>
-              <div className="hidden md:flex items-center">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold-sand mr-2" />
-                <div className="w-12 lg:w-20 h-px bg-slate-200" />
-              </div>
-            </div>
-            <p className="font-lora text-slate-600 text-sm md:text-xl leading-relaxed max-w-2xl mx-auto italic">
-              Canales de atención directa para una gestión eficiente de sus
-              activos.
-            </p>
-            <div className="flex justify-center items-center gap-3">
-              <div className="w-2 h-2 rotate-45 border border-gold-sand bg-gold-sand/20" />
-              <div className="w-16 h-px bg-gold-sand/40" />
-              <div className="w-2 h-2 rotate-45 border border-gold-sand bg-gold-sand/20" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16 text-center">
+          {/* Logo */}
+          <div className="flex justify-center mb-4 sm:mb-6">
+            <div className="relative w-20 h-8 sm:w-28 sm:h-10">
+              <Image
+                src="/logo-blanco.webp"
+                alt="Riquelme Propiedades"
+                fill
+                className="object-contain object-center brightness-150"
+              />
             </div>
           </div>
+
+          {/* Subtitle */}
+          <p className="font-semibold text-xs sm:text-sm uppercase tracking-[0.2em] mb-2 sm:mb-3 text-[#e6b255]">
+            Canales de atención
+          </p>
+
+          {/* Title */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-3 sm:mb-4 uppercase tracking-tight text-white" style={{ fontFamily: "var(--font-montserrat)" }}>
+            Contacto
+          </h1>
+
+          {/* Description */}
+          <p className="text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-white/80">
+            Canales de atención directa para una gestión eficiente de sus activos.
+          </p>
+
+          {/* Decorative element */}
+          <div className="flex items-center justify-center gap-2 mt-5 sm:mt-6">
+            <div className="w-8 h-px bg-[#e6b255]" />
+            <div className="w-2 h-2 rounded-full bg-[#e6b255]" />
+            <div className="w-8 h-px bg-[#e6b255]" />
+          </div>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
 
         {/* --- GRILLA DE CONTACTO --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">

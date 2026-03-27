@@ -35,7 +35,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Post individual
   if (segments.length === 1) {
     try {
-      const { BlogPostService } = await import("@/server/services/blog-post.service");
       const post = await BlogPostService.findBySlug(slug);
       const ui = mapBlogPostToUI(post);
       return {

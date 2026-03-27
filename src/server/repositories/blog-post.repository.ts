@@ -23,11 +23,13 @@ export class BlogPostRepository {
       .lean();
   }
 
-  static findBySlug(slug: string) {
+  static async findBySlug(slug: string) {
+    await connectDB();
     return BlogPostModel.findOne({ slug }).lean();
   }
 
-  static findByCategory(category: string, filter: any, options: FindAllOptions = {}) {
+  static async findByCategory(category: string, filter: any, options: FindAllOptions = {}) {
+    await connectDB();
     return BlogPostModel.find({ category, ...filter })
       .select(
         "title slug excerpt category tags featuredImage author status publishedAt readingTime seoTitle seoDescription createdAt updatedAt",
@@ -38,7 +40,8 @@ export class BlogPostRepository {
       .lean();
   }
 
-  static findLatestPublished(limit = 1) {
+  static async findLatestPublished(limit = 1) {
+    await connectDB();
     return BlogPostModel.find({ status: "published" })
       .select(
         "title slug excerpt category tags featuredImage author publishedAt readingTime",
@@ -48,23 +51,28 @@ export class BlogPostRepository {
       .lean();
   }
 
-  static count(filter: any) {
+  static async count(filter: any) {
+    await connectDB();
     return BlogPostModel.countDocuments(filter);
   }
 
-  static create(data: any) {
+  static async create(data: any) {
+    await connectDB();
     return BlogPostModel.create(data);
   }
 
-  static update(id: string, data: any) {
+  static async update(id: string, data: any) {
+    await connectDB();
     return BlogPostModel.findByIdAndUpdate(id, data, { new: true }).lean();
   }
 
-  static delete(id: string) {
+  static async delete(id: string) {
+    await connectDB();
     return BlogPostModel.findByIdAndDelete(id);
   }
 
-  static findById(id: string) {
+  static async findById(id: string) {
+    await connectDB();
     return BlogPostModel.findById(id).lean();
   }
 
