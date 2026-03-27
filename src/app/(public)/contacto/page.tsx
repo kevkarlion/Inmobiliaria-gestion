@@ -25,7 +25,7 @@ export default function ContactoPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* --- HERO SECTION --- */}
-      <section className="relative overflow-hidden pt-20 sm:pt-24 md:pt-28 pb-2 sm:pb-4 min-h-[85vh]">
+      <section className="relative overflow-hidden pt-20 sm:pt-24 md:pt-28 pb-2 sm:pb-4">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
