@@ -7,9 +7,10 @@ interface Props {
   property: PropertyResponse;
   onDelete: (slug: string) => void;
   onEdit: (property: PropertyResponse) => void;
+  currentUser?: { id: string; isAdmin?: boolean } | null;
 }
 
-export default function PropertyCardAdmin({ property, onDelete, onEdit }: Props) {
+export default function PropertyCardAdmin({ property, onDelete, onEdit, currentUser }: Props) {
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
       {/* Header: ID y Slugs */}
@@ -93,7 +94,8 @@ export default function PropertyCardAdmin({ property, onDelete, onEdit }: Props)
       <PropertyActions 
         property={property} 
         onDelete={onDelete} 
-        onEdit={onEdit} 
+        onEdit={onEdit}
+        currentUser={currentUser}
       />
     </div>
   );

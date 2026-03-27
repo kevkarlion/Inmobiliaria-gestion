@@ -161,14 +161,18 @@ export class PropertyService {
     const filter: any = { status: "active" };
     const f = query.filters;
 
-    // Si el usuario no es admin, solo mostrar sus propiedades
-    if (currentUser && !currentUser.isAdmin) {
-      filter["createdBy.userId"] = currentUser.id;
-    }
+    // Mostrar TODAS las propiedades a TODOS los usuarios (admin y no admin)
+    // La restricción de edición se maneja en el controller (update/delete)
+    // El frontend oculta los botones de edición para propiedades que no son del usuario
 
     // filtros simples
     if (f.operationType) filter.operationType = f.operationType.toLowerCase();
     if (f.search) filter.title = { $regex: f.search, $options: "i" };
+
+    // Filter by user (for admin views)
+    if (f.userId) {
+      filter["createdBy.userId"] = f.userId;
+    }
 
     // ubicación
     if (f.province) {

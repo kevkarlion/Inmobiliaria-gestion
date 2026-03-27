@@ -97,12 +97,12 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-base font-semibold text-slate-900">
             Novedades
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 mt-0.5">
             {currentMeta.total} post{currentMeta.total !== 1 ? "s" : ""} en total
           </p>
         </div>
@@ -115,24 +115,24 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <th className="text-left px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
                   Título
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <th className="text-left px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
                   Categoría
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <th className="text-left px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
                   Estado
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <th className="text-left px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
                   Fecha
                 </th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <th className="text-right px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
                   Acciones
                 </th>
               </tr>
@@ -143,24 +143,24 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
                   key={post._id}
                   className="hover:bg-slate-50 transition-colors"
                 >
-                  <td className="px-4 py-3">
+                  <td className="px-3 py-2">
                     <div>
-                      <p className="font-medium text-slate-900 line-clamp-1">
+                      <p className="font-medium text-slate-800 line-clamp-1 text-xs">
                         {post.title}
                       </p>
-                      <p className="text-xs text-slate-500 truncate max-w-xs">
+                      <p className="text-[10px] text-slate-400 truncate max-w-xs">
                         {post.slug}
                       </p>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="inline-block text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium capitalize">
+                  <td className="px-3 py-2">
+                    <span className="inline-block text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium capitalize">
                       {post.category.replace("-", " ")}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-3 py-2">
                     <span
-                      className={`inline-block text-xs px-2 py-0.5 rounded-full font-medium ${
+                      className={`inline-block text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
                         post.status === "published"
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
@@ -169,26 +169,26 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
                       {post.status === "published" ? "Publicado" : "Borrador"}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-slate-500 whitespace-nowrap">
+                  <td className="px-3 py-2 text-xs text-slate-500 whitespace-nowrap">
                     {post.publishedAt
                       ? new Date(post.publishedAt).toLocaleDateString("es-AR")
                       : "—"}
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="px-3 py-2">
+                    <div className="flex items-center justify-end gap-1">
                       <Link href={`/admin/novedades/${post._id}/edit`}>
-                        <Button variant="ghost" size="sm" className="gap-1">
-                          <Pencil size={14} />
+                        <Button variant="ghost" size="sm" className="gap-1 h-7 px-2 text-[10px]">
+                          <Pencil size={12} />
                           Editar
                         </Button>
                       </Link>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="gap-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="gap-1 h-7 px-2 text-[10px] text-red-600 hover:text-red-700 hover:bg-red-50"
                         onClick={() => handleDelete(post._id)}
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={12} />
                         Eliminar
                       </Button>
                     </div>
@@ -197,7 +197,7 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
               ))}
               {posts.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-12 text-center text-slate-500">
+                  <td colSpan={5} className="px-3 py-8 text-center text-xs text-slate-500">
                     No hay posts todavía.{" "}
                     <Link href="/admin/novedades/new" className="text-primary hover:underline">
                       Creá el primero
@@ -211,8 +211,8 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
 
         {/* Pagination */}
         {currentMeta.pages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200">
-            <p className="text-sm text-slate-500">
+          <div className="flex items-center justify-between px-3 py-2 border-t border-slate-200">
+            <p className="text-xs text-slate-500">
               Página {currentPage} de {currentMeta.pages}
             </p>
             <div className="flex items-center gap-2">

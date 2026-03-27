@@ -70,12 +70,12 @@ export default function ClientCardAdmin({ client, onUpdate, onDelete }: Props) {
 
   return (
     <>
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
+      <div className="bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-slate-50 px-4 py-3 border-b border-slate-100 flex justify-between items-start">
+        <div className="bg-slate-50 px-3 py-2 border-b border-slate-100 flex justify-between items-start">
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-slate-800 truncate">{client.name}</h3>
-            <p className="text-xs text-slate-400 font-mono truncate">{client.id}</p>
+            <h3 className="font-semibold text-slate-800 truncate text-sm">{client.name}</h3>
+            <p className="text-[10px] text-slate-400 font-mono truncate">{client.id}</p>
           </div>
 
           {/* Menú de acciones */}
@@ -122,7 +122,7 @@ export default function ClientCardAdmin({ client, onUpdate, onDelete }: Props) {
         </div>
 
         {/* Body */}
-        <div className="p-4 grow">
+        <div className="p-3 grow">
           {/* Badges */}
           <div className="flex gap-2 mb-4">
             <span className={`${status.bg} ${status.text} text-[10px] px-2 py-0.5 rounded-full font-medium`}>

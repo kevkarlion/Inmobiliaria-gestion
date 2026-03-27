@@ -1,23 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import PropertyCardAdmin from "@/components/shared/PropertyCardAdmin/PropertyCardAdmin";
 import CreatePropertyForm from "@/components/shared/PropertyForm/PropertyForm"; 
 import EditPropertyForm from "@/components/shared/EditPropertyForm/EditPropertyForm";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
-import { Building2, Plus, MapPin, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Building2, Plus, MapPin, Edit, Trash2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { toast } from "sonner";
+
+interface UserOption {
+  id: string;
+  email: string;
+  label: string;
+}
 
 interface Props {
   initialProperties: PropertyResponse[];
   meta: { total: number; page: number; limit: number; pages: number };
   page: number;
+  currentUser?: { id: string; isAdmin?: boolean } | null;
+  filter?: string;
+  users?: { id: string; email: string }[];
 }
 
-export default function PropertiesAdminClient({ initialProperties, meta, page }: Props) {
+export default function PropertiesAdminClient({ 
+  initialProperties, 
+  meta, 
+  page, 
+  currentUser,
+  filter = "all",
+  users = []
+}: Props) {
   const [properties, setProperties] = useState<PropertyResponse[]>(initialProperties);
   const [currentMeta, setCurrentMeta] = useState(meta);
   const [currentPage, setCurrentPage] = useState(page);
@@ -25,7 +41,22 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(false);
   const router = useRouter();
+
+  // Sync initial properties when filter changes (from server navigation)
+  useEffect(() => {
+    setProperties(initialProperties);
+    setCurrentMeta(meta);
+    setCurrentPage(page);
+  }, [initialProperties, meta, page]);
+
+  // Build dropdown options
+  const dropdownOptions: UserOption[] = [
+    { id: "all", email: "", label: "Todas" },
+    { id: "mine", email: "", label: "Mis propiedades" },
+    ...users.map(u => ({ ...u, label: u.email.split('@')[0] })),
+  ];
 
   // Confirm modal state
   const [confirmModal, setConfirmModal] = useState<{
@@ -47,6 +78,9 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
     try {
       const params = new URLSearchParams();
       params.set("page", String(newPage));
+      if (filter !== "all") {
+        params.set("filter", filter);
+      }
       const res = await fetch(`/api/properties?${params.toString()}`);
       if (!res.ok) throw new Error("Error fetching page");
       const data = await res.json();
@@ -106,6 +140,9 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
     try {
       const params = new URLSearchParams();
       params.set("page", String(currentPage));
+      if (filter !== "all") {
+        params.set("filter", filter);
+      }
       const res = await fetch(`/api/properties?${params.toString()}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
@@ -119,31 +156,55 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
     }
   }
 
+  function handleFilterChange(newFilter: string) {
+    if (newFilter === filter) return;
+    setFilterLoading(true);
+    router.push(`/admin/properties?filter=${newFilter}&page=1`);
+    // Reset loading after a short delay to allow navigation to complete
+    setTimeout(() => setFilterLoading(false), 500);
+  }
+
   return (
     <div className="p-4 md:p-6">
       <div className="w-full">
         
         {/* SECCIÓN DE ACCIONES DE LISTA */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 px-2">
-          <div>
-            <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-[0.2em]">Inventario Actual</h2>
-            <p className="text-slate-700 font-medium text-lg">
+        <div className="flex flex-col gap-4 mb-6 px-2">
+          {/* Filter dropdown - on its own row */}
+          <div className="flex items-center gap-2">
+            <select
+              value={filter}
+              onChange={(e) => handleFilterChange(e.target.value)}
+              disabled={filterLoading}
+              className="px-3 py-2 text-xs font-bold rounded-lg border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer min-w-[140px]"
+            >
+              {dropdownOptions.map(opt => (
+                <option key={opt.id} value={opt.id}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Info y botón en otra fila */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <p className="text-slate-700 font-medium text-sm">
               {currentMeta.total} Propiedades registradas
               {currentMeta.pages > 1 && (
-                <span className="text-slate-400 font-normal text-sm ml-2">
-                  — página {currentPage} de {currentMeta.pages}
+                <span className="text-slate-400 font-normal text-xs ml-1">
+                  — pág. {currentPage}/{currentMeta.pages}
                 </span>
               )}
             </p>
-          </div>
 
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-xl md:rounded-2xl shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group w-full md:w-auto"
-          >
-            <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-            <span className="uppercase text-xs tracking-widest">Publicar Nueva</span>
-          </button>
+            <button
+              onClick={() => setShowCreateForm(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-xl md:rounded-2xl shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group w-full md:w-auto"
+            >
+              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              <span className="uppercase text-xs tracking-widest">Publicar Nueva</span>
+            </button>
+          </div>
         </div>
 
         {/* MODAL CREACIÓN */}
@@ -178,8 +239,15 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
           </div>
         )}
 
-        {/* VISTA DE TARJETAS (mobile + tablet) */}
-        {properties.length > 0 && (
+        {/* Spinner de carga */}
+        {filterLoading && (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          </div>
+        )}
+
+        {/* VISTA DE TARJETAS (mobile + tablet) - solo cuando NO está cargando */}
+        {!filterLoading && properties.length > 0 && (
           <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
             {properties.map((p) => (
               <PropertyCardAdmin
@@ -190,13 +258,14 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
                   setEditingProperty(prop);
                   setShowEditForm(true);
                 }}
+                currentUser={currentUser}
               />
             ))}
           </div>
         )}
 
-        {/* TABLA DE PROPIEDADES (laptop en adelante) */}
-        {properties.length > 0 && (
+        {/* TABLA DE PROPIEDADES (laptop en adelante) - solo cuando NO está cargando */}
+        {!filterLoading && properties.length > 0 && (
           <div className="hidden lg:block bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="overflow-x-auto max-h-[calc(100vh-200px)]">
               <table className="w-full text-sm min-w-[900px]">
@@ -306,23 +375,28 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
                       {/* Acciones */}
                       <td className="px-1 py-2">
                         <div className="flex items-center justify-center gap-1">
-                          <button
-                            onClick={() => {
-                              setEditingProperty(p);
-                              setShowEditForm(true);
-                            }}
-                            className="p-1 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
-                            title="Editar"
-                          >
-                            <Edit size={12} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(p.slug)}
-                            className="p-1 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                            title="Eliminar"
-                          >
-                            <Trash2 size={12} />
-                          </button>
+                          {/* Mostrar botones solo si es admin o propietario */}
+                          {(currentUser?.isAdmin || p.createdBy?.userId === currentUser?.id) && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setEditingProperty(p);
+                                  setShowEditForm(true);
+                                }}
+                                className="p-1 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                                title="Editar"
+                              >
+                                <Edit size={12} />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(p.slug)}
+                                className="p-1 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                title="Eliminar"
+                              >
+                                <Trash2 size={12} />
+                              </button>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -334,7 +408,7 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
         )}
 
         {/* ESTADO VACÍO */}
-        {properties.length === 0 && (
+        {!filterLoading && properties.length === 0 && (
           <div className="bg-white border-2 border-dashed border-slate-200 rounded-xl py-16 text-center">
             <Building2 className="w-12 h-12 text-slate-200 mx-auto mb-4" />
             <h3 className="text-slate-900 font-bold text-lg">No hay propiedades</h3>
@@ -349,11 +423,11 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
         )}
 
         {/* PAGINATION CONTROLS */}
-        {currentMeta.pages > 1 && (
+        {!filterLoading && currentMeta.pages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-6">
             <button
               onClick={() => goToPage(currentPage - 1)}
-              disabled={currentPage <= 1 || loading}
+              disabled={currentPage <= 1 || loading || filterLoading}
               className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft size={16} />
@@ -385,7 +459,7 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
                   <button
                     key={p}
                     onClick={() => goToPage(p)}
-                    disabled={loading}
+                    disabled={loading || filterLoading}
                     className={`min-w-[36px] h-9 flex items-center justify-center text-sm font-medium rounded-lg transition-colors ${
                       p === currentPage
                         ? "bg-blue-600 text-white"
@@ -400,7 +474,7 @@ export default function PropertiesAdminClient({ initialProperties, meta, page }:
 
             <button
               onClick={() => goToPage(currentPage + 1)}
-              disabled={currentPage >= currentMeta.pages || loading}
+              disabled={currentPage >= currentMeta.pages || loading || filterLoading}
               className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Siguiente
