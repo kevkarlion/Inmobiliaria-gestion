@@ -44,7 +44,6 @@ interface TasacionFormData {
     timeline: string;
   };
   step6: {
-    estimatedPrice: string;
     notes: string;
   };
 }
@@ -56,22 +55,8 @@ const initialFormData: TasacionFormData = {
   step3: { propertyType: "", propertyState: "" },
   step4: { surfaceCovered: "", surfaceTotal: "", rooms: "", bathrooms: "", garage: "" },
   step5: { reason: "", timeline: "" },
-  step6: { estimatedPrice: "", notes: "" },
+  step6: { notes: "" },
 };
-
-// Neighborhoods for General Roca
-const neighborhoods = [
-  "Barrio Norte",
-  "Centro",
-  "Barrio Nuevo",
-  "San Lorenzo",
-  "Barrio Industrial",
-  "Barrio Melipal",
-  "Barrio Jockey Club",
-  "Barrio La Rubia",
-  "Barrio Ceferino",
-  "Otro",
-];
 
 // Property types
 const propertyTypes = [
@@ -341,16 +326,13 @@ export default function TasacionForm() {
                 <label className="block text-xs font-bold text-slate-700 mb-1.5 lg:mb-1">
                   Barrio / Zona
                 </label>
-                <select
+                <input
+                  type="text"
                   value={formData.step2.neighborhood}
                   onChange={e => updateFormData("step2", { neighborhood: e.target.value })}
-                  className="w-full px-3 lg:px-3 py-2 lg:py-2 border-2 border-slate-200 focus:border-gold-sand rounded-sm text-sm transition-colors bg-white"
-                >
-                  <option value="">Seleccionar barrio (opcional)</option>
-                  {neighborhoods.map(n => (
-                    <option key={n} value={n}>{n}</option>
-                  ))}
-                </select>
+                  className="w-full px-3 lg:px-3 py-2 lg:py-2 border-2 border-slate-200 focus:border-gold-sand rounded-sm text-sm transition-colors"
+                  placeholder="Ej: Barrio Norte (opcional)"
+                />
               </div>
 
               <div>
@@ -603,32 +585,17 @@ export default function TasacionForm() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 lg:mb-1">
-                  Precio estimado (opcional)
-                </label>
-                <input
-                  type="text"
-                  value={formData.step6.estimatedPrice}
-                  onChange={e => updateFormData("step6", { estimatedPrice: e.target.value })}
-                  className="w-full px-3 lg:px-3 py-2 lg:py-1.5 border-2 border-slate-200 focus:border-gold-sand rounded-sm text-sm transition-colors"
-                  placeholder="Ej: USD 150.000"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 lg:mb-1">
-                  Observaciones
-                </label>
-                <textarea
-                  value={formData.step6.notes}
-                  onChange={e => updateFormData("step6", { notes: e.target.value })}
-                  className="w-full px-3 lg:px-3 py-2 lg:py-1.5 border-2 border-slate-200 focus:border-gold-sand rounded-sm text-sm transition-colors resize-none"
-                  rows={1}
-                  placeholder="Comentarios adicionales..."
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 lg:mb-1">
+                Observaciones
+              </label>
+              <textarea
+                value={formData.step6.notes}
+                onChange={e => updateFormData("step6", { notes: e.target.value })}
+                className="w-full px-3 lg:px-3 py-2 lg:py-1.5 border-2 border-slate-200 focus:border-gold-sand rounded-sm text-sm transition-colors resize-none"
+                rows={3}
+                placeholder="Comentarios adicionales..."
+              />
             </div>
 
             <div>
