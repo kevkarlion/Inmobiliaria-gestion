@@ -92,6 +92,7 @@ export class PropertyService {
       price: {
         amount: dto.price.amount,
         currency: dto.price.currency as "USD" | "ARS",
+        priceOption: dto.price.priceOption || "amount",
       },
       address: {
         street: dto.address.street,
@@ -302,6 +303,7 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
       ...property.price,
       amount: payload.price.amount ?? property.price.amount,
       currency: payload.price.currency ?? property.price.currency,
+      priceOption: payload.price.priceOption ?? property.price.priceOption ?? "amount",
     };
   }
 
