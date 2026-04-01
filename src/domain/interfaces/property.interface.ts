@@ -14,6 +14,7 @@ export interface IProperty {
   price: {
     amount: number;
     currency: "USD" | "ARS";
+    priceOption: "amount" | "consult";
   };
   address: {
     street: string;

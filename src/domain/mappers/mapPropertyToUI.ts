@@ -62,6 +62,7 @@ export function mapPropertyToUI(property: any): PropertyUI {
     // Precio
     amount: property.price?.amount || 0,
     currency: property.price?.currency || "USD",
+    priceOption: property.price?.priceOption || "amount",
 
     // Medidas
     bedrooms: property.features?.bedrooms || 0,

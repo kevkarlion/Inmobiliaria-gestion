@@ -79,7 +79,13 @@ export default async function PropertyPageDetail({
       )}
 
       <p className="text-2xl font-bold mt-4 mb-4">
-        {dto.price.currency} {dto.price.amount.toLocaleString("es-AR")}
+        {(dto.price.priceOption === "consult" || dto.price.amount === 0) ? (
+          <span className="text-green-600">Consultar Precio</span>
+        ) : (
+          <>
+            {dto.price.currency} {dto.price.amount.toLocaleString("es-AR")}
+          </>
+        )}
       </p>
 
       {dto.description && (

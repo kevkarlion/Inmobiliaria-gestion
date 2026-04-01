@@ -25,6 +25,7 @@ export function mapPropertyToForm(property: PropertyResponse): any {
 
     // Precio
     priceAmount: property.price?.amount || 0,
+    priceOption: property.price?.priceOption || "amount",
     currency: property.price?.currency || "USD",
 
     // Location

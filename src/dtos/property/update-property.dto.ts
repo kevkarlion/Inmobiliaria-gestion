@@ -22,6 +22,7 @@ export class UpdatePropertyDTO {
   price?: {
     amount?: number;
     currency?: "USD" | "ARS";
+    priceOption?: "amount" | "consult";
   };
 
   features?: {
@@ -87,10 +88,14 @@ export class UpdatePropertyDTO {
       barrio: data.barrio || undefined,
     };
 
-    this.price = data.priceAmount ? {
-      amount: Number(data.priceAmount),
-      currency: data.currency || "USD",
-    } : undefined;
+    // Si existe priceOption O priceAmount, actualizar el precio
+    if (data.priceOption || data.priceAmount !== undefined) {
+      this.price = {
+        amount: Number(data.priceAmount) || 0,
+        currency: data.currency || "USD",
+        priceOption: data.priceOption || "amount",
+      };
+    }
 
     // 4. Age ahora se mapea dentro de features
     this.features = {

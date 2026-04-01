@@ -84,7 +84,7 @@ export default function PropertyShare({
       {/* Botón compartir nativo */}
       <button
         onClick={handleNativeShare}
-        className="w-full py-3 px-4 rounded-xl font-montserrat font-bold uppercase tracking-wide bg-gold-sand text-black hover:opacity-90 transition"
+        className="w-full py-3 px-4 rounded-xl font-inter font-semibold uppercase tracking-wide bg-gold-sand text-black hover:opacity-90 transition"
       >
         Compartir propiedad
       </button>
@@ -93,28 +93,28 @@ export default function PropertyShare({
       <div className="grid grid-cols-2 gap-2">
         <button
           onClick={shareWhatsapp}
-          className="w-full py-2.5 px-3 rounded-lg bg-[#25D366] text-white text-xs font-bold hover:opacity-90 transition"
+          className="w-full py-2.5 px-3 rounded-lg bg-[#25D366] text-white text-xs font-inter font-semibold hover:opacity-90 transition"
         >
           WhatsApp
         </button>
 
         <button
           onClick={shareFacebook}
-          className="w-full py-2.5 px-3 rounded-lg bg-[#1877F2] text-white text-xs font-bold hover:opacity-90 transition"
+          className="w-full py-2.5 px-3 rounded-lg bg-[#1877F2] text-white text-xs font-inter font-semibold hover:opacity-90 transition"
         >
           Facebook
         </button>
 
         <button
           onClick={shareLinkedin}
-          className="w-full py-2.5 px-3 rounded-lg bg-[#0A66C2] text-white text-xs font-bold hover:opacity-90 transition"
+          className="w-full py-2.5 px-3 rounded-lg bg-[#0A66C2] text-white text-xs font-inter font-semibold hover:opacity-90 transition"
         >
           LinkedIn
         </button>
 
         <button
           onClick={copyLink}
-          className="w-full py-2.5 px-3 rounded-lg bg-gold-sand text-black text-xs font-bold hover:opacity-90 transition"
+          className="w-full py-2.5 px-3 rounded-lg bg-gold-sand text-black text-xs font-inter font-semibold hover:opacity-90 transition"
         >
           Copiar link
         </button>

@@ -18,6 +18,7 @@ export interface PropertyMatch {
     price: {
       amount: number;
       currency: string;
+      priceOption: "amount" | "consult";
     };
     propertyType: {
       id: string;
@@ -71,6 +72,7 @@ export function propertyMatchingResultDTO(requirement: any, properties: any[]): 
         price: {
           amount: property.price?.amount || 0,
           currency: property.price?.currency || "USD",
+          priceOption: property.price?.priceOption || "amount",
         },
         propertyType: {
           id: property.propertyType?._id?.toString() || "",

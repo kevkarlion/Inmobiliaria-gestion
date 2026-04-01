@@ -13,6 +13,7 @@ export class CreatePropertyDTO {
   price: { 
     amount: number; 
     currency: "USD" | "ARS";
+    priceOption: "amount" | "consult";
   };
   
   address: { 
@@ -52,6 +53,12 @@ export class CreatePropertyDTO {
     if (!data.propertyTypeSlug) throw new BadRequestError("El tipo de propiedad es requerido");
     if (!data.province) throw new BadRequestError("La provincia es requerida");
     if (!data.city) throw new BadRequestError("La localidad es requerida");
+    
+    // Validar precio: o bien tiene monto (priceOption="amount") o bien "consultar" (priceOption="consult")
+    if (!data.priceOption) throw new BadRequestError("La opción de precio es requerida");
+    if (data.priceOption === "amount" && (!data.priceAmount || data.priceAmount <= 0)) {
+      throw new BadRequestError("El monto del precio es requerido cuando seleccionas 'Ingresar monto'");
+    }
 
     // Validar que el título no contenga el tipo de propiedad (evita slug duplicado)
     const typePrefix = data.propertyTypeSlug.toLowerCase();
@@ -77,8 +84,9 @@ export class CreatePropertyDTO {
     this.tags = data.tags || [];
 
     this.price = {
-      amount: Number(data.priceAmount),
+      amount: Number(data.priceAmount) || 0,
       currency: data.currency === "ARS" ? "ARS" : "USD",
+      priceOption: data.priceOption || "amount",
     };
 
     this.address = {

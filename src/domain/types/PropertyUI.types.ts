@@ -25,6 +25,7 @@ export interface PropertyUI {
   // Precio
   amount: number;
   currency: string;
+  priceOption: "amount" | "consult";
 
   // Características
   bedrooms: number;

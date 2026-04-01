@@ -14,6 +14,8 @@ import {
   Ruler,
   Route,
   Network,
+  MessageCircle,
+  MapPin,
   type LucideIcon,
 } from "lucide-react";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
@@ -34,52 +36,69 @@ export function PropertyDetailClient({
     /* El section ahora es el contenedor de ancho completo para el background */
     <section className="w-full bg-white-bg">
       {/* Contenedor interno que centra el contenido y maneja el max-width */}
-      <div className="max-w-7xl mx-auto px-4 py-14">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-14">
         {/* CABECERA */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-black/10 pb-10 pt-12 lg:pt-32">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <span className="label-subtitle font-montserrat bg-black text-white px-3 py-1 rounded">
-                {p.operationType}
-              </span>
-              {p.opportunity && (
-                <span className="label-subtitle font-montserrat bg-gold-sand text-black px-3 py-1 rounded">
-                  Oportunidad
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-black/10 pb-10 pt-12 lg:pt-32">
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="label-subtitle font-montserrat bg-black text-white px-3 py-1 rounded text-xs">
+                  {p.operationType}
                 </span>
-              )}
-              {p.featured && (
-                <span className="label-subtitle font-montserrat bg-oxford text-white px-3 py-1 rounded">
-                  Destacada
-                </span>
-              )}
-              {p.premium && (
-                <span className="label-subtitle font-montserrat bg-purple-600 text-white px-3 py-1 rounded">
-                  Premium
-                </span>
-              )}
+                {p.opportunity && (
+                  <span className="label-subtitle font-montserrat bg-gold-sand text-black px-3 py-1 rounded text-xs">
+                    Oportunidad
+                  </span>
+                )}
+                {p.featured && (
+                  <span className="label-subtitle font-montserrat bg-oxford text-white px-3 py-1 rounded text-xs">
+                    Destacada
+                  </span>
+                )}
+                {p.premium && (
+                  <span className="label-subtitle font-montserrat bg-purple-600 text-white px-3 py-1 rounded text-xs">
+                    Premium
+                  </span>
+                )}
+              </div>
+
+            <div className="relative">
+              <h1 className="font-montserrat text-3xl md:text-4xl lg:text-5xl uppercase tracking-tight leading-tight text-oxford" style={{ fontWeight: 900, letterSpacing: '-0.02em' }}>
+                {p.title}
+              </h1>
+              
+              {/* Línea decorativa dorada */}
+              <div className="w-24 h-1 bg-gradient-to-r from-gold-sand to-gold-hover rounded-full mt-4" />
             </div>
 
-            <h1 className="font-montserrat text-4xl md:text-6xl font-black uppercase tracking-tight leading-none text-oxford">
-              {p.title}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-x-2 text-blue-gray font-semibold">
-              <span>📍</span>
+            <div className="flex flex-wrap items-center gap-x-2 text-blue-gray font-medium mt-5">
+              <MapPin className="w-4 h-4 text-gold-sand" />
               <span>
                 {p.street} {p.number}
               </span>
-              <span className="opacity-60 italic">| {p.zoneName}</span>
+              <span className="opacity-60">|</span>
+              <span className="opacity-80">{p.zoneName}</span>
             </div>
           </div>
 
           <div className="flex flex-col md:items-end">
-            <span className="label-subtitle text-blue-gray mb-1">
-              Valor de la propiedad
-            </span>
-            <div className="font-montserrat text-4xl md:text-5xl font-black text-gold-sand flex items-baseline gap-2">
-              <span className="text-xl">{p.currency}</span>
-              <span>{formatPrice(p.amount)}</span>
-            </div>
+            {(p.priceOption !== "consult" && p.amount !== 0) ? (
+              <>
+                <span className="label-subtitle text-blue-gray mb-1">
+                  Valor de la propiedad
+                </span>
+                <div className="font-montserrat text-3xl md:text-4xl font-black text-gold-sand flex items-baseline gap-2">
+                  <span className="text-lg">{p.currency}</span>
+                  <span>{formatPrice(p.amount)}</span>
+                </div>
+              </>
+            ) : (
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-oxford/5 to-gold-sand/10 px-5 py-2.5 rounded-2xl border border-gold-sand/30">
+                <MessageCircle className="w-5 h-5 text-gold-sand" />
+                <span className="font-montserrat text-xl md:text-2xl font-black text-gold-sand">
+                  Consultar Precio
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -227,7 +246,7 @@ export function PropertyDetailClient({
                 {/* NUEVO: Compartir propiedad por slug */}
                 <PropertyShare
                   title={p.title}
-                  price={`${p.currency} ${formatPrice(p.amount)}`}
+                  price={(p.priceOption === "consult" || p.amount === 0) ? "Consultar Precio" : `${p.currency} ${formatPrice(p.amount)}`}
                   zone={p.zoneName}
                 />
               </div>

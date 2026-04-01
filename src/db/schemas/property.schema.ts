@@ -52,6 +52,11 @@ const PropertySchema = new Schema<IProperty>(
         enum: ["ARS", "USD"],
         required: true,
       },
+      priceOption: {
+        type: String,
+        enum: ["amount", "consult"],
+        default: "amount",
+      },
     },
 
     features: {

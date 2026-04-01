@@ -69,7 +69,13 @@ export default function PropertyCardAdmin({ property, onDelete, onEdit, currentU
           </div>
           <div className="flex items-center gap-2 font-bold text-slate-900">
             <Tag size={16} className="text-blue-500" />
-            <span>{property.price.currency} {property.price.amount.toLocaleString("es-AR")}</span>
+            <span>
+              {(property.price.priceOption === "consult" || property.price.amount === 0) ? (
+                "Consultar Precio"
+              ) : (
+                `${property.price.currency} ${property.price.amount.toLocaleString("es-AR")}`
+              )}
+            </span>
           </div>
         </div>
 

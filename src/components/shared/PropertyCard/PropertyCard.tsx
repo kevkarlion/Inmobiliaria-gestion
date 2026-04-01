@@ -152,10 +152,16 @@ export default function PropertyCard({ property }: any) {
           {property.price && (
             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800">
               <p className="text-xl font-bold text-neutral-900 dark:text-white">
-                <span className="text-gold-sand text-sm font-semibold mr-1">
-                  {property.price.currency}
-                </span>
-                {property.price.amount.toLocaleString("es-AR")}
+                {(property.price.priceOption === "consult" || property.price.amount === 0) ? (
+                  <span className="text-gold-sand text-sm font-semibold">Consultar Precio</span>
+                ) : (
+                  <>
+                    <span className="text-gold-sand text-sm font-semibold mr-1">
+                      {property.price.currency}
+                    </span>
+                    {property.price.amount.toLocaleString("es-AR")}
+                  </>
+                )}
               </p>
             </div>
           )}

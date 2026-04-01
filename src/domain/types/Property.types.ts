@@ -41,6 +41,7 @@ export interface Property {
   price: {
     amount: number;
     currency: string;
+    priceOption: "amount" | "consult";
   };
 
   features: {

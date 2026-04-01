@@ -9,6 +9,7 @@ export interface PropertyDTO {
   price: {
     amount: number;
     currency: "USD" | "ARS";
+    priceOption: "amount" | "consult";
   };
 
   typeName: string;

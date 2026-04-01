@@ -23,6 +23,7 @@ export interface PropertyResponse {
   price: {
     amount: number;
     currency: string;
+    priceOption: "amount" | "consult";
   };
 
   propertyType: {
@@ -81,6 +82,7 @@ export function propertyResponseDTO(property: any): PropertyResponse {
     price: {
       amount: property.price.amount,
       currency: property.price.currency,
+      priceOption: property.price.priceOption || "amount",
     },
 
     propertyType: {

@@ -37,6 +37,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
     city: "",
     barrio: "",
     priceAmount: 0,
+    priceOption: "amount", // Por defecto se ingresa monto
     currency: "USD",
     bedrooms: 0,
     bathrooms: 0,
@@ -269,24 +270,73 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
           <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Precio *</Label>
-          <Input type="text" inputMode="numeric" pattern="[0-9]*" name="priceAmount" value={form.priceAmount || ""} onChange={handleChange} className="bg-white/5 border-white/10 h-12" placeholder="Ej: 150000" required />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Moneda</Label>
-          <Select value={form.currency} onValueChange={(v) => handleSelectChange("currency", v)}>
-            <SelectTrigger className="bg-white/5 border-white/10 h-12">
-              <SelectValue placeholder="Moneda" />
+          <Select 
+            value={form.priceOption} 
+            onValueChange={(v: "amount" | "consult") => {
+              setForm(prev => ({
+                ...prev,
+                priceOption: v,
+                // Si selecciona "consultar", limpiamos el monto
+                priceAmount: v === "consult" ? 0 : prev.priceAmount
+              }));
+            }}
+          >
+            <SelectTrigger className="bg-white/5 border-white/10 h-12 text-white">
+              <SelectValue placeholder="Seleccionar" />
             </SelectTrigger>
             <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
-              <SelectItem value="USD">USD (Dólares)</SelectItem>
-              <SelectItem value="ARS">ARS (Pesos)</SelectItem>
+              <SelectItem value="amount">Ingresar monto</SelectItem>
+              <SelectItem value="consult">Consultar Precio</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-2">
-          <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Teléfono de Contacto</Label>
-          <Input name="contactPhone" value={form.contactPhone} onChange={handleChange} placeholder="Ej: 2984123456" className="bg-white/5 border-white/10 h-12" />
-        </div>
+        
+        {/* Solo mostrar si选择了 monto */}
+        {form.priceOption === "amount" && (
+          <>
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Monto</Label>
+              <Input 
+                type="text" 
+                inputMode="numeric" 
+                pattern="[0-9]*" 
+                name="priceAmount" 
+                value={form.priceAmount || ""} 
+                onChange={handleChange} 
+                className="bg-white/5 border-white/10 h-12" 
+                placeholder="Ej: 150000" 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Moneda</Label>
+              <Select value={form.currency} onValueChange={(v) => handleSelectChange("currency", v)}>
+                <SelectTrigger className="bg-white/5 border-white/10 h-12">
+                  <SelectValue placeholder="Moneda" />
+                </SelectTrigger>
+                <SelectContent position="popper" className="bg-neutral-800 border-white/10 text-white z-200">
+                  <SelectItem value="USD">USD (Dólares)</SelectItem>
+                  <SelectItem value="ARS">ARS (Pesos)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        )}
+        
+        {/* Si选择了 consultar, mostrar espacio vacío para mantener layout */}
+        {form.priceOption === "consult" && (
+          <div className="space-y-2">
+            <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Teléfono de Contacto</Label>
+            <Input name="contactPhone" value={form.contactPhone} onChange={handleChange} placeholder="Ej: 2984123456" className="bg-white/5 border-white/10 h-12" />
+          </div>
+        )}
+        
+        {/* Si选择了 monto, mostrar teléfono en el tercer espacio */}
+        {form.priceOption === "amount" && (
+          <div className="space-y-2">
+            <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Teléfono de Contacto</Label>
+            <Input name="contactPhone" value={form.contactPhone} onChange={handleChange} placeholder="Ej: 2984123456" className="bg-white/5 border-white/10 h-12" />
+          </div>
+        )}
       </div>
 
       {/* SECCIÓN 3: UBICACIÓN TÉCNICA */}

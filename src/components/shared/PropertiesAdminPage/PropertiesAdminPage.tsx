@@ -335,10 +335,16 @@ export default function PropertiesAdminClient({
                       {/* Precio */}
                       <td className="px-2 py-2 text-right hidden lg:table-cell">
                         <div className="flex flex-col items-end">
-                          <span className="text-[9px] text-slate-400">{p.price.currency}</span>
-                          <span className="font-bold text-slate-800 text-[10px]">
-                            {p.price.amount.toLocaleString("es-AR")}
-                          </span>
+                          {p.price.priceOption === "consult" ? (
+                            <span className="font-bold text-slate-800 text-[10px]">Consultar Precio</span>
+                          ) : (
+                            <>
+                              <span className="text-[9px] text-slate-400">{p.price.currency}</span>
+                              <span className="font-bold text-slate-800 text-[10px]">
+                                {p.price.amount.toLocaleString("es-AR")}
+                              </span>
+                            </>
+                          )}
                         </div>
                       </td>
                       

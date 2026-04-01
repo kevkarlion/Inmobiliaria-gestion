@@ -9,6 +9,7 @@ export interface PropertyFormType {
   barrio?: string;    // ID Seleccionado (opcional)
 
   priceAmount: number;
+  priceOption: "amount" | "consult"; // "amount" = monto específico, "consult" = "Consultar Precio"
   currency: "USD" | "ARS";
   
   // Características
