@@ -100,6 +100,16 @@ const PropertySchema = new Schema<IProperty>(
       default: [],
     },
 
+    // Imágenes multi-resolución
+    imagesDesktop: {
+      type: [String],
+      default: [],
+    },
+    imagesMobile: {
+      type: [String],
+      default: [],
+    },
+
     status: {
       type: String,
       enum: Object.values(PropertyStatus),

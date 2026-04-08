@@ -9,6 +9,8 @@ export class UpdatePropertyDTO {
   tags?: string[];
   status?: "active" | "inactive";
   images?: string[];
+  imagesDesktop?: string[];
+  imagesMobile?: string[];
 
   address?: {
     street?: string;
@@ -77,6 +79,8 @@ export class UpdatePropertyDTO {
     this.contactPhone = data.contactPhone; // 👈 3. Mapeo de teléfono
     this.status = data.status;
     this.images = data.images;
+    this.imagesDesktop = data.imagesDesktop;
+    this.imagesMobile = data.imagesMobile;
     this.tags = data.tags;
 
     this.address = {

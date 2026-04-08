@@ -3,15 +3,30 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useDeviceResolution } from "@/lib/device-resolution";
 
 interface PropertyGalleryProps {
-  images?: string[];
+  images?: string[];       // Fallback backward compatibility
+  imagesDesktop?: string[];
+  imagesMobile?: string[];
 }
 
-export function PropertyGallery({ images = [] }: PropertyGalleryProps) {
+export function PropertyGallery({ 
+  images = [], 
+  imagesDesktop = [], 
+  imagesMobile = [] 
+}: PropertyGalleryProps) {
   const [index, setIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const validImages = images.filter(Boolean);
+  const isMobile = useDeviceResolution();
+
+  // Seleccionar el array correcto según el dispositivo
+  // Si el array específico está vacío, usar images como fallback
+  const selectedImages = isMobile 
+    ? (imagesMobile.length > 0 ? imagesMobile : images)
+    : (imagesDesktop.length > 0 ? imagesDesktop : images);
+  
+  const validImages = selectedImages.filter(Boolean);
 
   if (!validImages.length)
     return (

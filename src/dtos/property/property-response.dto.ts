@@ -52,6 +52,8 @@ export interface PropertyResponse {
     id?: string;
     url: string;
   }[];
+  imagesDesktop?: string[];
+  imagesMobile?: string[];
 
   description?: string;
   status?: string;
@@ -143,6 +145,8 @@ export function propertyResponseDTO(property: any): PropertyResponse {
       id: img._id?.toString(),
       url: typeof img === "string" ? img : img.url,
     })),
+    imagesDesktop: property.imagesDesktop || [],
+    imagesMobile: property.imagesMobile || [],
 
     description: property.description,
     status: property.status,

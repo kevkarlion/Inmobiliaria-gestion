@@ -87,6 +87,12 @@ export function mapPropertyToUI(property: any): PropertyUI {
     images: Array.isArray(property.images) 
       ? property.images.map((img: any) => typeof img === "string" ? img : img.url)
       : [],
+    imagesDesktop: Array.isArray(property.imagesDesktop) 
+      ? property.imagesDesktop 
+      : [],
+    imagesMobile: Array.isArray(property.imagesMobile) 
+      ? property.imagesMobile 
+      : [],
     description: property.description || "",
 
     // Estado

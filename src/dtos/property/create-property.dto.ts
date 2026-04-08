@@ -8,6 +8,8 @@ export class CreatePropertyDTO {
   description: string;
   contactPhone: string; // 👈 Agregado para contacto
   images: { url: string; alt?: string }[];
+  imagesDesktop: string[];
+  imagesMobile: string[];
   tags: string[];
 
   price: { 
@@ -81,6 +83,8 @@ export class CreatePropertyDTO {
     this.description = data.description || "";
     this.contactPhone = data.contactPhone || ""; // 👈 Mapeo del teléfono
     this.images = data.images || [];
+    this.imagesDesktop = data.imagesDesktop || [];
+    this.imagesMobile = data.imagesMobile || [];
     this.tags = data.tags || [];
 
     this.price = {

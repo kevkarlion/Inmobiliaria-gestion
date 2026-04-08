@@ -4,6 +4,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, BedDouble, Bath, Car, Layers, Home } from "lucide-react";
+import { PropertyImageResolver } from "@/components/shared/PropertyImageResolver/PropertyImageResolver";
 
 const isLandType = (typeSlug?: string) => 
   typeSlug === "terreno" || typeSlug === "loteo" || typeSlug === "lote";
@@ -15,17 +16,24 @@ export default function PropertyCard({ property }: any) {
   const typeSlug = property.propertyType?.slug;
   const isLand = isLandType(typeSlug);
 
+  // Obtener las imágenes según el dispositivo (con fallback)
+  const images = property.images || [];
+  const imagesDesktop = property.imagesDesktop || [];
+  const imagesMobile = property.imagesMobile || [];
+  const hasImage = images.length > 0 || imagesDesktop.length > 0 || imagesMobile.length > 0;
+
   return (
     <Link href={`/properties/${property.slug}`}>
       <div className="group relative bg-white dark:bg-neutral-900 rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:shadow-xl hover:border-gold-sand/40 transition-all duration-300">
 
         {/* IMAGEN */}
         <div className="relative h-48 overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-          {property.images?.[0] ? (
-            <Image
-              src={property.images[0]}
+          {hasImage ? (
+            <PropertyImageResolver
+              images={images}
+              imagesDesktop={imagesDesktop}
+              imagesMobile={imagesMobile}
               alt={property.title}
-              fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (

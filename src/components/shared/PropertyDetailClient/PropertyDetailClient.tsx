@@ -104,7 +104,11 @@ export function PropertyDetailClient({
 
         {/* GALERÍA */}
         <div className="mb-14">
-          <PropertyGallery images={p.images} />
+          <PropertyGallery 
+            images={p.images} 
+            imagesDesktop={p.imagesDesktop} 
+            imagesMobile={p.imagesMobile} 
+          />
         </div>
 
         {/* CONTENIDO */}

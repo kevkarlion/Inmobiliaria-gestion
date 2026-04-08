@@ -5,6 +5,7 @@ import { useState, ChangeEvent, FormEvent, useEffect, useMemo } from "react";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { mapPropertyToForm } from "@/domain/mappers/propertyToForm.mapper";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
+import MultiResolutionUploader from '@/components/CloudinaryUploader/MultiResolutionUploader';
 import SortableImageGrid from "@/components/shared/SortableImage/SortableImageGrid";
 import { toast } from "sonner";
 
@@ -138,6 +139,20 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
     setForm((prev: any) => ({
       ...prev,
       images: [...(prev.images || []), ...urls],
+    }));
+  };
+
+  const handleDesktopImagesUpload = (urls: string[]) => {
+    setForm((prev: any) => ({
+      ...prev,
+      imagesDesktop: [...(prev.imagesDesktop || []), ...urls],
+    }));
+  };
+
+  const handleMobileImagesUpload = (urls: string[]) => {
+    setForm((prev: any) => ({
+      ...prev,
+      imagesMobile: [...(prev.imagesMobile || []), ...urls],
     }));
   };
 
@@ -469,13 +484,24 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
 
       {/* SECCIÓN 6: MULTIMEDIA */}
       <div className="space-y-4">
-        <Label className="block text-[10px] font-black uppercase tracking-widest text-gray-400">Galería de Imágenes</Label>
-        <CloudinaryUploader onImageUpload={handleImagesUpload} folder="properties" />
-        <SortableImageGrid
-          images={form.images || []}
-          onReorder={handleReorder}
-          onRemove={removeImage}
+        <Label className="block text-[10px] font-black uppercase tracking-widest text-gray-400">Imágenes Multi-Resolución</Label>
+        <MultiResolutionUploader 
+          onImagesDesktop={handleDesktopImagesUpload}
+          onImagesMobile={handleMobileImagesUpload}
+          existingDesktop={form.imagesDesktop || []}
+          existingMobile={form.imagesMobile || []}
         />
+        
+        {/* Legacy images section - keep for backward compatibility */}
+        <div className="pt-6 border-t border-white/10">
+          <Label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Galería Legacy</Label>
+          <CloudinaryUploader onImageUpload={handleImagesUpload} folder="properties" />
+          <SortableImageGrid
+            images={form.images || []}
+            onReorder={handleReorder}
+            onRemove={removeImage}
+          />
+        </div>
       </div>
 
       {/* SECCIÓN 7: FLAGS */}

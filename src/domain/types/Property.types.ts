@@ -66,6 +66,8 @@ export interface Property {
 
   tags: string[];
   images: string[];
+  imagesDesktop?: string[];
+  imagesMobile?: string[];
   description: string;
   status: "active" | "inactive";
   

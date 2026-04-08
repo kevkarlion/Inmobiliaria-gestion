@@ -42,5 +42,7 @@ export interface PropertyFormType {
   premium: boolean;
   tags: string[];
   images: string[];
+  imagesDesktop?: string[];
+  imagesMobile?: string[];
   description: string;
 }

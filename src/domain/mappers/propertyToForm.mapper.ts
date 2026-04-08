@@ -59,6 +59,8 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     images: (property.images || []).map((img: any) =>
       typeof img === "string" ? img : img.url,
     ),
+    imagesDesktop: property.imagesDesktop || [],
+    imagesMobile: property.imagesMobile || [],
 
     status: property.status || "active",
   };

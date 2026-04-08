@@ -45,6 +45,8 @@ export interface IProperty {
   };
   tags: string[];
   images: { url: string; alt?: string }[];
+  imagesDesktop?: string[];
+  imagesMobile?: string[];
 
 
   location: {
