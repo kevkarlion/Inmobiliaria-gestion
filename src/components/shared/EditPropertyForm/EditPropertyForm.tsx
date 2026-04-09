@@ -138,21 +138,21 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
   const handleImagesUpload = (urls: string[]) => {
     setForm((prev: any) => ({
       ...prev,
-      images: [...(prev.images || []), ...urls],
+      images: urls, // Reemplazar, no concatenar
     }));
   };
 
   const handleDesktopImagesUpload = (urls: string[]) => {
     setForm((prev: any) => ({
       ...prev,
-      imagesDesktop: [...(prev.imagesDesktop || []), ...urls],
+      imagesDesktop: urls, // Reemplazar, no concatenar
     }));
   };
 
   const handleMobileImagesUpload = (urls: string[]) => {
     setForm((prev: any) => ({
       ...prev,
-      imagesMobile: [...(prev.imagesMobile || []), ...urls],
+      imagesMobile: urls, // Reemplazar, no concatenar
     }));
   };
 
