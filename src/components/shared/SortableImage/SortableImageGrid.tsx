@@ -26,6 +26,9 @@ export default function SortableImageGrid({
   onReorder,
   onRemove,
 }: SortableImageGridProps) {
+  // Crear IDs únicos para cada imagen
+  const imageIds = images.map((image, index) => `${image}-${index}`);
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 8 },
@@ -36,9 +39,14 @@ export default function SortableImageGrid({
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    const oldIndex = images.indexOf(active.id as string);
-    const newIndex = images.indexOf(over.id as string);
-    if (oldIndex === -1 || newIndex === -1) return;
+    // Extraer los índices de los IDs únicos
+    const oldId = active.id as string;
+    const newId = over.id as string;
+    
+    const oldIndex = parseInt(oldId.split("-").pop() || "0", 10);
+    const newIndex = parseInt(newId.split("-").pop() || "0", 10);
+
+    if (isNaN(oldIndex) || isNaN(newIndex)) return;
 
     onReorder(arrayMove(images, oldIndex, newIndex));
   };
@@ -50,13 +58,13 @@ export default function SortableImageGrid({
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={images}
+        items={imageIds}
         strategy={horizontalListSortingStrategy}
       >
         <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
           {images.map((image, index) => (
             <SortableImage
-              key={image}
+              key={`${image}-${index}`}
               image={image}
               index={index}
               onRemove={onRemove}

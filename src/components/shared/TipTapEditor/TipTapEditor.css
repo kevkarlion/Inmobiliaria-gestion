@@ -4,6 +4,14 @@
   min-height: 300px;
   padding: 1rem;
   outline: none;
+  /* Color de selección visible en fondo oscuro */
+  -webkit-text-fill-color: currentColor;
+}
+
+.TipTapEditor-wrapper .ProseMirror ::selection,
+.TipTapEditor-wrapper .ProseMirror ::-moz-selection {
+  background-color: rgba(59, 130, 246, 0.6); /* Azul semitransparente */
+  color: white;
 }
 
 .TipTapEditor-wrapper .ProseMirror p.is-editor-empty:first-child::before {

@@ -17,7 +17,8 @@ export function mapPropertyToForm(property: PropertyResponse): any {
       property.address?.province?.name ||
       "",
     city: property.address?.city?.slug || property.address?.city?.name || "",
-    barrio: property.address?.barrio?.slug || property.address?.barrio || "",
+    barrio: property.address?.barrio?.name || property.address?.barrio?.slug || "",
+    barrioSlug: property.address?.barrio?.slug || "",
 
     street: property.address?.street || "",
     number: property.address?.number || "",

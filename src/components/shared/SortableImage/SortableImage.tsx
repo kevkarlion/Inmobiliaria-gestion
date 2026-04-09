@@ -12,6 +12,8 @@ interface SortableImageProps {
 }
 
 export default function SortableImage({ image, index, onRemove }: SortableImageProps) {
+  // Usar un ID único que incluya el índice para permitir URLs duplicadas
+  const uniqueId = `${image}-${index}`;
   const {
     attributes,
     listeners,
@@ -19,7 +21,7 @@ export default function SortableImage({ image, index, onRemove }: SortableImageP
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: image });
+  } = useSortable({ id: uniqueId });
 
   const style = {
     transform: CSS.Transform.toString(transform),
