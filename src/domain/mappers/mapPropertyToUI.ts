@@ -43,8 +43,9 @@ export function mapPropertyToUI(property: any): PropertyUI {
   let externalSearchUrl: string;
   
   if (lat && lng) {
-    // Usar coordenadas del iframe para mostrar el marker exacto
-    externalSearchUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    // Usar formato "place" más compatible con mobile (iOS/Android)
+    // Formato: https://www.google.com/maps/@LAT,LNG,z15
+    externalSearchUrl = `https://www.google.com/maps/@${lat},${lng},17z?entry=ttu`;
   } else {
     // Fallback a búsqueda por texto
     externalSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${street} ${number} ${city}`)}`;
