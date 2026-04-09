@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import CloudinaryUploader from "./CloudinaryUploader";
+import SortableImageGrid from "@/components/shared/SortableImage/SortableImageGrid";
 
 interface MultiResolutionUploaderProps {
   onImagesDesktop: (urls: string[]) => void;
@@ -43,6 +44,16 @@ export default function MultiResolutionUploader({
     onImagesMobile(newImages);
   };
 
+  const handleDesktopReorder = (reorderedImages: string[]) => {
+    setDesktopImages(reorderedImages);
+    onImagesDesktop(reorderedImages);
+  };
+
+  const handleMobileReorder = (reorderedImages: string[]) => {
+    setMobileImages(reorderedImages);
+    onImagesMobile(reorderedImages);
+  };
+
   return (
     <div className="space-y-6">
       {/* Desktop Section */}
@@ -57,17 +68,11 @@ export default function MultiResolutionUploader({
           existingImages={desktopImages}
         />
         {desktopImages.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {desktopImages.map((img, idx) => (
-              <button
-                key={idx}
-                onClick={() => removeDesktopImage(idx)}
-                className="text-xs bg-red-500/20 hover:bg-red-500/40 text-red-400 px-2 py-1 rounded transition-colors"
-              >
-                Eliminar {idx + 1}
-              </button>
-            ))}
-          </div>
+          <SortableImageGrid
+            images={desktopImages}
+            onReorder={handleDesktopReorder}
+            onRemove={removeDesktopImage}
+          />
         )}
       </div>
 
@@ -83,17 +88,11 @@ export default function MultiResolutionUploader({
           existingImages={mobileImages}
         />
         {mobileImages.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {mobileImages.map((img, idx) => (
-              <button
-                key={idx}
-                onClick={() => removeMobileImage(idx)}
-                className="text-xs bg-red-500/20 hover:bg-red-500/40 text-red-400 px-2 py-1 rounded transition-colors"
-              >
-                Eliminar {idx + 1}
-              </button>
-            ))}
-          </div>
+          <SortableImageGrid
+            images={mobileImages}
+            onReorder={handleMobileReorder}
+            onRemove={removeMobileImage}
+          />
         )}
       </div>
     </div>
