@@ -467,16 +467,8 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
       </div>
 
       {/* SECCIÓN 5: MAPA */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-white/5 rounded-2xl border border-white/5">
+      <div className="space-y-2 p-6 bg-white/5 rounded-2xl border border-white/5">
         <div className="space-y-2">
-          <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Latitud</Label>
-          <Input type="number" step="any" name="lat" value={form.lat ?? ""} onChange={handleChange} className="bg-neutral-800 border-white/10 h-12" />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Longitud</Label>
-          <Input type="number" step="any" name="lng" value={form.lng ?? ""} onChange={handleChange} className="bg-neutral-800 border-white/10 h-12" />
-        </div>
-        <div className="md:col-span-2 space-y-2">
           <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">URL Mapa / Iframe</Label>
           <Input name="mapsUrl" value={form.mapsUrl || ""} onChange={handleChange} className="bg-neutral-800 border-white/10 h-12" />
         </div>

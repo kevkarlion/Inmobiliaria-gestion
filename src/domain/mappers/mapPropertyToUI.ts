@@ -26,11 +26,29 @@ export function mapPropertyToUI(property: any): PropertyUI {
     ? rawBarrio?.slug || "" 
     : rawBarrio?.toLowerCase().replace(/\s+/g, '-') || "";
 
-  // 3. URL externa Google Maps (Corregido el template string)
+  // Variables de dirección para fallback
   const street = property.address?.street || "";
   const number = property.address?.number || "";
   const city = property.address?.city?.name || "";
-  const externalSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${street} ${number} ${city}`)}`;
+
+  // 3. Extraer coordenadas del iframe de Google Maps para URL externa
+  // El iframe tiene formato: ...!2d{LONG}!3d{LAT}...
+  const embedUrl = cleanEmbedUrl;
+  const lngMatch = embedUrl.match(/!2d(-?[\d.]+)/);
+  const latMatch = embedUrl.match(/!3d(-?[\d.]+)/);
+  
+  const lat = latMatch ? latMatch[1] : null;
+  const lng = lngMatch ? lngMatch[1] : null;
+  
+  let externalSearchUrl: string;
+  
+  if (lat && lng) {
+    // Usar coordenadas del iframe para mostrar el marker exacto
+    externalSearchUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  } else {
+    // Fallback a búsqueda por texto
+    externalSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${street} ${number} ${city}`)}`;
+  }
 
   return {
     id: property._id?.toString() || property.id, 

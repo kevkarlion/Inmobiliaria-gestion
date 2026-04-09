@@ -206,8 +206,6 @@ export function PropertyDetailClient({
                 <Item label="Localidad" value={p.cityName} light />
                 <Item label="Barrio" value={p.barrioName} light />
                 <Item label="Código Postal" value={p.zipCode} light />
-                <Item label="Latitud" value={p.lat} light />
-                <Item label="Longitud" value={p.lng} light />
               </div>
 
               {p.mapsUrl && (
