@@ -327,13 +327,20 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
     };
   }
 
-  // Flags
-  if (payload.flags) {
+  // Flags - acepta ambos formatos: nested (flags.reserved) o root (reserved)
+  if (payload.flags || payload.reserved !== undefined || payload.sold !== undefined) {
     updateData.flags = {
       ...property.flags,
-      featured: payload.flags.featured ?? property.flags?.featured,
-      opportunity: payload.flags.opportunity ?? property.flags?.opportunity,
-      premium: payload.flags.premium ?? property.flags?.premium,
+      featured: payload.flags?.featured ?? property.flags?.featured,
+      opportunity: payload.flags?.opportunity ?? property.flags?.opportunity,
+      premium: payload.flags?.premium ?? property.flags?.premium,
+      // Priorizar nested (flags.reserved) sobre root
+      reserved: payload.flags?.reserved !== undefined 
+        ? payload.flags.reserved 
+        : payload.reserved !== undefined ? payload.reserved : property.flags?.reserved ?? false,
+      sold: payload.flags?.sold !== undefined 
+        ? payload.flags.sold 
+        : payload.sold !== undefined ? payload.sold : property.flags?.sold ?? false,
     };
   }
 

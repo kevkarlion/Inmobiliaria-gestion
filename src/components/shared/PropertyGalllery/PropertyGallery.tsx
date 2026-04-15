@@ -9,12 +9,16 @@ interface PropertyGalleryProps {
   images?: string[];       // Fallback backward compatibility
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  reserved?: boolean;
+  sold?: boolean;
 }
 
 export function PropertyGallery({ 
   images = [], 
   imagesDesktop = [], 
-  imagesMobile = [] 
+  imagesMobile = [],
+  reserved,
+  sold
 }: PropertyGalleryProps) {
   const [index, setIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -40,8 +44,9 @@ export function PropertyGallery({
 
   return (
     <div className="w-full max-w-5xl mx-auto px-2 sm:px-6">
-      {/* Contenedor Principal - tamaño fijo grande */}
+      {/* Contenedor Principal */}
       <div className="relative w-full aspect-[3/4] md:aspect-[2/3] max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl border border-white/5 bg-black">
+        
         <Image
           src={validImages[index]}
           alt={`Propiedad - Imagen ${index + 1}`}
@@ -52,8 +57,8 @@ export function PropertyGallery({
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
         />
         
-        {/* Controles */}
-        <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none">
+        {/* Controles - dentro del contenedor */}
+        <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none z-20">
           <button 
             onClick={prev} 
             className="pointer-events-auto bg-black/40 hover:bg-white hover:text-black backdrop-blur-sm text-white p-2 sm:p-3 rounded-full transition-all active:scale-90"
@@ -69,9 +74,81 @@ export function PropertyGallery({
         </div>
 
         {/* Contador */}
-        <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white tracking-widest border border-white/10">
+        <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-white tracking-widest border border-white/10 z-20">
           {index + 1} / {validImages.length}
         </div>
+
+        {/* RIBBON: Reserved - mobile (hidden en laptop) */}
+        {reserved && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 md:hidden">
+            <div 
+              className="absolute bg-amber-500 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center text-xs"
+              style={{
+                left: '44%',
+                top: '-7%',
+                width: '79%',
+                transformOrigin: '0% 0%',
+                transform: 'rotate(29.74deg)',
+              }}
+            >
+              <span className="whitespace-nowrap">⏱️ RESERVADA</span>
+            </div>
+          </div>
+        )}
+        
+        {/* RIBBON: Sold - mobile (hidden en laptop) */}
+        {sold && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 md:hidden">
+            <div 
+              className="absolute bg-red-600 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center text-xs"
+              style={{
+                left: '44%',
+                top: '-7%',
+                width: '79%',
+                transformOrigin: '0% 0%',
+                transform: 'rotate(29.74deg)',
+              }}
+            >
+              <span className="whitespace-nowrap">✅ VENDIDA</span>
+            </div>
+          </div>
+        )}
+
+        {/* RIBBON Reserved - laptop (solo visible en md+) */}
+        {reserved && (
+          <div className="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-10">
+            <div 
+              className="absolute bg-amber-500 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center md:text-sm"
+              style={{
+                left: '35%',
+                top: '-28%',
+                width: '95%',
+                transformOrigin: '0% 0%',
+                transform: 'rotate(29.74deg)',
+              }}
+            >
+              <span className="whitespace-nowrap">⏱️ RESERVADA</span>
+            </div>
+          </div>
+        )}
+        
+        {/* RIBBON Sold - laptop (solo visible en md+) */}
+        {sold && (
+          <div className="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-10">
+            <div 
+              className="absolute bg-red-600 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center md:text-sm"
+              style={{
+                left: '35%',
+                top: '-28%',
+                width: '95%',
+                transformOrigin: '0% 0%',
+                transform: 'rotate(29.74deg)',
+              }}
+            >
+              <span className="whitespace-nowrap">✅ VENDIDA</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Carrusel de Miniaturas (Thumbnails) */}

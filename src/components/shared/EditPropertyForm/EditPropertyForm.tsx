@@ -498,6 +498,31 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
 
       {/* SECCIÓN 7: FLAGS */}
       <div className="flex flex-wrap gap-8 py-6 border-y border-white/5">
+        {/* Visual badges - Reserved/Sold (no affect status) */}
+        <div className="flex items-center space-x-3 group cursor-pointer">
+          <Checkbox 
+            id="edit-reserved"
+            checked={!!form.flags?.reserved}
+            onCheckedChange={(checked) => setForm((prev: any) => ({ ...prev, flags: { ...prev.flags, reserved: checked } }))}
+            className="border-white/20 data-[state=checked]:bg-amber-500"
+          />
+          <Label htmlFor="edit-reserved" className="text-[10px] font-bold uppercase tracking-widest text-amber-500 cursor-pointer">
+            Reservada
+          </Label>
+        </div>
+
+        <div className="flex items-center space-x-3 group cursor-pointer">
+          <Checkbox 
+            id="edit-sold"
+            checked={!!form.flags?.sold}
+            onCheckedChange={(checked) => setForm((prev: any) => ({ ...prev, flags: { ...prev.flags, sold: checked } }))}
+            className="border-white/20 data-[state=checked]:bg-green-600"
+          />
+          <Label htmlFor="edit-sold" className="text-[10px] font-bold uppercase tracking-widest text-green-600 cursor-pointer">
+            Vendida
+          </Label>
+        </div>
+
         {/* Tipo de cochera */}
         <div className="flex items-center space-x-3 group">
           <Label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">

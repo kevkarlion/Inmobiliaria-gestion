@@ -43,6 +43,42 @@ export default function PropertyCardHome({ property }: Props) {
 
       {/* Contenido Superpuesto */}
       <div className="relative z-20 h-full p-6 flex flex-col justify-between font-montserrat">
+        {/* RIBBON: Reserved - Diagonal from middle-top to extended past right */}
+        {property.reserved && (
+          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+            <div 
+              className="absolute bg-amber-500 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
+              style={{
+                left: '43%',
+                top: '-12%',
+                width: '81%',
+                transformOrigin: '0% 0%',
+                transform: 'rotate(29.74deg)',
+              }}
+            >
+              <span className="whitespace-nowrap">⏱️ RESERVADA</span>
+            </div>
+          </div>
+        )}
+
+        {/* RIBBON: Sold - Diagonal from middle-top to extended past right */}
+        {property.sold && (
+          <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+            <div 
+              className="absolute bg-green-600 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
+              style={{
+                left: '43%',
+                top: '-12%',
+                width: '81%',
+                transformOrigin: '0% 0%',
+                transform: 'rotate(29.74deg)',
+              }}
+            >
+              <span className="whitespace-nowrap">✅ VENDIDA</span>
+            </div>
+          </div>
+        )}
+
         {/* Superior: Tags y Características */}
         <div className="flex justify-between items-start">
           <div className="flex flex-col gap-2">

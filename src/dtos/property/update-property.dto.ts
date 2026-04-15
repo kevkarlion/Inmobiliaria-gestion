@@ -45,6 +45,8 @@ export class UpdatePropertyDTO {
     featured?: boolean;
     opportunity?: boolean;
     premium?: boolean;
+    reserved?: boolean;
+    sold?: boolean;
   };
 
   location?: { 
@@ -120,6 +122,13 @@ export class UpdatePropertyDTO {
       featured: data.featured !== undefined ? Boolean(data.featured) : undefined,
       opportunity: data.opportunity !== undefined ? Boolean(data.opportunity) : undefined,
       premium: data.premium !== undefined ? Boolean(data.premium) : undefined,
+      // Priorizar nested (flags.reserved) sobre root porque es más reciente
+      reserved: data.flags?.reserved !== undefined 
+        ? Boolean(data.flags.reserved) 
+        : data.reserved !== undefined ? Boolean(data.reserved) : undefined,
+      sold: data.flags?.sold !== undefined 
+        ? Boolean(data.flags.sold) 
+        : data.sold !== undefined ? Boolean(data.sold) : undefined,
     };
 
     this.location = {

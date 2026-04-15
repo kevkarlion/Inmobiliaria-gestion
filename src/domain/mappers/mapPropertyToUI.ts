@@ -100,6 +100,8 @@ export function mapPropertyToUI(property: any): PropertyUI {
     featured: !!property.flags?.featured,
     opportunity: !!property.flags?.opportunity,
     premium: !!property.flags?.premium,
+    reserved: !!property.flags?.reserved,
+    sold: !!property.flags?.sold,
 
     // Contenido
     tags: property.tags || [],

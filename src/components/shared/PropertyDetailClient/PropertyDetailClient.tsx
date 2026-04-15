@@ -35,6 +35,7 @@ export function PropertyDetailClient({
   return (
     /* El section ahora es el contenedor de ancho completo para el background */
     <section className="w-full bg-white-bg">
+
       {/* Contenedor interno que centra el contenido y maneja el max-width */}
       <div className="max-w-7xl mx-auto px-4 lg:px-8 py-14">
         {/* CABECERA */}
@@ -107,7 +108,9 @@ export function PropertyDetailClient({
           <PropertyGallery 
             images={p.images} 
             imagesDesktop={p.imagesDesktop} 
-            imagesMobile={p.imagesMobile} 
+            imagesMobile={p.imagesMobile}
+            reserved={p.reserved}
+            sold={p.sold}
           />
         </div>
 

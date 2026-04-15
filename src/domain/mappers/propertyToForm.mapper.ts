@@ -49,10 +49,19 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     // Antigüedad: Se mapea desde features.age del PropertyResponse
     age: property.features?.age || 0, 
 
-    // Flags
+    // Flags - tanto en raíz como nested para compatibilidad
     featured: !!property.flags?.featured,
     opportunity: !!property.flags?.opportunity,
     premium: !!property.flags?.premium,
+    reserved: !!property.flags?.reserved,
+    sold: !!property.flags?.sold,
+    flags: {
+      featured: !!property.flags?.featured,
+      opportunity: !!property.flags?.opportunity,
+      premium: !!property.flags?.premium,
+      reserved: !!property.flags?.reserved,
+      sold: !!property.flags?.sold,
+    },
 
     // Extras
     description: property.description || "",

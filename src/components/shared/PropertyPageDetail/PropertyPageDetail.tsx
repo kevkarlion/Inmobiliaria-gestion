@@ -22,6 +22,22 @@ export default async function PropertyPageDetail({
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      {/* BANNER RESERVADA/VENDIDA - Full width banner */}
+      {dto.flags?.reserved && (
+        <div className="w-full bg-amber-500 text-white py-6 text-center -mx-6 -mt-6 mb-6">
+          <div className="flex items-center justify-center gap-4 font-black text-3xl uppercase tracking-widest">
+            ⏱️ RESERVADA
+          </div>
+        </div>
+      )}
+      {dto.flags?.sold && (
+        <div className="w-full bg-green-600 text-white py-6 text-center -mx-6 -mt-6 mb-6">
+          <div className="flex items-center justify-center gap-4 font-black text-3xl uppercase tracking-widest">
+            ✅ VENDIDA
+          </div>
+        </div>
+      )}
+
       <h1 className="text-3xl font-bold mb-4">{dto.title}</h1>
 
       {/* FLAGS */}

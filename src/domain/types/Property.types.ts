@@ -62,6 +62,8 @@ export interface Property {
     featured: boolean;
     opportunity: boolean;
     premium: boolean;
+    reserved: boolean;
+    sold: boolean;
   };
 
   tags: string[];
