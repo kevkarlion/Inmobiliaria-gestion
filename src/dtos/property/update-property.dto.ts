@@ -13,7 +13,9 @@ export class UpdatePropertyDTO {
   imagesMobile?: string[];
   // Flags en raíz para compatibilidad
   reserved?: boolean;
+  reservedIsMale?: boolean;
   sold?: boolean;
+  soldIsMale?: boolean;
 
   address?: {
     street?: string;
@@ -49,7 +51,9 @@ export class UpdatePropertyDTO {
     opportunity?: boolean;
     premium?: boolean;
     reserved?: boolean;
+    reservedIsMale?: boolean;
     sold?: boolean;
+    soldIsMale?: boolean;
   };
 
   location?: { 
@@ -129,9 +133,15 @@ export class UpdatePropertyDTO {
       reserved: data.flags?.reserved !== undefined 
         ? Boolean(data.flags.reserved) 
         : data.reserved !== undefined ? Boolean(data.reserved) : undefined,
+      reservedIsMale: data.flags?.reservedIsMale !== undefined
+        ? Boolean(data.flags.reservedIsMale)
+        : data.reservedIsMale !== undefined ? Boolean(data.reservedIsMale) : undefined,
       sold: data.flags?.sold !== undefined 
         ? Boolean(data.flags.sold) 
         : data.sold !== undefined ? Boolean(data.sold) : undefined,
+      soldIsMale: data.flags?.soldIsMale !== undefined
+        ? Boolean(data.flags.soldIsMale)
+        : data.soldIsMale !== undefined ? Boolean(data.soldIsMale) : undefined,
     };
 
     this.location = {

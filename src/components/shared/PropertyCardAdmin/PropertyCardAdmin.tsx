@@ -26,6 +26,16 @@ export default function PropertyCardAdmin({ property, onDelete, onEdit, currentU
       <div className="p-4 grow">
         {/* Flags de Marketing */}
         <div className="flex gap-1 mb-3">
+          {property.flags?.reserved && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full border" style={{ backgroundColor: '#67EA81', color: '#0d7119', borderColor: '#67EA81' }}>
+              {property.flags.reservedIsMale ? "Reservado" : "Reservada"}
+            </span>
+          )}
+          {property.flags?.sold && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full border" style={{ backgroundColor: '#EB4D23', color: '#fff', borderColor: '#EB4D23' }}>
+              {property.flags.soldIsMale ? "Vendido" : "Vendida"}
+            </span>
+          )}
           {property.flags?.featured && <span className="bg-amber-100 text-amber-700 text-[10px] px-2 py-0.5 rounded-full border border-amber-200">Destacada</span>}
           {property.flags?.opportunity && <span className="bg-rose-100 text-rose-700 text-[10px] px-2 py-0.5 rounded-full border border-rose-200">Oportunidad</span>}
           {property.flags?.premium && <span className="bg-purple-100 text-purple-700 text-[10px] px-2 py-0.5 rounded-full border border-purple-200">Premium</span>}

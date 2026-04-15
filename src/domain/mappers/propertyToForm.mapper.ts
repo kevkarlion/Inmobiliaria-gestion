@@ -54,13 +54,17 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     opportunity: !!property.flags?.opportunity,
     premium: !!property.flags?.premium,
     reserved: !!property.flags?.reserved,
+    reservedIsMale: !!property.flags?.reservedIsMale,
     sold: !!property.flags?.sold,
+    soldIsMale: !!property.flags?.soldIsMale,
     flags: {
       featured: !!property.flags?.featured,
       opportunity: !!property.flags?.opportunity,
       premium: !!property.flags?.premium,
       reserved: !!property.flags?.reserved,
+      reservedIsMale: !!property.flags?.reservedIsMale,
       sold: !!property.flags?.sold,
+      soldIsMale: !!property.flags?.soldIsMale,
     },
 
     // Extras

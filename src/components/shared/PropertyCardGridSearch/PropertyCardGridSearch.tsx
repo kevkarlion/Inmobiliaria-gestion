@@ -75,8 +75,9 @@ if (!properties) {
             {p.reserved && (
               <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
                 <div 
-                  className="absolute bg-amber-500 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
+                  className="absolute text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
                   style={{
+                    backgroundColor: '#67EA81',
                     left: '43%',
                     top: '-12%',
                     width: '81%',
@@ -84,7 +85,7 @@ if (!properties) {
                     transform: 'rotate(29.74deg)',
                   }}
                 >
-                  <span className="whitespace-nowrap">⏱️ RESERVADA</span>
+                  <span className="whitespace-nowrap font-montserrat">{p.reservedIsMale ? "RESERVADO" : "RESERVADA"}</span>
                 </div>
               </div>
             )}
@@ -93,8 +94,9 @@ if (!properties) {
             {p.sold && (
               <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
                 <div 
-                  className="absolute bg-red-600 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
+                  className="absolute text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
                   style={{
+                    backgroundColor: '#EB4D23',
                     left: '43%',
                     top: '-12%',
                     width: '81%',
@@ -102,7 +104,7 @@ if (!properties) {
                     transform: 'rotate(29.74deg)',
                   }}
                 >
-                  <span className="whitespace-nowrap">✅ VENDIDA</span>
+                  <span className="whitespace-nowrap font-montserrat">{p.soldIsMale ? "VENDIDO" : "VENDIDA"}</span>
                 </div>
               </div>
             )}

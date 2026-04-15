@@ -24,16 +24,16 @@ export default async function PropertyPageDetail({
     <div className="max-w-4xl mx-auto p-6">
       {/* BANNER RESERVADA/VENDIDA - Full width banner */}
       {dto.flags?.reserved && (
-        <div className="w-full bg-amber-500 text-white py-6 text-center -mx-6 -mt-6 mb-6">
-          <div className="flex items-center justify-center gap-4 font-black text-3xl uppercase tracking-widest">
-            ⏱️ RESERVADA
+        <div className="w-full text-white py-6 text-center -mx-6 -mt-6 mb-6" style={{ backgroundColor: '#67EA81' }}>
+          <div className="flex items-center justify-center gap-4 font-montserrat font-black text-3xl uppercase tracking-widest">
+            {dto.flags.reservedIsMale ? "RESERVADO" : "RESERVADA"}
           </div>
         </div>
       )}
       {dto.flags?.sold && (
-        <div className="w-full bg-red-600 text-white py-6 text-center -mx-6 -mt-6 mb-6">
-          <div className="flex items-center justify-center gap-4 font-black text-3xl uppercase tracking-widest">
-            ✅ VENDIDA
+        <div className="w-full text-white py-6 text-center -mx-6 -mt-6 mb-6" style={{ backgroundColor: '#EB4D23' }}>
+          <div className="flex items-center justify-center gap-4 font-montserrat font-black text-3xl uppercase tracking-widest">
+            {dto.flags.soldIsMale ? "VENDIDO" : "VENDIDA"}
           </div>
         </div>
       )}

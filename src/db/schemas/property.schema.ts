@@ -95,7 +95,9 @@ const PropertySchema = new Schema<IProperty>(
       premium: { type: Boolean, default: false, index: true },
       // Visual-only badges (don't affect status)
       reserved: { type: Boolean, default: false },
+      reservedIsMale: { type: Boolean, default: false }, // true = reservado, false = reservada
       sold: { type: Boolean, default: false },
+      soldIsMale: { type: Boolean, default: false }, // true = vendido, false = vendida
     },
 
     images: {

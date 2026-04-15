@@ -503,24 +503,106 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
           <Checkbox 
             id="edit-reserved"
             checked={!!form.flags?.reserved}
-            onCheckedChange={(checked) => setForm((prev: any) => ({ ...prev, flags: { ...prev.flags, reserved: checked } }))}
-            className="border-white/20 data-[state=checked]:bg-amber-500"
+            onCheckedChange={(checked) => setForm((prev: any) => ({ 
+              ...prev, 
+              flags: { 
+                ...prev.flags, 
+                reserved: checked,
+                reservedIsMale: checked ? prev.flags?.reservedIsMale : false // Reset gender when unchecked
+              },
+              reservedIsMale: checked ? prev.reservedIsMale : false 
+            }))}
+            className="border-white/20 data-[state=checked]:bg-[#67EA81]"
           />
-          <Label htmlFor="edit-reserved" className="text-[10px] font-bold uppercase tracking-widest text-amber-500 cursor-pointer">
+          <Label htmlFor="edit-reserved" className="text-[10px] font-bold uppercase tracking-widest text-[#67EA81] cursor-pointer">
             Reservada
           </Label>
+          {form.flags?.reserved && (
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] text-[#67EA81] cursor-pointer flex items-center gap-1">
+                <input 
+                  type="radio" 
+                  name="reserved-gender" 
+                  checked={!form.flags?.reservedIsMale}
+                  onChange={() => setForm((prev: any) => ({ 
+                    ...prev, 
+                    flags: { ...prev.flags, reservedIsMale: false },
+                    reservedIsMale: false 
+                  }))}
+                  className="accent-[#67EA81]"
+                /> reservada
+              </label>
+              <label className="text-[10px] text-[#67EA81] cursor-pointer flex items-center gap-1">
+                <input 
+                  type="radio" 
+                  name="reserved-gender" 
+                  checked={!!form.flags?.reservedIsMale}
+                  onChange={() => setForm((prev: any) => ({ 
+                    ...prev, 
+                    flags: { ...prev.flags, reservedIsMale: true },
+                    reservedIsMale: true 
+                  }))}
+                  className="accent-[#67EA81]"
+                /> reservado
+              </label>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center space-x-3 group cursor-pointer">
           <Checkbox 
             id="edit-sold"
             checked={!!form.flags?.sold}
-            onCheckedChange={(checked) => setForm((prev: any) => ({ ...prev, flags: { ...prev.flags, sold: checked } }))}
-            className="border-white/20 data-[state=checked]:bg-green-600"
+            onCheckedChange={(checked) => {
+              setForm((prev: any) => ({ 
+                ...prev, 
+                flags: { 
+                  ...prev.flags, 
+                  sold: checked,
+                  soldIsMale: checked ? prev.flags?.soldIsMale : false 
+                },
+                soldIsMale: checked ? prev.soldIsMale : false 
+              }));
+            }}
+            className="border-white/20 data-[state=checked]:bg-[#EB4D23]"
           />
-          <Label htmlFor="edit-sold" className="text-[10px] font-bold uppercase tracking-widest text-green-600 cursor-pointer">
+          <Label htmlFor="edit-sold" className="text-[10px] font-bold uppercase tracking-widest text-[#EB4D23] cursor-pointer">
             Vendida
           </Label>
+          {form.flags?.sold && (
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] text-[#EB4D23] cursor-pointer flex items-center gap-1">
+                <input 
+                  type="radio" 
+                  name="sold-gender" 
+                  checked={!form.flags?.soldIsMale}
+                  onChange={() => {
+                    setForm((prev: any) => ({ 
+                      ...prev, 
+                      flags: { ...prev.flags, soldIsMale: false },
+                      soldIsMale: false 
+                    }));
+                  }}
+                  className="accent-[#EB4D23]"
+                /> vendida
+              </label>
+              <label className="text-[10px] text-[#EB4D23] cursor-pointer flex items-center gap-1">
+                <input 
+                  type="radio" 
+                  name="sold-gender" 
+                  checked={!!form.flags?.soldIsMale}
+                  onChange={() => {
+                    setForm((prev: any) => ({ 
+                      ...prev, 
+                      flags: { ...prev.flags, soldIsMale: true },
+                      soldIsMale: true 
+                    }));
+                  }}
+                  className="accent-[#EB4D23]"
+                /> vendido
+              </label>
+            </div>
+          )}
         </div>
 
         {/* Tipo de cochera */}

@@ -44,8 +44,10 @@ export interface PropertyUI {
   featured: boolean;
   opportunity: boolean;
   premium: boolean;
-  reserved: boolean;  // Visual badge only
-  sold: boolean;      // Visual badge only
+  reserved: boolean;
+  reservedIsMale: boolean;
+  sold: boolean;
+  soldIsMale: boolean;
   status: "active" | "inactive";
 
   // Contenido

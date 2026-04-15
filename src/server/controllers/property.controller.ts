@@ -130,6 +130,11 @@ export class PropertyController {
       const currentUser = await getAuthenticatedUser();
       const body = await req.json();
       
+      console.log("🔍 CONTROLLER - body recibido:", JSON.stringify(body, null, 2));
+      console.log("🔍 CONTROLLER - body.flags:", JSON.stringify(body.flags, null, 2));
+      console.log("🔍 CONTROLLER - body.soldIsMale (root):", body.soldIsMale);
+      console.log("🔍 CONTROLLER - body.reservedIsMale (root):", body.reservedIsMale);
+      
       const dto = new UpdatePropertyDTO(body);
       const existingProperty = await PropertyService.findBySlug(params.slug);
 

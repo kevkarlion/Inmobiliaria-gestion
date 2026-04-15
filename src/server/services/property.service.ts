@@ -327,22 +327,57 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
     };
   }
 
-  // Flags - acepta ambos formatos: nested (flags.reserved) o root (reserved)
-  if (payload.flags || payload.reserved !== undefined || payload.sold !== undefined) {
-    updateData.flags = {
-      ...property.flags,
-      featured: payload.flags?.featured ?? property.flags?.featured,
-      opportunity: payload.flags?.opportunity ?? property.flags?.opportunity,
-      premium: payload.flags?.premium ?? property.flags?.premium,
-      // Priorizar nested (flags.reserved) sobre root
-      reserved: payload.flags?.reserved !== undefined 
-        ? payload.flags.reserved 
-        : payload.reserved !== undefined ? payload.reserved : property.flags?.reserved ?? false,
-      sold: payload.flags?.sold !== undefined 
-        ? payload.flags.sold 
-        : payload.sold !== undefined ? payload.sold : property.flags?.sold ?? false,
-    };
-  }
+// Flags - SIEMPRE guardar todos los campos (nuevos y existentes)
+  const currentFlags = property.flags || {};
+  
+  // Obtener valores de reservedIsMale de payload (puede venir en flags o en raíz)
+  const reservedIsMalePayload = payload.flags?.reservedIsMale !== undefined
+    ? payload.flags.reservedIsMale
+    : payload.reservedIsMale !== undefined
+      ? payload.reservedIsMale
+      : undefined;
+        
+  // Obtener valores de soldIsMale de payload (puede venir en flags o en raíz)
+  const soldIsMalePayload = payload.flags?.soldIsMale !== undefined
+    ? payload.flags.soldIsMale
+    : payload.soldIsMale !== undefined
+      ? payload.soldIsMale
+      : undefined;
+  
+  // Traducir campos viejos a nuevos si existen
+  const reservedIsMale = reservedIsMalePayload !== undefined 
+    ? reservedIsMalePayload
+    : currentFlags.reservedIsMale !== undefined 
+      ? currentFlags.reservedIsMale 
+      : currentFlags.reservedVariant === "reservado";
+      
+  const soldIsMale = soldIsMalePayload !== undefined 
+    ? soldIsMalePayload
+    : currentFlags.soldIsMale !== undefined 
+      ? currentFlags.soldIsMale 
+      : currentFlags.soldVariant === "vendido";
+  
+  updateData.flags = {
+    // Siempre incluir todos los campos posibles, con defaults
+    featured: payload.flags?.featured ?? currentFlags.featured ?? false,
+    opportunity: payload.flags?.opportunity ?? currentFlags.opportunity ?? false,
+    premium: payload.flags?.premium ?? currentFlags.premium ?? false,
+    // Reserved
+    reserved: payload.flags?.reserved !== undefined 
+      ? payload.flags.reserved 
+      : payload.reserved !== undefined
+        ? payload.reserved
+        : currentFlags.reserved ?? false,
+    reservedIsMale: reservedIsMale,
+    // Sold
+    sold: payload.flags?.sold !== undefined 
+      ? payload.flags.sold 
+      : payload.sold !== undefined
+        ? payload.sold
+        : currentFlags.sold ?? false,
+    soldIsMale: soldIsMale,
+  };
+  console.log("🔍 DEBUG - Guardando flags:", JSON.stringify(updateData.flags, null, 2));
 
   // Campos simples
   const simpleFields: (keyof UpdatePropertyDTO)[] = [

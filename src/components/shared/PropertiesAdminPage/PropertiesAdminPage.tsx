@@ -312,6 +312,16 @@ export default function PropertiesAdminClient({
                       {/* Título + Flags */}
                       <td className="px-2 py-2">
                         <div className="flex flex-wrap items-center gap-1 mb-1">
+                          {p.flags?.reserved && (
+                            <span className="text-[9px] px-1 py-0.5 rounded-full" style={{ backgroundColor: '#67EA81', color: '#0d7119' }}>
+                              {p.flags.reservedIsMale ? "Reservado" : "Reservada"}
+                            </span>
+                          )}
+                          {p.flags?.sold && (
+                            <span className="text-[9px] px-1 py-0.5 rounded-full" style={{ backgroundColor: '#EB4D23', color: '#fff' }}>
+                              {p.flags.soldIsMale ? "Vendido" : "Vendida"}
+                            </span>
+                          )}
                           {p.flags?.featured && <span className="bg-amber-100 text-amber-700 text-[9px] px-1 py-0.5 rounded-full">Dest.</span>}
                           {p.flags?.opportunity && <span className="bg-rose-100 text-rose-700 text-[9px] px-1 py-0.5 rounded-full">Oport.</span>}
                           {p.flags?.premium && <span className="bg-purple-100 text-purple-700 text-[9px] px-1 py-0.5 rounded-full">Prem.</span>}

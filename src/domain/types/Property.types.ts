@@ -63,7 +63,9 @@ export interface Property {
     opportunity: boolean;
     premium: boolean;
     reserved: boolean;
+    reservedIsMale: boolean;
     sold: boolean;
+    soldIsMale: boolean;
   };
 
   tags: string[];

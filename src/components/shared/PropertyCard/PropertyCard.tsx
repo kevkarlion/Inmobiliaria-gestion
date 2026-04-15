@@ -10,6 +10,8 @@ const isLandType = (typeSlug?: string) =>
   typeSlug === "terreno" || typeSlug === "loteo" || typeSlug === "lote";
 
 export default function PropertyCard({ property }: any) {
+  console.log("🎨 PropertyCard - sold:", property.flags?.sold, "soldIsMale:", property.flags?.soldIsMale);
+  
   const operationColor =
     property.operationType === "venta" ? "bg-gold-sand" : "bg-blue-600";
   
@@ -53,8 +55,9 @@ export default function PropertyCard({ property }: any) {
           {property.flags?.reserved && (
             <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
               <div 
-                className="absolute bg-amber-500 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
+                className="absolute text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
                 style={{
+                  backgroundColor: '#67EA81',
                   left: '43%',
                   top: '-12%',
                   width: '81%',
@@ -62,7 +65,9 @@ export default function PropertyCard({ property }: any) {
                   transform: 'rotate(29.74deg)',
                 }}
               >
-                <span className="whitespace-nowrap">⏱️ RESERVADA</span>
+                <span className="whitespace-nowrap font-montserrat">
+                  {property.flags?.reservedIsMale ? "RESERVADO" : "RESERVADA"}
+                </span>
               </div>
             </div>
           )}
@@ -71,8 +76,9 @@ export default function PropertyCard({ property }: any) {
           {property.flags?.sold && (
             <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
               <div 
-                className="absolute bg-red-600 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
+                className="absolute text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
                 style={{
+                  backgroundColor: '#EB4D23',
                   left: '43%',
                   top: '-12%',
                   width: '81%',
@@ -80,7 +86,9 @@ export default function PropertyCard({ property }: any) {
                   transform: 'rotate(29.74deg)',
                 }}
               >
-                <span className="whitespace-nowrap">✅ VENDIDA</span>
+                <span className="whitespace-nowrap font-montserrat">
+                  {property.flags?.soldIsMale ? "VENDIDO" : "VENDIDA"}
+                </span>
               </div>
             </div>
           )}

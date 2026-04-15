@@ -10,7 +10,9 @@ interface PropertyGalleryProps {
   imagesDesktop?: string[];
   imagesMobile?: string[];
   reserved?: boolean;
+  reservedIsMale?: boolean;
   sold?: boolean;
+  soldIsMale?: boolean;
 }
 
 export function PropertyGallery({ 
@@ -18,7 +20,9 @@ export function PropertyGallery({
   imagesDesktop = [], 
   imagesMobile = [],
   reserved,
-  sold
+  reservedIsMale,
+  sold,
+  soldIsMale
 }: PropertyGalleryProps) {
   const [index, setIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -82,8 +86,9 @@ export function PropertyGallery({
         {reserved && (
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 md:hidden">
             <div 
-              className="absolute bg-amber-500 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center text-xs"
+              className="absolute text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center text-xs"
               style={{
+                backgroundColor: '#67EA81',
                 left: '44%',
                 top: '-7%',
                 width: '79%',
@@ -91,7 +96,7 @@ export function PropertyGallery({
                 transform: 'rotate(29.74deg)',
               }}
             >
-              <span className="whitespace-nowrap">⏱️ RESERVADA</span>
+              <span className="whitespace-nowrap font-montserrat">{reservedIsMale ? "RESERVADO" : "RESERVADA"}</span>
             </div>
           </div>
         )}
@@ -100,8 +105,9 @@ export function PropertyGallery({
         {sold && (
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 md:hidden">
             <div 
-              className="absolute bg-red-600 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center text-xs"
+              className="absolute text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center text-xs"
               style={{
+                backgroundColor: '#EB4D23',
                 left: '44%',
                 top: '-7%',
                 width: '79%',
@@ -109,7 +115,7 @@ export function PropertyGallery({
                 transform: 'rotate(29.74deg)',
               }}
             >
-              <span className="whitespace-nowrap">✅ VENDIDA</span>
+              <span className="whitespace-nowrap font-montserrat">{soldIsMale ? "VENDIDO" : "VENDIDA"}</span>
             </div>
           </div>
         )}
@@ -118,8 +124,9 @@ export function PropertyGallery({
         {reserved && (
           <div className="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-10">
             <div 
-              className="absolute bg-amber-500 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center md:text-sm"
+              className="absolute text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center md:text-sm"
               style={{
+                backgroundColor: '#67EA81',
                 left: '35%',
                 top: '-28%',
                 width: '95%',
@@ -127,7 +134,7 @@ export function PropertyGallery({
                 transform: 'rotate(29.74deg)',
               }}
             >
-              <span className="whitespace-nowrap">⏱️ RESERVADA</span>
+              <span className="whitespace-nowrap font-montserrat">{reservedIsMale ? "RESERVADO" : "RESERVADA"}</span>
             </div>
           </div>
         )}
@@ -136,8 +143,9 @@ export function PropertyGallery({
         {sold && (
           <div className="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-10">
             <div 
-              className="absolute bg-red-600 text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center md:text-sm"
+              className="absolute text-white font-black uppercase tracking-wider py-3 shadow-xl flex items-center justify-center md:text-sm"
               style={{
+                backgroundColor: '#EB4D23',
                 left: '35%',
                 top: '-28%',
                 width: '95%',
@@ -145,7 +153,7 @@ export function PropertyGallery({
                 transform: 'rotate(29.74deg)',
               }}
             >
-              <span className="whitespace-nowrap">✅ VENDIDA</span>
+              <span className="whitespace-nowrap font-montserrat">{soldIsMale ? "VENDIDO" : "VENDIDA"}</span>
             </div>
           </div>
         )}

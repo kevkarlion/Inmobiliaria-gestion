@@ -101,7 +101,9 @@ export function mapPropertyToUI(property: any): PropertyUI {
     opportunity: !!property.flags?.opportunity,
     premium: !!property.flags?.premium,
     reserved: !!property.flags?.reserved,
+    reservedIsMale: !!property.flags?.reservedIsMale,
     sold: !!property.flags?.sold,
+    soldIsMale: !!property.flags?.soldIsMale,
 
     // Contenido
     tags: property.tags || [],

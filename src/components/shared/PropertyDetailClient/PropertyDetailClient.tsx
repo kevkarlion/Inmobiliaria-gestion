@@ -110,7 +110,9 @@ export function PropertyDetailClient({
             imagesDesktop={p.imagesDesktop} 
             imagesMobile={p.imagesMobile}
             reserved={p.reserved}
+            reservedIsMale={p.reservedIsMale}
             sold={p.sold}
+            soldIsMale={p.soldIsMale}
           />
         </div>
 
