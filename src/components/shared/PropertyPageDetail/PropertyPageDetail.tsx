@@ -31,7 +31,7 @@ export default async function PropertyPageDetail({
         </div>
       )}
       {dto.flags?.sold && (
-        <div className="w-full bg-green-600 text-white py-6 text-center -mx-6 -mt-6 mb-6">
+        <div className="w-full bg-red-600 text-white py-6 text-center -mx-6 -mt-6 mb-6">
           <div className="flex items-center justify-center gap-4 font-black text-3xl uppercase tracking-widest">
             ✅ VENDIDA
           </div>

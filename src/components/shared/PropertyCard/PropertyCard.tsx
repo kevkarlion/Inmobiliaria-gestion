@@ -71,7 +71,7 @@ export default function PropertyCard({ property }: any) {
           {property.flags?.sold && (
             <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
               <div 
-                className="absolute bg-green-600 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
+                className="absolute bg-red-600 text-white text-xs font-black uppercase tracking-wider py-1 shadow-lg flex items-center justify-center"
                 style={{
                   left: '43%',
                   top: '-12%',
