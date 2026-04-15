@@ -5,12 +5,15 @@ export class UpdatePropertyDTO {
   operationType?: "venta" | "alquiler";
   propertyTypeSlug?: string;
   description?: string;
-  contactPhone?: string; // 👈 1. Agregado en la raíz
+  contactPhone?: string;
   tags?: string[];
   status?: "active" | "inactive";
   images?: string[];
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  // Flags en raíz para compatibilidad
+  reserved?: boolean;
+  sold?: boolean;
 
   address?: {
     street?: string;
