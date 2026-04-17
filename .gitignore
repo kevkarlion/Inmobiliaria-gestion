@@ -44,3 +44,6 @@ next-env.d.ts
 *Performance-on-Search*.xlsx
 *google-search-console*.xlsx
 *.xlsx
+
+# Agent config
+.atl/

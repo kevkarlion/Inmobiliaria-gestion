@@ -8,9 +8,9 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "Inmobiliaria en General Roca, Río Negro",
+  title: "Inmobiliaria Riquelme | Casas, Departamentos y Terrenos en Venta en General Roca",
   description:
-    "Inmobiliaria en General Roca, Río Negro. Encontrá casas, departamentos, terrenos y loteos en venta y alquiler con asesoramiento profesional en Riquelme Propiedades.",
+    "Encontrá tu próximo hogar en General Roca. Casas, departamentos y terrenos en venta con asesoramiento profesional. ¡ Tasación gratis !",
   alternates: {
     canonical: getCanonicalUrl("/"),
   },
