@@ -4,7 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import Analytics from "@/components/shared/Analytics";
 
-const GA_ID = "G-V2PZYEK8YQ";
+const GA_ID = "G-YMX97YCPT7";
 
 const montserrat = Montserrat({
   subsets: ["latin"],

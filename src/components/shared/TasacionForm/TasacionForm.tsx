@@ -14,6 +14,7 @@ import {
   Send
 } from "lucide-react";
 import { generateWhatsAppUrl, DEFAULT_WHATSAPP } from "@/lib/whatsappMessage";
+import { trackFormSubmit, trackCtaClick } from "@/components/shared/Analytics";
 
 // Types for form data
 interface TasacionFormData {
@@ -196,6 +197,11 @@ export default function TasacionForm() {
 
       if (data.success) {
         setSubmitted(true);
+        // 🔥 Track form submit
+        trackFormSubmit({
+          form_type: "consulta",
+          form_location: "tasacion",
+        });
         toast.success("¡Gracias! Tu solicitud ha sido recibida.");
       } else {
         toast.error(data.error || "Hubo un problema al enviar");
