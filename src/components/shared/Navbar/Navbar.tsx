@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { buildSeoListingUrl } from "@/lib/seoUrls";
 import { pluralizePropertyType } from "@/lib/propertyTypeLabels";
-import { trackCtaClick } from "@/components/shared/Analytics";
 import type { NavMenuStructure } from "@/lib/seoUrls";
 
 const NAV_COLOR = "#001d3d";
@@ -99,7 +98,6 @@ export default function Navbar({ menuStructure }: NavbarProps) {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 border-l pl-8 border-gray-100"
-              onClick={() => trackCtaClick({ cta_type: "whatsapp", cta_location: "header" })}
             >
               <MessageCircle className="text-gold-sand" size={20} />
               <div className="flex flex-col">

@@ -25,14 +25,14 @@ interface PropertyViewParams {
 
 interface CtaClickParams {
   cta_type: "whatsapp" | "telefono" | "mapa" | "email" | "contacto" | "detalles";
-  cta_location: "card" | "detail" | "hero" | "footer";
+  cta_location: "card" | "detail" | "hero" | "footer" | "header";
   property_id?: string;
 }
 
 interface FormSubmitParams {
   form_type: "contacto" | "consulta" | "whatsapp" | "admin";
   property_id?: string;
-  form_location: "card" | "detail" | "footer" | "header";
+  form_location: "card" | "detail" | "footer" | "header" | "tasacion";
 }
 
 // ============================================================================

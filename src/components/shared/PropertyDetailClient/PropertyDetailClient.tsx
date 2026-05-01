@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Building2,
   LayoutGrid,
@@ -36,7 +38,7 @@ export function PropertyDetailClient({
   // 🔥 Trackear vista de propiedad cuando se carga
   useEffect(() => {
     trackPropertyView({
-      property_id: property._id || property.id || "",
+      property_id: property.id || "",
       property_title: p.title,
       property_type: p.typeSlug || "",
       operation: p.operationType === "venta" ? "venta" : "alquiler",
@@ -44,7 +46,7 @@ export function PropertyDetailClient({
       currency: p.currency,
       location: `${p.zoneName}, ${p.cityName}`,
     });
-  }, [property._id, property.id, p.title, p.typeSlug, p.operationType, p.amount, p.currency, p.zoneName, p.cityName]);
+  }, [property.id, p.title, p.typeSlug, p.operationType, p.amount, p.currency, p.zoneName, p.cityName]);
   
 
   return (
@@ -244,7 +246,7 @@ export function PropertyDetailClient({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="label-subtitle text-gold-sand hover:text-white transition-colors flex justify-center bg-white/10 py-2 rounded-lg"
-                    onClick={() => trackCtaClick({ cta_type: "mapa", cta_location: "detail", property_id: property._id || property.id })}
+                    onClick={() => trackCtaClick({ cta_type: "mapa", cta_location: "detail", property_id: property.id })}
                   >
                     Abrir en Google Maps ↗
                   </a>
@@ -261,7 +263,7 @@ export function PropertyDetailClient({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-cta bg-gold-sand text-black hover:bg-gold-hover text-center w-full py-4 rounded-xl font-black uppercase tracking-widest transition-all hover:scale-[1.02]"
-                    onClick={() => trackWhatsAppClick(property._id || property.id, p.title)}
+                    onClick={() => trackWhatsAppClick(property.id, p.title)}
                   >
                     Contactar asesor
                   </a>

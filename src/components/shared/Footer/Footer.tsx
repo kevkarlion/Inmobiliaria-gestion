@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import { Instagram, MessageCircle, Facebook } from "lucide-react"; 
 import Image from "next/image";
-import { trackCtaClick } from "@/components/shared/Analytics";
 
 const Footer: React.FC = () => {
   return (
@@ -66,7 +65,6 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-oxford transition-all group"
               aria-label="WhatsApp"
-              onClick={() => trackCtaClick({ cta_type: "whatsapp", cta_location: "footer" })}
             >
               <MessageCircle size={20} className="group-hover:scale-110 transition-transform" />
             </a>
