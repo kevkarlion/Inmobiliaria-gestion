@@ -97,9 +97,12 @@ export default async function PropertyDetailPage({
   const { slug } = await params;
 
   const property = await PropertyService.findBySlug(slug);
-  
 
   if (!property) notFound();
 
-  return <PropertyDetailClient property={property} />;
+  // Serializar a JSON plano para eliminar ObjectIds/BSON types
+  // Next.js 16 no permite pasar objetos con toJSON() a Client Components
+  const serialized = JSON.parse(JSON.stringify(property));
+
+  return <PropertyDetailClient property={serialized} />;
 }

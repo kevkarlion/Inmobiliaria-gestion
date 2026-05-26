@@ -171,11 +171,11 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
   };
 
   const handleDesktopImagesUpload = (urls: string[]) => {
-    setForm(prev => ({ ...prev, imagesDesktop: [...(prev.imagesDesktop || []), ...urls] }));
+    setForm(prev => ({ ...prev, imagesDesktop: urls }));
   };
 
   const handleMobileImagesUpload = (urls: string[]) => {
-    setForm(prev => ({ ...prev, imagesMobile: [...(prev.imagesMobile || []), ...urls] }));
+    setForm(prev => ({ ...prev, imagesMobile: urls }));
   };
 
   const removeImage = (index: number) => {
