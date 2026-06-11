@@ -2,6 +2,7 @@
 import { Suspense } from "react";
 import "@/app/globals.css";
 import { SITE_URL } from "@/lib/config";
+import { JsonLd, buildOrganizationSchema, SEO_CONFIG } from "@/lib/seo";
 import { PropertyProvider } from "@/context/PropertyContext";
 import { Montserrat, Lora, Inter } from "next/font/google";
 import Navbar from "@/components/shared/Navbar/Navbar";
@@ -111,6 +112,7 @@ export default async function PublicLayout({
 
   return (
     <div className={`${montserrat.variable} ${lora.variable} ${inter.variable} min-h-screen w-full max-w-full overflow-x-hidden`}>
+      <JsonLd type="Organization" data={buildOrganizationSchema(SEO_CONFIG)} />
       <PublicBackground />
       <PropertyProvider>
         <Navbar menuStructure={menuStructure} />

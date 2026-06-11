@@ -30,8 +30,10 @@ import { useEffect } from "react";
 
 export function PropertyDetailClient({
   property,
+  altTexts,
 }: {
   property: PropertyResponse;
+  altTexts?: string[];
 }) {
   const p = mapPropertyToUI(property);
 
@@ -126,6 +128,7 @@ export function PropertyDetailClient({
             images={p.images} 
             imagesDesktop={p.imagesDesktop} 
             imagesMobile={p.imagesMobile}
+            altTexts={altTexts}
             reserved={p.reserved}
             reservedIsMale={p.reservedIsMale}
             sold={p.sold}

@@ -9,6 +9,7 @@ interface PropertyGalleryProps {
   images?: string[];       // Fallback backward compatibility
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  altTexts?: string[];     // SEO alt texts per image
   reserved?: boolean;
   reservedIsMale?: boolean;
   sold?: boolean;
@@ -19,6 +20,7 @@ export function PropertyGallery({
   images = [], 
   imagesDesktop = [], 
   imagesMobile = [],
+  altTexts = [],
   reserved,
   reservedIsMale,
   sold,
@@ -53,7 +55,7 @@ export function PropertyGallery({
         
         <Image
           src={validImages[index]}
-          alt={`Propiedad - Imagen ${index + 1}`}
+          alt={altTexts[index] || `Propiedad - Imagen ${index + 1}`}
           fill
           priority={index === 0}
           loading={index === 0 ? undefined : "lazy"}
@@ -177,7 +179,7 @@ export function PropertyGallery({
             <div className="relative w-16 h-12 sm:w-24 sm:h-16">
               <Image 
                 src={img} 
-                alt={`Thumbnail ${i + 1}`} 
+                alt={altTexts[i] || `Thumbnail ${i + 1}`} 
                 fill 
                 className="object-cover"
                 sizes="100px"

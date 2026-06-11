@@ -3,6 +3,11 @@ import { getUiProperties } from "@/components/server/data-access/get-ui-properti
 import SearchTypePage from "@/components/shared/SearchTypePage/SearchTypePage";
 import type { Metadata } from "next";
 import { getCanonicalUrl } from "@/lib/config";
+import { JsonLd } from "@/lib/seo/jsonLd";
+import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
+import { buildCollectionPageSchema } from "@/lib/seo/schemas/collectionPage";
+import { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
+import { buildBreadcrumbItems } from "@/lib/seo/breadcrumbs";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -32,6 +37,12 @@ const FILTER_COPY: Record<
   },
 };
 
+const FILTER_LABELS: Record<string, string> = {
+  venta: "En Venta",
+  alquiler: "En Alquiler",
+  oportunidad: "Oportunidades",
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -52,6 +63,19 @@ export async function generateMetadata({
     alternates: {
       canonical: getCanonicalUrl(`/propiedades/${filter}`),
     },
+    openGraph: {
+      title: copy.title,
+      description: copy.description,
+      url: `/propiedades/${filter}`,
+      siteName: "Riquelme Propiedades",
+      locale: "es_AR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: copy.title,
+      description: copy.description,
+    },
   };
 }
 
@@ -67,10 +91,32 @@ export default async function Page({ params }: Props) {
     limit: 50,
   });
 
+  const canonicalUrl = getCanonicalUrl(`/propiedades/${filter}`);
+  const filterLabel = FILTER_LABELS[filter] || filter;
+
+  const itemListSchema = buildItemListSchema(properties);
+
+  const collectionPageSchema = buildCollectionPageSchema(
+    canonicalUrl,
+    itemListSchema
+  );
+
+  const breadcrumbItems = buildBreadcrumbItems(
+    `/propiedades/${filter}`,
+    ["Inicio", "Propiedades", filterLabel]
+  );
+
+  const breadcrumbSchema = buildBreadcrumbListSchema(breadcrumbItems);
+
   return (
-    <SearchTypePage
-      properties={properties}
-      filterParam={filter}
-    />
+    <>
+      <JsonLd type="ItemList" data={itemListSchema} />
+      <JsonLd type="CollectionPage" data={collectionPageSchema} />
+      <JsonLd type="BreadcrumbList" data={breadcrumbSchema} />
+      <SearchTypePage
+        properties={properties}
+        filterParam={filter}
+      />
+    </>
   );
 }
