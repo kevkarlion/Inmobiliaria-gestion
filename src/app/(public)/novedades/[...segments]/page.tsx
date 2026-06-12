@@ -276,6 +276,7 @@ async function PostView(slug: string) {
                   alt="Riquelme Propiedades"
                   fill
                   className="object-contain object-center brightness-150"
+                  sizes="(max-width: 640px) 96px, 128px"
                 />
               </div>
 

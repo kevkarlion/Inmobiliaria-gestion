@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { MapPin, Maximize, Phone, Tag, Hash, User, Building2 } from "lucide-react";

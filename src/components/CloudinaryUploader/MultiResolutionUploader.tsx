@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CloudinaryUploader from "./CloudinaryUploader";
 import SortableImageGrid from "@/components/shared/SortableImage/SortableImageGrid";
 
@@ -17,17 +17,9 @@ export default function MultiResolutionUploader({
   existingDesktop = [],
   existingMobile = [],
 }: MultiResolutionUploaderProps) {
+  // State initialized from props — parent uses key prop to reset on change
   const [desktopImages, setDesktopImages] = useState<string[]>(existingDesktop);
   const [mobileImages, setMobileImages] = useState<string[]>(existingMobile);
-
-  // Sincronizar cuando las props cambien (ej: el form cambió desde otro lado)
-  useEffect(() => {
-    setDesktopImages(existingDesktop);
-  }, [existingDesktop]);
-
-  useEffect(() => {
-    setMobileImages(existingMobile);
-  }, [existingMobile]);
 
   const handleDesktopUpload = (urls: string[]) => {
     const newImages = [...desktopImages, ...urls];

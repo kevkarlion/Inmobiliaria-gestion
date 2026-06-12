@@ -1,20 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from "vitest";
 import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
 import { SEO_CONFIG } from "@/lib/seo/config";
 
+type JsonLdResult = Record<string, any>;
+
 describe("buildItemListSchema", () => {
   it("returns ItemList with @type", () => {
-    const result = buildItemListSchema([]);
+    const result: JsonLdResult = buildItemListSchema([]);
     expect(result["@type"]).toBe("ItemList");
   });
 
   it("returns empty itemListElement for empty properties", () => {
-    const result = buildItemListSchema([]);
+    const result: JsonLdResult = buildItemListSchema([]);
     expect(result.itemListElement).toEqual([]);
   });
 
   it("returns numberOfItems 0 for empty properties", () => {
-    const result = buildItemListSchema([]);
+    const result: JsonLdResult = buildItemListSchema([]);
     expect(result.numberOfItems).toBe(0);
   });
 
@@ -23,7 +26,7 @@ describe("buildItemListSchema", () => {
       { slug: "casa-moderna", title: "Casa Moderna" },
       { slug: "departamento-centro", title: "Departamento Centro" },
     ];
-    const result = buildItemListSchema(properties);
+    const result: JsonLdResult = buildItemListSchema(properties);
     expect(result.itemListElement).toHaveLength(2);
     expect(result.itemListElement[0]).toEqual({
       "@type": "ListItem",
@@ -43,7 +46,7 @@ describe("buildItemListSchema", () => {
     const properties = [
       { slug: "casa-moderna", title: "Casa Moderna" },
     ];
-    const result = buildItemListSchema(properties, 10);
+    const result: JsonLdResult = buildItemListSchema(properties, 10);
     expect(result.itemListElement[0].position).toBe(10);
   });
 
@@ -53,7 +56,7 @@ describe("buildItemListSchema", () => {
       { slug: "b", title: "B" },
       { slug: "c", title: "C" },
     ];
-    const result = buildItemListSchema(properties);
+    const result: JsonLdResult = buildItemListSchema(properties);
     expect(result.numberOfItems).toBe(3);
   });
 });

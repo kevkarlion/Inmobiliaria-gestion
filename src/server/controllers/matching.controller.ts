@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectDB } from "@/db/connection";
 import { MatchingService } from "../services/matching.service";
 import { NextResponse } from "next/server";

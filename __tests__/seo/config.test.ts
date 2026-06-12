@@ -2,6 +2,10 @@ import { describe, it, expect } from "vitest";
 import { SEO_CONFIG } from "@/lib/seo/config";
 
 describe("SEO_CONFIG", () => {
+  it("is frozen and cannot be mutated", () => {
+    expect(Object.isFrozen(SEO_CONFIG)).toBe(true);
+  });
+
   it("has siteName set to the brand name", () => {
     expect(SEO_CONFIG.siteName).toBe("Riquelme Propiedades");
   });

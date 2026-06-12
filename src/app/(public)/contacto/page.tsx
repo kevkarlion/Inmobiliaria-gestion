@@ -5,10 +5,9 @@ import {
   Mail,
   MessageCircle,
   Clock,
-  Facebook,
-  Instagram,
   ArrowRight,
 } from "lucide-react";
+import { FacebookIcon, InstagramIcon } from "@/components/shared/BrandIcons/BrandIcons";
 import type { Metadata } from "next";
 import { getCanonicalUrl } from "@/lib/config";
 
@@ -46,6 +45,7 @@ export default function ContactoPage() {
                 alt="Riquelme Propiedades"
                 fill
                 className="object-contain object-center brightness-150"
+                sizes="(max-width: 640px) 80px, 112px"
               />
             </div>
           </div>
@@ -157,14 +157,14 @@ export default function ContactoPage() {
                 target="_blank"
                 className="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-900 hover:bg-slate-900 hover:text-white transition-all duration-500 shadow-sm"
               >
-                <Facebook size={18} />
+                <FacebookIcon size={18} />
               </a>
               <a
                 href="https://www.instagram.com/riquelme.propiedades/"
                 target="_blank"
                 className="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-900 hover:bg-slate-900 hover:text-white transition-all duration-500 shadow-sm"
               >
-                <Instagram size={18} />
+                <InstagramIcon size={18} />
               </a>
             </div>
           </div>

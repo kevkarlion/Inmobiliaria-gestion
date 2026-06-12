@@ -147,6 +147,7 @@ export default async function NovedadesPage({ searchParams }: Props) {
                 alt="Riquelme Propiedades"
                 fill
                 className="object-contain object-center brightness-150"
+                sizes="(max-width: 640px) 80px, 112px"
               />
             </div>
           </div>
@@ -261,6 +262,7 @@ export default async function NovedadesPage({ searchParams }: Props) {
                       alt="Riquelme Propiedades"
                       fill
                       className="object-contain object-left"
+                      sizes="128px"
                     />
                   </div>
                 </div>

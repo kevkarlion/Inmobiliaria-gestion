@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PropertyCardAdmin from "@/components/shared/PropertyCardAdmin/PropertyCardAdmin";
 import CreatePropertyForm from "@/components/shared/PropertyForm/PropertyForm"; 
@@ -44,12 +45,7 @@ export default function PropertiesAdminClient({
   const [filterLoading, setFilterLoading] = useState(false);
   const router = useRouter();
 
-  // Sync initial properties when filter changes (from server navigation)
-  useEffect(() => {
-    setProperties(initialProperties);
-    setCurrentMeta(meta);
-    setCurrentPage(page);
-  }, [initialProperties, meta, page]);
+  // Sync occurs via key prop on the parent component — remounts when page/filter changes
 
   // Build dropdown options
   const dropdownOptions: UserOption[] = [
@@ -230,6 +226,7 @@ export default function PropertiesAdminClient({
               style={{ scrollbarGutter: "stable" }}
             >
               <EditPropertyForm 
+                key={editingProperty.slug}
                 property={editingProperty} 
                 slug={editingProperty.slug} 
                 onClose={() => { setShowEditForm(false); setEditingProperty(null); }} 

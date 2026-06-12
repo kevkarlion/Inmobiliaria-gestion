@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
 import { AuditLogResponse } from "@/dtos/audit/audit-log-response.dto";
-import { Search, FileText, User, Building2, Users, Clock, Filter } from "lucide-react";
+import { Search, FileText, User, Building2, Users, Clock } from "lucide-react";
 
 interface Props {
   initialLogs: AuditLogResponse[];

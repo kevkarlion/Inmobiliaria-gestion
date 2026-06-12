@@ -20,13 +20,13 @@ describe('CreateClientDTO validation', () => {
     expect(dto).toBeTruthy()
   })
 
-  it('rejects invalid operationType', () => {
+  it('normalizes invalid operationType to compra', () => {
     const data = {
       name: 'Test2',
       email: 'test2@example.com',
       phone: '123',
       preferences: {
-        operationType: 'compra',
+        operationType: 'invalid',
         subType: 'terreno',
         propertyTypes: ['terreno'],
         zones: [],
@@ -34,6 +34,7 @@ describe('CreateClientDTO validation', () => {
         features: { bedrooms: 0, bathrooms: 0, minM2: 0, garage: false }
       },
     }
-    expect(() => new CreateClientDTO(data)).toThrow()
+    const dto = new CreateClientDTO(data)
+    expect(dto.preferences.operationType).toBe('compra')
   })
 })

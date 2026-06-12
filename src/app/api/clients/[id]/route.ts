@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
-import { connectDB } from "@/db/connection";
 import { ClientController } from "@/server/controllers/client.controller";
 
 export async function GET(req: Request, context: { params: Promise<{ id: string }> }) {

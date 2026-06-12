@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClientModel } from "@/db/schemas/client.schema";
 import { ClientStatus } from "@/domain/enums/client-status.enum";
 import { ClientSource } from "@/domain/enums/client-source.enum";

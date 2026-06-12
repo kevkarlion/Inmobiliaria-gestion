@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AuditLogModel } from "@/domain/models/AuditLog";
 import { AuditAction, AuditEntity } from "@/dtos/audit/query-audit-log.dto";
 

@@ -7,8 +7,11 @@ interface AltTextProperty {
 
 export function generateAltText(
   property: AltTextProperty,
-  index?: number
+  index?: number,
+  customAltText?: string
 ): string {
+  if (customAltText) return customAltText;
+
   const parts: string[] = [property.title];
 
   if (property.operationType) {

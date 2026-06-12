@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Import removed - using any type for flexibility
 // import { ClientDocument } from "@/db/schemas/client.schema";
-import { RequirementDocument } from "@/domain/models/requirement.model";
 import { ClientModel } from "@/db/schemas/client.schema";
 
 export interface MatchResult {
@@ -185,7 +184,7 @@ export class MatchingService {
     
     // Para "venta", usar saleProperty; para "compra"/"alquiler", usar propertyPreferences
     let propertyPrefs: any[] = [];
-    let saleProperty = currentClient.saleProperty;
+    const saleProperty = currentClient.saleProperty;
     
     if (operationType === "venta" && saleProperty) {
       // Convertir saleProperty al formato de preference para matching
@@ -222,7 +221,7 @@ export class MatchingService {
     for (const other of otherClients) {
       // Obtener las preferencias del otro cliente (同样的逻辑)
       let otherPrefs: any[] = [];
-      let otherSaleProperty = other.saleProperty;
+      const otherSaleProperty = other.saleProperty;
       
       const otherOpType = other.preferences?.operationType;
       if (otherOpType === "venta" && otherSaleProperty) {

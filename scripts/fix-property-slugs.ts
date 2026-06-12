@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Script de migración para corregir slugs de propiedades mal formados.
  * 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClientModel } from "@/db/schemas/client.schema";
 import { RequirementModel } from "@/domain/models/requirement.model";
 

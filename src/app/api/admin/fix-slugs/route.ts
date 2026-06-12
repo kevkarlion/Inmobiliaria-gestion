@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { connectDB } from "@/db/connection";
 import { PropertyModel } from "@/db/schemas/property.schema";

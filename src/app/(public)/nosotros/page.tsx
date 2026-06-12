@@ -8,10 +8,8 @@ import {
   Handshake,
   ArrowRight,
   MessageCircle,
-  Instagram,
-  Facebook,
-  Linkedin,
 } from "lucide-react";
+import { FacebookIcon, InstagramIcon, LinkedinIcon } from "@/components/shared/BrandIcons/BrandIcons";
 
 export const metadata: Metadata = {
   title: "Nosotros - Riquelme Propiedades en General Roca",
@@ -109,6 +107,7 @@ export default function NosotrosPage() {
                 alt="Riquelme Propiedades"
                 fill
                 className="object-contain object-center brightness-150"
+                sizes="(max-width: 640px) 80px, 112px"
               />
             </div>
           </div>
@@ -288,7 +287,7 @@ export default function NosotrosPage() {
                         aria-label={`Instagram de ${member.name}`}
                         className="hover:text-gold-sand transition-colors"
                       >
-                        <Instagram size={20} />
+                        <InstagramIcon size={20} />
                       </a>
                     )}
                     {member.facebook && (
@@ -299,7 +298,7 @@ export default function NosotrosPage() {
                         aria-label={`Facebook de ${member.name}`}
                         className="hover:text-gold-sand transition-colors"
                       >
-                        <Facebook size={20} />
+                        <FacebookIcon size={20} />
                       </a>
                     )}
                     {member.linkedin && (
@@ -310,7 +309,7 @@ export default function NosotrosPage() {
                         aria-label={`LinkedIn de ${member.name}`}
                         className="hover:text-gold-sand transition-colors"
                       >
-                        <Linkedin size={20} />
+                        <LinkedinIcon size={20} />
                       </a>
                     )}
                     {member.whatsapp && (

@@ -31,6 +31,7 @@ export default function AboutPreview() {
                 fill
                 priority
                 className="object-cover grayscale-[0.2] lg:group-hover:grayscale-0 transition-all duration-700"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
               {/* Overlay más alto para proteger el texto h2 y h3 que están arriba */}
               <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/80 to-slate-900/40 lg:hidden" />

@@ -156,14 +156,18 @@ export default async function PropertyDetailPage({
 
   const rawImages: { url?: string }[] | string[] = property.images || [];
   const imageCount = rawImages.length;
-  const altTexts = Array.from({ length: imageCount }, (_, i) =>
-    generateAltText({
+  const altTexts = Array.from({ length: imageCount }, (_, i) => {
+    const image = rawImages[i];
+    const customAlt = typeof image === "object" && image !== null
+      ? (image as { url?: string; alt?: string }).alt
+      : undefined;
+    return generateAltText({
       title: property.title,
       operationType: property.operationType,
       barrioName: property.barrioName,
       cityName: property.cityName,
-    }, i)
-  );
+    }, i, customAlt);
+  });
 
   const serialized = JSON.parse(JSON.stringify(property));
 

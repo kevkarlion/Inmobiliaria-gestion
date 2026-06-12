@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // app/admin/users/page.tsx (SERVER)
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

@@ -43,6 +43,7 @@ export default function SortableImage({ image, index, onRemove }: SortableImageP
         alt={`preview-${index}`}
         fill
         className="object-cover transition-transform group-hover:scale-110"
+        sizes="(max-width: 768px) 25vw, 150px"
         unoptimized
       />
 

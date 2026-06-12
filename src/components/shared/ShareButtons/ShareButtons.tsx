@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Share2, Facebook, MessageCircle, Link2, Check } from "lucide-react";
+import { Share2, MessageCircle, Link2, Check } from "lucide-react";
+import { FacebookIcon } from "@/components/shared/BrandIcons/BrandIcons";
 
 interface ShareButtonsProps {
   url: string;
@@ -73,7 +74,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
         className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
         aria-label="Compartir en Facebook"
       >
-        <Facebook size={16} />
+        <FacebookIcon size={16} />
       </button>
 
       <button

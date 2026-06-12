@@ -13,7 +13,7 @@ describe("buildOgImageUrl", () => {
       const result = buildOgImageUrl(input);
       
       expect(result).toBe(
-        "https://res.cloudinary.com/demo/image/upload/sample.jpg?fl=progressive,f_jpg,q_auto:best,w_1200,h_630,c_fill"
+        "https://res.cloudinary.com/demo/image/upload/sample.jpg?fl=progressive,f_auto,q_auto:best,w_1200,h_630,c_fill"
       );
     });
 
@@ -22,7 +22,7 @@ describe("buildOgImageUrl", () => {
       const result = buildOgImageUrl(input);
       
       expect(result).toBe(
-        "https://res.cloudinary.com/demo/image/upload/sample.jpg?v1=123&fl=progressive,f_jpg,q_auto:best,w_1200,h_630,c_fill"
+        "https://res.cloudinary.com/demo/image/upload/sample.jpg?v1=123&fl=progressive,f_auto,q_auto:best,w_1200,h_630,c_fill"
       );
     });
 
@@ -31,7 +31,7 @@ describe("buildOgImageUrl", () => {
       const result = buildOgImageUrl(input);
       
       expect(result).toBe(
-        "https://res.cloudinary.com/my-cloud/image/upload/v1/properties/abc123.jpg?fl=progressive,f_jpg,q_auto:best,w_1200,h_630,c_fill"
+        "https://res.cloudinary.com/my-cloud/image/upload/v1/properties/abc123.jpg?fl=progressive,f_auto,q_auto:best,w_1200,h_630,c_fill"
       );
     });
   });

@@ -1,4 +1,5 @@
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectDB } from "@/db/connection";
 import { PropertyService } from "../services/property.service";
 import { AuditService } from "../services/audit.service";
@@ -11,7 +12,7 @@ import {
 } from "@/dtos/property/property-response.dto";
 import { CreatePropertyDTO } from "@/dtos/property/create-property.dto";
 import { UpdatePropertyDTO } from "@/dtos/property/update-property.dto";
-import { requireAdmin, getCurrentUser as getAuthenticatedUser } from "@/lib/auth";
+import { getCurrentUser as getAuthenticatedUser } from "@/lib/auth";
 
 export class PropertyController {
   private static handleError(error: unknown) {

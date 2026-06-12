@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AuditLogRepository } from "../repositories/audit-log.repository";
 import { AuditAction, AuditEntity, QueryAuditLogDTO } from "@/dtos/audit/query-audit-log.dto";
 import { auditLogResponseDTO, AuditLogResponse } from "@/dtos/audit/audit-log-response.dto";

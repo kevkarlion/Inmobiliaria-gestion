@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserModel } from "@/domain/models/User";
-import { Types } from "mongoose";
 import { UserRole } from "@/dtos/user/create-user.dto";
 
 export class UserRepository {

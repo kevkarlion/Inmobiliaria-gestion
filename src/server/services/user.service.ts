@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as bcrypt from "bcryptjs";
 import { UserRepository } from "../repositories/user.repository";
 import { AuditService } from "./audit.service";

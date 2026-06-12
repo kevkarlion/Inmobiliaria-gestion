@@ -56,4 +56,23 @@ describe("generateAltText", () => {
     });
     expect(result).toBe("Casa en Centro");
   });
+
+  it("uses customAltText when provided (DB priority)", () => {
+    const result = generateAltText({
+      title: "Casa Moderna",
+      operationType: "venta",
+      barrioName: "Centro",
+      cityName: "General Roca",
+    }, 1, "Foto personalizada de la fachada");
+    expect(result).toBe("Foto personalizada de la fachada");
+  });
+
+  it("falls back to generated text when customAltText is empty", () => {
+    const result = generateAltText({
+      title: "Departamento",
+      operationType: "alquiler",
+      barrioName: "Norte",
+    }, 0, "");
+    expect(result).toBe("Departamento en alquiler en Norte");
+  });
 });

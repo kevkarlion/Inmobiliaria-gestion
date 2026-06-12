@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, ChangeEvent, FormEvent, useEffect, useMemo } from "react";
+import { useState, ChangeEvent, FormEvent, useMemo } from "react";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { mapPropertyToForm } from "@/domain/mappers/propertyToForm.mapper";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
@@ -45,10 +45,6 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
     setAlertMessage(message);
     setAlertModalOpen(true);
   };
-
-  useEffect(() => {
-    setForm(mapPropertyToForm(property));
-  }, [property]);
 
   // 1. DATA DE PROVINCIAS (Ordenadas)
   const provinces = useMemo(() => [

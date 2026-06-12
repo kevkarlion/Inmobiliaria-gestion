@@ -47,6 +47,7 @@ export default async function PropertiesAdminPage({
 
   return (
     <PropertiesAdminClient
+      key={`${page}-${filter}`}
       initialProperties={properties}
       meta={meta}
       page={page}

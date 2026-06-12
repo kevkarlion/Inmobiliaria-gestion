@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Instagram, MessageCircle, Facebook } from "lucide-react"; 
+import { MessageCircle } from "lucide-react";
+import { FacebookIcon, InstagramIcon } from "@/components/shared/BrandIcons/BrandIcons";
 import Image from "next/image";
 
 const Footer: React.FC = () => {
@@ -21,6 +22,7 @@ const Footer: React.FC = () => {
                 fill
                 className="object-contain"
                 priority
+                sizes="160px"
               />
             </div>
           </div>
@@ -77,7 +79,7 @@ const Footer: React.FC = () => {
               className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-oxford transition-all group"
               aria-label="Facebook"
             >
-              <Facebook size={20} className="group-hover:scale-110 transition-transform" />
+              <FacebookIcon size={20} className="group-hover:scale-110 transition-transform" />
             </a>
 
             {/* Instagram */}
@@ -88,7 +90,7 @@ const Footer: React.FC = () => {
               className="flex items-center justify-center w-11 h-11 rounded-full border border-white/20 text-white hover:bg-gold-sand hover:text-oxford transition-all group"
               aria-label="Instagram"
             >
-              <Instagram size={20} className="group-hover:scale-110 transition-transform" />
+              <InstagramIcon size={20} className="group-hover:scale-110 transition-transform" />
             </a>
           </div>
           <p className="text-[10px] text-white/40 italic">

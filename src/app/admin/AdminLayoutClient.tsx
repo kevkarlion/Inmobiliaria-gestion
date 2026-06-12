@@ -58,43 +58,33 @@ const adminNavItems = [
   { href: "/admin/audit-logs", icon: FileText, label: "Auditoría" },
 ];
 
+function getStoredUser(): { role: string | null; email: string | null } {
+  if (typeof window === "undefined") return { role: null, email: null };
+  const token = localStorage.getItem("admin_token");
+  if (!token) return { role: null, email: null };
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return { role: payload.role ?? null, email: payload.email ?? null };
+  } catch {
+    return { role: null, email: null };
+  }
+}
+
+function getInitialSidebarOpen(): boolean {
+  if (typeof window === "undefined") return false;
+  const saved = localStorage.getItem("admin_sidebar_open");
+  return saved !== null ? saved === "true" : true;
+}
+
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isMobile, isTablet } = useViewport();
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(getInitialSidebarOpen);
+  const [userRole] = useState<string | null>(() => getStoredUser().role);
+  const [userEmail] = useState<string | null>(() => getStoredUser().email);
   const router = useRouter();
 
   const isDesktop = !isMobile && !isTablet;
-
-  // Get user role and email from localStorage on mount
-  useEffect(() => {
-    const token = localStorage.getItem("admin_token");
-    if (token) {
-      try {
-        // Decode JWT to get role and email (simple base64 decode)
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        setUserRole(payload.role);
-        setUserEmail(payload.email);
-      } catch (e) {
-        console.error("Error decoding token:", e);
-      }
-    }
-  }, []);
-
-  // Initialize sidebar state based on viewport
-  // Desktop: use localStorage, default to open (for new sessions)
-  // Mobile/tablet: use localStorage with default open
-  useEffect(() => {
-    const savedState = localStorage.getItem("admin_sidebar_open");
-    if (savedState !== null) {
-      setSidebarOpen(savedState === "true");
-    } else {
-      // Default to open for all viewports (including desktop)
-      setSidebarOpen(true);
-    }
-  }, []);
 
   const isAdmin = userRole === "admin";
   const navItems = isAdmin

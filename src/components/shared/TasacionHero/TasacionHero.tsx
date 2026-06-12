@@ -34,6 +34,7 @@ export default function TasacionHero() {
               alt="Riquelme Propiedades"
               fill
               className="object-contain object-center brightness-150"
+              sizes="(max-width: 640px) 80px, 112px"
             />
           </div>
         </div>

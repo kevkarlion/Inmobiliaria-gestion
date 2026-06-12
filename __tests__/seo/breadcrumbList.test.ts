@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from "vitest";
 import { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
+
+type JsonLdResult = Record<string, any>;
 
 describe("buildBreadcrumbListSchema", () => {
   it("returns BreadcrumbList with correct @type", () => {
     const items = [
       { name: "Inicio", item: "https://riquelmeprop.com/" },
     ];
-    const result = buildBreadcrumbListSchema(items);
+    const result: JsonLdResult = buildBreadcrumbListSchema(items);
     expect(result["@type"]).toBe("BreadcrumbList");
   });
 
@@ -16,7 +19,7 @@ describe("buildBreadcrumbListSchema", () => {
       { name: "Propiedades", item: "https://riquelmeprop.com/propiedades" },
       { name: "Casa Moderna", item: "https://riquelmeprop.com/propiedad/casa-moderna" },
     ];
-    const result = buildBreadcrumbListSchema(items);
+    const result: JsonLdResult = buildBreadcrumbListSchema(items);
     expect(result.itemListElement).toHaveLength(3);
     expect(result.itemListElement[0]).toEqual({
       "@type": "ListItem",
@@ -39,7 +42,7 @@ describe("buildBreadcrumbListSchema", () => {
   });
 
   it("works with empty items array", () => {
-    const result = buildBreadcrumbListSchema([]);
+    const result: JsonLdResult = buildBreadcrumbListSchema([]);
     expect(result.itemListElement).toEqual([]);
   });
 
@@ -48,7 +51,7 @@ describe("buildBreadcrumbListSchema", () => {
       { name: "Inicio", item: "https://riquelmeprop.com/" },
       { name: "Propiedades", item: "" },
     ];
-    const result = buildBreadcrumbListSchema(items);
+    const result: JsonLdResult = buildBreadcrumbListSchema(items);
     expect(result.itemListElement[1]).toEqual({
       "@type": "ListItem",
       position: 2,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
@@ -177,7 +178,7 @@ describe("Filter Listing Page JSON-LD", () => {
     expect(metadata.title).toBe("Propiedades en venta en General Roca");
     expect(metadata.openGraph).toBeDefined();
     expect(metadata.openGraph?.siteName).toBe("Riquelme Propiedades");
-    expect(metadata.twitter?.card).toBe("summary_large_image");
+    expect((metadata.twitter as any)?.card).toBe("summary_large_image");
   });
 
   it("handles oportunidad filter with correct breadcrumb label", async () => {

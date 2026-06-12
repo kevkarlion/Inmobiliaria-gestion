@@ -25,7 +25,7 @@ export interface SeoConfig {
   priceRange: string;
 }
 
-export const SEO_CONFIG: SeoConfig = {
+export const SEO_CONFIG: SeoConfig = Object.freeze({
   siteName: "Riquelme Propiedades",
   siteUrl: SITE_URL,
   logo: "/og-image.png",
@@ -44,4 +44,4 @@ export const SEO_CONFIG: SeoConfig = {
   },
   openingHours: "Mo-Fr 09:00-18:00",
   priceRange: "$$$",
-};
+});

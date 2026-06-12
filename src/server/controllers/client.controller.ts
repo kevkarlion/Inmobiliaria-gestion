@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectDB } from "@/db/connection";
 import { ClientService } from "../services/client.service";
 import { AuditService } from "../services/audit.service";
@@ -8,7 +9,7 @@ import { clientResponseDTO, ClientResponse } from "@/dtos/client/client-response
 import { CreateClientDTO } from "@/dtos/client/create-client.dto";
 import { UpdateClientDTO } from "@/dtos/client/update-client.dto";
 import { ClientStatus } from "@/domain/enums/client-status.enum";
-import { requireAdmin, getCurrentUser as getAuthenticatedUser } from "@/lib/auth";
+import { getCurrentUser as getAuthenticatedUser } from "@/lib/auth";
 
 export class ClientController {
   private static handleError(error: unknown) {

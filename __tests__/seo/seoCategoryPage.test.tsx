@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
@@ -194,7 +195,7 @@ describe("SEO Category Page JSON-LD", () => {
     });
 
     expect(metadata.openGraph?.siteName).toBe("Riquelme Propiedades");
-    expect(metadata.twitter?.card).toBe("summary_large_image");
+    expect((metadata.twitter as any)?.card).toBe("summary_large_image");
   });
 
   it("returns twitter metadata in generateMetadata", async () => {
@@ -202,6 +203,6 @@ describe("SEO Category Page JSON-LD", () => {
       params: Promise.resolve({ seoCategory: "casas-en-venta" }),
     });
 
-    expect(metadata.twitter?.card).toBe("summary_large_image");
+    expect((metadata.twitter as any)?.card).toBe("summary_large_image");
   });
 });

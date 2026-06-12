@@ -10,12 +10,11 @@ import {
   Menu,
   X,
   MessageCircle,
-  Facebook,
-  Instagram,
   Share2,
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
+import { FacebookIcon, InstagramIcon } from "@/components/shared/BrandIcons/BrandIcons";
 import { buildSeoListingUrl } from "@/lib/seoUrls";
 import { pluralizePropertyType } from "@/lib/propertyTypeLabels";
 import type { NavMenuStructure } from "@/lib/seoUrls";
@@ -64,7 +63,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                     rel="noopener noreferrer"
                     className="text-onyx hover:text-gold-sand transition-colors"
                   >
-                    <Facebook size={16} />
+                    <FacebookIcon size={16} />
                   </a>
                   <a
                     href="https://www.instagram.com/riquelme.propiedades/"
@@ -72,7 +71,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                     rel="noopener noreferrer"
                     className="text-onyx hover:text-gold-sand transition-colors"
                   >
-                    <Instagram size={16} />
+                    <InstagramIcon size={16} />
                   </a>
                 </div>
               </div>
@@ -519,7 +518,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                   rel="noopener noreferrer"
                   className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-white/5 ring-1 ring-white/10 px-4 py-3 text-sm font-bold text-white/90 hover:bg-gold-sand/10 hover:text-gold-sand transition-colors"
                 >
-                  <Instagram size={18} />
+                  <InstagramIcon size={18} />
                   Instagram
                 </a>
                 <a
@@ -528,7 +527,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                   rel="noopener noreferrer"
                   className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-white/5 ring-1 ring-white/10 px-4 py-3 text-sm font-bold text-white/90 hover:bg-gold-sand/10 hover:text-gold-sand transition-colors"
                 >
-                  <Facebook size={18} />
+                  <FacebookIcon size={18} />
                   Facebook
                 </a>
               </div>

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import slugify from "slugify";
 import { PropertyRepository } from "../repositories/property.repository";
 import { PropertyTypeRepository } from "../repositories/property-type.repository";
 import { PropertyModel } from "@/db/schemas/property.schema";

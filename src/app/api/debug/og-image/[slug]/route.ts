@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { PropertyService } from "@/server/services/property.service";
 import { buildOgImageUrl } from "@/lib/ogImage";
-import { getCanonicalUrl } from "@/lib/config";
 
 export async function GET(
   req: Request,

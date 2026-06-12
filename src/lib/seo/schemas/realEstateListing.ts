@@ -1,5 +1,4 @@
 import { SITE_URL } from "@/lib/config";
-import { SEO_CONFIG } from "@/lib/seo/config";
 
 interface PropertyImage {
   id?: string;

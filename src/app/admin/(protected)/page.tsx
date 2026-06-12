@@ -90,7 +90,6 @@ export default function AdminDashboard() {
 
 /* --- Sub-componentes --- */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function StatCard({ title, value, icon, trend, positive }: any) {
   return (
     <div className="p-6 bg-white border border-slate-200 rounded-xl shadow-sm">

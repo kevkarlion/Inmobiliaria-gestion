@@ -35,6 +35,7 @@ export default function PropertyCardHome({ property }: Props) {
           alt={property.title}
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-1000 opacity-70 group-hover:opacity-50"
+          sizes="(max-width: 768px) 300px, 420px"
         />
       </div>
 

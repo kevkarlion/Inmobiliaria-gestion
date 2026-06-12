@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // context/PropertyContext.tsx
 "use client";
 

@@ -114,6 +114,7 @@ export default function CloudinaryUploader({
                 alt={`Imagen ${idx + 1}`}
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 25vw, 15vw"
                 unoptimized // si las imágenes ya vienen de Cloudinary no necesitas optimización adicional
               />
             </div>
