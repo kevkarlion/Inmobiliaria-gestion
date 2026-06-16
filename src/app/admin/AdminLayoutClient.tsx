@@ -58,31 +58,33 @@ const adminNavItems = [
   { href: "/admin/audit-logs", icon: FileText, label: "Auditoría" },
 ];
 
-function getStoredUser(): { role: string | null; email: string | null } {
-  if (typeof window === "undefined") return { role: null, email: null };
-  const token = localStorage.getItem("admin_token");
-  if (!token) return { role: null, email: null };
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return { role: payload.role ?? null, email: payload.email ?? null };
-  } catch {
-    return { role: null, email: null };
-  }
-}
-
-function getInitialSidebarOpen(): boolean {
-  if (typeof window === "undefined") return false;
-  const saved = localStorage.getItem("admin_sidebar_open");
-  return saved !== null ? saved === "true" : true;
-}
-
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isMobile, isTablet } = useViewport();
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(getInitialSidebarOpen);
-  const [userRole] = useState<string | null>(() => getStoredUser().role);
-  const [userEmail] = useState<string | null>(() => getStoredUser().email);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
+
+  // Hydrate from localStorage after mount to avoid SSR mismatch
+  useEffect(() => {
+    const savedSidebar = localStorage.getItem("admin_sidebar_open");
+    setSidebarOpen(savedSidebar !== null ? savedSidebar === "true" : true);
+
+    const token = localStorage.getItem("admin_token");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        setUserRole(payload.role ?? null);
+        setUserEmail(payload.email ?? null);
+      } catch {
+        // token inválido, ignorar
+      }
+    }
+
+    setMounted(true);
+  }, []);
 
   const isDesktop = !isMobile && !isTablet;
 

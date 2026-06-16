@@ -106,6 +106,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
       { label: "Mainqué", value: "mainque" },
       { label: "Punta Colorada", value: "punta-colorada" },
       { label: "San Carlos de Bariloche", value: "bariloche" },
+      { label: "Sierra Colorada", value: "sierra-colorada" },
       { label: "Sierra Grande", value: "sierra-grande" },
       { label: "Viedma", value: "viedma" },
       { label: "Otras localidades (Río Negro)", value: "otras-rio-negro" },

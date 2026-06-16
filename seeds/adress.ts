@@ -44,6 +44,7 @@ async function runSeed() {
       { name: "Viedma", slug: "viedma" },
       { name: "San Carlos de Bariloche", slug: "bariloche" },
       { name: "El Bolsón", slug: "el-bolson" },
+      { name: "Sierra Colorada", slug: "sierra-colorada" },
       { name: "Dina Huapi", slug: "dina-huapi" },
       // Ciudad genérica para Río Negro
       { name: "Otras localidades (Río Negro)", slug: "otras-rio-negro" }
