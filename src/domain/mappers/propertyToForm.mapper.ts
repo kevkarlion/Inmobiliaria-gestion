@@ -75,6 +75,7 @@ export function mapPropertyToForm(property: PropertyResponse): any {
     ),
     imagesDesktop: property.imagesDesktop || [],
     imagesMobile: property.imagesMobile || [],
+    videos: property.videos || [],
 
     status: property.status || "active",
   };

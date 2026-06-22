@@ -10,6 +10,7 @@ export class CreatePropertyDTO {
   images: { url: string; alt?: string }[];
   imagesDesktop: string[];
   imagesMobile: string[];
+  videos: string[];
   tags: string[];
 
   price: { 
@@ -85,6 +86,12 @@ export class CreatePropertyDTO {
     this.images = data.images || [];
     this.imagesDesktop = data.imagesDesktop || [];
     this.imagesMobile = data.imagesMobile || [];
+
+    if (Array.isArray(data.videos) && data.videos.length > 3) {
+      throw new BadRequestError("Una propiedad no puede tener más de 3 videos");
+    }
+    this.videos = data.videos || [];
+
     this.tags = data.tags || [];
 
     this.price = {

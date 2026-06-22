@@ -6,6 +6,7 @@ import { PropertyFormType } from "@/domain/types/PropertyFormType.types";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
 import MultiResolutionUploader from '@/components/CloudinaryUploader/MultiResolutionUploader';
+import VideoUploader from '@/components/CloudinaryUploader/VideoUploader';
 import SortableImageGrid from "@/components/shared/SortableImage/SortableImageGrid";
 import { toast } from "sonner";
 
@@ -65,6 +66,7 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
     images: [],
     imagesDesktop: [],
     imagesMobile: [],
+    videos: [],
     description: "",
   });
 
@@ -177,6 +179,10 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
 
   const handleMobileImagesUpload = (urls: string[]) => {
     setForm(prev => ({ ...prev, imagesMobile: urls }));
+  };
+
+  const handleVideosChange = (urls: string[]) => {
+    setForm(prev => ({ ...prev, videos: urls }));
   };
 
   const removeImage = (index: number) => {
@@ -516,6 +522,15 @@ export default function CreatePropertyForm({ onClose, onCreate }: CreateProperty
             images={form.images}
             onReorder={handleReorder}
             onRemove={removeImage}
+          />
+        </div>
+
+        {/* Video uploader */}
+        <div className="pt-6 border-t border-white/10">
+          <Label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4">Videos</Label>
+          <VideoUploader
+            onVideosChange={handleVideosChange}
+            existingVideos={form.videos}
           />
         </div>
       </div>

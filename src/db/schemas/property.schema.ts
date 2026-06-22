@@ -115,6 +115,11 @@ const PropertySchema = new Schema<IProperty>(
       default: [],
     },
 
+    videos: {
+      type: [String],
+      default: [],
+    },
+
     status: {
       type: String,
       enum: Object.values(PropertyStatus),

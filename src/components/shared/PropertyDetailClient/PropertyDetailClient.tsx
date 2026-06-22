@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { mapPropertyToUI } from "@/domain/mappers/mapPropertyToUI";
 import { PropertyGallery } from "@/components/shared/PropertyGalllery/PropertyGallery";
+import VideoGallery from "@/components/shared/PropertyDetailClient/VideoGallery";
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { formatPrice } from "@/utils/formatPrice";
 import PropertyShare from "@/components/shared/PropertyShare/PropertyShare";
@@ -135,6 +136,12 @@ export function PropertyDetailClient({
             soldIsMale={p.soldIsMale}
           />
         </div>
+
+        {p.videos.length > 0 && (
+          <div className="mb-14">
+            <VideoGallery videos={p.videos} />
+          </div>
+        )}
 
         {/* CONTENIDO */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-14">

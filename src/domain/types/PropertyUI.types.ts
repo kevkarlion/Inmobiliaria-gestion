@@ -55,6 +55,7 @@ export interface PropertyUI {
   images: string[];
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  videos: string[];
   description: string;
 
   // Contacto

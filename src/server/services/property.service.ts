@@ -119,6 +119,7 @@ export class PropertyService {
         : [dto.images].filter(Boolean),
       imagesDesktop: Array.isArray(dto.imagesDesktop) ? dto.imagesDesktop : [],
       imagesMobile: Array.isArray(dto.imagesMobile) ? dto.imagesMobile : [],
+      videos: Array.isArray(dto.videos) ? dto.videos : [],
       createdBy: dto.createdBy ? {
         userId: new Types.ObjectId(dto.createdBy.userId),
         email: dto.createdBy.email,
@@ -385,6 +386,7 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
     "images",
     "imagesDesktop",
     "imagesMobile",
+    "videos",
     "status",
     "operationType",
     "contactPhone",

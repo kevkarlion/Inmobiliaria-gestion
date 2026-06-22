@@ -54,6 +54,7 @@ export interface PropertyResponse {
   }[];
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  videos: string[];
 
   description?: string;
   status?: string;
@@ -147,6 +148,7 @@ export function propertyResponseDTO(property: any): PropertyResponse {
     })),
     imagesDesktop: property.imagesDesktop || [],
     imagesMobile: property.imagesMobile || [],
+    videos: property.videos || [],
 
     description: property.description,
     status: property.status,

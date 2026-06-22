@@ -11,6 +11,7 @@ export class UpdatePropertyDTO {
   images?: string[];
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  videos?: string[];
   // Flags en raíz para compatibilidad
   reserved?: boolean;
   reservedIsMale?: boolean;
@@ -90,6 +91,7 @@ export class UpdatePropertyDTO {
     this.images = data.images;
     this.imagesDesktop = data.imagesDesktop;
     this.imagesMobile = data.imagesMobile;
+    this.videos = data.videos;
     this.tags = data.tags;
 
     this.address = {

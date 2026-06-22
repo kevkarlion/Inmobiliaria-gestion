@@ -116,6 +116,7 @@ export function mapPropertyToUI(property: any): PropertyUI {
     imagesMobile: Array.isArray(property.imagesMobile) 
       ? property.imagesMobile 
       : [],
+    videos: Array.isArray(property.videos) ? property.videos : [],
     description: property.description || "",
 
     // Estado

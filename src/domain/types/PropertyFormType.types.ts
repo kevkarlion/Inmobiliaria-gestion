@@ -44,5 +44,6 @@ export interface PropertyFormType {
   images: string[];
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  videos: string[];
   description: string;
 }

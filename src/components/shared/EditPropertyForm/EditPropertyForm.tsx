@@ -6,6 +6,7 @@ import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { mapPropertyToForm } from "@/domain/mappers/propertyToForm.mapper";
 import CloudinaryUploader from '@/components/CloudinaryUploader/CloudinaryUploader';
 import MultiResolutionUploader from '@/components/CloudinaryUploader/MultiResolutionUploader';
+import VideoUploader from '@/components/CloudinaryUploader/VideoUploader';
 import SortableImageGrid from "@/components/shared/SortableImage/SortableImageGrid";
 import { toast } from "sonner";
 
@@ -150,6 +151,13 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
     setForm((prev: any) => ({
       ...prev,
       imagesMobile: urls, // Reemplazar, no concatenar
+    }));
+  };
+
+  const handleVideosChange = (urls: string[]) => {
+    setForm((prev: any) => ({
+      ...prev,
+      videos: urls,
     }));
   };
 
@@ -489,6 +497,15 @@ export default function EditPropertyForm({ property, slug, onClose, onUpdate }: 
             images={form.images || []}
             onReorder={handleReorder}
             onRemove={removeImage}
+          />
+        </div>
+
+        {/* Video uploader */}
+        <div className="pt-6 border-t border-white/10">
+          <Label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4">Videos</Label>
+          <VideoUploader
+            onVideosChange={handleVideosChange}
+            existingVideos={form.videos || []}
           />
         </div>
       </div>

@@ -72,6 +72,7 @@ export interface Property {
   images: string[];
   imagesDesktop?: string[];
   imagesMobile?: string[];
+  videos: string[];
   description: string;
   status: "active" | "inactive";
   
