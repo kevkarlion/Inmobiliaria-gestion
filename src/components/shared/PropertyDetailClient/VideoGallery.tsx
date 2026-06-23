@@ -79,7 +79,7 @@ export default function VideoGallery({ videos }: VideoGalleryProps) {
 
       {selectedIndex !== null && (
         <div
-          className="fixed inset-0 z-[60] bg-black/90 flex flex-col md:flex-row md:items-center md:justify-center p-0 md:p-4"
+          className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-0 md:p-4"
           onClick={closeModal}
         >
           <button
@@ -90,20 +90,20 @@ export default function VideoGallery({ videos }: VideoGalleryProps) {
           </button>
 
           <div
-            className="flex-1 md:flex-none md:w-full md:max-w-4xl md:aspect-video"
+            className="w-full h-full md:w-auto md:h-auto md:max-w-4xl flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <video
               ref={videoRef}
               key={selectedIndex}
+              src={videos[selectedIndex]}
               controls
               autoPlay
               playsInline
               preload="metadata"
-              className="w-full h-full object-contain rounded-none md:rounded-2xl"
-            >
-              <source src={videos[selectedIndex]} type="video/mp4" />
-            </video>
+              className="w-full h-full max-w-5xl max-h-full md:rounded-2xl"
+              style={{ objectFit: "contain" }}
+            />
           </div>
         </div>
       )}
