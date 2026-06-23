@@ -98,6 +98,8 @@ export default function VideoGallery({ videos }: VideoGalleryProps) {
               key={selectedIndex}
               controls
               autoPlay
+              playsInline
+              preload="metadata"
               className="w-full h-full object-contain rounded-none md:rounded-2xl"
             >
               <source src={videos[selectedIndex]} type="video/mp4" />
