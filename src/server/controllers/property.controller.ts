@@ -175,6 +175,53 @@ export class PropertyController {
     }
   }
 
+  // POST /properties/:slug/toggle-active
+  static async toggleActive(req: Request, { params }: { params: { slug: string } }) {
+    try {
+      await connectDB();
+      const currentUser = await getAuthenticatedUser();
+      const existingProperty = await PropertyService.findBySlug(params.slug);
+
+      if (!existingProperty) {
+        return NextResponse.json(
+          { message: "Propiedad no encontrada" },
+          { status: 404 }
+        );
+      }
+
+      // Verify permissions: admin or owner
+      const existingUserId = existingProperty.createdBy?.userId?.toString();
+      const isOwner = currentUser && existingUserId === currentUser.id;
+      const isAdmin = currentUser?.role === "admin" || currentUser?.isAdmin;
+
+      if (!currentUser || (!isOwner && !isAdmin)) {
+        return NextResponse.json(
+          { message: "No tenés permisos para modificar esta propiedad" },
+          { status: 403 }
+        );
+      }
+
+      const updatedProperty = await PropertyService.toggleActive(params.slug);
+
+      // Audit log
+      if (currentUser) {
+        await AuditService.log({
+          action: existingProperty.isActive !== false ? "deactivate" : "activate",
+          entity: "property",
+          entityId: existingProperty._id.toString(),
+          userId: currentUser.id,
+          userEmail: currentUser.email,
+          description: `Propiedad ${existingProperty.isActive !== false ? "desactivada" : "activada"}: ${existingProperty.title}`,
+          changes: { slug: params.slug, isActive: updatedProperty.isActive },
+        });
+      }
+
+      return NextResponse.json(propertyResponseDTO(updatedProperty));
+    } catch (error: unknown) {
+      return this.handleError(error);
+    }
+  }
+
   // DELETE /properties/:slug
   static async delete(req: Request, { params }: { params: { slug: string } }) {
     try {

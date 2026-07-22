@@ -43,6 +43,7 @@ export default function PropertiesAdminClient({
   const [showEditForm, setShowEditForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
+  const [togglingSlug, setTogglingSlug] = useState<string | null>(null);
   const router = useRouter();
 
   // Sync occurs via key prop on the parent component — remounts when page/filter changes
@@ -158,6 +159,26 @@ export default function PropertiesAdminClient({
     router.push(`/admin/properties?filter=${newFilter}&page=1`);
     // Reset loading after a short delay to allow navigation to complete
     setTimeout(() => setFilterLoading(false), 500);
+  }
+
+  async function handleToggleActive(slug: string) {
+    setTogglingSlug(slug);
+    try {
+      const res = await fetch(`/api/properties/${slug}/toggle-active`, { method: "POST" });
+      if (res.ok) {
+        const updated = await res.json();
+        setProperties((prev) =>
+          prev.map((p) => (p.slug === slug ? { ...p, isActive: updated.isActive } : p))
+        );
+        toast.success(updated.isActive ? "Propiedad activada" : "Propiedad desactivada");
+      } else {
+        toast.error("Error al cambiar estado de la propiedad");
+      }
+    } catch {
+      toast.error("Error al cambiar estado de la propiedad");
+    } finally {
+      setTogglingSlug(null);
+    }
   }
 
   return (
@@ -283,7 +304,7 @@ export default function PropertiesAdminClient({
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {properties.map((p, index) => (
-                    <tr key={p.id} className={`transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-blue-50`}>
+                    <tr key={p.id} className={`transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-blue-50 ${p.isActive === false ? 'opacity-50' : ''}`}>
                       {/* Thumbnail */}
                       <td className="px-1 py-1.5">
                         {p.images?.[0]?.url ? (
@@ -326,6 +347,9 @@ export default function PropertiesAdminClient({
                         <Link href={`/properties/${p.slug}`} target="_blank" className="font-medium text-slate-800 hover:text-blue-600 hover:underline text-xs block w-[180px] lg:w-[220px]">
                           {p.title}
                         </Link>
+                        {p.isActive === false && (
+                          <span className="inline-block mt-0.5 bg-slate-200 text-slate-600 text-[9px] px-1.5 py-0.5 rounded font-medium">Inactiva</span>
+                        )}
                       </td>
                       
                       {/* Dirección */}
@@ -391,6 +415,30 @@ export default function PropertiesAdminClient({
                           {/* Mostrar botones solo si es admin o propietario */}
                           {(currentUser?.isAdmin || p.createdBy?.userId === currentUser?.id) && (
                             <>
+                              {/* Toggle Switch */}
+                              <button
+                                onClick={() => handleToggleActive(p.slug)}
+                                disabled={togglingSlug === p.slug}
+                                className="relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{
+                                  backgroundColor: togglingSlug === p.slug
+                                    ? '#cbd5e1'
+                                    : p.isActive === false
+                                      ? '#e2e8f0'
+                                      : '#22c55e'
+                                }}
+                                title={p.isActive === false ? "Activar propiedad" : "Desactivar propiedad"}
+                              >
+                                {togglingSlug === p.slug ? (
+                                  <Loader2 size={10} className="animate-spin text-slate-500 mx-auto" />
+                                ) : (
+                                  <span
+                                    className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform ${
+                                      p.isActive === false ? 'translate-x-[3px]' : 'translate-x-[19px]'
+                                    }`}
+                                  />
+                                )}
+                              </button>
                               <button
                                 onClick={() => {
                                   setEditingProperty(p);

@@ -13,7 +13,7 @@ interface Props {
 
 export default function PropertyCardAdmin({ property, onDelete, onEdit, currentUser }: Props) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+    <div className={`bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col ${property.isActive === false ? 'opacity-50' : ''}`}>
       {/* Header: ID y Slugs */}
       <div className="bg-slate-50 px-4 py-2 border-b border-slate-100 flex justify-between items-center">
         <span className="text-[10px] font-mono text-slate-400 truncate flex items-center gap-1">
@@ -60,7 +60,12 @@ export default function PropertyCardAdmin({ property, onDelete, onEdit, currentU
 
           <div className="min-w-0 flex flex-col justify-center">
             <h2 className="text-lg font-bold text-slate-800 leading-tight mb-1">{property.title}</h2>
-            <p className="text-xs text-slate-400 font-mono truncate">/{property.slug}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-slate-400 font-mono truncate">/{property.slug}</p>
+              {property.isActive === false && (
+                <span className="inline-block bg-slate-200 text-slate-600 text-[9px] px-1.5 py-0.5 rounded font-medium">Inactiva</span>
+              )}
+            </div>
           </div>
         </div>
 

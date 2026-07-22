@@ -57,6 +57,7 @@ export interface IProperty {
 
   description: string;
   status: "active" | "inactive";
+  isActive: boolean;
   createdBy?: {
     userId: Types.ObjectId;
     email: string;

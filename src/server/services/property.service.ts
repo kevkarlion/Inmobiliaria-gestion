@@ -162,6 +162,12 @@ export class PropertyService {
   ): Promise<FindAllPropertiesResult> {
     await connectDB();
     const filter: any = { status: "active" };
+
+    // Non-admin users only see active (enabled) properties
+    if (!currentUser?.isAdmin) {
+      filter.isActive = { $ne: false };
+    }
+
     const f = query.filters;
 
     // Mostrar TODAS las propiedades a TODOS los usuarios (admin y no admin)
@@ -476,6 +482,34 @@ static async update(slug: string, payload: UpdatePropertyDTO) {
     revalidatePath("/propiedades/venta");
     revalidatePath("/propiedades/alquiler");
     return { message: "Property deleted successfully" };
+  }
+
+  // TOGGLE /properties/:slug/toggle-active
+  static async toggleActive(slug: string) {
+    const property = await PropertyRepository.findDocumentBySlugAnyStatus(slug);
+    if (!property) throw new NotFoundError("Property not found");
+
+    const newIsActive = property.isActive === false;
+    property.isActive = newIsActive;
+    await property.save();
+
+    revalidatePath("/");
+    revalidatePath("/propiedades/oportunidad");
+    revalidatePath("/propiedades/venta");
+    revalidatePath("/propiedades/alquiler");
+    revalidatePath(`/propiedad/${slug}`);
+
+    const result = await PropertyModel.findById(property._id)
+      .populate("propertyType")
+      .populate("address.province")
+      .populate("address.city")
+      .populate("address.barrio")
+      .lean();
+
+    return {
+      ...result,
+      _id: result!._id.toString(),
+    } as any;
   }
 
   //para llamada del SearchBar y llamadas con filtros del home

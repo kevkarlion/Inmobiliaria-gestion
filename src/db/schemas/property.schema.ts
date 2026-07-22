@@ -127,6 +127,8 @@ const PropertySchema = new Schema<IProperty>(
       index: true,
     },
 
+    isActive: { type: Boolean, default: true, index: true },
+
     // Usuario que creó la propiedad
     createdBy: {
       userId: { type: Schema.Types.ObjectId, ref: "User" },

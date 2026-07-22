@@ -58,6 +58,7 @@ export interface PropertyResponse {
 
   description?: string;
   status?: string;
+  isActive: boolean;
 
   location: {
     mapsUrl: string;
@@ -152,6 +153,7 @@ export function propertyResponseDTO(property: any): PropertyResponse {
 
     description: property.description,
     status: property.status,
+    isActive: property.isActive !== false,
 
     location: {
       mapsUrl: property.location?.mapsUrl || "",

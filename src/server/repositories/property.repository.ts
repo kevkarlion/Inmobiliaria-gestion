@@ -44,6 +44,11 @@ export class PropertyRepository {
     return PropertyModel.findOne({ slug, status: "active" });
   }
 
+  // Toggle active - finds document regardless of isActive status
+  static findDocumentBySlugAnyStatus(slug: string) {
+    return PropertyModel.findOne({ slug });
+  }
+
   //paginacion
   static count(filter: any) {
     return PropertyModel.countDocuments(filter);
