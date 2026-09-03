@@ -175,6 +175,7 @@ export default function NosotrosPage() {
                   src="/nosotros-section.webp"
                   alt="Riquelme Propiedades"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 640px"
                   className="object-cover grayscale"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/80 to-slate-900/40 lg:hidden" />
@@ -259,6 +260,7 @@ export default function NosotrosPage() {
                     src={member.image}
                     alt={member.name}
                     fill
+                    sizes="320px"
                     className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

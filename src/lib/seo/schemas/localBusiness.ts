@@ -40,33 +40,6 @@ export function buildLocalBusinessSchema() {
         },
       },
     ],
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Propiedades en Venta y Alquiler",
-      itemListElement: [
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Product",
-            name: "Casas en venta en General Roca",
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Product",
-            name: "Departamentos en venta en General Roca",
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Product",
-            name: "Terrenos en venta en General Roca",
-          },
-        },
-      ],
-    },
     sameAs: [SEO_CONFIG.social.facebook, SEO_CONFIG.social.instagram],
   };
 }
