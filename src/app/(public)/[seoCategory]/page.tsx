@@ -17,7 +17,6 @@ import RelatedCategories, {
 
 import { JsonLd } from "@/lib/seo/jsonLd";
 import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
-import { buildCollectionPageSchema } from "@/lib/seo/schemas/collectionPage";
 import { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
 import { buildBreadcrumbItems } from "@/lib/seo/breadcrumbs";
 
@@ -99,13 +98,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function buildSeoSchemas(properties: { slug: string; title: string }[], canonicalUrl: string, breadcrumbLabels: string[], path: string) {
+function buildSeoSchemas(properties: { slug: string; title: string }[], breadcrumbLabels: string[], path: string) {
   const itemListSchema = buildItemListSchema(properties);
-  const collectionPageSchema = buildCollectionPageSchema(canonicalUrl, itemListSchema);
   const breadcrumbItems = buildBreadcrumbItems(path, breadcrumbLabels);
   const breadcrumbSchema = buildBreadcrumbListSchema(breadcrumbItems);
 
-  return { itemListSchema, collectionPageSchema, breadcrumbSchema };
+  return { itemListSchema, breadcrumbSchema };
 }
 
 // Categorías relacionadas que se muestran como cards visuales en el bottom.
@@ -150,14 +148,12 @@ export default async function SeoCategoryPage({ params }: Props) {
       limit: 50,
     });
 
-    const canonicalUrl = category.canonical;
     const breadcrumbLabels = ["Inicio", category.title];
-    const schemas = buildSeoSchemas(properties, canonicalUrl, breadcrumbLabels, `/${seoCategory}`);
+    const schemas = buildSeoSchemas(properties, breadcrumbLabels, `/${seoCategory}`);
 
     return (
       <>
         <JsonLd type="ItemList" data={schemas.itemListSchema} />
-        <JsonLd type="CollectionPage" data={schemas.collectionPageSchema} />
         <JsonLd type="BreadcrumbList" data={schemas.breadcrumbSchema} />
         <SearchTypePage
           properties={properties}
@@ -203,14 +199,12 @@ export default async function SeoCategoryPage({ params }: Props) {
 
   const seoDescription = `${typePlural} en ${opLabel} en ${names.cityName}. Encontrá opciones con Riquelme Propiedades.`;
 
-  const canonicalUrl = getCanonicalUrl(`/${seoCategory}`);
   const breadcrumbLabels = ["Inicio", seoTitle];
-  const schemas = buildSeoSchemas(properties, canonicalUrl, breadcrumbLabels, `/${seoCategory}`);
+  const schemas = buildSeoSchemas(properties, breadcrumbLabels, `/${seoCategory}`);
 
   return (
     <>
       <JsonLd type="ItemList" data={schemas.itemListSchema} />
-      <JsonLd type="CollectionPage" data={schemas.collectionPageSchema} />
       <JsonLd type="BreadcrumbList" data={schemas.breadcrumbSchema} />
       <SearchTypePage
         properties={properties}

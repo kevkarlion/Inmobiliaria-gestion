@@ -12,7 +12,8 @@ export function buildBreadcrumbListSchema(
       position: index + 1,
       name: crumb.name,
     };
-    if (crumb.item) {
+    // Solo emitir "item" si es una URL absoluta válida (nunca cadena vacía).
+    if (crumb.item && crumb.item.startsWith("http")) {
       entry.item = crumb.item;
     }
     return entry;

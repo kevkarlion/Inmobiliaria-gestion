@@ -7,7 +7,6 @@ import RelatedCategories, {
 } from "@/components/shared/RelatedCategories/RelatedCategories";
 import { JsonLd } from "@/lib/seo/jsonLd";
 import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
-import { buildCollectionPageSchema } from "@/lib/seo/schemas/collectionPage";
 import { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
 import { buildBreadcrumbItems } from "@/lib/seo/breadcrumbs";
 
@@ -63,12 +62,7 @@ export default async function VentaPropiedadesPage() {
     limit: 50,
   });
 
-  const canonicalUrl = getCanonicalUrl("/venta-de-propiedades");
   const itemListSchema = buildItemListSchema(properties);
-  const collectionPageSchema = buildCollectionPageSchema(
-    canonicalUrl,
-    itemListSchema
-  );
   const breadcrumbItems = buildBreadcrumbItems("/venta-de-propiedades", [
     "Inicio",
     "Venta de Propiedades",
@@ -78,7 +72,6 @@ export default async function VentaPropiedadesPage() {
   return (
     <>
       <JsonLd type="ItemList" data={itemListSchema} />
-      <JsonLd type="CollectionPage" data={collectionPageSchema} />
       <JsonLd type="BreadcrumbList" data={breadcrumbSchema} />
 
       <SearchTypePage

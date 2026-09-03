@@ -5,6 +5,5 @@ export { buildOrganizationSchema } from "@/lib/seo/schemas/organization";
 export { buildRealEstateListingSchema } from "@/lib/seo/schemas/realEstateListing";
 export { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
 export { buildItemListSchema } from "@/lib/seo/schemas/itemList";
-export { buildCollectionPageSchema } from "@/lib/seo/schemas/collectionPage";
 export { buildBreadcrumbItems } from "@/lib/seo/breadcrumbs";
 export { generateAltText } from "@/lib/seo/image";

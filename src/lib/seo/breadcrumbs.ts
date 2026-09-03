@@ -7,7 +7,7 @@ interface BreadcrumbItem {
 }
 
 export function buildBreadcrumbItems(
-  _path: string,
+  path: string,
   labels: string[],
   baseUrl?: string
 ): BreadcrumbItem[] {
@@ -21,7 +21,8 @@ export function buildBreadcrumbItems(
     const isLast = index === labels.length - 1;
 
     if (isLast) {
-      return { name: label, item: "" };
+      // El último crumb apunta a la página actual (URL absoluta canónica).
+      return { name: label, item: `${root}${path}` };
     }
 
     const url = `${root}/${slugify(label)}`;

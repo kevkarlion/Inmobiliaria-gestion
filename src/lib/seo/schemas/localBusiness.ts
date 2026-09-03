@@ -39,14 +39,6 @@ export function buildLocalBusinessSchema() {
           name: "Río Negro",
         },
       },
-      {
-        "@type": "City",
-        name: "Neuquén",
-        containedInPlace: {
-          "@type": "State",
-          name: "Neuquén",
-        },
-      },
     ],
     hasOfferCatalog: {
       "@type": "OfferCatalog",

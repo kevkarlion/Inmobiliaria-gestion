@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import { getCanonicalUrl } from "@/lib/config";
 import { JsonLd } from "@/lib/seo/jsonLd";
 import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
-import { buildCollectionPageSchema } from "@/lib/seo/schemas/collectionPage";
 import { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
 import { buildBreadcrumbItems } from "@/lib/seo/breadcrumbs";
 
@@ -91,15 +90,9 @@ export default async function Page({ params }: Props) {
     limit: 50,
   });
 
-  const canonicalUrl = getCanonicalUrl(`/propiedades/${filter}`);
   const filterLabel = FILTER_LABELS[filter] || filter;
 
   const itemListSchema = buildItemListSchema(properties);
-
-  const collectionPageSchema = buildCollectionPageSchema(
-    canonicalUrl,
-    itemListSchema
-  );
 
   const breadcrumbItems = buildBreadcrumbItems(
     `/propiedades/${filter}`,
@@ -111,7 +104,6 @@ export default async function Page({ params }: Props) {
   return (
     <>
       <JsonLd type="ItemList" data={itemListSchema} />
-      <JsonLd type="CollectionPage" data={collectionPageSchema} />
       <JsonLd type="BreadcrumbList" data={breadcrumbSchema} />
       <SearchTypePage
         properties={properties}
