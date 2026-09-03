@@ -12,6 +12,7 @@ import { PropertyService } from "@/server/services/property.service";
 import { Toaster } from "sonner";
 import { PublicBackground } from "@/components/shared/PublicBackground/PublicBackground";
 import BlogScrollRestoration from "@/components/shared/BlogScrollRestoration";
+import { buildLocalBusinessSchema } from "@/lib/seo/schemas/localBusiness";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -111,8 +112,9 @@ export default async function PublicLayout({
   }
 
   return (
-    <div className={`${montserrat.variable} ${lora.variable} ${inter.variable} min-h-screen w-full max-w-full overflow-x-hidden`}>
+    <div className={`${montserrat.variable} ${lora.variable} ${inter.variable} min-h-screen w-full max-w-full overflow-x-clip`}>
       <JsonLd type="Organization" data={buildOrganizationSchema(SEO_CONFIG)} />
+      <JsonLd type="LocalBusiness" data={buildLocalBusinessSchema()} />
       <PublicBackground />
       <PropertyProvider>
         <Navbar menuStructure={menuStructure} />
@@ -120,7 +122,7 @@ export default async function PublicLayout({
           <BlogScrollRestoration />
         </Suspense>
 
-        <main className="flex flex-col min-h-screen w-full max-w-full md:bg-white overflow-x-hidden">
+        <main className="flex flex-col min-h-screen w-full max-w-full md:bg-white overflow-x-clip">
           {children}
         </main>
 

@@ -13,6 +13,7 @@ interface Props {
   fixedOperation?: "venta" | "alquiler";
   seoTitle?: string;
   seoDescription?: string;
+  children?: React.ReactNode;
 }
 
 export default function SearchTypePage({
@@ -23,6 +24,7 @@ export default function SearchTypePage({
   fixedOperation,
   seoTitle,
   seoDescription,
+  children,
 }: Props) {
 
   const isCityLocked = !!fixedCity;
@@ -216,7 +218,7 @@ export default function SearchTypePage({
                 ? "fixed inset-0 z-50 bg-oxford p-6 overflow-y-auto"
                 : "hidden"
             }
-            lg:relative lg:block lg:inset-auto lg:z-0 lg:bg-transparent lg:p-0 lg:w-80 shrink-0
+            lg:sticky lg:top-32 lg:block lg:inset-auto lg:z-0 lg:bg-transparent lg:p-0 lg:w-80 shrink-0 lg:self-start lg:h-[calc(100vh-8rem)] lg:overflow-y-auto
           `}
           >
             <div className="bg-oxford p-8 rounded-[2rem] shadow-2xl border border-white/5 text-white">
@@ -468,6 +470,10 @@ export default function SearchTypePage({
           </div>
 
         </div>
+
+        {/* Related categories (visual cards) - inyectado desde la página server */}
+        {children}
+
       </div>
     </main>
   );

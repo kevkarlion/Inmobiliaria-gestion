@@ -161,7 +161,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                     <div className="bg-white text-oxford rounded-b shadow-xl border-t-2 border-gold-sand py-2">
                       {/* Link para ver todas las propiedades de venta */}
                       <Link
-                        href="/propiedades/venta"
+                        href="/venta-de-propiedades"
                         className="block px-4 py-2 text-sm hover:bg-gold-sand/10 hover:text-gold-sand font-semibold"
                       >
                         Ver todas
@@ -193,7 +193,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                 </div>
               ) : (
                 <Link
-                  href="/propiedades/venta"
+                  href="/venta-de-propiedades"
                   scroll
                   className="text-sm font-medium hover:text-gold-sand transition-colors py-5 px-3 border-b-2 border-transparent hover:border-gold-sand"
                 >
@@ -276,9 +276,9 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                 </button>
                 {mobileVentaOpen && (
                   <div className="pl-4 mt-1 space-y-1">
-                    {/* Link para ver todas */}
+{/* Link para ver todas */}
                     <Link
-                      href="/propiedades/venta"
+                      href="/venta-de-propiedades"
                       onClick={() => setIsOpen(false)}
                       className="group flex items-center justify-between rounded-md px-3 py-2 text-[13px] font-semibold uppercase tracking-wider text-gold-sand ring-1 ring-gold-sand/40 bg-gold-sand/10 hover:bg-gold-sand/15 transition-colors"
                     >
@@ -327,7 +327,7 @@ export default function Navbar({ menuStructure }: NavbarProps) {
               </div>
             ) : (
               <Link
-                href="/propiedades/venta"
+                href="/venta-de-propiedades"
                 scroll
                 onClick={() => setIsOpen(false)}
                 className="text-lg font-bold uppercase tracking-wider text-white hover:text-gold-sand py-2"

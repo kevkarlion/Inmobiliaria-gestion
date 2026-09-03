@@ -11,6 +11,9 @@ import { getUiProperties } from "@/components/server/data-access/get-ui-properti
 import { PropertyService } from "@/server/services/property.service";
 
 import SearchTypePage from "@/components/shared/SearchTypePage/SearchTypePage";
+import RelatedCategories, {
+  type PropertyQuery,
+} from "@/components/shared/RelatedCategories/RelatedCategories";
 
 import { JsonLd } from "@/lib/seo/jsonLd";
 import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
@@ -105,6 +108,34 @@ function buildSeoSchemas(properties: { slug: string; title: string }[], canonica
   return { itemListSchema, collectionPageSchema, breadcrumbSchema };
 }
 
+// Categorías relacionadas que se muestran como cards visuales en el bottom.
+const RELATED_CATEGORIES: {
+  title: string;
+  href: string;
+  query: PropertyQuery;
+}[] = [
+  {
+    title: "Casas en venta en Río Negro",
+    href: "/casas-en-venta-rio-negro",
+    query: { operationType: "venta", propertyType: "casa", province: "rio-negro" },
+  },
+  {
+    title: "Departamentos en venta en Río Negro",
+    href: "/departamentos-en-venta-rio-negro",
+    query: { operationType: "venta", propertyType: "departamento", province: "rio-negro" },
+  },
+  {
+    title: "Terrenos en venta en Río Negro",
+    href: "/terrenos-en-venta-rio-negro",
+    query: { operationType: "venta", propertyType: "terreno", province: "rio-negro" },
+  },
+  {
+    title: "Loteos en venta en General Roca",
+    href: "/loteos-en-venta-general-roca",
+    query: { operationType: "venta", propertyType: "loteo", city: "general-roca" },
+  },
+];
+
 export default async function SeoCategoryPage({ params }: Props) {
   const { seoCategory } = await params;
 
@@ -114,7 +145,8 @@ export default async function SeoCategoryPage({ params }: Props) {
     const properties = await getUiProperties({
       operationType: category.operationType,
       propertyType: category.propertyTypeSlug,
-      city: category.citySlug,
+      city: category.provinceSlug ? undefined : category.citySlug,
+      province: category.provinceSlug,
       limit: 50,
     });
 
@@ -130,12 +162,17 @@ export default async function SeoCategoryPage({ params }: Props) {
         <SearchTypePage
           properties={properties}
           filterParam={seoCategory}
-          fixedCity={category.citySlug}
+          fixedCity={category.provinceSlug ? undefined : category.citySlug}
           fixedPropertyType={category.propertyTypeSlug}
           fixedOperation={category.operationType}
           seoTitle={category.title}
           seoDescription={category.description}
-        />
+        >
+          <RelatedCategories
+            categories={RELATED_CATEGORIES}
+            currentHref={`/${seoCategory}`}
+          />
+        </SearchTypePage>
       </>
     );
   }
@@ -183,7 +220,12 @@ export default async function SeoCategoryPage({ params }: Props) {
         fixedOperation={parsed.operation}
         seoTitle={seoTitle}
         seoDescription={seoDescription}
-      />
+      >
+        <RelatedCategories
+          categories={RELATED_CATEGORIES}
+          currentHref={`/${seoCategory}`}
+        />
+      </SearchTypePage>
     </>
   );
 }

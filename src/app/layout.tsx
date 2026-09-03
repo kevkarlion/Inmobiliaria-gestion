@@ -25,8 +25,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Riquelme Propiedades",
-  description: "Inmobiliaria - Venta y Alquiler de Propiedades",
+  title: "Riquelme Propiedades | Inmobiliaria en General Roca, Río Negro",
+  description:
+    "Venta y alquiler de casas, departamentos, terrenos y loteos en General Roca y Neuquén. Inmobiliaria en Río Negro con asesoramiento profesional.",
 };
 
 export const viewport: Viewport = {
@@ -46,7 +47,7 @@ export default function RootLayout({
       className={`${montserrat.variable} ${lora.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body className="antialiased overflow-x-hidden max-w-full">
+      <body className="antialiased overflow-x-clip max-w-full">
         
         {/* 🔥 Tracker de navegación */}
         <Analytics />

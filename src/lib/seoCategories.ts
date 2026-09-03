@@ -9,11 +9,16 @@ interface SeoCategoryConfig {
   operationType?: OperationType;
   propertyTypeSlug?: string;
   citySlug?: string;
+  provinceSlug?: string;
   canonical: string;
 }
 
-// Por ahora nos enfocamos en General Roca.
+// Ciudades
 const CITY_SLUG_GENERAL_ROCA = "general-roca";
+
+// Provincias
+const PROVINCE_SLUG_RIO_NEGRO = "rio-negro";
+const PROVINCE_SLUG_NEUQUEN = "neuquen";
 
 export const SEO_CATEGORIES: SeoCategoryConfig[] = [
   {
@@ -65,6 +70,79 @@ export const SEO_CATEGORIES: SeoCategoryConfig[] = [
     propertyTypeSlug: "departamento-en-pozo",
     citySlug: CITY_SLUG_GENERAL_ROCA,
     canonical: getCanonicalUrl("/departamentos-en-pozo-en-venta-general-roca"),
+  },
+  // Variante para keyword "venta de loteo"
+  {
+    slug: "venta-de-loteo-general-roca",
+    title: "Venta de Loteo en General Roca",
+    description:
+      "Venta de loteo en General Roca, Río Negro. Lotes en cuotas con infraestructura y servicios en barrios planificados.",
+    operationType: "venta",
+    propertyTypeSlug: "loteo",
+    citySlug: CITY_SLUG_GENERAL_ROCA,
+    canonical: getCanonicalUrl("/venta-de-loteo-general-roca"),
+  },
+  // === Páginas provinciales Río Negro ===
+  {
+    slug: "casas-en-venta-rio-negro",
+    title: "Casas en venta en Río Negro",
+    description:
+      "Casas en venta en Río Negro. Propiedades en General Roca, Cipolletti, Viedma y otras ciudades de la provincia.",
+    operationType: "venta",
+    propertyTypeSlug: "casa",
+    provinceSlug: PROVINCE_SLUG_RIO_NEGRO,
+    canonical: getCanonicalUrl("/casas-en-venta-rio-negro"),
+  },
+  {
+    slug: "departamentos-en-venta-rio-negro",
+    title: "Departamentos en venta en Río Negro",
+    description:
+      "Departamentos en venta en Río Negro. Opciones en General Roca, Cipolletti y Neuquén con la mejor asesoría.",
+    operationType: "venta",
+    propertyTypeSlug: "departamento",
+    provinceSlug: PROVINCE_SLUG_RIO_NEGRO,
+    canonical: getCanonicalUrl("/departamentos-en-venta-rio-negro"),
+  },
+  {
+    slug: "terrenos-en-venta-rio-negro",
+    title: "Terrenos en venta en Río Negro",
+    description:
+      "Terrenos y lotes en venta en Río Negro. Invertí en terreno en General Roca, Cipolletti o zonas aledañas.",
+    operationType: "venta",
+    propertyTypeSlug: "terreno",
+    provinceSlug: PROVINCE_SLUG_RIO_NEGRO,
+    canonical: getCanonicalUrl("/terrenos-en-venta-rio-negro"),
+  },
+  // === Páginas Neuquén ===
+  {
+    slug: "casas-en-venta-neuquen",
+    title: "Casas en venta en Neuquén",
+    description:
+      "Casas en venta en Neuquén Capital y alrededores. Propiedades residenciales con asesoramiento de Riquelme Propiedades.",
+    operationType: "venta",
+    propertyTypeSlug: "casa",
+    provinceSlug: PROVINCE_SLUG_NEUQUEN,
+    canonical: getCanonicalUrl("/casas-en-venta-neuquen"),
+  },
+  {
+    slug: "departamentos-en-venta-neuquen",
+    title: "Departamentos en venta en Neuquén",
+    description:
+      "Departamentos en venta en Neuquén. Opciones modernas y proyectos en pozo con financiación.",
+    operationType: "venta",
+    propertyTypeSlug: "departamento",
+    provinceSlug: PROVINCE_SLUG_NEUQUEN,
+    canonical: getCanonicalUrl("/departamentos-en-venta-neuquen"),
+  },
+  {
+    slug: "terrenos-en-venta-neuquen",
+    title: "Terrenos en venta en Neuquén",
+    description:
+      "Terrenos en venta en Neuquén. Lotes para desarrollo residencial e inversión en la capital provincial.",
+    operationType: "venta",
+    propertyTypeSlug: "terreno",
+    provinceSlug: PROVINCE_SLUG_NEUQUEN,
+    canonical: getCanonicalUrl("/terrenos-en-venta-neuquen"),
   },
 ];
 
