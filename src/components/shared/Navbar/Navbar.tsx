@@ -19,7 +19,7 @@ import { buildSeoListingUrl } from "@/lib/seoUrls";
 import { pluralizePropertyType } from "@/lib/propertyTypeLabels";
 import type { NavMenuStructure } from "@/lib/seoUrls";
 
-const NAV_COLOR = "#001d3d";
+const NAV_COLOR = "#335989";
 
 interface NavbarProps {
   menuStructure?: NavMenuStructure | null;
@@ -39,12 +39,14 @@ export default function Navbar({ menuStructure }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" scroll className="shrink-0">
             <Image
-              src="/logo-navbar.webp"
+              src="/logo-desktop-2026.png"
               alt="Riquelme Propiedades"
               width={180}
               height={60}
               className="object-contain"
               priority
+              quality={85}
+              sizes="(max-width: 1024px) 0px, 180px"
             />
           </Link>
 
@@ -128,12 +130,14 @@ export default function Navbar({ menuStructure }: NavbarProps) {
                 aria-label="Inicio"
               >
                 <Image
-                  src="/logo-blanco.png"
+                  src="/logo-blanco-2.png"
                   alt="Riquelme Propiedades"
-                  width={140}
-                  height={40}
+                  width={100}
+                  height={30}
                   className="object-contain"
                   priority
+                  quality={85}
+                  sizes="(max-width: 1023px) 100px, 0px"
                 />
               </button>
             </div>

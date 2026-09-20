@@ -17,11 +17,12 @@ const Footer: React.FC = () => {
           <div className="w-40 h-16">
             <div className="relative w-full h-full">
               <Image
-                src="/logo-blanco.webp"
+                src="/logo-blanco-2.png"
                 alt="Riquelme Propiedades"
                 fill
                 className="object-contain"
                 priority
+                quality={85}
                 sizes="160px"
               />
             </div>

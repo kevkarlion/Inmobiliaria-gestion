@@ -136,23 +136,25 @@ export default async function NovedadesPage({ searchParams }: Props) {
               "url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&q=80')",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#001d3d]/80 via-[#001d3d]/60 to-[#001d3d]/90" />
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e6b255] via-[#d4a045] to-[#e6b255]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#335989]/80 via-[#335989]/60 to-[#335989]/90" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#c1b032] via-[#a89428] to-[#c1b032]" />
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16 text-center">
           <div className="flex justify-center mb-4 sm:mb-6">
             <div className="relative w-20 h-8 sm:w-28 sm:h-10">
               <Image
-                src="/logo-blanco.webp"
+                src="/logo-blanco-2.png"
                 alt="Riquelme Propiedades"
                 fill
                 className="object-contain object-center brightness-150"
+                priority
+                quality={85}
                 sizes="(max-width: 640px) 80px, 112px"
               />
             </div>
           </div>
 
-          <p className="font-semibold text-xs sm:text-sm uppercase tracking-[0.2em] mb-2 sm:mb-3 text-[#e6b255]">
+          <p className="font-semibold text-xs sm:text-sm uppercase tracking-[0.2em] mb-2 sm:mb-3 text-[#c1b032]">
             Blog inmobiliario
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-3 sm:mb-4 uppercase tracking-tight text-white" style={{ fontFamily: "var(--font-montserrat)" }}>
@@ -163,9 +165,9 @@ export default async function NovedadesPage({ searchParams }: Props) {
           </p>
 
           <div className="flex items-center justify-center gap-2 mt-5 sm:mt-6">
-            <div className="w-8 h-px bg-[#e6b255]" />
-            <div className="w-2 h-2 rounded-full bg-[#e6b255]" />
-            <div className="w-8 h-px bg-[#e6b255]" />
+            <div className="w-8 h-px bg-[#c1b032]" />
+            <div className="w-2 h-2 rounded-full bg-[#c1b032]" />
+            <div className="w-8 h-px bg-[#c1b032]" />
           </div>
         </div>
       </section>
@@ -252,23 +254,25 @@ export default async function NovedadesPage({ searchParams }: Props) {
           <aside className="lg:w-72 shrink-0">
             <div className="lg:sticky lg:top-40 space-y-6">
               {/* Branding widget */}
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#001d3d] to-[#002b5c] p-6 shadow-lg">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e6b255] via-[#d4a045] to-[#e6b255]" />
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#335989] to-[#002b5c] p-6 shadow-lg">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#c1b032] via-[#a89428] to-[#c1b032]" />
 
                 <div className="mb-4">
                   <div className="relative w-32 h-12">
                     <Image
-                      src="/logo-blanco.webp"
+                      src="/logo-blanco-2.png"
                       alt="Riquelme Propiedades"
                       fill
                       className="object-contain object-left"
+                      priority
+                      quality={85}
                       sizes="128px"
                     />
                   </div>
                 </div>
 
                 <div className="mb-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#e6b255] mb-1">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c1b032] mb-1">
                     Tu inmobiliaria de confianza
                   </p>
                   <p className="text-[11px] uppercase tracking-[0.15em] text-white/50">
@@ -282,7 +286,7 @@ export default async function NovedadesPage({ searchParams }: Props) {
 
                 <Link
                   href="/contacto"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-[#e6b255] text-[#001d3d] text-xs font-bold uppercase tracking-wider hover:bg-[#d4a045] transition-colors"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-[#c1b032] text-[#335989] text-xs font-bold uppercase tracking-wider hover:bg-[#a89428] transition-colors"
                 >
                   Contactanos
                 </Link>

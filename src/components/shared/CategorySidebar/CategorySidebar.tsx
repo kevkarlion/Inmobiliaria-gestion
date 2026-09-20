@@ -28,14 +28,14 @@ export function CategorySidebar({ total, activeCategory }: CategorySidebarProps)
       <div className="space-y-1.5">
         <Link
           href="/novedades"
-          className="group flex items-center justify-between rounded-xl border border-[#e6b255]/20 bg-[#e6b255]/5 px-3 py-2.5 text-sm font-medium text-[#e6b255] transition-all hover:bg-[#e6b255]/10 hover:border-[#e6b255]/30"
+          className="group flex items-center justify-between rounded-xl border border-[#c1b032]/20 bg-[#c1b032]/5 px-3 py-2.5 text-sm font-medium text-[#c1b032] transition-all hover:bg-[#c1b032]/10 hover:border-[#c1b032]/30"
         >
           <span className="inline-flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#e6b255]/70" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#c1b032]/70" />
             Todas las novedades
           </span>
           {total !== undefined && (
-            <span className="rounded-full border border-[#e6b255]/20 bg-[#e6b255]/10 px-2 py-0.5 text-[11px] font-semibold text-[#e6b255]">
+            <span className="rounded-full border border-[#c1b032]/20 bg-[#c1b032]/10 px-2 py-0.5 text-[11px] font-semibold text-[#c1b032]">
               {total}
             </span>
           )}
@@ -48,14 +48,14 @@ export function CategorySidebar({ total, activeCategory }: CategorySidebarProps)
             onClick={() => navigateToCategory(cat.slug)}
             className={`group flex items-center justify-between w-full rounded-xl border px-3 py-2.5 text-sm transition-all ${
               cat.slug === activeCategory
-                ? "border-[#e6b255]/20 bg-[#e6b255]/5 text-[#e6b255] font-medium"
+                ? "border-[#c1b032]/20 bg-[#c1b032]/5 text-[#c1b032] font-medium"
                 : "border-transparent text-neutral-600 hover:border-neutral-200 hover:bg-neutral-50 hover:text-neutral-900"
             }`}
           >
             <span className="inline-flex items-center gap-2">
               <span
                 className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                  cat.slug === activeCategory ? "bg-[#e6b255]/70" : "bg-neutral-300 group-hover:bg-neutral-400"
+                  cat.slug === activeCategory ? "bg-[#c1b032]/70" : "bg-neutral-300 group-hover:bg-neutral-400"
                 }`}
               />
               {cat.label}
@@ -63,7 +63,7 @@ export function CategorySidebar({ total, activeCategory }: CategorySidebarProps)
             <span
               className={`text-xs transition-transform ${
                 cat.slug === activeCategory
-                  ? "text-[#e6b255]/70"
+                  ? "text-[#c1b032]/70"
                   : "text-neutral-400 group-hover:translate-x-0.5"
               }`}
             >

@@ -13,7 +13,7 @@ export default async function Hero() {
         {/* IMÁGENES */}
         <div className="block lg:hidden absolute inset-0">
           <Image
-            src="/hero-mobile.webp"
+            src="/hero-mobile-2026.webp"
             alt="Venta de casas, departamentos y terrenos en General Roca"
             width={1600}
             height={1000}
@@ -24,7 +24,7 @@ export default async function Hero() {
 
         <div className="hidden lg:block">
           <Image
-            src="/bg-hero1.webp"
+            src="/hero-dsk.webp"
             alt="Propiedades exclusivas en General Roca - Riquelme Propiedades"
             width={2400}
             height={1600}

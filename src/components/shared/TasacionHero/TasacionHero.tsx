@@ -22,25 +22,27 @@ export default function TasacionHero() {
         }}
       />
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#001d3d]/80 via-[#001d3d]/60 to-[#001d3d]/90" />
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e6b255] via-[#d4a045] to-[#e6b255]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#335989]/80 via-[#335989]/60 to-[#335989]/90" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#c1b032] via-[#a89428] to-[#c1b032]" />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 md:py-16 text-center">
         {/* Logo */}
         <div className="flex justify-center mb-4 sm:mb-6">
           <div className="relative w-20 h-8 sm:w-28 sm:h-10">
             <Image
-              src="/logo-blanco.webp"
+              src="/logo-blanco-2.png"
               alt="Riquelme Propiedades"
               fill
               className="object-contain object-center brightness-150"
+              priority
+              quality={85}
               sizes="(max-width: 640px) 80px, 112px"
             />
           </div>
         </div>
 
         {/* Subtitle */}
-        <p className="font-semibold text-xs sm:text-sm uppercase tracking-[0.2em] mb-2 sm:mb-3 text-[#e6b255]">
+        <p className="font-semibold text-xs sm:text-sm uppercase tracking-[0.2em] mb-2 sm:mb-3 text-[#c1b032]">
           Tasación profesional
         </p>
 
@@ -66,9 +68,9 @@ export default function TasacionHero() {
 
         {/* Trust copy */}
         <div className="flex items-center justify-center gap-2 mt-4 sm:mt-5">
-          <div className="w-8 h-px bg-[#e6b255]" />
-          <Shield size={14} className="text-[#e6b255]" />
-          <div className="w-8 h-px bg-[#e6b255]" />
+          <div className="w-8 h-px bg-[#c1b032]" />
+          <Shield size={14} className="text-[#c1b032]" />
+          <div className="w-8 h-px bg-[#c1b032]" />
         </div>
         <span className="text-xs text-white/60 mt-2 block">Sin compromiso</span>
       </div>

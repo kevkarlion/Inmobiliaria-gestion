@@ -46,8 +46,8 @@ export function CategoryPills({ activeCategory }: CategoryPillsProps) {
         onClick={() => window.scrollTo({ top: 0 })}
         className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
             isAllActive
-              ? "bg-[#e6b255] text-white shadow-sm"
-              : "border border-neutral-200 text-neutral-600 hover:border-[#e6b255] hover:text-[#e6b255] hover:bg-[#e6b255]/5"
+              ? "bg-[#c1b032] text-white shadow-sm"
+              : "border border-neutral-200 text-neutral-600 hover:border-[#c1b032] hover:text-[#c1b032] hover:bg-[#c1b032]/5"
           }`}
         >
           Todas
@@ -62,8 +62,8 @@ export function CategoryPills({ activeCategory }: CategoryPillsProps) {
               onClick={() => navigateToCategory(cat.slug)}
               className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
                 isActive
-                  ? "bg-[#e6b255] text-white shadow-sm"
-                  : "border border-neutral-200 text-neutral-600 hover:border-[#e6b255] hover:text-[#e6b255] hover:bg-[#e6b255]/5"
+                  ? "bg-[#c1b032] text-white shadow-sm"
+                  : "border border-neutral-200 text-neutral-600 hover:border-[#c1b032] hover:text-[#c1b032] hover:bg-[#c1b032]/5"
               }`}
             >
               {cat.label}
@@ -77,10 +77,10 @@ export function CategoryPills({ activeCategory }: CategoryPillsProps) {
         <button
           type="button"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 hover:border-[#e6b255] transition-colors"
+          className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 hover:border-[#c1b032] transition-colors"
         >
           <span className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#e6b255]" />
+            <span className="h-2 w-2 rounded-full bg-[#c1b032]" />
             {activeLabel}
           </span>
           <svg
@@ -103,7 +103,7 @@ export function CategoryPills({ activeCategory }: CategoryPillsProps) {
               }}
               className={`flex items-center gap-2 px-4 py-3 text-sm transition-colors ${
                 isAllActive
-                  ? "bg-[#e6b255]/10 text-[#e6b255] font-semibold"
+                  ? "bg-[#c1b032]/10 text-[#c1b032] font-semibold"
                   : "text-neutral-600 hover:bg-neutral-50"
               }`}
             >
@@ -123,11 +123,11 @@ export function CategoryPills({ activeCategory }: CategoryPillsProps) {
                   }}
                   className={`flex items-center gap-2 px-4 py-3 text-sm transition-colors ${
                     isActive
-                      ? "bg-[#e6b255]/10 text-[#e6b255] font-semibold"
+                      ? "bg-[#c1b032]/10 text-[#c1b032] font-semibold"
                       : "text-neutral-600 hover:bg-neutral-50"
                   }`}
                 >
-                  <span className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-[#e6b255]" : "bg-neutral-300"}`} />
+                  <span className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-[#c1b032]" : "bg-neutral-300"}`} />
                   {cat.label}
                 </button>
               );

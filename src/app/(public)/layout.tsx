@@ -82,9 +82,9 @@ export const metadata = {
     images: ["/og-image.png"],
   },
   icons: {
-    icon: "/icon.png",          // 512x512
-    shortcut: "/favicon.ico",   // clásico
-    apple: "/apple-icon.png",   // 180x180
+    icon: "/favicon-32x32.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
   robots: {
     index: true,

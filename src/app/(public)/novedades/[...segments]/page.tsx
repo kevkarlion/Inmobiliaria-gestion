@@ -264,25 +264,27 @@ async function PostView(slug: string) {
           )}
 
           {/* ── Branding bio ── */}
-          <div className="mt-10 relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#001d3d] to-[#002b5c] p-6 shadow-lg">
+          <div className="mt-10 relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#335989] to-[#002b5c] p-6 shadow-lg">
             {/* Línea dorada decorativa */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#e6b255] via-[#d4a045] to-[#e6b255]" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#c1b032] via-[#a89428] to-[#c1b032]" />
 
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
               {/* Logo */}
               <div className="relative w-24 h-20 sm:w-32 sm:h-12 shrink-0 flex-shrink-0">
                 <Image
-                  src="/logo-blanco.webp"
+                  src="/logo-blanco-2.png"
                   alt="Riquelme Propiedades"
                   fill
                   className="object-contain object-center brightness-150"
+                  priority
+                  quality={85}
                   sizes="(max-width: 640px) 96px, 128px"
                 />
               </div>
 
               {/* Info */}
               <div className="text-center sm:text-left flex-1">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#e6b255] mb-1">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c1b032] mb-1">
                   {ui.author}
                 </p>
                 <p className="text-[11px] uppercase tracking-[0.15em] text-white/50 mb-3">
@@ -296,7 +298,7 @@ async function PostView(slug: string) {
                 <div className="flex flex-col sm:flex-row gap-2 mt-4">
                   <Link
                     href="/contacto"
-                    className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-[#e6b255] text-[#001d3d] text-xs font-bold uppercase tracking-wider hover:bg-[#d4a045] transition-colors"
+                    className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-[#c1b032] text-[#335989] text-xs font-bold uppercase tracking-wider hover:bg-[#a89428] transition-colors"
                   >
                     Contactanos
                   </Link>
