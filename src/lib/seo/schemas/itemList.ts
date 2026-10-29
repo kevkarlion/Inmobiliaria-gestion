@@ -23,3 +23,29 @@ export function buildItemListSchema(
     itemListElement,
   };
 }
+
+/**
+ * ItemList del catálogo de ventas: cada entrada expone la entidad
+ * `RealEstateListing` anidada (más rico para resultados enriquecidos).
+ */
+export function buildCatalogItemListSchema(
+  properties: ItemListProperty[],
+  startPosition: number = 1
+): Record<string, unknown> {
+  const itemListElement = properties.map((prop, index) => ({
+    "@type": "ListItem",
+    position: startPosition + index,
+    item: {
+      "@type": "RealEstateListing",
+      name: prop.title,
+      url: `${SITE_URL}/propiedad/${prop.slug}`,
+    },
+  }));
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    numberOfItems: properties.length,
+    itemListElement,
+  };
+}

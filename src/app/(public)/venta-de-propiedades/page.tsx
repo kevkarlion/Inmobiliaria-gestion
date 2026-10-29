@@ -6,22 +6,27 @@ import RelatedCategories, {
   type PropertyQuery,
 } from "@/components/shared/RelatedCategories/RelatedCategories";
 import { JsonLd } from "@/lib/seo/jsonLd";
-import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
+import { buildCatalogItemListSchema } from "@/lib/seo/schemas/itemList";
+import { buildCollectionPageSchema } from "@/lib/seo/schemas/collectionPage";
 import { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
 import { buildBreadcrumbItems } from "@/lib/seo/breadcrumbs";
+import { buildPropertySeoTitle } from "@/lib/seo/propertyTitle";
+import { sortPropertiesByAvailability } from "@/lib/propertyFilters";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const PAGE_TITLE = "Propiedades en Venta en General Roca y Alto Valle";
+
 export const metadata: Metadata = {
-  title: "Propiedades en Venta en Río Negro",
+  title: PAGE_TITLE,
   description:
-    "Casas, departamentos, terrenos y loteos en venta en Río Negro. Contamos con propiedades en diversas localidades con asesoramiento profesional de Riquelme Propiedades.",
+    "Casas, departamentos, terrenos y loteos en venta en General Roca, Río Negro y el Alto Valle. Comprá con la asesoría de Riquelme Propiedades.",
   alternates: { canonical: getCanonicalUrl("/venta-de-propiedades") },
   openGraph: {
-    title: "Propiedades en Venta en Río Negro",
+    title: PAGE_TITLE,
     description:
-      "Encontrá tu próxima propiedad en Río Negro. Casas, departamentos, terrenos y loteos en venta.",
+      "Encontrá tu próxima propiedad en General Roca y el Alto Valle. Casas, departamentos, terrenos y loteos en venta.",
     url: getCanonicalUrl("/venta-de-propiedades"),
     siteName: "Riquelme Propiedades",
     locale: "es_AR",
@@ -56,29 +61,69 @@ const CATEGORY_LINKS: {
   },
 ];
 
-export default async function VentaPropiedadesPage() {
+interface Props {
+  searchParams: Promise<{
+    tipo?: string;
+    barrio?: string;
+    ubicacion?: string;
+  }>;
+}
+
+export default async function VentaPropiedadesPage({ searchParams }: Props) {
+  const { tipo, barrio, ubicacion } = await searchParams;
+
   const properties = await getUiProperties({
     operationType: "venta",
+    propertyType: tipo,
+    city: ubicacion,
+    barrio,
     limit: 50,
   });
 
-  const itemListSchema = buildItemListSchema(properties);
+  // Las unidades activas van primero; vendidas y reservadas se desplazan al final.
+  const sortedProperties = sortPropertiesByAvailability(properties);
+
+  const itemListSchema = buildCatalogItemListSchema(
+    sortedProperties.map((p) => ({
+      slug: p.slug,
+      title: buildPropertySeoTitle({
+        typeName: p.typeName,
+        barrioName: p.barrioName,
+        cityName: p.cityName,
+        operationType: p.operationType,
+      }),
+    }))
+  );
+
   const breadcrumbItems = buildBreadcrumbItems("/venta-de-propiedades", [
     "Inicio",
     "Venta de Propiedades",
   ]);
   const breadcrumbSchema = buildBreadcrumbListSchema(breadcrumbItems);
 
+  const collectionSchema = buildCollectionPageSchema(
+    getCanonicalUrl("/venta-de-propiedades"),
+    itemListSchema
+  );
+
   return (
     <>
       <JsonLd type="ItemList" data={itemListSchema} />
+      <JsonLd type="CollectionPage" data={collectionSchema} />
       <JsonLd type="BreadcrumbList" data={breadcrumbSchema} />
 
       <SearchTypePage
-        properties={properties}
+        properties={sortedProperties}
         filterParam="venta"
-        seoTitle="Propiedades en Venta en Río Negro"
-        seoDescription="Comprá casas, departamentos, terrenos y loteos en venta en Río Negro con la asesoría de Riquelme Propiedades en General Roca y la región."
+        fixedCity={ubicacion}
+        fixedPropertyType={tipo}
+        fixedOperation="venta"
+        barrioQuery={barrio}
+        showQuickFilters
+        quickFilterType={tipo}
+        quickFilterCity={ubicacion}
+        seoTitle={PAGE_TITLE}
+        seoDescription="Comprá casas, departamentos, terrenos y loteos en venta en General Roca y el Alto Valle con la asesoría de Riquelme Propiedades."
       >
         <RelatedCategories categories={CATEGORY_LINKS} />
       </SearchTypePage>

@@ -4,6 +4,8 @@
 import { useMemo, useState } from "react";
 import { PropertyUI } from "@/domain/types/PropertyUI.types";
 import PropertyCardGrid from "@/components/shared/PropertyCardGridSearch/PropertyCardGridSearch";
+import CatalogQuickFilters from "@/components/shared/CatalogQuickFilters/CatalogQuickFilters";
+import { matchesBarrioQuery } from "@/lib/propertyFilters";
 
 interface Props {
   properties: PropertyUI[];
@@ -13,6 +15,12 @@ interface Props {
   fixedOperation?: "venta" | "alquiler";
   seoTitle?: string;
   seoDescription?: string;
+  /** Barrio aplicado por query string (?barrio=) */
+  barrioQuery?: string;
+  /** Muestra la barra de filtros rápidos (chips) sobre el catálogo */
+  showQuickFilters?: boolean;
+  quickFilterType?: string;
+  quickFilterCity?: string;
   children?: React.ReactNode;
 }
 
@@ -24,6 +32,10 @@ export default function SearchTypePage({
   fixedOperation,
   seoTitle,
   seoDescription,
+  barrioQuery,
+  showQuickFilters,
+  quickFilterType,
+  quickFilterCity,
   children,
 }: Props) {
 
@@ -122,6 +134,7 @@ export default function SearchTypePage({
 
       if (provinceSelected && p.provinceSlug !== provinceSelected) return false;
       if (citySelected && p.citySlug !== citySelected) return false;
+      if (!matchesBarrioQuery(p.barrioName, barrioQuery)) return false;
 
       return true;
     });
@@ -137,6 +150,7 @@ export default function SearchTypePage({
     garage,
     provinceSelected,
     citySelected,
+    barrioQuery,
   ]);
 
   // Título fallback
@@ -199,6 +213,16 @@ export default function SearchTypePage({
             <div className="h-px bg-black/10 flex-1" />
           </div>
         </div>
+
+        {/* FILTROS RÁPIDOS (mobile) */}
+        {showQuickFilters && (
+          <div className="mb-8">
+            <CatalogQuickFilters
+              activeType={quickFilterType}
+              activeCity={quickFilterCity}
+            />
+          </div>
+        )}
 
         <div className="flex flex-col lg:flex-row gap-12">
 

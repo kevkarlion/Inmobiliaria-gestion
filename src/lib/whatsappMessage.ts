@@ -51,3 +51,30 @@ export function generateSimpleWhatsAppUrl(phone: string): string {
  * Default WhatsApp number for Riquelme Propiedades
  */
 export const DEFAULT_WHATSAPP = "5492984582082";
+
+/**
+ * Generate a WhatsApp URL to inquire about a specific property
+ * @param title - Property title shown in the prefilled message
+ * @param phone - Optional property contact phone (falls back to the agency number)
+ * @param reference - Operation reference label (e.g. "Venta")
+ * @returns Full WhatsApp URL
+ */
+export function generatePropertyInquiryUrl(
+  title: string,
+  phone?: string,
+  reference: string = "Venta"
+): string {
+  const normalized = (phone ?? "").replace(/\D/g, "");
+
+  // Los phones guardados pueden venir como "54..." o como "2984..." con prefijo local.
+  const contact =
+    normalized.length > 0
+      ? normalized.startsWith("54")
+        ? normalized
+        : `54${normalized}`
+      : DEFAULT_WHATSAPP;
+
+  const message = `Hola! Quiero consultar por la propiedad ${title} (Ref: ${reference})`;
+
+  return `https://wa.me/${contact}?text=${encodeURIComponent(message)}`;
+}
