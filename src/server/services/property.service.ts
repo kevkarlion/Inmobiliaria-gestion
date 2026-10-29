@@ -18,6 +18,7 @@ import { Types } from "mongoose";
 import { connectDB } from "@/db/connection";
 import { revalidatePath } from "next/cache";
 import { buildPropertySeoSlug } from "@/lib/propertySlug";
+import { buildBarrioMatchRegex } from "@/lib/propertyFilters";
 import type { NavMenuStructure, TypeMenuEntry } from "@/lib/seoUrls";
 
 export class PropertyService {
@@ -195,8 +196,10 @@ export class PropertyService {
     }
 
     if (f.barrio) {
-      const barrioDoc = await Barrio.findOne({ slug: f.barrio }).lean();
-      if (barrioDoc) filter["address.barrio"] = barrioDoc._id;
+      // `address.barrio` es texto libre (string), no una referencia a la colección
+      // Barrio: se matchea por texto normalizado (slug tolerant a espacios/guiones).
+      const barrioRegex = buildBarrioMatchRegex(f.barrio);
+      if (barrioRegex) filter["address.barrio"] = barrioRegex;
     }
 
     // precio
@@ -225,6 +228,11 @@ export class PropertyService {
         filter[`flags.${flag}`] = true;
       }
     });
+
+    // Disponibilidad: las propiedades vendidas o reservadas no deben aparecer
+    // en los listados comerciales (home, catálogo de venta).
+    if (f.excludeSold) filter["flags.sold"] = { $ne: true };
+    if (f.excludeReserved) filter["flags.reserved"] = { $ne: true };
 
     const { skip, limit, page } = query.pagination;
     const sort = query.sort.sort;

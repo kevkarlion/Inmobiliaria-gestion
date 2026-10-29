@@ -23,6 +23,10 @@ export class PropertyFilterDTO {
   premium?: boolean;
   opportunity?: boolean;
 
+  // Disponibilidad: excluye del listado las propiedades vendidas o reservadas
+  excludeSold?: boolean;
+  excludeReserved?: boolean;
+
   // Filter by user (for admin)
   userId?: string;
 
@@ -72,6 +76,8 @@ export class PropertyFilterDTO {
     this.featured = parseBool(query.featured);
     this.premium = parseBool(query.premium);
     this.opportunity = parseBool(query.opportunity);
+    this.excludeSold = parseBool(query.excludeSold);
+    this.excludeReserved = parseBool(query.excludeReserved);
 
     // User filter
     this.userId = query.userId && query.userId !== "" ? query.userId : undefined;

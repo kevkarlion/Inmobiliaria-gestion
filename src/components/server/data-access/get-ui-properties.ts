@@ -11,6 +11,10 @@ type Props = {
   barrio?: string;
   limit?: number;
   isOpportunity?: boolean;
+  /** Excluye propiedades vendidas y reservadas de los listados comerciales. */
+  excludeUnavailable?: boolean;
+  excludeSold?: boolean;
+  excludeReserved?: boolean;
 };
 
 export async function getUiProperties({
@@ -21,6 +25,9 @@ export async function getUiProperties({
   barrio,
   limit = 20,
   isOpportunity,
+  excludeUnavailable,
+  excludeSold,
+  excludeReserved,
 }: Props) {
   await connectDB();
 
@@ -31,6 +38,8 @@ export async function getUiProperties({
     city,
     barrio,
     opportunity: isOpportunity,
+    excludeSold: excludeUnavailable ? true : excludeSold,
+    excludeReserved: excludeUnavailable ? true : excludeReserved,
     limit,
     page: 1,
   });
