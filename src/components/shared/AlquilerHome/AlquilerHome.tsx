@@ -7,6 +7,7 @@ export default async function AlquilerHome() {
   const properties = await getUiProperties({
     operationType: "alquiler",
     limit: 6,
+    excludeUnavailable: true,
   });
 
   if (!properties || properties.length === 0) {

@@ -74,9 +74,9 @@ function Content({ isMobile }: ContentProps) {
         </div>
 
         <h2 className={`font-montserrat text-3xl lg:text-5xl italic leading-tight ${textColor}`}>
-          Estrategia aplicada a <br />
+          Estrategia Aplicada a <br />{" "}
           <span className="text-gold-sand text-2xl lg:text-4xl 2xl:text-5xl uppercase font-black tracking-tighter not-italic">
-            activos inmobiliarios.
+            Activos Inmobiliarios
           </span>
         </h2>
 

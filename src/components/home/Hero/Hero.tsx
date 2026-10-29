@@ -4,7 +4,7 @@ import { getUiProperties } from "@/components/server/data-access/get-ui-properti
 import Image from "next/image";
 
 export default async function Hero() {
-  const allProperties = await getUiProperties({ limit: 20 });
+  const allProperties = await getUiProperties({ limit: 20, excludeUnavailable: true });
 
   return (
     <section className="w-full min-h-screen bg-oxford">
@@ -46,15 +46,18 @@ export default async function Hero() {
                 {/* Keyword de confianza */}
                 <span className="text-gold-sand text-xs md:text-sm md:mt-8  font-bold tracking-[0.4em] mb-1 drop-shadow-md bg-black/40 px-2 py-1 rounded-md md:bg-transparent">
                   Inmobiliaria en General Roca
-                </span>
+                </span>{" "}
 
                 {/* Título principal con gradiente parcial */}
                 <span className="text-2xl md:text-4xl lg:text-4xl xl:text-5xl font-montserrat font-black leading-[1.1] drop-shadow-lg flex flex-col">
-                  <span className="text-transparent bg-clip-text bg-linear-to-r from-gold-sand to-yellow-600 font-extrabold">
-                    Casas, <span className="text-white/90">Departamentos</span>
-                  </span>
+                  <span>
+                    <span className="text-transparent bg-clip-text bg-linear-to-r from-gold-sand to-yellow-600 font-extrabold">
+                      | Venta de Casas,
+                    </span>{" "}
+                    <span className="text-white/90">Departamentos</span>
+                  </span>{" "}
                   <span className="text-white font-extrabold mt-1">
-                    y Loteos
+                    y Terrenos
                   </span>
                 </span>
               </h1>
