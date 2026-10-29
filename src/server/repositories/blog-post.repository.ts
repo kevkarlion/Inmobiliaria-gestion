@@ -15,7 +15,7 @@ export class BlogPostRepository {
     await connectDB();
     return BlogPostModel.find(filter)
       .select(
-        "title slug excerpt category tags featuredImage author status publishedAt readingTime seoTitle seoDescription createdAt updatedAt",
+        "title slug excerpt category tags featuredImage author status publishedAt readingTime featuredOnHome homeOrder seoTitle seoDescription createdAt updatedAt",
       )
       .sort(options.sort || { publishedAt: -1, createdAt: -1 })
       .skip(options.skip || 0)
@@ -32,7 +32,7 @@ export class BlogPostRepository {
     await connectDB();
     return BlogPostModel.find({ category, ...filter })
       .select(
-        "title slug excerpt category tags featuredImage author status publishedAt readingTime seoTitle seoDescription createdAt updatedAt",
+        "title slug excerpt category tags featuredImage author status publishedAt readingTime featuredOnHome homeOrder seoTitle seoDescription createdAt updatedAt",
       )
       .sort(options.sort || { publishedAt: -1, createdAt: -1 })
       .skip(options.skip || 0)
@@ -44,7 +44,7 @@ export class BlogPostRepository {
     await connectDB();
     return BlogPostModel.find({ status: "published" })
       .select(
-        "title slug excerpt category tags featuredImage author publishedAt readingTime",
+        "title slug excerpt category tags featuredImage author publishedAt readingTime featuredOnHome homeOrder",
       )
       .sort({ publishedAt: -1 })
       .limit(limit)

@@ -42,6 +42,8 @@ export class BlogPostService {
       author: dto.author,
       status: dto.status,
       readingTime: dto.readingTime,
+      featuredOnHome: dto.featuredOnHome === true,
+      homeOrder: Number.isFinite(dto.homeOrder) ? dto.homeOrder : 0,
     };
 
     if (dto.seoTitle) data.seoTitle = dto.seoTitle;
@@ -55,6 +57,7 @@ export class BlogPostService {
     const saved = await BlogPostRepository.create(data);
 
     // Revalidation
+    revalidatePath("/");
     revalidatePath("/novedades");
     revalidatePath("/novedades/pagina");
     revalidatePath("/novedades/sitemap.xml", "page");
@@ -68,6 +71,9 @@ export class BlogPostService {
 
     if (query.status) filter.status = query.status;
     if (query.category) filter.category = query.category;
+    if (query.featuredOnHome !== undefined) {
+      filter.featuredOnHome = query.featuredOnHome;
+    }
 
     const { skip, limit, page } = query;
     const sort = { publishedAt: -1, createdAt: -1 } as Record<string, 1 | -1>;
@@ -89,6 +95,29 @@ export class BlogPostService {
         pages: Math.ceil(total / limit),
       },
     };
+  }
+
+  /**
+   * Artículos seleccionados desde el admin para la home.
+   * Orden: homeOrder asc (curaduría) y, a igual orden, publicación más reciente.
+   */
+  static async findHomeFeatured(limit = 3): Promise<any[]> {
+    await connectDB();
+
+    const filter: any = { status: "published", featuredOnHome: true };
+    const sort = {
+      homeOrder: 1,
+      publishedAt: -1,
+      createdAt: -1,
+    } as Record<string, 1 | -1>;
+
+    const posts = await BlogPostRepository.findAll(filter, {
+      sort,
+      skip: 0,
+      limit,
+    });
+
+    return posts.map((post: any) => ({ ...post, _id: post._id.toString() }));
   }
 
   static async findAllAdmin(query: QueryBlogPostDTO): Promise<PaginatedBlogPosts> {
@@ -178,6 +207,14 @@ export class BlogPostService {
       if (dto[field] !== undefined) updateData[field] = (dto as any)[field];
     }
 
+    // Curaduría de la home
+    if (dto.featuredOnHome !== undefined) {
+      updateData.featuredOnHome = dto.featuredOnHome;
+    }
+    if (dto.homeOrder !== undefined) {
+      updateData.homeOrder = dto.homeOrder;
+    }
+
     // SEO
     if (dto.seoTitle !== undefined) updateData.seoTitle = dto.seoTitle || undefined;
     if (dto.seoDescription !== undefined)
@@ -201,6 +238,7 @@ export class BlogPostService {
     const updated = await BlogPostRepository.update(id, updateData);
 
     // Revalidation
+    revalidatePath("/");
     revalidatePath("/novedades");
     revalidatePath(`/novedades/${existing.slug}`);
     revalidatePath(`/novedades/${existing.category}`);
@@ -218,6 +256,7 @@ export class BlogPostService {
     await BlogPostRepository.delete(id);
 
     // Revalidation
+    revalidatePath("/");
     revalidatePath("/novedades");
     revalidatePath(`/novedades/${existing.slug}`);
     revalidatePath(`/novedades/${existing.category}`);

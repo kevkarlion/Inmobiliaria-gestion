@@ -4,6 +4,8 @@ import { BLOG_CATEGORY_VALUES } from "@/domain/enums/blog-category.enum";
 export class QueryBlogPostDTO {
   status?: "draft" | "published";
   category?: string;
+  /** Solo los posts seleccionados para la home. */
+  featuredOnHome?: boolean;
   page: number;
   limit: number;
 
@@ -18,6 +20,12 @@ export class QueryBlogPostDTO {
       this.category = data.category;
     } else {
       this.category = undefined;
+    }
+
+    if (data.featuredOnHome === true || data.featuredOnHome === "true") {
+      this.featuredOnHome = true;
+    } else if (data.featuredOnHome === false || data.featuredOnHome === "false") {
+      this.featuredOnHome = false;
     }
 
     const page = parseInt(data.page, 10);

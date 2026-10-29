@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Plus, Pencil, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Pencil, Trash2, Home, Star } from "lucide-react";
 import { ConfirmModal } from "@/components/ui/confirm-modal";
 
 interface Post {
@@ -21,6 +21,8 @@ interface Post {
   status: "draft" | "published";
   publishedAt: string | null;
   readingTime: number;
+  featuredOnHome: boolean;
+  homeOrder: number;
   seoTitle?: string;
   seoDescription?: string;
 }
@@ -85,6 +87,33 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
     }
   }
 
+  async function toggleFeaturedOnHome(id: string, current: boolean) {
+    try {
+      const res = await fetch(`/api/admin/blog-post?id=${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ featuredOnHome: !current }),
+      });
+
+      if (!res.ok) throw new Error();
+
+      setPosts((prev) =>
+        prev.map((post) =>
+          post._id === id ? { ...post, featuredOnHome: !current } : post
+        )
+      );
+
+      toast.success(
+        !current
+          ? "Artículo agregado a la home"
+          : "Artículo quitado de la home"
+      );
+      router.refresh();
+    } catch {
+      toast.error("Error al actualizar la selección de la home");
+    }
+  }
+
   async function refreshPage() {
     const params = new URLSearchParams();
     params.set("page", String(currentPage));
@@ -130,6 +159,9 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
                   Estado
                 </th>
                 <th className="text-left px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
+                  Home
+                </th>
+                <th className="text-left px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
                   Fecha
                 </th>
                 <th className="text-right px-3 py-2 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
@@ -169,6 +201,38 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
                       {post.status === "published" ? "Publicado" : "Borrador"}
                     </span>
                   </td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        toggleFeaturedOnHome(post._id, post.featuredOnHome)
+                      }
+                      className={`inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded-full font-medium transition-colors ${
+                        post.featuredOnHome
+                          ? "bg-gold-sand/20 text-gold-sand border border-gold-sand/40"
+                          : "bg-slate-100 text-slate-500 hover:bg-gold-sand/10 hover:text-gold-sand border border-transparent"
+                      }`}
+                      title={
+                        post.featuredOnHome
+                          ? "Quitar de la home"
+                          : "Mostrar en la home"
+                      }
+                      aria-pressed={post.featuredOnHome}
+                    >
+                      {post.featuredOnHome ? (
+                        <>
+                          <Star size={11} />
+                          En home
+                          {post.homeOrder ? ` · ${post.homeOrder}` : ""}
+                        </>
+                      ) : (
+                        <>
+                          <Home size={11} />
+                          No
+                        </>
+                      )}
+                    </button>
+                  </td>
                   <td className="px-3 py-2 text-xs text-slate-500 whitespace-nowrap">
                     {post.publishedAt
                       ? new Date(post.publishedAt).toLocaleDateString("es-AR")
@@ -197,7 +261,7 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
               ))}
               {posts.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-3 py-8 text-center text-xs text-slate-500">
+                  <td colSpan={6} className="px-3 py-8 text-center text-xs text-slate-500">
                     No hay posts todavía.{" "}
                     <Link href="/admin/novedades/new" className="text-primary hover:underline">
                       Creá el primero

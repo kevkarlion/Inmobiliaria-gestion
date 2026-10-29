@@ -15,6 +15,8 @@ export interface BlogPostUI {
   publishedAt: string;
   publishedAtFormatted: string;
   readingTime: number;
+  featuredOnHome: boolean;
+  homeOrder: number;
   seoTitle?: string;
   seoDescription?: string;
   createdAt?: string;

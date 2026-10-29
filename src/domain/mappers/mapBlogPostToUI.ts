@@ -53,6 +53,8 @@ export function mapBlogPostToUI(post: any): BlogPostUI {
     publishedAt: publishedAt ? formatDate(publishedAt) : "",
     publishedAtFormatted: publishedAt ? formatDateLong(publishedAt) : "",
     readingTime: post.readingTime || calculateReadingTime(post.content || ""),
+    featuredOnHome: post.featuredOnHome === true,
+    homeOrder: Number.isFinite(Number(post.homeOrder)) ? Number(post.homeOrder) : 0,
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,
     createdAt: post.createdAt ? formatDate(new Date(post.createdAt)) : undefined,

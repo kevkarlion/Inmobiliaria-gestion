@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { TipTapEditor } from "@/components/shared/TipTapEditor/TipTapEditor";
 import CloudinaryUploader from "@/components/CloudinaryUploader/CloudinaryUploader";
 import { ChevronLeft, Send } from "lucide-react";
@@ -32,6 +33,8 @@ interface Props {
     featuredImage: string;
     author: string;
     status: "draft" | "published";
+    featuredOnHome: boolean;
+    homeOrder: string;
     seoTitle: string;
     seoDescription: string;
   };
@@ -50,6 +53,9 @@ export default function BlogPostForm({ initialData, postId, mode }: Props) {
     featuredImage: initialData?.featuredImage || "",
     author: initialData?.author || "Riquelme Propiedades",
     status: initialData?.status || "draft",
+    featuredOnHome: initialData?.featuredOnHome || false,
+    homeOrder:
+      initialData?.homeOrder !== undefined ? String(initialData.homeOrder) : "0",
     seoTitle: initialData?.seoTitle || "",
     seoDescription: initialData?.seoDescription || "",
   });
@@ -77,6 +83,8 @@ export default function BlogPostForm({ initialData, postId, mode }: Props) {
         ...form,
         tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
         status: publishNow ? "published" : form.status,
+        featuredOnHome: form.featuredOnHome,
+        homeOrder: Number(form.homeOrder) || 0,
         seoTitle: form.seoTitle || undefined,
         seoDescription: form.seoDescription || undefined,
       };
@@ -220,6 +228,53 @@ export default function BlogPostForm({ initialData, postId, mode }: Props) {
             onChange={(e) => setForm((f) => ({ ...f, tags: e.target.value }))}
             placeholder="inmuebles, inversión, consejos"
           />
+        </div>
+
+        {/* Curaduría de la home */}
+        <div className="border-t border-slate-200 pt-6 space-y-4">
+          <h3 className="font-semibold text-slate-900">
+            Home (Novedades y Guías)
+          </h3>
+
+          <div className="flex items-start gap-3 rounded-lg border border-slate-200 p-4">
+            <Switch
+              id="featuredOnHome"
+              checked={form.featuredOnHome}
+              onCheckedChange={(checked) =>
+                setForm((f) => ({ ...f, featuredOnHome: checked }))
+              }
+              aria-label="Destacado en la home"
+            />
+            <div className="space-y-1">
+              <Label htmlFor="featuredOnHome" className="cursor-pointer">
+                Mostrar este artículo en la home
+              </Label>
+              <p className="text-xs text-neutral-500">
+                Solo los artículos activados aparecen en la sección
+                &quot;Novedades y Guías Inmobiliarias del Alto Valle&quot; de la
+                home. Si no hay ninguno activado, se muestran los 3 más
+                recientes.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-2 max-w-[220px]">
+            <Label htmlFor="homeOrder">Orden en la home</Label>
+            <Input
+              id="homeOrder"
+              type="number"
+              min={0}
+              value={form.homeOrder}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, homeOrder: e.target.value }))
+              }
+              placeholder="0"
+            />
+            <p className="text-xs text-neutral-500">
+              Menor número = aparece primero. A igual orden, se muestra el más
+              reciente.
+            </p>
+          </div>
         </div>
 
         {/* Contenido */}

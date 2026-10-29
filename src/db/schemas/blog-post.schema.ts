@@ -59,6 +59,17 @@ const BlogPostSchema = new Schema<IBlogPost>(
       type: Number,
       default: 1,
     },
+    // Curaduría de la home: solo los posts marcados se muestran en la Home.
+    featuredOnHome: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    // Orden dentro de la sección de la home (menor = primero).
+    homeOrder: {
+      type: Number,
+      default: 0,
+    },
     seoTitle: {
       type: String,
       maxlength: 120,

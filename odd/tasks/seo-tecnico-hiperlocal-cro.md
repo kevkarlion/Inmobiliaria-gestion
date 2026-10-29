@@ -136,6 +136,24 @@ Estructura el catálogo con el esquema `ItemList` para habilitar resultados enri
 }
 ```
 
+### S14 — Artículos de la home seleccionados desde el admin
+
+La sección "Novedades y Guías Inmobiliarias del Alto Valle" de la home muestra **solo artículos
+enlazados por slug**, y el editor decide cuáles ver desde `/admin/novedades`:
+
+- Cada post tiene un flag `featuredOnHome` (booleano) y un `homeOrder` (número).
+- La home consulta los posts publicados con `featuredOnHome: true`, ordenados por `homeOrder`
+  ascendente y, a igual orden, por publicación más reciente.
+- Si todavía no hay artículos seleccionados, la home cae a los 3 más recientes para no quedar
+  vacía.
+- Desde `/admin/novedades`: switch "Mostrar este artículo en la home" + input "Orden en la
+  home" en el alta/edición, y toggle rápido por fila en el listado.
+
+### S15 — La home no enlaza a páginas de categoría
+
+Las tarjetas de la sección de blog enlazan al artículo exacto (`/novedades/<slug>`); se eliminan
+los enlaces a categorías (`/novedades/comunidad`, `/novedades/normativa`, `/novedades/guias`).
+
 ### S13 — `SeoFooterGrid` con enlazado hiperlocal
 
 Agrega en la plantilla global del pie de página (Footer) una matriz de enlaces estratégicos para
@@ -183,6 +201,8 @@ transferir autoridad y posicionar términos locales:
 | T6  | Tests de regresión (RED primero) para S1-S13                        | S1-S13 | inline | `f37640f` test(seo): cover hyperlocal seo and cro changes |
 | T7  | Reparación de deuda preexistente que bloqueaba el build (CollectionPage + tipos de scripts) + tests de breadcrumbs | S12 | inline | `caa35a7` fix(seo): restore CollectionPage schema and repair stale breadcrumb tests |
 | T8  | Verificación: lint, suite completa, build y cierre                   | S1-S13 | inline | — |
+| T9  | Curaduría de la home: flag + orden en el modelo, servicio, home y admin | S14, S15 | inline | `feat(blog): curate home articles from admin` |
+| T10 | Verificación final de la curaduría (tests + round trip en base real) | S14, S15 | inline | — |
 
 ## Log
 
@@ -203,3 +223,6 @@ transferir autoridad y posicionar términos locales:
 - L15 — Dato a revisar (2026-04-17): los enlaces de barrio del footer apuntan a `210-viviendas`, `don-fernando`, `827-viviendas` y `stefenelli`; en los datos actuales "Stefenelli" no existe y las propiedades de "827 viviendas" y "210 viviendas" están deshabilitadas, por lo que esas búsquedas devuelven 0 resultados hasta que se carguen unidades.
 - L16 — Corrección del usuario (2026-04-17): "los enlaces con los numeros de cel en cada propiedad estan bien, pero el mensaje no indica el enlace con la propiedad, solo llega \"Hola! Quiero consultar por la propiedad Terreno en Venta en General Roca (Ref: Venta)\"." → S11 reescrito: el mensaje precompletado ahora incluye el enlace canónico de la unidad en una segunda línea (`generatePropertyInquiryUrl` acepta `propertyUrl`), aplicado tanto en las tarjetas del catálogo como en el botón "Contactar asesor" del detalle.
 - L17 — Revisión nativa RDD (2026-04-17): los candidatos `sha256:7d18c182…` y `sha256:d6aff853…` (este último ya con el fix del link de WhatsApp) quedaron sin revisar por decisión humana (**declined**, "Skip this time"); no se creó registro de revisión y las revisiones futuras siguen habilitadas.
+- L18 — Requisito del usuario (2026-04-17): "quiero ver solo articulos enlazados por slug. ademas quiero poder elegir a traves de /admin/novedades que articulos poner en el home." → S14 y S15: la home pasa a mostrar únicamente los artículos marcados como destacados desde el admin (enlazados por slug, ordenados por la curaduría) y se eliminan los enlaces a páginas de categoría.
+- L19 — Verificación de la curaduría (2026-04-17): round trip real contra la base: `PUT featuredOnHome=true` en un post ⇒ la home mostró solo ese artículo con su link por slug; `PUT featuredOnHome=false` ⇒ la home volvió a mostrar los 3 más recientes. No se dejó ningún post marcado (estado final: sin destacados).
+- L20 — Sin curaduría inicial (2026-04-17): no se modificó la base para marcar las tres guías del prompt original (zonificación, trámites e impuestos 2026, escrituración): la selección queda a criterio del usuario desde el admin. Hasta entonces la home muestra los 3 artículos más recientes.

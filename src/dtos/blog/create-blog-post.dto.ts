@@ -14,6 +14,8 @@ export class CreateBlogPostDTO {
   author: string;
   status: "draft" | "published";
   readingTime: number;
+  featuredOnHome: boolean;
+  homeOrder: number;
   seoTitle?: string;
   seoDescription?: string;
 
@@ -44,6 +46,10 @@ export class CreateBlogPostDTO {
     this.author = data.author || "Riquelme Propiedades";
     this.status = data.status === "published" ? "published" : "draft";
     this.readingTime = readingTime;
+    this.featuredOnHome = data.featuredOnHome === true;
+    this.homeOrder = Number.isFinite(Number(data.homeOrder))
+      ? Number(data.homeOrder)
+      : 0;
     this.seoTitle = data.seoTitle?.trim() || undefined;
     this.seoDescription = data.seoDescription?.trim() || undefined;
   }

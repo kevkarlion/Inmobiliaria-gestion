@@ -13,6 +13,8 @@ export class UpdateBlogPostDTO {
   featuredImage?: string;
   author?: string;
   status?: "draft" | "published";
+  featuredOnHome?: boolean;
+  homeOrder?: number;
   seoTitle?: string;
   seoDescription?: string;
 
@@ -54,6 +56,14 @@ export class UpdateBlogPostDTO {
     this.status = data.status !== undefined
       ? (data.status === "published" ? "published" : "draft")
       : undefined;
+    if (data.featuredOnHome !== undefined) {
+      this.featuredOnHome = data.featuredOnHome === true;
+    }
+
+    if (data.homeOrder !== undefined && Number.isFinite(Number(data.homeOrder))) {
+      this.homeOrder = Number(data.homeOrder);
+    }
+
     this.seoTitle = data.seoTitle?.trim() || undefined;
     this.seoDescription = data.seoDescription?.trim() || undefined;
   }

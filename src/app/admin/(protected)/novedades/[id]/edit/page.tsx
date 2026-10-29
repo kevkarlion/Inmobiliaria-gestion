@@ -41,6 +41,8 @@ export default async function EditNovedadesPage({ params }: Props) {
         featuredImage: post.featuredImage || "",
         author: post.author,
         status: post.status,
+        featuredOnHome: post.featuredOnHome === true,
+        homeOrder: String(post.homeOrder ?? 0),
         seoTitle: post.seoTitle || "",
         seoDescription: post.seoDescription || "",
       }}

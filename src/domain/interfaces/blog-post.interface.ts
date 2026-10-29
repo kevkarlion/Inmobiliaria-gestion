@@ -18,6 +18,8 @@ export interface IBlogPost {
   status: "draft" | "published";
   publishedAt: Date | null;
   readingTime: number;
+  featuredOnHome: boolean;
+  homeOrder: number;
   seoTitle?: string;
   seoDescription?: string;
   createdAt?: Date;
@@ -41,6 +43,8 @@ export interface BlogPost {
   status: "draft" | "published";
   publishedAt: Date | null;
   readingTime: number;
+  featuredOnHome: boolean;
+  homeOrder: number;
   seoTitle?: string;
   seoDescription?: string;
   createdAt?: Date;
