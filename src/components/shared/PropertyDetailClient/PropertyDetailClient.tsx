@@ -26,6 +26,7 @@ import VideoGallery from "@/components/shared/PropertyDetailClient/VideoGallery"
 import { PropertyResponse } from "@/dtos/property/property-response.dto";
 import { formatPrice } from "@/utils/formatPrice";
 import PropertyShare from "@/components/shared/PropertyShare/PropertyShare";
+import SoldPropertyCta from "@/components/shared/SoldPropertyCta/SoldPropertyCta";
 import { trackPropertyView, trackCtaClick, trackWhatsAppClick, trackPhoneClick } from "@/components/shared/Analytics";
 import { useEffect } from "react";
 
@@ -266,17 +267,29 @@ export function PropertyDetailClient({
               {/* BOTÓN CENTRADO */}
               {/* ACCIONES */}
               <div className="mt-10 flex flex-col gap-4 w-full">
-                {/* Contacto asesor (tu botón actual) */}
-                {p.contactPhone && (
-                  <a
-                    href={`https://wa.me/54${p.contactPhone}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-cta bg-gold-sand text-black hover:bg-gold-hover text-center w-full py-4 rounded-xl font-black uppercase tracking-widest transition-all hover:scale-[1.02]"
-                    onClick={() => trackWhatsAppClick(property.id, p.title)}
-                  >
-                    Contactar asesor
-                  </a>
+                {/* Propiedad no disponible: capturamos el lead para avisar similares */}
+                {p.sold ? (
+                  <SoldPropertyCta
+                    barrio={p.barrioName}
+                    city={p.cityName}
+                    typeName={p.typeName}
+                    typeSlug={p.typeSlug}
+                    operationType={p.operationType}
+                    propertyTitle={p.title}
+                  />
+                ) : (
+                  /* Contacto asesor (tu botón actual) */
+                  p.contactPhone && (
+                    <a
+                      href={`https://wa.me/54${p.contactPhone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-cta bg-gold-sand text-black hover:bg-gold-hover text-center w-full py-4 rounded-xl font-black uppercase tracking-widest transition-all hover:scale-[1.02]"
+                      onClick={() => trackWhatsAppClick(property.id, p.title)}
+                    >
+                      Contactar asesor
+                    </a>
+                  )
                 )}
 
                 {/* NUEVO: Compartir propiedad por slug */}
