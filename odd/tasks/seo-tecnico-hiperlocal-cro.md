@@ -143,7 +143,9 @@ enlazados por slug**, y el editor decide cuáles ver desde `/admin/novedades`:
 
 - Cada post tiene un flag `featuredOnHome` (booleano) y un `homeOrder` (número).
 - La home consulta los posts publicados con `featuredOnHome: true`, ordenados por `homeOrder`
-  ascendente y, a igual orden, por publicación más reciente.
+  ascendente y, a igual orden, por publicación más reciente. **La cantidad es libre**: se
+  muestran todos los artículos seleccionados (el límite de 24 es solo una red de seguridad).
+  La grilla es responsive y da filas extra a medida que se suma más artículos.
 - Si todavía no hay artículos seleccionados, la home cae a los 3 más recientes para no quedar
   vacía.
 - Desde `/admin/novedades`: switch "Mostrar este artículo en la home" + input "Orden en la
@@ -226,4 +228,5 @@ transferir autoridad y posicionar términos locales:
 - L18 — Requisito del usuario (2026-04-17): "quiero ver solo articulos enlazados por slug. ademas quiero poder elegir a traves de /admin/novedades que articulos poner en el home." → S14 y S15: la home pasa a mostrar únicamente los artículos marcados como destacados desde el admin (enlazados por slug, ordenados por la curaduría) y se eliminan los enlaces a páginas de categoría.
 - L19 — Verificación de la curaduría (2026-04-17): round trip real contra la base: `PUT featuredOnHome=true` en un post ⇒ la home mostró solo ese artículo con su link por slug; `PUT featuredOnHome=false` ⇒ la home volvió a mostrar los 3 más recientes. No se dejó ningún post marcado (estado final: sin destacados).
 - L20 — Sin curaduría inicial (2026-04-17): no se modificó la base para marcar las tres guías del prompt original (zonificación, trámites e impuestos 2026, escrituración): la selección queda a criterio del usuario desde el admin. Hasta entonces la home muestra los 3 artículos más recientes.
+- L22 — Requisito del usuario (2026-04-17): "me gusta poder poner la cantidad que quiera, no solo 3" → la home deja de limitar a 3 artículos: muestra todos los seleccionados (grid responsive 1/2/3/4 columnas) y el admin muestra el contador "N en la home".
 - L21 — Incidencia reportada por el usuario (2026-04-17): "no estan quedando seleccionadas en admin/novedades al dar click en home. no persiste el add". Causa: el `next dev` que estaba corriendo desde antes de los cambios tenía un grafo de módulos parcialmente recargado (el repository ya devolvía los campos nuevos, pero la ruta de actualización no aplicaba el flag), y el toggle del listado actualizaba el estado local de forma optimista, así que la UI mostraba "En home" sin que nada se guardara. Correcciones: (a) el toggle ahora toma el valor de la respuesta del servidor y avisa con un toast si el backend no aplicó el cambio; (b) se reinició el `next dev`. Verificado: `PUT featuredOnHome` responde con el valor real persistido y la home muestra solo el artículo curado.

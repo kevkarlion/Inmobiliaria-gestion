@@ -29,7 +29,14 @@ interface Post {
 
 interface Props {
   initialPosts: Post[];
-  meta: { total: number; page: number; limit: number; pages: number };
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    pages: number;
+    /** Artículos seleccionados para la home (todas las páginas). */
+    featuredTotal?: number;
+  };
   page: number;
 }
 
@@ -147,6 +154,14 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             {currentMeta.total} post{currentMeta.total !== 1 ? "s" : ""} en total
+            {typeof currentMeta.featuredTotal === "number" && (
+              <>
+                {" · "}
+                <span className="text-gold-sand font-medium">
+                  {currentMeta.featuredTotal} en la home
+                </span>
+              </>
+            )}
           </p>
         </div>
         <Link href="/admin/novedades/new">

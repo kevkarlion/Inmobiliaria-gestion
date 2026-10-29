@@ -9,11 +9,12 @@ import { BlogPostCard } from "@/components/shared/BlogPostCard/BlogPostCard";
  *
  * Muestra únicamente los artículos seleccionados desde /admin/novedades
  * (flag `featuredOnHome`), ordenados por la curaduría del admin
- * (`homeOrder`) y enlazados a su slug real. Si todavía no hay artículos
+ * (`homeOrder`) y enlazados a su slug real. La cantidad es libre: se
+ * muestran todos los seleccionados. Si todavía no hay artículos
  * seleccionados, cae a los 3 más recientes para no dejar la home vacía.
  */
 export default async function HomeBlogSection() {
-  const curated = await BlogPostService.findHomeFeatured(3);
+  const curated = await BlogPostService.findHomeFeatured();
 
   const items =
     curated.length > 0
@@ -50,7 +51,7 @@ export default async function HomeBlogSection() {
         </div>
 
         {/* Artículos seleccionados (enlazados por slug) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
           {posts.map((post) => (
             <BlogPostCard key={post.id} post={post} />
           ))}

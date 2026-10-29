@@ -110,7 +110,29 @@ describe("HomeBlogSection (curaduría desde el admin)", () => {
   it("consulta los artículos curados por el admin", async () => {
     await HomeBlogSection();
 
-    expect(findHomeFeatured).toHaveBeenCalledWith(3);
+    expect(findHomeFeatured).toHaveBeenCalled();
+  });
+
+  it("muestra todos los artículos seleccionados, no solo tres", async () => {
+    const many = Array.from({ length: 5 }, (_, i) => ({
+      ...curatedPosts[0],
+      _id: `x${i}`,
+      slug: `articulo-curado-${i}`,
+      title: `Artículo curado ${i}`,
+    }));
+
+    findHomeFeatured.mockResolvedValueOnce(many as never);
+
+    const { container } = render(await HomeBlogSection());
+
+    const hrefs = Array.from(container.querySelectorAll("a")).map((a) =>
+      a.getAttribute("href")
+    );
+
+    many.forEach((post) => {
+      expect(hrefs).toContain(`/novedades/${post.slug}`);
+    });
+    expect(hrefs.filter((h) => h?.startsWith("/novedades/"))).toHaveLength(5);
   });
 
   it("cae a los más recientes cuando todavía no hay artículos seleccionados", async () => {

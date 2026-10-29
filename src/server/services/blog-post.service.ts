@@ -16,6 +16,8 @@ export interface PaginatedBlogPosts {
     page: number;
     limit: number;
     pages: number;
+    /** Artículos seleccionados para la home (solo en el listado de admin). */
+    featuredTotal?: number;
   };
 }
 
@@ -100,8 +102,9 @@ export class BlogPostService {
   /**
    * Artículos seleccionados desde el admin para la home.
    * Orden: homeOrder asc (curaduría) y, a igual orden, publicación más reciente.
+   * El límite es una red de seguridad, no una restricción de la curaduría.
    */
-  static async findHomeFeatured(limit = 3): Promise<any[]> {
+  static async findHomeFeatured(limit = 24): Promise<any[]> {
     await connectDB();
 
     const filter: any = { status: "published", featuredOnHome: true };
@@ -130,9 +133,10 @@ export class BlogPostService {
     const { skip, limit, page } = query;
     const sort = { publishedAt: -1, createdAt: -1 } as Record<string, 1 | -1>;
 
-    const [items, total] = await Promise.all([
+    const [items, total, featuredTotal] = await Promise.all([
       BlogPostRepository.findAll(filter, { sort, skip, limit }),
       BlogPostRepository.count(filter),
+      BlogPostRepository.count({ featuredOnHome: true }),
     ]);
 
     return {
@@ -145,6 +149,7 @@ export class BlogPostService {
         page,
         limit,
         pages: Math.ceil(total / limit),
+        featuredTotal,
       },
     };
   }
