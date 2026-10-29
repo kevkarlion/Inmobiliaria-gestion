@@ -19,6 +19,7 @@ vi.mock("next/link", () => ({
 }));
 
 import PropertyCardGridSearch from "@/components/shared/PropertyCardGridSearch/PropertyCardGridSearch";
+import { SITE_URL } from "@/lib/config";
 
 const property = {
   id: "p1",
@@ -96,7 +97,7 @@ describe("PropertyCardGridSearch card", () => {
       whatsapp.getAttribute("href")!.split("text=")[1]
     );
     expect(message).toBe(
-      "Hola! Quiero consultar por la propiedad Casa en Venta en 210 Viviendas, General Roca (Ref: Venta)"
+      `Hola! Quiero consultar por la propiedad Casa en Venta en 210 Viviendas, General Roca (Ref: Venta)\n${SITE_URL}/propiedad/casa-210-viviendas-general-roca`
     );
   });
 

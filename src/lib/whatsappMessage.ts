@@ -93,16 +93,23 @@ export function normalizeArgentinePhone(phone?: string): string {
  * @param title - Property title shown in the prefilled message
  * @param phone - Optional property contact phone (falls back to the agency number)
  * @param reference - Operation reference label (e.g. "Venta")
+ * @param propertyUrl - Canonical URL of the property, appended so the advisor
+ *                      receives the link to the unit being asked about
  * @returns Full WhatsApp URL
  */
 export function generatePropertyInquiryUrl(
   title: string,
   phone?: string,
-  reference: string = "Venta"
+  reference: string = "Venta",
+  propertyUrl?: string
 ): string {
   const contact = normalizeArgentinePhone(phone);
 
-  const message = `Hola! Quiero consultar por la propiedad ${title} (Ref: ${reference})`;
+  const baseMessage = `Hola! Quiero consultar por la propiedad ${title} (Ref: ${reference})`;
+
+  const message = propertyUrl
+    ? `${baseMessage}\n${propertyUrl}`
+    : baseMessage;
 
   return `https://wa.me/${contact}?text=${encodeURIComponent(message)}`;
 }

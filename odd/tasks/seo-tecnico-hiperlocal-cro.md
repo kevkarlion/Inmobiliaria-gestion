@@ -106,7 +106,13 @@ Añade una barra horizontal deslizable en la parte superior del catálogo con ac
 
 Agrega en cada tarjeta un botón directo de WhatsApp que abra la aplicación con un texto
 precompletado dinámico: `"Hola! Quiero consultar por la propiedad [Título de la Propiedad] (Ref:
-Venta)"`.
+Venta)"`, seguido del enlace canónico de la propiedad para que el asesor reciba el link de la
+unidad consultada:
+
+```
+Hola! Quiero consultar por la propiedad [Título de la Propiedad] (Ref: Venta)
+[Título de la Propiedad]: https://www.riquelmeprop.com/propiedad/[slug]
+```
 
 ### S12 — Schema JSON-LD (`ItemList`) del catálogo
 
@@ -195,3 +201,5 @@ transferir autoridad y posicionar términos locales:
 - L13 — Entidades JSON-LD (2026-04-17): el layout global ya emitía un `RealEstateAgent`; para que Google no mezcle dos entidades del mismo tipo, el schema del layout recibió `@id` propio (`#localbusiness`) y el de la home quedó con `#organization`.
 - L14 — Verificación funcional en producción (2026-04-17): `npm run build` + `npm run start` contra la base real. Home: un solo `h1` con el texto pedido y los cuatro `h2`; catálogo: `h1` nuevo, títulos estandarizados, orden activos primero, botón de WhatsApp por tarjeta con mensaje precompletado, `ItemList` con `RealEstateListing` y `CollectionPage`; filtros `?barrio=`, `?ubicacion=` y `?tipo=` resuelven contra datos reales (Andrade 1, Centro 1, General Roca 23, Las Grutas 2, Terrenos 10, Departamentos en Pozo 3); detalle de una propiedad vendida: aparece el formulario de captura y desaparece el botón "Contactar asesor"; footer: los 10 enlaces hiperlocales presentes.
 - L15 — Dato a revisar (2026-04-17): los enlaces de barrio del footer apuntan a `210-viviendas`, `don-fernando`, `827-viviendas` y `stefenelli`; en los datos actuales "Stefenelli" no existe y las propiedades de "827 viviendas" y "210 viviendas" están deshabilitadas, por lo que esas búsquedas devuelven 0 resultados hasta que se carguen unidades.
+- L16 — Corrección del usuario (2026-04-17): "los enlaces con los numeros de cel en cada propiedad estan bien, pero el mensaje no indica el enlace con la propiedad, solo llega \"Hola! Quiero consultar por la propiedad Terreno en Venta en General Roca (Ref: Venta)\"." → S11 reescrito: el mensaje precompletado ahora incluye el enlace canónico de la unidad en una segunda línea (`generatePropertyInquiryUrl` acepta `propertyUrl`), aplicado tanto en las tarjetas del catálogo como en el botón "Contactar asesor" del detalle.
+- L17 — Revisión nativa RDD (2026-04-17): el candidato `sha256:7d18c182…` quedó sin revisar por decisión humana (**declined**, "Skip this time"); no se creó registro de revisión y las revisiones futuras siguen habilitadas.

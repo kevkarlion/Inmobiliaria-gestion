@@ -41,6 +41,20 @@ describe("generatePropertyInquiryUrl", () => {
     );
   });
 
+  it("appends the property url so the advisor receives the link", () => {
+    const url = generatePropertyInquiryUrl(
+      "Casa en Venta en 210 Viviendas, General Roca",
+      "2984582082",
+      "Venta",
+      "https://www.riquelmeprop.com/propiedad/casa-210-viviendas-general-roca"
+    );
+
+    const message = decodeURIComponent(url.split("text=")[1]);
+    expect(message).toBe(
+      "Hola! Quiero consultar por la propiedad Casa en Venta en 210 Viviendas, General Roca (Ref: Venta)\nhttps://www.riquelmeprop.com/propiedad/casa-210-viviendas-general-roca"
+    );
+  });
+
   it("uses the agency number when the property has no phone", () => {
     const url = generatePropertyInquiryUrl("Casa en Venta", "");
     expect(url.startsWith(`https://wa.me/${DEFAULT_WHATSAPP}?text=`)).toBe(true);

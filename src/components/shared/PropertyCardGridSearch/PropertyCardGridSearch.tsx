@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MapPin, BedDouble, Layers, Home, MessageCircle } from "lucide-react";
 import { buildPropertySeoTitle } from "@/lib/seo/propertyTitle";
 import { generatePropertyInquiryUrl } from "@/lib/whatsappMessage";
+import { SITE_URL } from "@/lib/config";
 
 interface Props {
   properties?: PropertyUI[]; // si viene undefined, renderizamos skeletons
@@ -58,7 +59,8 @@ export default function PropertyCardGridSearch({ properties, skeletonCount = 6 }
         const whatsappUrl = generatePropertyInquiryUrl(
           seoTitle,
           p.contactPhone,
-          p.operationType === "venta" ? "Venta" : "Alquiler"
+          p.operationType === "venta" ? "Venta" : "Alquiler",
+          `${SITE_URL}/propiedad/${p.slug}`
         );
 
         return (
