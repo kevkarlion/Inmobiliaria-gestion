@@ -28,6 +28,7 @@ import { formatPrice } from "@/utils/formatPrice";
 import PropertyShare from "@/components/shared/PropertyShare/PropertyShare";
 import SoldPropertyCta from "@/components/shared/SoldPropertyCta/SoldPropertyCta";
 import { trackPropertyView, trackCtaClick, trackWhatsAppClick, trackPhoneClick } from "@/components/shared/Analytics";
+import { normalizeArgentinePhone } from "@/lib/whatsappMessage";
 import { useEffect } from "react";
 
 export function PropertyDetailClient({
@@ -281,7 +282,7 @@ export function PropertyDetailClient({
                   /* Contacto asesor (tu botón actual) */
                   p.contactPhone && (
                     <a
-                      href={`https://wa.me/54${p.contactPhone}`}
+                      href={`https://wa.me/${normalizeArgentinePhone(p.contactPhone)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-cta bg-gold-sand text-black hover:bg-gold-hover text-center w-full py-4 rounded-xl font-black uppercase tracking-widest transition-all hover:scale-[1.02]"

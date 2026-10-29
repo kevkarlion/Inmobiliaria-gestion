@@ -4,6 +4,7 @@ export function buildLocalBusinessSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
+    "@id": `${SEO_CONFIG.siteUrl}/#localbusiness`,
     name: SEO_CONFIG.siteName,
     url: SEO_CONFIG.siteUrl,
     logo: `${SEO_CONFIG.siteUrl}${SEO_CONFIG.logo}`,
