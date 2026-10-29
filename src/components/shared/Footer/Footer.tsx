@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { FacebookIcon, InstagramIcon } from "@/components/shared/BrandIcons/BrandIcons";
+import SeoFooterGrid from "@/components/shared/SeoFooterGrid/SeoFooterGrid";
 import Image from "next/image";
 
 const Footer: React.FC = () => {
@@ -99,6 +100,10 @@ const Footer: React.FC = () => {
           </p>
         </div>
 
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6">
+        <SeoFooterGrid />
       </div>
 
       {/* Copyright & Firma */}
