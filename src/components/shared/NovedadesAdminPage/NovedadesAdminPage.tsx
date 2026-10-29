@@ -97,14 +97,28 @@ export default function NovedadesAdminClient({ initialPosts, meta, page }: Props
 
       if (!res.ok) throw new Error();
 
+      // Confiamos en la respuesta del servidor: si el backend no aplicó el
+      // cambio, mostramos el estado real en vez de fingir que se guardó.
+      const data = await res.json().catch(() => null);
+      const applied = data?.featuredOnHome === true;
+
       setPosts((prev) =>
         prev.map((post) =>
-          post._id === id ? { ...post, featuredOnHome: !current } : post
+          post._id === id
+            ? { ...post, featuredOnHome: applied, homeOrder: data?.homeOrder ?? post.homeOrder }
+            : post
         )
       );
 
+      if (applied !== !current) {
+        toast.error(
+          "El servidor no guardó el cambio. Revisá que el backend esté actualizado."
+        );
+        return;
+      }
+
       toast.success(
-        !current
+        applied
           ? "Artículo agregado a la home"
           : "Artículo quitado de la home"
       );

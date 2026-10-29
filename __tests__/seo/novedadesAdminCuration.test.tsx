@@ -22,6 +22,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+import { toast } from "sonner";
 import NovedadesAdminClient from "@/components/shared/NovedadesAdminPage/NovedadesAdminPage";
 
 const posts = [
@@ -63,6 +64,9 @@ const meta = { total: 2, page: 1, limit: 12, pages: 1 };
 
 describe("Listado de novedades (curaduría de la home)", () => {
   beforeEach(() => {
+    vi.mocked(toast.error).mockClear();
+    vi.mocked(toast.success).mockClear();
+
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => ({ ok: true, json: async () => ({ items: posts, meta }) }))
@@ -82,6 +86,39 @@ describe("Listado de novedades (curaduría de la home)", () => {
     const featured = screen.getByText(/En home/);
     expect(featured).toBeDefined();
     expect(screen.getAllByText(/No/).length).toBeGreaterThan(0);
+  });
+
+  it("no marca el artículo si el servidor no aplicó el cambio", async () => {
+    // Backend que responde 200 pero sin aplicar el flag (backend desactualizado).
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ _id: "p2", featuredOnHome: false, homeOrder: 0 }),
+    }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <NovedadesAdminClient initialPosts={posts} meta={meta} page={1} />
+    );
+
+    // p2 está sin destacar: el click debería activarlo.
+    const toggle = screen
+      .getAllByRole("button")
+      .find((b) => b.textContent?.includes("No")) as HTMLButtonElement;
+
+    fireEvent.click(toggle);
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(
+        "El servidor no guardó el cambio. Revisá que el backend esté actualizado."
+      )
+    );
+
+    // El estado real se mantiene: el post sigue sin destacar.
+    expect(
+      screen.getAllByRole("button").some((b) => b.textContent?.includes("No"))
+    ).toBe(true);
   });
 
   it("activa y desactiva un artículo desde el listado", async () => {
