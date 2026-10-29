@@ -55,7 +55,7 @@ async function main() {
   const BlogPost = mongoose.model("BlogPost_SeoFix", BlogPostSchema);
 
   const posts = await BlogPost.find({
-    seoTitle: { $exists: true, $ne: null, $ne: "" },
+    seoTitle: { $exists: true, $nin: [null, ""] },
   }).lean();
 
   const affected = posts.filter((p) => p.seoTitle && SUFFIX_PATTERN.test(p.seoTitle));

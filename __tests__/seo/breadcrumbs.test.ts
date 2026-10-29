@@ -10,7 +10,10 @@ describe("buildBreadcrumbItems", () => {
     );
     expect(result).toHaveLength(2);
     expect(result[0]).toEqual({ name: "Inicio", item: "https://riquelmeprop.com/" });
-    expect(result[1]).toEqual({ name: "Propiedades", item: "" });
+    expect(result[1]).toEqual({
+      name: "Propiedades",
+      item: "https://riquelmeprop.com/propiedades",
+    });
   });
 
   it("builds correct URLs for nested path", () => {
@@ -22,7 +25,7 @@ describe("buildBreadcrumbItems", () => {
     expect(result).toHaveLength(3);
     expect(result[0].item).toBe("https://riquelmeprop.com/");
     expect(result[1].item).toBe("https://riquelmeprop.com/propiedades");
-    expect(result[2].item).toBe("");
+    expect(result[2].item).toBe("https://riquelmeprop.com/propiedades/en-venta");
   });
 
   it("works with detail page path", () => {
@@ -33,7 +36,7 @@ describe("buildBreadcrumbItems", () => {
     );
     expect(result).toHaveLength(3);
     expect(result[1].item).toBe("https://riquelmeprop.com/propiedades");
-    expect(result[2].item).toBe("");
+    expect(result[2].item).toBe("https://riquelmeprop.com/propiedad/casa-moderna");
   });
 
   it("uses default baseUrl from config when not provided", () => {
@@ -45,13 +48,13 @@ describe("buildBreadcrumbItems", () => {
     expect(result[0].item).toMatch(/\/$/);
   });
 
-  it("last item is always current page (empty item)", () => {
+  it("last item always points to the current page (canonical url)", () => {
     const result = buildBreadcrumbItems(
       "/propiedades/en-venta/casas",
       ["Inicio", "Propiedades", "En Venta", "Casas"],
       "https://riquelmeprop.com"
     );
     const last = result[result.length - 1];
-    expect(last.item).toBe("");
+    expect(last.item).toBe("https://riquelmeprop.com/propiedades/en-venta/casas");
   });
 });

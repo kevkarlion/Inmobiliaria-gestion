@@ -55,7 +55,7 @@ async function main() {
   const BlogPost = mongoose.model("BlogPost_SeoApply", BlogPostSchema);
 
   let ok = 0;
-  let missing: string[] = [];
+  const missing: string[] = [];
 
   for (const pair of pairs) {
     const post = await BlogPost.findOne({ slug: pair.slug }).lean();

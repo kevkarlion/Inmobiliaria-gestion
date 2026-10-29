@@ -17,6 +17,7 @@ import RelatedCategories, {
 
 import { JsonLd } from "@/lib/seo/jsonLd";
 import { buildItemListSchema } from "@/lib/seo/schemas/itemList";
+import { buildCollectionPageSchema } from "@/lib/seo/schemas/collectionPage";
 import { buildBreadcrumbListSchema } from "@/lib/seo/schemas/breadcrumbList";
 import { buildBreadcrumbItems } from "@/lib/seo/breadcrumbs";
 
@@ -154,6 +155,13 @@ export default async function SeoCategoryPage({ params }: Props) {
     return (
       <>
         <JsonLd type="ItemList" data={schemas.itemListSchema} />
+        <JsonLd
+          type="CollectionPage"
+          data={buildCollectionPageSchema(
+            getCanonicalUrl(`/${seoCategory}`),
+            schemas.itemListSchema
+          )}
+        />
         <JsonLd type="BreadcrumbList" data={schemas.breadcrumbSchema} />
         <SearchTypePage
           properties={properties}
@@ -205,6 +213,13 @@ export default async function SeoCategoryPage({ params }: Props) {
   return (
     <>
       <JsonLd type="ItemList" data={schemas.itemListSchema} />
+      <JsonLd
+        type="CollectionPage"
+        data={buildCollectionPageSchema(
+          getCanonicalUrl(`/${seoCategory}`),
+          schemas.itemListSchema
+        )}
+      />
       <JsonLd type="BreadcrumbList" data={schemas.breadcrumbSchema} />
       <SearchTypePage
         properties={properties}

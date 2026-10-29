@@ -148,7 +148,9 @@ describe("SEO Category Page JSON-LD", () => {
         expect(parsed.itemListElement).toHaveLength(2);
         expect(parsed.itemListElement[0].name).toBe("Inicio");
         expect(parsed.itemListElement[1].name).toBe("Casas en venta en General Roca");
-        expect(parsed.itemListElement[1].item).toBeFalsy();
+        expect(parsed.itemListElement[1].item).toBe(
+          "https://riquelmeprop.com/casas-en-venta"
+        );
       }
     });
     expect(foundBreadcrumb).toBe(true);

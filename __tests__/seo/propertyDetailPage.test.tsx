@@ -110,7 +110,9 @@ describe("PropertyDetailPage JSON-LD", () => {
         expect(items[1].name).toBe("Propiedades");
         expect(items[2].name).toBe("Centro");
         expect(items[3].name).toBe("Casa Moderna en Centro");
-        expect(items[3].item).toBeFalsy();
+        expect(items[3].item).toBe(
+          "https://riquelmeprop.com/propiedad/casa-moderna-en-centro"
+        );
       }
     });
     expect(foundBreadcrumb).toBe(true);

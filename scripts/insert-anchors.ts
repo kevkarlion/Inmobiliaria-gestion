@@ -313,8 +313,10 @@ async function main() {
         console.log(`   ✅ ${op.description}`);
         console.log(`      diff: ${after - before >= 0 ? "+" : ""}${after - before} chars`);
       } else {
+        const marker =
+          "find" in op ? op.find : "startMarker" in op ? op.startMarker : "";
         console.log(`   ❌ ${op.description}`);
-        console.log(`      Marker no encontrado: "${op.find.slice(0, 100)}..."`);
+        console.log(`      Marker no encontrado: "${marker.slice(0, 100)}..."`);
       }
     }
 
